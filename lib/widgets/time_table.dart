@@ -51,10 +51,10 @@ class _CalendarAppState extends State<CalendarApp> {
           // mode property
           monthViewSettings: MonthViewSettings(
               appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-      //     onTap: (CalendarTapDetails details){
-      //    DateTime date = details.date;
-      //    dynamic appointments = details.appointments;
-      //    CalendarElement view = details.targetElement;
+        //   onTap: (CalendarTapDetails details){
+        //  DateTime date = details.date;
+        //  dynamic appointments = details.appointments;
+        //  CalendarElement view = details.targetElement;
       //  },
         ),
       ),
