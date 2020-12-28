@@ -14,6 +14,7 @@ import './widgets/attendance_of_class.dart';
 import './widgets/class_records.dart';
 import './widgets/choose_records_screen.dart';
 import './widgets/class_record_detail.dart';
+import './widgets/edit-timetable-form.dart';
 
 void main() async {
   runApp(Tapp());
@@ -46,7 +47,7 @@ class Tapp extends StatelessWidget {
               fontSize: 16,
             ),
             headline5: TextStyle(
-              color: Color.fromARGB(255, 47, 255, 0),
+              color: Color.fromARGB(255, 0, 0, 179),
               fontFamily: 'Lato',
               fontSize: 18,
             ),
@@ -66,6 +67,7 @@ class Tapp extends StatelessWidget {
           RecordsPage.routeName: (context) => RecordsPage(),
           ClassRecords.routeName: (context) => ClassRecords(),
           ClassRecordDetail.routeName: (context) => ClassRecordDetail(),
+          EditTTForm.routeName: (context) => EditTTForm(),
         },
         home: HomePage(),
       ),
@@ -115,6 +117,7 @@ class HomePage extends StatelessWidget {
                 _buttonBuilder('Attendance', AttendancePage.routeName, context),
                 _buttonBuilder('Records', RecordsPage.routeName, context),
                 _buttonBuilder('Time Table', CalendarApp.routeName, context),
+                _buttonBuilder('Edit TT', EditTTForm.routeName, context),
               ],
             ),
           ),

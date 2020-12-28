@@ -52,8 +52,7 @@ class AllClasses with ChangeNotifier {
     }
   }
 
-  void addMeeting(DateTime start, SubjectName name, int durationHours) {
-    DateTime endTime = start.add(Duration(hours: durationHours));
+  void addMeeting(DateTime start, SubjectName name, DateTime endTime) {
     if (start != null && name != null) {
       Meeting m =
           Meeting(enToString(name), start, endTime, assignCol(name), false);

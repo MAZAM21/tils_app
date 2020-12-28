@@ -70,8 +70,8 @@ class _EditTTState extends State<EditTT> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2021),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 365)),
     ).then((pickedDate) {
       if (pickedDate == null) {
         return;
@@ -219,11 +219,11 @@ class _EditTTState extends State<EditTT> {
               ),
             );
           } else {
-            meetingsData.addMeeting(
-              _dateStart,
-              stringToEnum(_chosenSub),
-              _duration,
-            );
+            // meetingsData.addMeeting(
+            //   _dateStart,
+            //   stringToEnum(_chosenSub),
+            //   _duration,
+            // );
             //Navigator.pushReplacementNamed(context, CalendarApp.routeName);
             Navigator.pop(context);
           }
