@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import '../models/subject.dart';
 import '../widgets/time_table.dart';
@@ -33,29 +35,16 @@ class AllClasses with ChangeNotifier {
     notifyListeners();
   }
 
-  Color assignCol(SubjectName sub) {
-    switch (sub) {
-      case SubjectName.Jurisprudence:
-        return Colors.indigo;
-        break;
-      case SubjectName.Trust:
-        return Colors.amber[900];
-        break;
-      case SubjectName.Conflict:
-        return Colors.teal;
-        break;
-      case SubjectName.Islamic:
-        return Colors.lime[800];
-        break;
-      default:
-        return Colors.black;
-    }
-  }
 
   void addMeeting(DateTime start, SubjectName name, DateTime endTime) {
     if (start != null && name != null) {
-      Meeting m =
-          Meeting(enToString(name), start, endTime, assignCol(name), false);
+      Meeting m = Meeting(
+        enToString(name),
+        start,
+        endTime,
+        assignCol(name),
+        false,
+      );
       addClass(
         DateTime.now().toString(),
         name,
@@ -63,6 +52,24 @@ class AllClasses with ChangeNotifier {
       allClassMeetings.add(m);
       notifyListeners();
     }
+  }
+
+  int findMeetingIndex(DateTime start, String name, DateTime endTime) {
+    int i = allClassMeetings.indexWhere((x) {
+      return x.from == start && x.to == endTime && x.eventName == name;
+    });
+    return i;
+  }
+
+  void editMeeting(int i, DateTime start, SubjectName name, DateTime end) {
+    allClassMeetings[i] = Meeting(
+      enToString(name),
+      start,
+      end,
+      assignCol(name),
+      false,
+    );
+    notifyListeners();
   }
 
   String enToString(SubjectName name) {
@@ -81,6 +88,24 @@ class AllClasses with ChangeNotifier {
         break;
       default:
         return 'Undeclared';
+    }
+  }
+  Color assignCol(SubjectName sub) {
+    switch (sub) {
+      case SubjectName.Jurisprudence:
+        return Colors.indigo;
+        break;
+      case SubjectName.Trust:
+        return Colors.amber[900];
+        break;
+      case SubjectName.Conflict:
+        return Colors.teal;
+        break;
+      case SubjectName.Islamic:
+        return Colors.lime[800];
+        break;
+      default:
+        return Colors.black;
     }
   }
 }

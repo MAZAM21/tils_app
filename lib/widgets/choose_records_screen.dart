@@ -12,17 +12,17 @@ class RecordsPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
           backgroundColor: Theme.of(context).canvasColor,
-          appBar: AppBar(
-            title: Text('Which records would you like?'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Back'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          ),
+          // appBar: AppBar(
+          //   title: Text('Which records would you like?'),
+          //   actions: <Widget>[
+          //     FlatButton(
+          //       child: Text('Back'),
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //       },
+          //     )
+          //   ],
+          // ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

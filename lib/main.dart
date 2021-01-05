@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/subject.dart';
 
-// import 'package:tils_app/models/subject.dart';
+import './widgets/all_tabs.dart';
 import './providers/all_students.dart';
 import './widgets/attendance_page.dart';
 import './widgets/student_records.dart';
@@ -15,6 +14,8 @@ import './widgets/class_records.dart';
 import './widgets/choose_records_screen.dart';
 import './widgets/class_record_detail.dart';
 import './widgets/edit-timetable-form.dart';
+import './widgets/home.dart';
+
 
 void main() async {
   runApp(Tapp());
@@ -59,6 +60,8 @@ class Tapp extends StatelessWidget {
           ),
         ),
         routes: {
+          '/': (context) => AllTabs(),
+          HomePage.routeName: (context) => HomePage(),
           AttendancePage.routeName: (context) => AttendancePage(),
           StudentRecords.routeName: (context) => StudentRecords(),
           CalendarApp.routeName: (context) => CalendarApp(),
@@ -69,60 +72,12 @@ class Tapp extends StatelessWidget {
           ClassRecordDetail.routeName: (context) => ClassRecordDetail(),
           EditTTForm.routeName: (context) => EditTTForm(),
         },
-        home: HomePage(),
+        
       ),
     );
   }
 }
 
-Widget _buttonBuilder(String buttName, Object route, BuildContext context) {
-  return Flexible(
-    fit: FlexFit.loose,
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(route);
-        },
-        style: ButtonStyle(
-          minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
-          backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).primaryColor),
-          textStyle:
-              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
-        ),
-        child: Text(buttName),
-      ),
-    ),
-  );
-}
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('HomePage'),
-      ),
-      //backgroundColor: Theme.of(context).backgroundColor,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 300,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                _buttonBuilder('Attendance', AttendancePage.routeName, context),
-                _buttonBuilder('Records', RecordsPage.routeName, context),
-                _buttonBuilder('Time Table', CalendarApp.routeName, context),
-                _buttonBuilder('Edit TT', EditTTForm.routeName, context),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+
+

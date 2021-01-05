@@ -38,17 +38,17 @@ class AttendancePage extends StatelessWidget {
     return MaterialApp(
       theme: Theme.of(context),
       home: Scaffold(
-          appBar: AppBar(
-            title: Text('Attendance'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('HomePage'),
-              ),
-            ],
-          ),
+          // appBar: AppBar(
+          //   title: Text('Attendance'),
+          //   actions: <Widget>[
+          //     FlatButton(
+          //       onPressed: () {
+          //         Navigator.pop(context);
+          //       },
+          //       child: Text('HomePage'),
+          //     ),
+          //   ],
+          // ),
           body: GridView.builder(
             itemCount: allClassesAdded.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

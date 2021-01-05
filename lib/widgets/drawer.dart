@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+import './edit-timetable-form.dart';
+
+class AppDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          AppBar(
+            title: Text('Hello Friend!'),
+            automaticallyImplyLeading: true, //does not display back button
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.calendar_today_rounded),
+            title: Text('Edit Time Table'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(EditTTForm.routeName);
+            },
+          ),
+          Divider(),
+        ],
+      ),
+    );
+  }
+}

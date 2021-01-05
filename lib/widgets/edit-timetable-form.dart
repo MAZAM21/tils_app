@@ -24,6 +24,27 @@ class _EditTTFormState extends State<EditTTForm> {
   int _customHours = 0;
   int _customMinutes = 0;
   final _form = GlobalKey<FormState>();
+  var _isInit = true;
+  var _isEdit = false;
+  int editedIndex;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final editClass = ModalRoute.of(context).settings.arguments as Meeting;
+      if (editClass != null) {
+        _startDate = editClass.from;
+        _startTime = editClass.from;
+        _endTime = editClass.to;
+        _subName = checkSubject(editClass.eventName);
+        _isEdit = true;
+        editedIndex = Provider.of<AllClasses>(context)
+            .findMeetingIndex(_startTime, enToString(_subName), _endTime);
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   //sets _subName to SubjectName enum
   void setSubject(String sub) {
@@ -87,7 +108,7 @@ class _EditTTFormState extends State<EditTTForm> {
 
 //subject option buttons,
 //set _subName.
-  Widget buildSubjectButton(String subName, Color def) {
+  Widget buildSubjectButton(String subName) {
     return ElevatedButton(
       child: Text(subName),
       onPressed: () {
@@ -99,7 +120,7 @@ class _EditTTFormState extends State<EditTTForm> {
       style: ButtonStyle(
         backgroundColor: _subName == checkSubject(subName)
             ? MaterialStateProperty.all(Colors.redAccent)
-            : MaterialStateProperty.all(def),
+            : MaterialStateProperty.all(Colors.purple[900]),
       ),
     );
   }
@@ -255,14 +276,19 @@ class _EditTTFormState extends State<EditTTForm> {
   }
 
   void _saveForm(AllClasses addTT, BuildContext context) {
-    if (_startTime != DateTime.now() && _subName != null) {
-      addTT.addMeeting(_startTime, _subName, _endTime);
-
-      setState(() {
-        _subName = null;
-        _startTime = DateTime.now();
-        _duration = null;
-      });
+    if (_startTime != DateTime.now() && _subName != SubjectName.Undeclared) {
+      if (!_isEdit) {
+        addTT.addMeeting(_startTime, _subName, _endTime);
+        setState(() {
+          _subName = null;
+          _startTime = DateTime.now();
+          _duration = null;
+        });
+      } else {
+        setState(() {
+          addTT.editMeeting(editedIndex, _startTime, _subName, _endTime);
+        });
+      }
     } else {
       showDialog(
         context: context,
@@ -279,253 +305,241 @@ class _EditTTFormState extends State<EditTTForm> {
   Widget build(BuildContext context) {
     final addToTT = Provider.of<AllClasses>(context);
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          // IconButton(
-          //   icon: Icon(Icons.save),
-          //   onPressed: () {
-          //     _saveForm(addToTT);
-          //   },
-          // ),
-          // FlatButton(
-          //   child: Text('Back'),
-          //   onPressed: () => Navigator.pop(context),
-          // )
-        ],
-      ),
-      body: Builder(
-        builder:(BuildContext context) {return Form(
+      
+      body: Builder(builder: (BuildContext context) {
+        return Form(
           key: _form,
-          child: SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 20,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      //Subject Buttons
+                      Container(
+                        height: 200,
+                        width: 150,
+                        child: Column(
+                          // mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            buildSubjectButton('Jurisprudence'),
+                            buildSubjectButton('Trust'),
+                            buildSubjectButton('Conflict'),
+                            buildSubjectButton('Islamic'),
+                          ],
                         ),
-                        //Subject Buttons
-                        Container(
-                          height: 200,
-                          width: 150,
-                          child: Column(
-                            // mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              buildSubjectButton('Jurisprudence', Colors.indigo),
-                              buildSubjectButton('Trust', Colors.amber[900]),
-                              buildSubjectButton('Conflict', Colors.teal),
-                              buildSubjectButton('Islamic', Colors.lime[800]),
-                            ],
-                          ),
+                      ),
+                      Divider(),
+                      //Date Display and Picker
+                      Container(
+                        width: 250,
+                        height: 100,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            buildDatepicker(),
+                            buildDateDisplay(),
+                          ],
                         ),
-                        Divider(),
-                        //Date Display and Picker
-                        Container(
-                          width: 250,
-                          height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              buildDatepicker(),
-                              buildDateDisplay(),
-                            ],
-                          ),
+                      ),
+                      Divider(),
+                      //Time Display and Picker
+                      Container(
+                        width: 250,
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            buildTimePicker(),
+                            buildTimeDisplay(),
+                          ],
                         ),
-                        Divider(),
-                        //Time Display and Picker
-                        Container(
-                          width: 250,
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              buildTimePicker(),
-                              buildTimeDisplay(),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        //Duration presets
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          width: 400,
-                          height: 50,
-                          child: Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    buildDurationOption('1', 1, 0),
-                                    buildDurationOption('1.5', 1, 30),
-                                    buildDurationOption('2', 2, 0),
-                                    buildDurationOption('2.5', 2, 30),
-                                    buildDurationOption('3', 3, 0),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(),
-                        //Custom duration
-                        Container(
-                          height: 70,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'Custom Duration',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontFamily: 'Lato',
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
+                      ),
+                      Divider(),
+                      //Duration presets
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                        width: 400,
+                        height: 50,
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
                                 children: <Widget>[
-                                  SizedBox(
-                                    height: 35,
-                                    width: 35,
-                                    child: ElevatedButton(
-                                      child: Text(
-                                        'H',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return NumberPickerDialog.integer(
-                                              initialIntegerValue: 0,
-                                              minValue: 0,
-                                              maxValue: 12,
-                                              title: Text('H'),
-                                            );
-                                          },
-                                        ).then((value) {
-                                          setState(() {
-                                            _customHours = value;
-                                            setDuration(
-                                                _customHours, _customMinutes, '');
-                                          });
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: Card(
-                                      color: Colors.white,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 11),
-                                        child: Text(
-                                          _customHours.toString(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.blueGrey[900]),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 35,
-                                    height: 35,
-                                    child: ElevatedButton(
-                                      child: Text(
-                                        'M',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return NumberPickerDialog.integer(
-                                              initialIntegerValue: 0,
-                                              minValue: 0,
-                                              maxValue: 60,
-                                              title: Text('Minutes'),
-                                            );
-                                          },
-                                        ).then((value) {
-                                          setState(() {
-                                            _customMinutes = value;
-                                            setDuration(
-                                                _customHours, _customMinutes, '');
-                                          });
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: Card(
-                                      color: Colors.white,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 11),
-                                        child: Text(
-                                          _customMinutes.toString(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.blueGrey[900]),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                  buildDurationOption('1', 1, 0),
+                                  buildDurationOption('1.5', 1, 30),
+                                  buildDurationOption('2', 2, 0),
+                                  buildDurationOption('2.5', 2, 30),
+                                  buildDurationOption('3', 3, 0),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Divider(),
-                        // Save button
-                        Row(
+                      ),
+                      Divider(),
+                      //Custom duration
+                      Container(
+                        height: 70,
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            ElevatedButton(
-                              child: Text('Add to Time Table'),
-                              onPressed: () {
-                                Scaffold.of(context).hideCurrentSnackBar();
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: _subName != SubjectName.Undeclared? Text(
-                                      '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime)} added to Time Table') : 'Please select Subject',
-                                ));
-                                setState(() {
-                                  _saveForm(addToTT, context);
-                                });
-                              },
-                            )
+                            Text(
+                              'Custom Duration',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontFamily: 'Lato',
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 35,
+                                  width: 35,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'H',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return NumberPickerDialog.integer(
+                                            initialIntegerValue: 0,
+                                            minValue: 0,
+                                            maxValue: 12,
+                                            title: Text('H'),
+                                          );
+                                        },
+                                      ).then((value) {
+                                        setState(() {
+                                          _customHours = value;
+                                          setDuration(_customHours,
+                                              _customMinutes, '');
+                                        });
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: Card(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 11),
+                                      child: Text(
+                                        _customHours.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blueGrey[900]),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'M',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return NumberPickerDialog.integer(
+                                            initialIntegerValue: 0,
+                                            minValue: 0,
+                                            maxValue: 60,
+                                            title: Text('Minutes'),
+                                          );
+                                        },
+                                      ).then((value) {
+                                        setState(() {
+                                          _customMinutes = value;
+                                          setDuration(_customHours,
+                                              _customMinutes, '');
+                                        });
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 50,
+                                  height: 40,
+                                  child: Card(
+                                    color: Colors.white,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 11),
+                                      child: Text(
+                                        _customMinutes.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.blueGrey[900]),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Divider(),
+                      // Save button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            child: Text('Add to Time Table'),
+                            onPressed: () {
+                              Scaffold.of(context).hideCurrentSnackBar();
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: _subName != SubjectName.Undeclared
+                                    ? Text(
+                                        '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime)} added to Time Table')
+                                    : 'Please select Subject',
+                              ));
+                              setState(() {
+                                _saveForm(addToTT, context);
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 25,)
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        );}
-      ),
+        );
+      }),
     );
   }
 }

@@ -1,47 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:intl/intl.dart';
 
 import './edit-timetable.dart';
 import '../providers/all_classes.dart';
 import 'package:provider/provider.dart';
+import './edit-timetable-form.dart';
 
 class CalendarApp extends StatefulWidget {
   static const routeName = '/time-table';
-  
+
   @override
   _CalendarAppState createState() => _CalendarAppState();
 }
 
 class _CalendarAppState extends State<CalendarApp> {
-  
+  void onTapCalendar(Meeting tappedClass) {
+    Navigator.popAndPushNamed(context, EditTTForm.routeName, arguments: tappedClass);
+    
+  }
+
+  void showElementDetails(Meeting selected) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Subject: ${selected.eventName}'),
+              Divider(),
+              Text(
+                  'Starts at: ${DateFormat('d MMM hh mm a').format(selected.from)}'),
+              Divider(),
+              Text(
+                  'Ends at: ${DateFormat('d MMM hh mm a').format(selected.to)}'),
+              SizedBox(
+                height: 20,
+              ),
+              FlatButton(
+                child: Text('Edit Class'),
+                onPressed: () => onTapCalendar(selected),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-   
-   final meetingsData = Provider.of<AllClasses>(context);
+    final meetingsData = Provider.of<AllClasses>(context);
     final thisMeeting = meetingsData.timeTable;
     return MaterialApp(
       title: 'Calendar Demo',
       home: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Back'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            FlatButton(
-              child: Text('Edit Time Table'),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  EditTT.routeName,
-                );
-              },
-            )
-          ],
-        ),
+        // appBar: AppBar(
+        //   actions: <Widget>[
+        //     FlatButton(
+        //       child: Text('Back'),
+        //       onPressed: () {
+        //         Navigator.pop(context);
+        //       },
+        //     ),
+        //     FlatButton(
+        //       child: Text('Edit Time Table'),
+        //       onPressed: () {
+        //         Navigator.pushNamed(
+        //           context,
+        //           EditTTForm.routeName,
+        //         );
+        //       },
+        //     )
+        //   ],
+        // ),
         body: SfCalendar(
           view: CalendarView.workWeek,
           dataSource:
@@ -51,11 +84,13 @@ class _CalendarAppState extends State<CalendarApp> {
           // mode property
           monthViewSettings: MonthViewSettings(
               appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-        //   onTap: (CalendarTapDetails details){
-        //  DateTime date = details.date;
-        //  dynamic appointments = details.appointments;
-        //  CalendarElement view = details.targetElement;
-      //  },
+          onTap: (CalendarTapDetails details) {
+            DateTime date = details.date;
+            dynamic appointments = details.appointments;
+            //CalendarElement view = details.targetElement;
+            print(date.toString());
+            showElementDetails(appointments[0]);
+          },
         ),
       ),
     );
