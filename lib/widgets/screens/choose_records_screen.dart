@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/widgets/student_records.dart';
-import '../models/subject.dart';
-import '../models/student.dart';
-import '../widgets/class_records.dart';
+import './student_records.dart';
+import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/student.dart';
+import './class_records.dart';
 
 class RecordsPage extends StatelessWidget {
   static const routeName = '/choose-records';

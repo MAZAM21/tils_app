@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/providers/all_classes.dart';
 import 'package:provider/provider.dart';
-import '../models/subject.dart';
+import 'package:tils_app/models/subject.dart';
 
 import './class_record_detail.dart';
 

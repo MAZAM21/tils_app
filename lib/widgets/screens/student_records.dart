@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/subject.dart';
 
-import '../models/student.dart';
-import '../models/dummy_data.dart';
-import '../providers/all_classes.dart';
-import '../providers/all_students.dart';
+
+import 'package:tils_app/providers/all_students.dart';
 
 class StudentRecords extends StatelessWidget {
   static const routeName = '/student-records';

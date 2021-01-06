@@ -1,4 +1,4 @@
-import 'package:tils_app/widgets/attendance_page.dart';
+import 'package:tils_app/widgets/screens/attendance_page.dart';
 
 import './subject.dart';
 import 'package:flutter/material.dart';

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 
-import './edit-timetable.dart';
-import '../providers/all_classes.dart';
+
+import 'package:tils_app/providers/all_classes.dart';
 import 'package:provider/provider.dart';
 import './edit-timetable-form.dart';
 

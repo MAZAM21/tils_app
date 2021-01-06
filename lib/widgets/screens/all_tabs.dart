@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/drawer.dart';
 
-import '../widgets/attendance_page.dart';
-import '../widgets/choose_records_screen.dart';
-import '../widgets/edit-timetable-form.dart';
-import '../widgets/home.dart';
-import '../widgets/time_table.dart';
+import './attendance_page.dart';
+import './choose_records_screen.dart';
+import './edit-timetable-form.dart';
+import './home.dart';
+import './time_table.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});

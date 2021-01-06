@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/subject.dart';
+import 'package:tils_app/models/subject.dart';
 
 class ClassRecordDetail extends StatelessWidget {
   static const routeName = '/class-record-detail';

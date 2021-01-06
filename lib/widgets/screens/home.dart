@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './student_records.dart';
 import './time_table.dart';
-import './drawer.dart';
+import '../drawer.dart';
 import './edit-timetable-form.dart';
 import './attendance_page.dart';
 import './choose_records_screen.dart';

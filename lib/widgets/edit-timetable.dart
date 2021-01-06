@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/subject.dart';
-import 'time_table.dart';
+
 import '../providers/all_classes.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +16,7 @@ class _EditTTState extends State<EditTT> {
   DateTime _dateStart = DateTime.now();
   int _duration;
   String _chosenSub;
-  Meeting classAdded;
+  //Meeting classAdded;
 
   List<String> _allSubjects = [
     'Conflict',

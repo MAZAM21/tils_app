@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/widgets/attendance_of_class.dart';
+import './attendance_of_class.dart';
 
-import '../models/subject.dart';
-import '../providers/all_classes.dart';
-import '../providers/all_students.dart';
-import '../models/student.dart';
-//import '../models/dummy_data.dart';
+import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/providers/all_classes.dart';
+import 'package:tils_app/providers/all_students.dart';
+import 'package:tils_app/models/student.dart';
+
 
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';

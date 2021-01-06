@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../models/subject.dart';
-import '../widgets/time_table.dart';
+import '../widgets/screens/time_table.dart';
 
 class AllClasses with ChangeNotifier {
   //_allClasses will have a list of SubjectClass elements which will be displayed for attendance and records

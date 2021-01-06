@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/all_students.dart';
-import '../models/subject.dart';
-import '../models/student.dart';
+import 'package:tils_app/providers/all_students.dart';
+import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/student.dart';
 
 class AttendanceOfClass extends StatefulWidget {
   static const routeName = '/attendance-of-class';

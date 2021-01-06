@@ -3,9 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
-import '../models/subject.dart';
+import 'package:tils_app/models/subject.dart';
 import './time_table.dart';
-import '../providers/all_classes.dart';
+import 'package:tils_app/providers/all_classes.dart';
 
 class EditTTForm extends StatefulWidget {
   static const routeName = '/edit-tt-form';
