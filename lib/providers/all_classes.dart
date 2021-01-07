@@ -1,8 +1,8 @@
-
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../models/subject.dart';
 import '../widgets/screens/time_table.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AllClasses with ChangeNotifier {
   //_allClasses will have a list of SubjectClass elements which will be displayed for attendance and records
@@ -19,58 +19,120 @@ class AllClasses with ChangeNotifier {
     return [...allClasses];
   }
 
-  List<Meeting> get timeTable {
-    return [...allClassMeetings];
-  }
+  // List<Meeting> get timeTable {
+  //   //return [...allClassMeetings];
 
-  void addClass(
-    String id,
+  //   return[...getFromCF()];
+  // }
+
+  CollectionReference _classCollection =
+      FirebaseFirestore.instance.collection('classes');
+
+  Future<void> addToCF(
     SubjectName name,
-  ) {
-    SubjectClass addToAll = SubjectClass(
-      id: id,
-      subjectName: name,
-    );
-    allClasses.add(addToAll);
-    notifyListeners();
-  }
+    DateTime start,
+    DateTime end,
+  ) async {
+    String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
+    String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
 
-
-  void addMeeting(DateTime start, SubjectName name, DateTime endTime) {
-    if (start != null && name != null) {
-      Meeting m = Meeting(
-        enToString(name),
-        start,
-        endTime,
-        assignCol(name),
-        false,
-      );
-      addClass(
-        DateTime.now().toString(),
-        name,
-      );
-      allClassMeetings.add(m);
-      notifyListeners();
+    try {
+      return await _classCollection.add({
+        'subjectName': enToString(name),
+        'startTime': startString,
+        'endTime': endString,
+      });
+    } catch (err) {
+      print('error in adding to database: $err');
     }
   }
 
-  int findMeetingIndex(DateTime start, String name, DateTime endTime) {
-    int i = allClassMeetings.indexWhere((x) {
-      return x.from == start && x.to == endTime && x.eventName == name;
-    });
-    return i;
+  Future<void> editInCF(
+      String id, String name, DateTime start, DateTime end) async {
+    String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
+    String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
+    try {
+      return await _classCollection.doc(id).set({
+        'subjectName': name,
+        'startTime': startString,
+        'endTime': endString,
+      });
+    } catch (err) {
+      print('error in adding edited class: $err');
+    }
+    
   }
 
-  void editMeeting(int i, DateTime start, SubjectName name, DateTime end) {
-    allClassMeetings[i] = Meeting(
-      enToString(name),
-      start,
-      end,
-      assignCol(name),
-      false,
-    );
-    notifyListeners();
-  }
+  // List<Meeting> getFromCF() {
+  //   List<Meeting> inFuncList;
+  //   _classCollection.get().then((snapShot) {
+  //     return snapShot.docs.forEach((meeting) {
+  //       return inFuncList.add(Meeting(
+
+  //         meeting['subjectName'],
+  //         DateFormat("yyyy-MM-dd hh:mm:ss a").parse(meeting['startTime']),
+  //         DateFormat("yyyy-MM-dd hh:mm:ss a").parse(meeting['endTime']),
+  //         Colors.grey,
+  //         false,
+  //       ));
+  //     });
+  //   });
+  //   return inFuncList;
+  // }
+
+  // void deleteFromCF() {
+  //   _classCollection.
+  // }
+
+  // void addClass(
+  //   String id,
+  //   SubjectName name,
+  // ) {
+  //   SubjectClass addToAll = SubjectClass(
+  //     id: id,
+  //     subjectName: name,
+  //   );
+  //   allClasses.add(addToAll);
+  //   notifyListeners();
+  // }
+
+  // void addMeeting(DateTime start, SubjectName name, DateTime endTime) {
+  //   if (start != null && name != null) {
+  //     // Meeting m = Meeting(
+  //     //   enToString(name),
+  //     //   start,
+  //     //   endTime,
+  //     //   assignCol(name),
+  //     //   false,
+  //     // );
+  //     addToCF(name, start, endTime);
+  //     addClass(
+  //       DateTime.now().toString(),
+  //       name,
+  //     );
+  //     // allClassMeetings.add(m);
+
+  //     notifyListeners();
+  //   }
+  // }
+
+  // int findMeetingIndex(String docId) {
+  //   int i = allClassMeetings.firstWhere((x) {
+  //     return x.docId ==docId;
+  //   });
+  //   return i;
+  // }
+
+  // void editMeeting(int i, DateTime start, SubjectName name, DateTime end) {
+  //   allClassMeetings[i] = Meeting(
+  //     enToString(name),
+  //     start,
+  //     end,
+  //     assignCol(name),
+  //     false,
+  //   );
+  //   notifyListeners();
+  // }
 
   String enToString(SubjectName name) {
     switch (name) {
@@ -90,6 +152,7 @@ class AllClasses with ChangeNotifier {
         return 'Undeclared';
     }
   }
+
   Color assignCol(SubjectName sub) {
     switch (sub) {
       case SubjectName.Jurisprudence:

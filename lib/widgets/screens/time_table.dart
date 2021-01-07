@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
-
 
 import 'package:tils_app/providers/all_classes.dart';
 import 'package:provider/provider.dart';
 import './edit-timetable-form.dart';
 
 class CalendarApp extends StatefulWidget {
+  final List<Meeting> _allmeets;
+  CalendarApp(this._allmeets);
   static const routeName = '/time-table';
 
   @override
@@ -16,8 +18,8 @@ class CalendarApp extends StatefulWidget {
 
 class _CalendarAppState extends State<CalendarApp> {
   void onTapCalendar(Meeting tappedClass) {
-    Navigator.popAndPushNamed(context, EditTTForm.routeName, arguments: tappedClass);
-    
+    Navigator.popAndPushNamed(context, EditTTForm.routeName,
+        arguments: tappedClass);
   }
 
   void showElementDetails(Meeting selected) {
@@ -40,7 +42,10 @@ class _CalendarAppState extends State<CalendarApp> {
               ),
               FlatButton(
                 child: Text('Edit Class'),
-                onPressed: () => onTapCalendar(selected),
+                onPressed: () {
+                  Navigator.pop(context);
+                  onTapCalendar(selected);
+                },
               ),
             ],
           ),
@@ -51,8 +56,9 @@ class _CalendarAppState extends State<CalendarApp> {
 
   @override
   Widget build(BuildContext context) {
-    final meetingsData = Provider.of<AllClasses>(context);
-    final thisMeeting = meetingsData.timeTable;
+    // final meetingsData = Provider.of<AllClasses>(context);
+    // final thisMeeting = meetingsData.timeTable;
+
     return MaterialApp(
       title: 'Calendar Demo',
       home: Scaffold(
@@ -76,9 +82,10 @@ class _CalendarAppState extends State<CalendarApp> {
         //   ],
         // ),
         body: SfCalendar(
-          view: CalendarView.workWeek,
-          dataSource:
-              thisMeeting != null ? MeetingDataSource(thisMeeting) : null,
+          view: CalendarView.week,
+          dataSource: widget._allmeets != null
+              ? MeetingDataSource(widget._allmeets)
+              : null,
           // by default the month appointment display mode set as Indicator, we can
           // change the display mode as appointment using the appointment display
           // mode property
@@ -137,7 +144,8 @@ class MeetingDataSource extends CalendarDataSource {
 /// information about the event data which will be rendered in calendar.
 class Meeting {
   /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
+      this.docId);
 
   /// Event name which is equivalent to subject property of [Appointment].
   String eventName;
@@ -153,4 +161,7 @@ class Meeting {
 
   /// IsAllDay which is equivalent to isAllDay property of [Appointment].
   bool isAllDay;
+
+  /// Firestore doc ID.
+  String docId;
 }

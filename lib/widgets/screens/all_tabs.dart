@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/drawer.dart';
+import 'package:tils_app/widgets/time_table_builder.dart';
 
 import './attendance_page.dart';
 import './choose_records_screen.dart';
@@ -70,7 +71,7 @@ class _AllTabsState extends State<AllTabs> {
         body: TabBarView(
           children: <Widget>[
             EditTTForm(),
-            CalendarApp(),
+            TimeTableBuilder(),
             HomePage(),
             AttendancePage(),
             RecordsPage(),

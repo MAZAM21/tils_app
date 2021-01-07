@@ -26,7 +26,7 @@ class _EditTTFormState extends State<EditTTForm> {
   final _form = GlobalKey<FormState>();
   var _isInit = true;
   var _isEdit = false;
-  int editedIndex;
+  String _editedId;
 
   @override
   void didChangeDependencies() {
@@ -38,9 +38,9 @@ class _EditTTFormState extends State<EditTTForm> {
         _endTime = editClass.to;
         _subName = checkSubject(editClass.eventName);
         _isEdit = true;
-        editedIndex = Provider.of<AllClasses>(context)
-            .findMeetingIndex(_startTime, enToString(_subName), _endTime);
+        _editedId = editClass.docId;
       }
+      //if a route argument is passed to this then it copies the passed values to the local variables and executes findMeetingIndex to get the index of the edited element.
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -278,7 +278,7 @@ class _EditTTFormState extends State<EditTTForm> {
   void _saveForm(AllClasses addTT, BuildContext context) {
     if (_startTime != DateTime.now() && _subName != SubjectName.Undeclared) {
       if (!_isEdit) {
-        addTT.addMeeting(_startTime, _subName, _endTime);
+        addTT.addToCF(_subName, _startTime, _endTime);
         setState(() {
           _subName = null;
           _startTime = DateTime.now();
@@ -286,7 +286,7 @@ class _EditTTFormState extends State<EditTTForm> {
         });
       } else {
         setState(() {
-          addTT.editMeeting(editedIndex, _startTime, _subName, _endTime);
+          addTT.editInCF(_editedId,enToString(_subName), _startTime, _endTime,);
         });
       }
     } else {
@@ -305,7 +305,6 @@ class _EditTTFormState extends State<EditTTForm> {
   Widget build(BuildContext context) {
     final addToTT = Provider.of<AllClasses>(context);
     return Scaffold(
-      
       body: Builder(builder: (BuildContext context) {
         return Form(
           key: _form,
@@ -377,8 +376,7 @@ class _EditTTFormState extends State<EditTTForm> {
                             Expanded(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
                                   buildDurationOption('1', 1, 0),
                                   buildDurationOption('1.5', 1, 30),
@@ -434,8 +432,8 @@ class _EditTTFormState extends State<EditTTForm> {
                                       ).then((value) {
                                         setState(() {
                                           _customHours = value;
-                                          setDuration(_customHours,
-                                              _customMinutes, '');
+                                          setDuration(
+                                              _customHours, _customMinutes, '');
                                         });
                                       });
                                     },
@@ -480,8 +478,8 @@ class _EditTTFormState extends State<EditTTForm> {
                                       ).then((value) {
                                         setState(() {
                                           _customMinutes = value;
-                                          setDuration(_customHours,
-                                              _customMinutes, '');
+                                          setDuration(
+                                              _customHours, _customMinutes, '');
                                         });
                                       });
                                     },
@@ -531,7 +529,9 @@ class _EditTTFormState extends State<EditTTForm> {
                           )
                         ],
                       ),
-                      SizedBox(height: 25,)
+                      SizedBox(
+                        height: 25,
+                      )
                     ],
                   ),
                 ),

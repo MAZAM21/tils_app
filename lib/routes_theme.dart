@@ -19,6 +19,7 @@ import './widgets/screens/class_record_detail.dart';
 import './widgets/screens/edit-timetable-form.dart';
 import './widgets/screens/home.dart';
 import './widgets/screens/auth_page.dart';
+import './widgets/time_table_builder.dart';
 
 
 class RoutesAndTheme extends StatelessWidget {
@@ -73,7 +74,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
           HomePage.routeName: (context) => HomePage(),
           AttendancePage.routeName: (context) => AttendancePage(),
           StudentRecords.routeName: (context) => StudentRecords(),
-          CalendarApp.routeName: (context) => CalendarApp(),
+          TimeTableBuilder.routeName: (context) => TimeTableBuilder(),
           EditTT.routeName: (context) => EditTT(),
           AttendanceOfClass.routeName: (context) => AttendanceOfClass(),
           RecordsPage.routeName: (context) => RecordsPage(),
