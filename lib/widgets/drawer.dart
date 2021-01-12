@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import './screens/edit-timetable-form.dart';
+import './screens/time table/edit-timetable-form.dart';
 
 class AppDrawer extends StatelessWidget {
   @override

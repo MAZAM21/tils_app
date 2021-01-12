@@ -33,7 +33,7 @@ class _ClassRecordsState extends State<ClassRecords> {
   @override
   Widget build(BuildContext context) {
     final allClassesData = Provider.of<AllClasses>(context);
-    final classList = allClassesData.allClasses;
+    final classList = allClassesData.allClassesData;
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +59,7 @@ class _ClassRecordsState extends State<ClassRecords> {
             child: GestureDetector(
               child: Card(
                 child: Text(
-                  enToString(classList[i].subjectName),
+                  classList[i].subjectName,
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 color: classList[i].getColor(),

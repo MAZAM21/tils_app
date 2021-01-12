@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import '../models/student.dart';
 import '../models/subject.dart';
-import '../models/dummy_data.dart';
 
 class AllStudents with ChangeNotifier {
-  // Map<Student, AttendanceStatus> attendanceStatus = {};
+  Map<Student, AttendanceStatus> attendanceStatus = {};
   List<Student> _allStudentsInClass =
-      allStudentDummy; //this is where all students registered in class logic will be passed
+      []; //this is where all students registered in class logic will be passed
 
-  //_allStudentsInCLass represents all students registered for that course. it is currently assigned a dummy data
-  //attendance status is a map of students as keys and their attendance status as values
+  // _allStudentsInCLass represents all students registered for that course. it is currently assigned a dummy data
+  // attendance status is a map of students as keys and their attendance status as values
 
   List<Student> get allInClass {
     return [..._allStudentsInClass];
@@ -17,6 +16,14 @@ class AllStudents with ChangeNotifier {
 
   int getNumofStudents() {
     return _allStudentsInClass.length;
+  }
+
+  void getStudentFromCF(String id, String name, String year) {
+    _allStudentsInClass.add(Student(
+      id: id,
+      name: name,
+      year: year,
+    ));
   }
 
   List<String> getRegStudsID(SubjectName sub) {

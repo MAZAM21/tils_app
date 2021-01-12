@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './attendance_of_class.dart';
 
 import 'package:tils_app/models/subject.dart';
-import 'package:tils_app/providers/all_classes.dart';
-import 'package:tils_app/providers/all_students.dart';
-import 'package:tils_app/models/student.dart';
-
+import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
 
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';
+  // final List<SubjectClass> allClassesAdded;
+  // AttendancePage(this.allClassesAdded);
 
-  //
   String enToString(SubjectName name) {
     switch (name) {
       case SubjectName.Jurisprudence:
@@ -33,53 +30,63 @@ class AttendancePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final classData = Provider.of<AllClasses>(context);
-    final allClassesAdded = classData.allClassesData;
-    return MaterialApp(
-      theme: Theme.of(context),
-      home: Scaffold(
-          // appBar: AppBar(
-          //   title: Text('Attendance'),
-          //   actions: <Widget>[
-          //     FlatButton(
-          //       onPressed: () {
-          //         Navigator.pop(context);
-          //       },
-          //       child: Text('HomePage'),
-          //     ),
-          //   ],
-          // ),
-          body: GridView.builder(
-            itemCount: allClassesAdded.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+    final classData = Provider.of<List<SubjectClass>>(context);
+
+    // CollectionReference _allAttCollection =
+    //     FirebaseFirestore.instance.collection('attendance');
+
+    return classData == null
+        ? Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-            itemBuilder: (ctx, i) {
-              return allClassesAdded == null
-                  ? Text('No Classes Scheduled for Attendance')
-                  : GridTile(
-                      child: GestureDetector(
-                        child: Card(
-                          child: Text(
-                            enToString(allClassesAdded[i].subjectName), 
-                            style: Theme.of(context).textTheme.headline4,
-                            textAlign: TextAlign.center,
+          )
+        : MaterialApp(
+            theme: Theme.of(context),
+            home: Scaffold(
+                // appBar: AppBar(
+                //   title: Text('Attendance'),
+                //   actions: <Widget>[
+                //     FlatButton(
+                //       onPressed: () {
+                //         Navigator.pop(context);
+                //       },
+                //       child: Text('HomePage'),
+                //     ),
+                //   ],
+                // ),
+                body: GridView.builder(
+              itemCount: classData.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (ctx, i) {
+                return classData == null
+                    ? Text('No Classes Scheduled for Attendance')
+                    : GridTile(
+                        child: GestureDetector(
+                          child: Card(
+                            child: Text(
+                              classData[i].subjectName,
+                              style: Theme.of(context).textTheme.headline4,
+                              textAlign: TextAlign.center,
+                            ),
+                            color: classData[i]
+                                .getColor(), //need to add colors to all subjects
                           ),
-                          color: allClassesAdded[i].getColor(),//need to add colors to all subjects
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              StudentProvider.routeName,
+                              arguments: classData[i],
+                            );
+                          },
                         ),
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                            AttendanceOfClass.routeName,
-                            arguments: allClassesAdded[i],
-                          );
-                        },
-                      ),
-                    );
-            },
-          )),
-    );
+                      );
+              },
+            )),
+          );
   }
 }

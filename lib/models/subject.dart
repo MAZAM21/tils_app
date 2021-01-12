@@ -1,8 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:provider/provider.dart';
-import './dummy_data.dart';
-import './student.dart';
+
 
 enum SubjectName {
   Trust,
@@ -18,43 +17,71 @@ enum AttendanceStatus {
 }
 
 class SubjectClass with ChangeNotifier {
-  final SubjectName subjectName;
+  final String subjectName;
   final String id;
-  Map<Student, AttendanceStatus> attendanceStatus = {};
+  Map<String, dynamic> attendanceStatus = {};
 
   SubjectClass({
     @required this.id,
     @required this.subjectName,
-    // @required this.regStuds,
+    this.attendanceStatus,
   });
 
-  Map<Student, AttendanceStatus> get attStat {
+  factory SubjectClass.fromFirestore(QueryDocumentSnapshot doc) {
+    Map data = doc.data();
+
+    return SubjectClass(
+      id: doc.id,
+      subjectName: data['subjectName'],
+    );
+  }
+
+  Map<dynamic, dynamic> get attStat {
     return attendanceStatus;
   }
 
-  void addStatus(Student stud, AttendanceStatus stat) {
-    //if the attendance status is null for stud, adds stat
-    attStat.update(stud, (val) => stat, ifAbsent: () => stat);
-    print(attendanceStatus.values.length.toString());
-    notifyListeners();
-  }
+  // void addStatus(Student stud, AttendanceStatus stat) {
+  //   //if the attendance status is null for stud, adds stat
+  //   attStat.update(stud, (val) => stat, ifAbsent: () => stat);
+  //   print(attendanceStatus.values.length.toString());
+  //   notifyListeners();
+  // }
 
   Color getColor() {
-     switch (subjectName) {
-      case SubjectName.Jurisprudence:
+    switch (subjectName) {
+      case 'Jurisprudence':
         return Colors.indigo;
         break;
-      case SubjectName.Trust:
+      case 'Trust':
         return Colors.amber[900];
         break;
-      case SubjectName.Conflict:
+      case 'Conflict':
         return Colors.teal;
         break;
-      case SubjectName.Islamic:
+      case 'Islamic':
         return Colors.lime[800];
         break;
       default:
         return Colors.black;
+    }
+  }
+
+  SubjectName setSubject(String sub) {
+    switch (sub) {
+      case 'Jurisprudence':
+        return SubjectName.Jurisprudence;
+        break;
+      case 'Trust':
+        return SubjectName.Trust;
+        break;
+      case 'Conflict':
+        return SubjectName.Conflict;
+        break;
+      case 'Islamic':
+        return SubjectName.Islamic;
+        break;
+      default:
+        return SubjectName.Undeclared;
     }
   }
 

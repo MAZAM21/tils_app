@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/drawer.dart';
-import 'package:tils_app/widgets/time_table_builder.dart';
+import 'package:tils_app/widgets/subject-class_builder.dart';
 
-import './attendance_page.dart';
+
 import './choose_records_screen.dart';
-import './edit-timetable-form.dart';
+import './time table/edit-timetable-form.dart';
 import './home.dart';
-import './time_table.dart';
+import './time table/time_table.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
@@ -71,9 +71,9 @@ class _AllTabsState extends State<AllTabs> {
         body: TabBarView(
           children: <Widget>[
             EditTTForm(),
-            TimeTableBuilder(),
+            CalendarApp(),
             HomePage(),
-            AttendancePage(),
+            SubjectClassBuilder(),
             RecordsPage(),
           ],
         ),

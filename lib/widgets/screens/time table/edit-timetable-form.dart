@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -27,7 +28,16 @@ class _EditTTFormState extends State<EditTTForm> {
   var _isInit = true;
   var _isEdit = false;
   String _editedId;
+  // Map<String, bool> attStatus = {};
+  // CollectionReference _studentCollection = FirebaseFirestore.instance.collection('students');
 
+
+  // @override
+  //   void initState() {
+  //     // TODO: implement initState
+  //     studentAttendance();
+  //     super.initState();
+  //   }
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -274,11 +284,25 @@ class _EditTTFormState extends State<EditTTForm> {
     _duration = d;
     _endTime = _startTime.add(Duration(hours: h, minutes: m));
   }
+ 
+// void studentAttendance() {
+    
+//     _studentCollection.get().then((allStudDocs) {
+//       allStudDocs.docs.forEach((student) {
+//         // if (student['registeredSubs'] == true) {
+//         attStatus.addAll({student['studentName']: false});
+//         //}
+//       });
+//     }).catchError((err) {
+//       print('$err');
+//     });
+    
+//   }
 
   void _saveForm(AllClasses addTT, BuildContext context) {
     if (_startTime != DateTime.now() && _subName != SubjectName.Undeclared) {
       if (!_isEdit) {
-        addTT.addToCF(_subName, _startTime, _endTime);
+        addTT.addToCF(_subName, _startTime, _endTime, );
         setState(() {
           _subName = null;
           _startTime = DateTime.now();

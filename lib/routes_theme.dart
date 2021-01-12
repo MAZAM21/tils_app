@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tils_app/models/attendance.dart';
+import 'package:tils_app/models/role.dart';
+import 'package:tils_app/models/student.dart';
+
+import 'package:tils_app/models/subject.dart';
+
+import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
+import 'package:tils_app/widgets/screens/role-getter.dart';
+import 'package:tils_app/widgets/screens/student-screens/student_home.dart';
+import './widgets/subject-class_builder.dart';
 
 import './widgets/screens/all_tabs.dart';
 import './providers/all_students.dart';
 import './widgets/screens/attendance_page.dart';
 import './widgets/screens/student_records.dart';
-import './widgets/screens/time_table.dart';
+import './widgets/screens/time table/time_table.dart';
 import './widgets/edit-timetable.dart';
 import './providers/all_classes.dart';
-import './widgets/screens/attendance_of_class.dart';
+
 import './widgets/screens/class_records.dart';
 import './widgets/screens/choose_records_screen.dart';
 import './widgets/screens/class_record_detail.dart';
-import './widgets/screens/edit-timetable-form.dart';
+import './widgets/screens/time table/edit-timetable-form.dart';
 import './widgets/screens/home.dart';
 import './widgets/screens/auth_page.dart';
-import './widgets/time_table_builder.dart';
 
+import './service/db.dart';
 
 class RoutesAndTheme extends StatelessWidget {
-  
-final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final db = DatabaseService();
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -34,6 +42,18 @@ final FirebaseAuth auth = FirebaseAuth.instance;
         ),
         ChangeNotifierProvider(
           create: (ctx) => AllStudents(),
+        ),
+        StreamProvider<List<Meeting>>(
+          create: (ctx) => db.streamMeetings(),
+        ),
+        StreamProvider<List<SubjectClass>>(
+          create: (ctx) => db.streamClasses(),
+        ),
+        StreamProvider<List<Attendance>>(
+          create: (ctx) => db.streamAttendance(),
+        ),
+        StreamProvider<User>(
+          create: (ctx) => db.authStateStream(),
         ),
       ],
       child: MaterialApp(
@@ -61,22 +81,25 @@ final FirebaseAuth auth = FirebaseAuth.instance;
             ),
           ),
         ),
-        home: StreamBuilder(
+        home: RoleGetter(),
+
+        /*StreamBuilder<User>(
             stream: auth.authStateChanges(),
             builder: (ctx, userSnapshot) {
               if (userSnapshot.hasData) {
                 return AllTabs();
               }
               return AuthScreen();
-            }),
+            }),*/
         routes: {
           //'/': (context) => AllTabs(),
-          HomePage.routeName: (context) => HomePage(),
           AttendancePage.routeName: (context) => AttendancePage(),
+          HomePage.routeName: (context) => HomePage(),
+          SubjectClassBuilder.routeName: (context) => SubjectClassBuilder(),
           StudentRecords.routeName: (context) => StudentRecords(),
-          TimeTableBuilder.routeName: (context) => TimeTableBuilder(),
+          CalendarApp.routeName: (context) => CalendarApp(),
           EditTT.routeName: (context) => EditTT(),
-          AttendanceOfClass.routeName: (context) => AttendanceOfClass(),
+          StudentProvider.routeName: (context) => StudentProvider(),
           RecordsPage.routeName: (context) => RecordsPage(),
           ClassRecords.routeName: (context) => ClassRecords(),
           ClassRecordDetail.routeName: (context) => ClassRecordDetail(),

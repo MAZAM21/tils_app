@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import './edit-timetable-form.dart';
 
 class CalendarApp extends StatefulWidget {
-  final List<Meeting> _allmeets;
-  CalendarApp(this._allmeets);
+  // final List<Meeting> _allmeets;
+  // CalendarApp(this._allmeets);
   static const routeName = '/time-table';
 
   @override
@@ -56,8 +56,7 @@ class _CalendarAppState extends State<CalendarApp> {
 
   @override
   Widget build(BuildContext context) {
-    // final meetingsData = Provider.of<AllClasses>(context);
-    // final thisMeeting = meetingsData.timeTable;
+    final meetingsData = Provider.of<List<Meeting>>(context);
 
     return MaterialApp(
       title: 'Calendar Demo',
@@ -82,10 +81,9 @@ class _CalendarAppState extends State<CalendarApp> {
         //   ],
         // ),
         body: SfCalendar(
-          view: CalendarView.week,
-          dataSource: widget._allmeets != null
-              ? MeetingDataSource(widget._allmeets)
-              : null,
+          view: CalendarView.workWeek,
+          dataSource:
+              meetingsData != null ? MeetingDataSource(meetingsData) : null,
           // by default the month appointment display mode set as Indicator, we can
           // change the display mode as appointment using the appointment display
           // mode property
@@ -98,6 +96,9 @@ class _CalendarAppState extends State<CalendarApp> {
             print(date.toString());
             showElementDetails(appointments[0]);
           },
+          minDate: DateTime.now(),
+          maxDate: DateTime.now().add(Duration(days: 7)),
+          allowViewNavigation: false,
         ),
       ),
     );
@@ -142,26 +143,38 @@ class MeetingDataSource extends CalendarDataSource {
 
 /// Custom business object class which contains properties to hold the detailed
 /// information about the event data which will be rendered in calendar.
-class Meeting {
-  /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
-      this.docId);
+// class Meeting {
+//   /// Creates a meeting class with required details.
+//   Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
+//       this.docId);
 
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
+//   factory Meeting.fromFirestore(QueryDocumentSnapshot doc) {
+//     Map data = doc.data();
+//     return Meeting(
+//       data['subjectName'] ?? '',
+//       DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
+//       DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']),
+//       Colors.lightGreen,
+//       false,
+//       doc.id,
+//     );
+//   }
 
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
+//   /// Event name which is equivalent to subject property of [Appointment].
+//   String eventName;
 
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
+//   /// From which is equivalent to start time property of [Appointment].
+//   DateTime from;
 
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
+//   /// To which is equivalent to end time property of [Appointment].
+//   DateTime to;
 
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
+//   /// Background which is equivalent to color property of [Appointment].
+//   Color background;
 
-  /// Firestore doc ID.
-  String docId;
-}
+//   /// IsAllDay which is equivalent to isAllDay property of [Appointment].
+//   bool isAllDay;
+
+//   /// Firestore doc ID.
+//   String docId;
+// }

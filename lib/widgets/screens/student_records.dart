@@ -11,7 +11,7 @@ class StudentRecords extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _allStudentsData = Provider.of<AllStudents>(context);
-    final _allStuds = _allStudentsData.allInClass;
+    // final _allStuds = _allStudentsData.allInClass;
     // final _allStudNames = _allStuds.keys.toList();
     // final _allStudStats = _allStuds.values.toList();
     return MaterialApp(
@@ -28,46 +28,46 @@ class StudentRecords extends StatelessWidget {
             ),
           ],
         ),
-        body: ListView.builder(
-          itemCount: _allStuds.length,
-          itemBuilder: (ctx, i) {
-            return Card(
-              child: InkWell(
-                child: ListTile(
-                  leading: Text(_allStuds[i].name),
-                  trailing: Container(
-                    width: 200,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          for (var x = 0;
-                              x < _allStuds[i].attStatStud.length;
-                              x++)
-                            CircleAvatar(
-                              child: Text(_allStuds[i].attStatStud[x] ==
-                                      AttendanceStatus.Present
-                                  ? 'P'
-                                  : _allStuds[i].attStatStud[x] ==
-                                          AttendanceStatus.Absent
-                                      ? 'A'
-                                      : 'L'),
-                              backgroundColor: _allStuds[i].attStatStud[x] ==
-                                      AttendanceStatus.Present
-                                  ? Colors.green
-                                  : _allStuds[i].attStatStud[x] == AttendanceStatus.Absent
-                                      ? Colors.red
-                                      : Colors.yellow,
-                            )
-                        ]),
-                  ),
-                  onTap: () {
-                    //Navigator.of(context).pushNamed();
-                  },
-                ),
-              ),
-            );
-          },
-        ),
+        // body: ListView.builder(
+        //   itemCount: _allStuds.length,
+        //   itemBuilder: (ctx, i) {
+        //     return Card(
+        //       child: InkWell(
+        //         child: ListTile(
+        //           leading: Text(_allStuds[i].name),
+        //           trailing: Container(
+        //             width: 200,
+        //             child: Row(
+        //                 mainAxisAlignment: MainAxisAlignment.end,
+        //                 children: [
+        //                   for (var x = 0;
+        //                       x < _allStuds[i].attStatStud.length;
+        //                       x++)
+        //                     CircleAvatar(
+        //                       child: Text(_allStuds[i].attStatStud[x] ==
+        //                               AttendanceStatus.Present
+        //                           ? 'P'
+        //                           : _allStuds[i].attStatStud[x] ==
+        //                                   AttendanceStatus.Absent
+        //                               ? 'A'
+        //                               : 'L'),
+        //                       backgroundColor: _allStuds[i].attStatStud[x] ==
+        //                               AttendanceStatus.Present
+        //                           ? Colors.green
+        //                           : _allStuds[i].attStatStud[x] == AttendanceStatus.Absent
+        //                               ? Colors.red
+        //                               : Colors.yellow,
+        //                     )
+        //                 ]),
+        //           ),
+        //           onTap: () {
+        //             //Navigator.of(context).pushNamed();
+        //           },
+        //         ),
+        //       ),
+        //     );
+        //   },
+        // ),
       ),
     );
   }

@@ -1,7 +1,9 @@
+
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import '../models/subject.dart';
-import '../widgets/screens/time_table.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AllClasses with ChangeNotifier {
@@ -9,25 +11,23 @@ class AllClasses with ChangeNotifier {
   //allClassMeetings will be used for Syncfusion Calendar widget
   //addClass adds to _allClasses
 
-  List<SubjectClass> allClasses = [
-    SubjectClass(id: 'test', subjectName: SubjectName.Islamic),
+  List<SubjectClass> _allClasses = [
+    SubjectClass(id: 'test', subjectName: 'Islamic'),
   ];
 
   final List<Meeting> allClassMeetings = [];
 
-  List<SubjectClass> get allClassesData {
-    return [...allClasses];
+  List<Meeting> get allMeetings {
+    return [...allClassMeetings];
   }
 
-  // List<Meeting> get timeTable {
-  //   //return [...allClassMeetings];
-
-  //   return[...getFromCF()];
-  // }
+  List<SubjectClass> get allClassesData {
+    return [..._allClasses];
+  }
 
   CollectionReference _classCollection =
       FirebaseFirestore.instance.collection('classes');
-
+ 
   Future<void> addToCF(
     SubjectName name,
     DateTime start,
@@ -47,6 +47,35 @@ class AllClasses with ChangeNotifier {
     }
   }
 
+  void addMeetingFromCF(String name, String start, String end, String id) {
+    allClassMeetings.add(Meeting(
+      name,
+      DateFormat("yyyy-MM-dd hh:mm:ss a").parse(start),
+      DateFormat("yyyy-MM-dd hh:mm:ss a").parse(end),
+      Colors.amberAccent,
+      false,
+      id,
+    ));
+  }
+
+  // void addClassFromCF(String id, String subName) {
+  //   _allClasses.add(SubjectClass(
+  //     id: id,
+  //     subjectName: setSubject(subName),
+  //   ));
+  // }
+
+  void addAttFromCF(String id, Map<dynamic, dynamic> attendance) {
+    
+    _allClasses.forEach((cls) {
+      if (id == cls.id) {
+        cls.attendanceStatus = attendance;
+      }
+    });
+  }
+
+  
+
   Future<void> editInCF(
       String id, String name, DateTime start, DateTime end) async {
     String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
@@ -60,79 +89,26 @@ class AllClasses with ChangeNotifier {
     } catch (err) {
       print('error in adding edited class: $err');
     }
-    
   }
 
-  // List<Meeting> getFromCF() {
-  //   List<Meeting> inFuncList;
-  //   _classCollection.get().then((snapShot) {
-  //     return snapShot.docs.forEach((meeting) {
-  //       return inFuncList.add(Meeting(
-
-  //         meeting['subjectName'],
-  //         DateFormat("yyyy-MM-dd hh:mm:ss a").parse(meeting['startTime']),
-  //         DateFormat("yyyy-MM-dd hh:mm:ss a").parse(meeting['endTime']),
-  //         Colors.grey,
-  //         false,
-  //       ));
-  //     });
-  //   });
-  //   return inFuncList;
-  // }
-
-  // void deleteFromCF() {
-  //   _classCollection.
-  // }
-
-  // void addClass(
-  //   String id,
-  //   SubjectName name,
-  // ) {
-  //   SubjectClass addToAll = SubjectClass(
-  //     id: id,
-  //     subjectName: name,
-  //   );
-  //   allClasses.add(addToAll);
-  //   notifyListeners();
-  // }
-
-  // void addMeeting(DateTime start, SubjectName name, DateTime endTime) {
-  //   if (start != null && name != null) {
-  //     // Meeting m = Meeting(
-  //     //   enToString(name),
-  //     //   start,
-  //     //   endTime,
-  //     //   assignCol(name),
-  //     //   false,
-  //     // );
-  //     addToCF(name, start, endTime);
-  //     addClass(
-  //       DateTime.now().toString(),
-  //       name,
-  //     );
-  //     // allClassMeetings.add(m);
-
-  //     notifyListeners();
-  //   }
-  // }
-
-  // int findMeetingIndex(String docId) {
-  //   int i = allClassMeetings.firstWhere((x) {
-  //     return x.docId ==docId;
-  //   });
-  //   return i;
-  // }
-
-  // void editMeeting(int i, DateTime start, SubjectName name, DateTime end) {
-  //   allClassMeetings[i] = Meeting(
-  //     enToString(name),
-  //     start,
-  //     end,
-  //     assignCol(name),
-  //     false,
-  //   );
-  //   notifyListeners();
-  // }
+  SubjectName setSubject(String sub) {
+    switch (sub) {
+      case 'Jurisprudence':
+        return SubjectName.Jurisprudence;
+        break;
+      case 'Trust':
+        return SubjectName.Trust;
+        break;
+      case 'Conflict':
+        return SubjectName.Conflict;
+        break;
+      case 'Islamic':
+        return SubjectName.Islamic;
+        break;
+      default:
+        return SubjectName.Undeclared;
+    }
+  }
 
   String enToString(SubjectName name) {
     switch (name) {
@@ -171,4 +147,39 @@ class AllClasses with ChangeNotifier {
         return Colors.black;
     }
   }
+}
+class Meeting {
+  /// Creates a meeting class with required details.
+  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
+      this.docId);
+
+  factory Meeting.fromFirestore(QueryDocumentSnapshot doc) {
+    Map data = doc.data();
+    return Meeting(
+      data['subjectName'] ?? '',
+      DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
+      DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']),
+      Colors.lightGreen,
+      false,
+      doc.id,
+    );
+  }
+
+  /// Event name which is equivalent to subject property of [Appointment].
+  String eventName;
+
+  /// From which is equivalent to start time property of [Appointment].
+  DateTime from;
+
+  /// To which is equivalent to end time property of [Appointment].
+  DateTime to;
+
+  /// Background which is equivalent to color property of [Appointment].
+  Color background;
+
+  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
+  bool isAllDay;
+
+  /// Firestore doc ID.
+  String docId;
 }
