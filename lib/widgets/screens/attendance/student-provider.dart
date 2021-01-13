@@ -13,6 +13,7 @@ class StudentProvider extends StatelessWidget {
     final sub = ModalRoute.of(context).settings.arguments as SubjectClass;
     final subName= sub.subjectName;
     final subId = sub.id;
+    db.addClassDetailToAttColl(subName, subId, sub.startTime);
     return FutureProvider<List<Student>>(
       create: (ctx) => db.getStudentsBySub(subName),
       child: AttendanceMarkerBuilder(subId),

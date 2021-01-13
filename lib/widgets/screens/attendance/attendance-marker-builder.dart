@@ -4,10 +4,11 @@ import 'package:tils_app/models/attendance.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:tils_app/providers/all_classes.dart';
+
 import 'package:tils_app/models/student.dart';
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 class AttendanceMarkerBuilder extends StatefulWidget {
   static const routeName = '/marker-builder';
@@ -158,9 +159,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
 
     return Scaffold(
       body: !streamActive
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
+          ? LoadingScreen()
           : ListView.builder(
               itemCount: studentProvider.length,
               itemBuilder: (ctx, i) {

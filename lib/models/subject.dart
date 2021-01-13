@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 
 enum SubjectName {
@@ -19,11 +20,13 @@ enum AttendanceStatus {
 class SubjectClass with ChangeNotifier {
   final String subjectName;
   final String id;
+  final DateTime startTime;
   Map<String, dynamic> attendanceStatus = {};
 
   SubjectClass({
     @required this.id,
     @required this.subjectName,
+    @required this.startTime,
     this.attendanceStatus,
   });
 
@@ -33,6 +36,7 @@ class SubjectClass with ChangeNotifier {
     return SubjectClass(
       id: doc.id,
       subjectName: data['subjectName'],
+      startTime: DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
     );
   }
 
@@ -85,17 +89,17 @@ class SubjectClass with ChangeNotifier {
     }
   }
 
-  String getAllPresent() {
-    final studs = attendanceStatus.keys.toList();
-    final stats = attendanceStatus.values.toList();
-    int allP = 0;
-    for (var i = 0; i < studs.length; i++) {
-      if (stats[i] == AttendanceStatus.Present) {
-        allP++;
-      }
-    }
-    return allP.toString();
-  }
+  // String getAllPresent() {
+  //   final studs = attendanceStatus.keys.toList();
+  //   final stats = attendanceStatus.values.toList();
+  //   int allP = 0;
+  //   for (var i = 0; i < studs.length; i++) {
+  //     if (stats[i] == AttendanceStatus.Present) {
+  //       allP++;
+  //     }
+  //   }
+  //   return allP.toString();
+  // }
 
   // List<String> get allStudIDs {
   //   return regStuds;

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/drawer.dart';
-import 'package:tils_app/widgets/subject-class_builder.dart';
+import 'package:tils_app/widgets/screens/attendance/attendance_page.dart';
 
 
-import './choose_records_screen.dart';
+
+import './records/choose_records_screen.dart';
 import './time table/edit-timetable-form.dart';
 import './home.dart';
 import './time table/time_table.dart';
@@ -73,7 +74,7 @@ class _AllTabsState extends State<AllTabs> {
             EditTTForm(),
             CalendarApp(),
             HomePage(),
-            SubjectClassBuilder(),
+            AttendancePage(),
             RecordsPage(),
           ],
         ),

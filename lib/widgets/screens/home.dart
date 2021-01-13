@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import './time table/time_table.dart';
 import '../drawer.dart';
 import './time table/edit-timetable-form.dart';
-import './attendance_page.dart';
-import './choose_records_screen.dart';
+import './attendance/attendance_page.dart';
+import './records/choose_records_screen.dart';
 
 class HomePage extends StatelessWidget {
   static const routeName = '/home';

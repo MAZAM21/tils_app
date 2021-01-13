@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:tils_app/models/meeting.dart';
 
-import 'package:tils_app/providers/all_classes.dart';
+
 import 'package:provider/provider.dart';
 import './edit-timetable-form.dart';
 

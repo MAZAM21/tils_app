@@ -20,20 +20,22 @@ class Student with ChangeNotifier {
     SubjectName.Islamic: true,
     SubjectName.Trust: true,
   };
-  Map<String, AttendanceStatus> attendance = {};
+  Map<String, int> attendance = {};
 
   Student({
     @required this.id,
     @required this.name,
     @required this.year,
+    this.attendance,
   });
 
   factory Student.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data();
     return Student(
-      id: doc.id,
-      name: data['studentName'],
-      year: data['year'],
+      id: doc.id ?? '',
+      name: data['studentName'] ?? '',
+      year: data['year'] ?? '',
+      attendance: {...data['attendance']} ?? {},
     );
   }
 
@@ -45,11 +47,11 @@ class Student with ChangeNotifier {
     return id;
   }
 
-  void addRec(String id, AttendanceStatus att) {
-    attendance.update(id, (val) => att, ifAbsent: () => att);
+//   void addRec(String id, AttendanceStatus att) {
+//     attendance.update(id, (val) => att, ifAbsent: () => att);
 
-    print(name);
-    print(attendance);
-    notifyListeners();
-  }
+//     print(name);
+//     print(attendance);
+//     notifyListeners();
+//   }
 }
