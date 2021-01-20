@@ -9,7 +9,6 @@ import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/service/db.dart';
 import './time_table.dart';
 
-
 class EditTTForm extends StatefulWidget {
   static const routeName = '/edit-tt-form';
 
@@ -30,7 +29,7 @@ class _EditTTFormState extends State<EditTTForm> {
   var _isInit = true;
   var _isEdit = false;
   String _editedId;
- 
+
   final db = DatabaseService();
   @override
   void didChangeDependencies() {
@@ -133,7 +132,7 @@ class _EditTTFormState extends State<EditTTForm> {
   void pickDate() {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _isEdit ? _startDate : DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 365)),
     ).then((pickedDate) {
@@ -142,6 +141,7 @@ class _EditTTFormState extends State<EditTTForm> {
       }
       setState(() {
         _startDate = pickedDate;
+        _startTime = pickedDate;
       });
     });
   }
@@ -192,7 +192,8 @@ class _EditTTFormState extends State<EditTTForm> {
   void pickTimeStart() {
     showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime:
+          _isEdit ? TimeOfDay.fromDateTime(_startDate) : TimeOfDay.now(),
     ).then((time) {
       if (time == null) {
         return;
@@ -278,9 +279,9 @@ class _EditTTFormState extends State<EditTTForm> {
     _duration = d;
     _endTime = _startTime.add(Duration(hours: h, minutes: m));
   }
- 
+
 // void studentAttendance() {
-    
+
 //     _studentCollection.get().then((allStudDocs) {
 //       allStudDocs.docs.forEach((student) {
 //         // if (student['registeredSubs'] == true) {
@@ -290,22 +291,31 @@ class _EditTTFormState extends State<EditTTForm> {
 //     }).catchError((err) {
 //       print('$err');
 //     });
-    
+
 //   }
 
   void _saveForm(BuildContext context) {
-    if (_startTime != DateTime.now() && _subName != SubjectName.Undeclared && _duration!=null) {
+    if (!_endTime.isBefore(_startTime) &&
+        _subName != SubjectName.Undeclared &&
+        _duration != null) {
       if (!_isEdit) {
-        db.addToCF(_subName, _startTime, _endTime, );
+        db.addToCF(
+          _subName,
+          _startTime,
+          _endTime,
+        );
         setState(() {
           _subName = null;
           _startTime = DateTime.now();
           _duration = null;
         });
       } else {
-        setState(() {
-          db.editInCF(_editedId,enToString(_subName), _startTime, _endTime,);
-        });
+        db.editInCF(
+          _editedId,
+          enToString(_subName),
+          _startTime,
+          _endTime,
+        );
       }
     } else {
       showDialog(
@@ -321,7 +331,6 @@ class _EditTTFormState extends State<EditTTForm> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: Builder(builder: (BuildContext context) {
         return Form(
@@ -535,7 +544,8 @@ class _EditTTFormState extends State<EditTTForm> {
                             onPressed: () {
                               Scaffold.of(context).hideCurrentSnackBar();
                               Scaffold.of(context).showSnackBar(SnackBar(
-                                content: _subName != SubjectName.Undeclared && _duration != null
+                                content: _subName != SubjectName.Undeclared &&
+                                        _duration != null
                                     ? Text(
                                         '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime)} added to Time Table')
                                     : Text('Class not added'),
@@ -543,6 +553,9 @@ class _EditTTFormState extends State<EditTTForm> {
                               setState(() {
                                 _saveForm(context);
                               });
+                              if (_isEdit) {
+                                Navigator.pop(context);
+                              }
                             },
                           )
                         ],

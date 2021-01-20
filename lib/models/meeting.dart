@@ -36,19 +36,19 @@ class Meeting {
   /// Firestore doc ID.
   String docId;
 }
-Color getColor(subjectName) {
+ Color getColor(subjectName) {
     switch (subjectName) {
       case 'Jurisprudence':
-        return Colors.indigo;
+        return Color.fromARGB(255, 56, 85, 89);
         break;
       case 'Trust':
-        return Colors.amber[900];
+        return Color.fromARGB(255, 68, 137, 156);
         break;
       case 'Conflict':
-        return Colors.teal;
+        return Color.fromARGB(255, 37, 31, 87);
         break;
       case 'Islamic':
-        return Colors.lime[800];
+        return Color.fromARGB(255, 39, 59, 92);
         break;
       default:
         return Colors.black;

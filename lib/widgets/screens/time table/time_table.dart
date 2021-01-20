@@ -1,11 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
+
 import 'package:tils_app/models/meeting.dart';
 
-
 import 'package:provider/provider.dart';
+import 'package:tils_app/service/db.dart';
 import './edit-timetable-form.dart';
 
 class CalendarApp extends StatefulWidget {
@@ -18,13 +20,55 @@ class CalendarApp extends StatefulWidget {
 }
 
 class _CalendarAppState extends State<CalendarApp> {
+  final db = DatabaseService();
+  CalendarController _controller;
+  DateTime _jumpToTime = DateTime.now();
+  String _text = '';
+
+  @override
+  void initState() {
+    _controller = CalendarController();
+    _controller.view = CalendarView.workWeek;
+    _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+    super.initState();
+  }
+
+  void _updateState(DateTime date) {
+    setState(() {
+      _jumpToTime = date;
+      _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+    });
+  }
+
+  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+    dynamic appointments = calendarTapDetails.appointments;
+    if (appointments != null) {
+      showElementDetails(appointments[0]);
+    }
+    if (_controller.view == CalendarView.month &&
+        calendarTapDetails.targetElement == CalendarElement.calendarCell) {
+      _controller.view = CalendarView.day;
+      _updateState(calendarTapDetails.date);
+    } else if ((_controller.view == CalendarView.week ||
+            _controller.view == CalendarView.workWeek) &&
+        calendarTapDetails.targetElement == CalendarElement.viewHeader) {
+      _controller.view = CalendarView.day;
+      _updateState(calendarTapDetails.date);
+    } else if (_controller.view == CalendarView.day &&
+        calendarTapDetails.targetElement == CalendarElement.header) {
+      _controller.view = CalendarView.workWeek;
+      _updateState(calendarTapDetails.date);
+    }
+  }
+
   void onTapCalendar(Meeting tappedClass) {
-    Navigator.popAndPushNamed(context, EditTTForm.routeName,
+    Navigator.pushNamed(context, EditTTForm.routeName,
         arguments: tappedClass);
   }
 
   void showElementDetails(Meeting selected) {
     showModalBottomSheet(
+      backgroundColor: selected.background,
       context: context,
       builder: (BuildContext context) {
         return Container(
@@ -48,6 +92,16 @@ class _CalendarAppState extends State<CalendarApp> {
                   onTapCalendar(selected);
                 },
               ),
+              ElevatedButton(
+                child: Text('Delete'),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                ),
+                onPressed: () {
+                  db.deleteClass(selected.docId);
+                  Navigator.pop(context);
+                },
+              )
             ],
           ),
         );
@@ -59,48 +113,29 @@ class _CalendarAppState extends State<CalendarApp> {
   Widget build(BuildContext context) {
     final meetingsData = Provider.of<List<Meeting>>(context);
 
-    return MaterialApp(
-      title: 'Calendar Demo',
-      home: Scaffold(
-        // appBar: AppBar(
-        //   actions: <Widget>[
-        //     FlatButton(
-        //       child: Text('Back'),
-        //       onPressed: () {
-        //         Navigator.pop(context);
-        //       },
-        //     ),
-        //     FlatButton(
-        //       child: Text('Edit Time Table'),
-        //       onPressed: () {
-        //         Navigator.pushNamed(
-        //           context,
-        //           EditTTForm.routeName,
-        //         );
-        //       },
-        //     )
-        //   ],
-        // ),
-        body: SfCalendar(
-          view: CalendarView.workWeek,
-          dataSource:
-              meetingsData != null ? MeetingDataSource(meetingsData) : null,
-          // by default the month appointment display mode set as Indicator, we can
-          // change the display mode as appointment using the appointment display
-          // mode property
-          monthViewSettings: MonthViewSettings(
-              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
-          onTap: (CalendarTapDetails details) {
-            DateTime date = details.date;
-            dynamic appointments = details.appointments;
-            //CalendarElement view = details.targetElement;
-            print(date.toString());
-            showElementDetails(appointments[0]);
-          },
-          minDate: DateTime.now(),
-          maxDate: DateTime.now().add(Duration(days: 7)),
-          allowViewNavigation: false,
-        ),
+    return Scaffold(
+      body: SfCalendar(
+        view: _controller.view,
+        controller: _controller,
+        dataSource:
+            meetingsData != null ? MeetingDataSource(meetingsData) : null,
+        // by default the month appointment display mode set as Indicator, we can
+        // change the display mode as appointment using the appointment display
+        // mode property
+
+        monthViewSettings: MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+        onTap: (CalendarTapDetails details) {
+          DateTime date = details.date;
+
+          //CalendarElement view = details.targetElement;
+          print(date.toString());
+
+          calendarTapped(details);
+        },
+        initialDisplayDate: _jumpToTime,
+        maxDate: DateTime.now().add(Duration(days: 7)),
+        allowViewNavigation: false,
       ),
     );
   }
@@ -141,41 +176,3 @@ class MeetingDataSource extends CalendarDataSource {
     return appointments[index].isAllDay;
   }
 }
-
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
-// class Meeting {
-//   /// Creates a meeting class with required details.
-//   Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay,
-//       this.docId);
-
-//   factory Meeting.fromFirestore(QueryDocumentSnapshot doc) {
-//     Map data = doc.data();
-//     return Meeting(
-//       data['subjectName'] ?? '',
-//       DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
-//       DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']),
-//       Colors.lightGreen,
-//       false,
-//       doc.id,
-//     );
-//   }
-
-//   /// Event name which is equivalent to subject property of [Appointment].
-//   String eventName;
-
-//   /// From which is equivalent to start time property of [Appointment].
-//   DateTime from;
-
-//   /// To which is equivalent to end time property of [Appointment].
-//   DateTime to;
-
-//   /// Background which is equivalent to color property of [Appointment].
-//   Color background;
-
-//   /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-//   bool isAllDay;
-
-//   /// Firestore doc ID.
-//   String docId;
-// }

@@ -6,6 +6,7 @@ import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/attendance/attendance-marker-builder.dart';
 
 class StudentProvider extends StatelessWidget {
+  //adds a document to attendance collection
   static const routeName = '/student-provider';
   final db = DatabaseService();
   @override

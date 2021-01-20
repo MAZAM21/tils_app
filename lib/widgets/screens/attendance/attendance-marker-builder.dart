@@ -158,6 +158,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
     }
 
     return Scaffold(
+      appBar: AppBar(),
       body: !streamActive
           ? LoadingScreen()
           : ListView.builder(

@@ -28,6 +28,9 @@ dependencies:
   firebase_core: ^0.5.3
   cloud_firestore: ^0.14.4
   firebase_auth: ^0.18.4+1
+  quiver: ^2.1.5
+  syncfusion_flutter_charts: ^18.4.34
+  syncfusion_flutter_calendar: ^18.4.34
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,8 +40,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  syncfusion_flutter_calendar: ^18.3.52
+  
   provider: ^4.3.2+3
+
 
 
 # For information on the generic Dart part of this file, see the
@@ -79,6 +83,11 @@ flutter:
     - family: Lato
       fonts:
         - asset: lib/assets/Lato-Regular.ttf
+    - family: Proxima Nova
+      fonts:
+        - asset: lib/assets/Proxima-Nova-Reg.ttf
+        - asset: lib/assets/Proxima-Nova-Bold.ttf
+
         
     # - family: Trajan Pro
     #   fonts:

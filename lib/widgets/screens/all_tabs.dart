@@ -1,12 +1,13 @@
+
+
 import 'package:flutter/material.dart';
+
 import 'package:tils_app/widgets/drawer.dart';
 import 'package:tils_app/widgets/screens/attendance/attendance_page.dart';
 
-
-
 import './records/choose_records_screen.dart';
 import './time table/edit-timetable-form.dart';
-import './home.dart';
+import './home/home.dart';
 import './time table/time_table.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
@@ -20,9 +21,9 @@ class ColoredTabBar extends Container implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    color: color,
-    child: tabBar,
-  );
+        color: color,
+        child: tabBar,
+      );
 }
 
 class AllTabs extends StatefulWidget {
@@ -39,45 +40,43 @@ class _AllTabsState extends State<AllTabs> {
       child: Scaffold(
         drawer: AppDrawer(),
         appBar: AppBar(
-          title: Text('TAPP'),
+          title: Text(
+            'TILS Teacher\'s Portal',
+            style: Theme.of(context).textTheme.headline6,
+            textAlign: TextAlign.justify,
+          ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: ColoredTabBar(
-              
               color: Colors.black,
               tabBar: TabBar(
-                labelColor: Theme.of(context).primaryColor,
-                isScrollable: true,
-                tabs: <Widget>[
-                  Tab(
-                    text: 'Edit Time Table',
-                  ),
-                  Tab(
-                    text: 'Time Table',
-                  ),
-                  Tab(
-                    text: 'Home',
-                  ),
-                  Tab(
-                    text: 'Attendance'
-                  ),
-                  Tab(
-                    text: 'Records',
-                  ),
-                ],
-              ),
+                  labelColor: Color.fromARGB(255, 237, 246, 249),
+                  isScrollable: true,
+                  tabs: <Widget>[
+                    Tab(
+                      text: 'Edit Time Table',
+                    ),
+                    Tab(
+                      text: 'Time Table',
+                    ),
+                    Tab(
+                      text: 'Home',
+                    ),
+                    Tab(text: 'Attendance'),
+                    Tab(
+                      text: 'Records',
+                    ),
+                  ]),
             ),
           ),
         ),
-        body: TabBarView(
-          children: <Widget>[
-            EditTTForm(),
-            CalendarApp(),
-            HomePage(),
-            AttendancePage(),
-            RecordsPage(),
-          ],
-        ),
+        body: TabBarView(children: <Widget>[
+          EditTTForm(),
+          CalendarApp(),
+          HomePage(),
+          AttendancePage(),
+          RecordsPage(),
+        ]),
       ),
     );
   }

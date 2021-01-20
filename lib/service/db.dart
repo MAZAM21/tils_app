@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:quiver/iterables.dart';
+import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/class-data.dart';
 import 'package:tils_app/models/role.dart';
@@ -16,8 +18,13 @@ class DatabaseService with ChangeNotifier {
   //gets classes collection data and converts to Meeting list for TT
   Stream<List<Meeting>> streamMeetings() {
     CollectionReference ref = _db.collection('classes');
-    return ref.snapshots().map(
-        (list) => list.docs.map((doc) => Meeting.fromFirestore(doc)).toList());
+    try {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => Meeting.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('error in streamMeetings:err');
+      return null;
+    }
   }
 
   //gets classes collection data and converts to subjectclass for attendance
@@ -32,6 +39,17 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('attendance');
     return ref.snapshots().map((list) =>
         list.docs.map((doc) => Attendance.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<Announcement>> streamAnnouncement() {
+    CollectionReference ref = _db.collection('announcements');
+    try {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => Announcement.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('err in stream announcement: $err');
+    }
+    return null;
   }
 
   //gets auth state stream
@@ -52,6 +70,7 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  //get all student docs from student collection
   Future<List<Student>> getAllStudents() async {
     try {
       QuerySnapshot ref = await _db.collection('students').get();
@@ -106,6 +125,21 @@ class DatabaseService with ChangeNotifier {
     return role;
   }
 
+  Future<void> addAnnouncementToCF(
+      String title, String body, String uid, DateTime now) async {
+    CollectionReference ref = _db.collection('announcements');
+    try {
+      return await ref.add({
+        'addedBy': uid,
+        'title': title,
+        'body': body,
+        'dateTime': now,
+      });
+    } catch (err) {
+      print('error in add annoncement:$err');
+    }
+  }
+
   //adds class data from edit tt to cf
   Future<void> addToCF(
     SubjectName name,
@@ -142,17 +176,58 @@ class DatabaseService with ChangeNotifier {
         'subjectName': name,
         'startTime': startString,
         'endTime': endString,
-      });
+      }, SetOptions(merge: true));
     } catch (err) {
       print('error in adding edited class: $err');
     }
   }
 
+  Future<void> editAnnouncement(
+    String id,
+    String title,
+    String body,
+    String uid,
+    DateTime time,
+  ) async {
+    CollectionReference ref = _db.collection('announcements');
+    try {
+      return await ref.doc(id).set({
+        'title': title,
+        'body': body,
+        'addedBy': uid,
+        'dateTime': time,
+      }, SetOptions(merge: true));
+    } catch (err) {
+      print('error in edit announcement: $err');
+    }
+  }
+
+  //get attendance and class docs for Class Records data object(ClassData)
   Future<ClassData> getClassRecord(String id) async {
     DocumentSnapshot attDoc = await _db.collection('attendance').doc(id).get();
     DocumentSnapshot classDoc = await _db.collection('classes').doc(id).get();
     ClassData cd = ClassData.fromFirestore(attDoc, classDoc);
     return cd;
+  }
+
+  Future<void> deleteClass(String id) async {
+    final classRef = _db.collection('classes');
+    final attRef = _db.collection('attendance');
+    try {
+      attRef.doc(id).delete();
+      return await classRef.doc(id).delete();
+    } catch (err) {
+      print('error in deleteClass: $err');
+    }
+  }
+
+  Future<void> deleteAnnouncement(String id) async {
+    final ref = _db.collection('announcements');
+    try {
+      return await ref.doc(id).delete();
+    } catch (err) {
+      print('err in delete Announcement: $err');
+    }
   }
 }
 

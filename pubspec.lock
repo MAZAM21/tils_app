@@ -220,7 +220,7 @@ packages:
     source: hosted
     version: "4.3.2+3"
   quiver:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: quiver
       url: "https://pub.dartlang.org"
@@ -260,26 +260,33 @@ packages:
     source: hosted
     version: "1.1.0-nullsafety.1"
   syncfusion_flutter_calendar:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: syncfusion_flutter_calendar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "18.3.52"
+    version: "18.4.34"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "18.4.34"
   syncfusion_flutter_core:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "18.3.52"
+    version: "18.4.34"
   syncfusion_flutter_datepicker:
     dependency: transitive
     description:
       name: syncfusion_flutter_datepicker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "18.3.52-beta"
+    version: "18.4.34-beta"
   term_glyph:
     dependency: transitive
     description:
