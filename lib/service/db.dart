@@ -5,6 +5,7 @@ import 'package:quiver/iterables.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/class-data.dart';
+import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student.dart';
 import '../models/meeting.dart';
@@ -50,6 +51,18 @@ class DatabaseService with ChangeNotifier {
       print('err in stream announcement: $err');
     }
     return null;
+  }
+  
+  Stream<List<RAfromDB>> streamRA(){
+    CollectionReference ref = _db.collection('remote-assessment');
+    try {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => RAfromDB.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('err in stream RA: $err');
+    }
+    return null;
+
   }
 
   //gets auth state stream
@@ -138,6 +151,24 @@ class DatabaseService with ChangeNotifier {
     } catch (err) {
       print('error in add annoncement:$err');
     }
+  }
+
+  //adds remote assessment to cf. only for input
+  Future<void> addAssessmentToCF(RemoteAssessment assessment) async {
+    CollectionReference ref =_db.collection('remote-assessment');
+    try{
+      return await ref.add({
+        'title':assessment.assessmentTitle,
+        'subject':assessment.subject,
+        'timeCreated':assessment.timeAdded,
+        'MCQs':assessment.returnMcqs(),
+        'TextQs':assessment.allTextQs,
+        'teacherId': assessment.teacherId
+      });
+    }catch(err){
+      print('error in add assessment: $err');
+    }
+    print('function triggered');
   }
 
   //adds class data from edit tt to cf

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:tils_app/models/meeting.dart';
+import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
 import 'package:tils_app/widgets/screens/announcements/display-announcements.dart';
 import 'package:tils_app/widgets/screens/home/attendance-graph.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
+import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
 import './class-timer-panel.dart';
 
 import 'package:provider/provider.dart';
@@ -49,6 +52,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // print('im called');
+    // Provider.of<RemoteAssessment>(context, listen: false).allMCQs = [];
     final meetingsList = Provider.of<List<Meeting>>(context);
     int estimateTs = 0;
     bool isActive = false;
@@ -64,25 +69,30 @@ class _HomePageState extends State<HomePage> {
         ? LoadingScreen()
         : Scaffold(
             drawer: AppDrawer(),
-            body: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    width: 400,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        //Subject Notifier
-                        ClassTimerPanel(estimateTs, nextClass),
-                        _buttonBuilder('Announcements', AllAnnouncements.routeName, context)
-                        
-                      ],
+            body:SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: 400,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          //Subject Notifier
+                          ClassTimerPanel(estimateTs, nextClass),
+                          _buttonBuilder('Announcements',
+                              AllAnnouncements.routeName, context),
+                          _buttonBuilder(
+                              'Remote Assessment', RASubject.routeName, context),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
   }

@@ -97,6 +97,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
+                          SizedBox(height: 30),
                           TextFormField(
                             key: ValueKey('announcement title'),
                             validator: (value) {

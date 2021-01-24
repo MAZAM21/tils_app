@@ -1,16 +1,17 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:tils_app/models/attendance.dart';
+import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-detail.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
 import 'package:tils_app/widgets/screens/announcements/display-announcements.dart';
 import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
+import 'package:tils_app/widgets/screens/remote-testing/answer-choice-input.dart';
+import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
+import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
 
 import './widgets/screens/attendance/attendance_page.dart';
@@ -35,6 +36,9 @@ class RoutesAndTheme extends StatelessWidget {
         ChangeNotifierProvider<DatabaseService>(
           create: (ctx) => DatabaseService(),
         ),
+        ChangeNotifierProvider<RemoteAssessment>(
+          create: (ctx) => RemoteAssessment(),
+        ),
         StreamProvider<List<Meeting>>(
           create: (ctx) => db.streamMeetings(),
         ),
@@ -47,6 +51,9 @@ class RoutesAndTheme extends StatelessWidget {
         StreamProvider<User>(
           create: (ctx) => db.authStateStream(),
         ),
+        StreamProvider<List<RAfromDB>>(
+          create: (ctx) => db.streamRA(),
+        )
       ],
       child: MaterialApp(
         initialRoute: '/',
@@ -92,6 +99,9 @@ class RoutesAndTheme extends StatelessWidget {
           EditTTForm.routeName: (context) => EditTTForm(),
           AllAnnouncements.routeName: (context) => AllAnnouncements(),
           AnnouncementDetail.routeName: (context) => AnnouncementDetail(),
+          RemoteAssessmentInput.routeName: (context) => RemoteAssessmentInput(),
+          AnswerChoiceInput.routeName: (context) => AnswerChoiceInput(),
+          RASubject.routeName: (context) => RASubject(),
         },
       ),
     );

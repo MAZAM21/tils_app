@@ -83,4 +83,13 @@ class TeacherService with ChangeNotifier {
     }
     return list.reversed.toList();
   }
+
+  List<String> valueList(Map map){
+    return map.values.toList();
+  }
+  List<String> keyList(Map map){
+    return map.keys.toList();
+  }
+
+
 }

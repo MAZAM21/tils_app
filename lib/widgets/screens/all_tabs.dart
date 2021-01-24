@@ -1,5 +1,6 @@
 
 
+
 import 'package:flutter/material.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
@@ -48,7 +49,7 @@ class _AllTabsState extends State<AllTabs> {
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: ColoredTabBar(
-              color: Colors.black,
+              color: Color.fromARGB(255, 0, 109, 119),
               tabBar: TabBar(
                   labelColor: Color.fromARGB(255, 237, 246, 249),
                   isScrollable: true,
