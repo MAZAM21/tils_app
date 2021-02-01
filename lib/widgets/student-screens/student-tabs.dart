@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
-import 'package:tils_app/widgets/screens/attendance/attendance_page.dart';
 
-import './records/choose_records_screen.dart';
-import './time table/edit-timetable-form.dart';
-import './home/home.dart';
-import './time table/time_table.dart';
+import 'package:tils_app/widgets/student-screens/student_home.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
@@ -24,49 +20,46 @@ class ColoredTabBar extends Container implements PreferredSizeWidget {
       );
 }
 
-class AllTabs extends StatefulWidget {
+class AllStudentTabs extends StatefulWidget {
   @override
-  _AllTabsState createState() => _AllTabsState();
+  _AllStudentTabsState createState() => _AllStudentTabsState();
 }
 
-class _AllTabsState extends State<AllTabs> {
+class _AllStudentTabsState extends State<AllStudentTabs>
+    with SingleTickerProviderStateMixin {
+  TabController _controller;
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
-      initialIndex: 1,
+      length: 1,
+      initialIndex: 0,
       child: Scaffold(
         drawer: AppDrawer(),
         appBar: AppBar(
-          title: Text(
-            'TILS Teacher\'s Portal',
+          title:  Text(
+            'TILS Student\'s Portal',
             style: Theme.of(context).textTheme.headline6,
             textAlign: TextAlign.justify,
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: ColoredTabBar(
-              color: Theme.of(context).canvasColor,
+              color: Color.fromARGB(255, 237, 246, 249),
               tabBar: TabBar(
-                  labelColor: Color.fromARGB(255, 76, 76, 76),
-                  indicatorColor: Color.fromARGB(255, 143, 166, 203),
-                  isScrollable: false,
+                  controller: _controller,
+                  labelColor: Theme.of(context).primaryColor,
+                  isScrollable: true,
                   tabs: <Widget>[
-                    Tab(
-                      text: 'Add Class',
-                    ),
                     Tab(
                       text: 'Home',
                     ),
-                    Tab(text: 'Attendance'),
                   ]),
             ),
           ),
         ),
         body: TabBarView(children: <Widget>[
-          EditTTForm(),
-          HomePage(),
-          AttendancePage(),
+          StudentHome(),
         ]),
       ),
     );

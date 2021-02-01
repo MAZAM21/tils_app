@@ -10,9 +10,11 @@ import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
 import 'package:tils_app/widgets/screens/announcements/display-announcements.dart';
 import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
 import 'package:tils_app/widgets/screens/remote-testing/answer-choice-input.dart';
+import 'package:tils_app/widgets/screens/remote-testing/display-all-ra.dart';
 import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
 import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
+import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 
 import './widgets/screens/attendance/attendance_page.dart';
 import './widgets/screens/records/student_records.dart';
@@ -51,39 +53,56 @@ class RoutesAndTheme extends StatelessWidget {
         StreamProvider<User>(
           create: (ctx) => db.authStateStream(),
         ),
-        StreamProvider<List<RAfromDB>>(
-          create: (ctx) => db.streamRA(),
-        )
       ],
       child: MaterialApp(
         initialRoute: '/',
         theme: ThemeData(
-          backgroundColor: Colors.black12,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 154, 23, 80)))),
+          //backgroundColor: Colors.black12,
           primaryColor: Color.fromARGB(255, 24, 118, 133),
           canvasColor: Color.fromARGB(255, 237, 246, 249),
           appBarTheme: AppBarTheme(
-            color: Color.fromARGB(255, 0, 109, 119),
+            elevation: 0,
+            color: Color.fromARGB(255, 237, 246, 249),
+            iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))
           ),
+          
           tabBarTheme:
-              TabBarTheme(labelColor: Color.fromARGB(255, 255, 221, 210)),
+              TabBarTheme(labelColor: Color.fromARGB(255, 24, 118, 133)),
           //cardcolor removed
           textTheme: TextTheme(
-            headline6: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Proxima Nova',
-              fontSize: 18,
-            ),
-            headline5: TextStyle(
-              color: Color.fromARGB(255, 0, 0, 179),
-              fontFamily: 'Proxima Nova',
-              fontSize: 18,
-            ),
-            headline4: TextStyle(
-              color: Color.fromARGB(255, 154, 23, 80),
-              fontFamily: 'Proxima Nova',
-              fontSize: 16,
-            ),
-          ),
+              headline6: TextStyle(
+                color: Color.fromARGB(255, 76, 76, 76),
+                fontFamily: 'Proxima Nova',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+              headline5: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 179),
+                fontFamily: 'Proxima Nova',
+                fontSize: 18,
+              ),
+              headline4: TextStyle(
+                color: Color.fromARGB(255, 154, 23, 80),
+                fontFamily: 'Proxima Nova',
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              headline3: TextStyle(
+                color: Color.fromARGB(255, 10, 50, 0),
+                fontFamily: 'Proxima Nova',
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+              ),
+              headline2: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Proxima Nova',
+                fontSize: 15,
+                fontWeight: FontWeight.normal,
+              )),
         ),
         home: RoleGetter(),
         routes: {
@@ -102,6 +121,8 @@ class RoutesAndTheme extends StatelessWidget {
           RemoteAssessmentInput.routeName: (context) => RemoteAssessmentInput(),
           AnswerChoiceInput.routeName: (context) => AnswerChoiceInput(),
           RASubject.routeName: (context) => RASubject(),
+          AllRAs.routeName: (context) => AllRAs(),
+          StudentRADisplay.routeName: (context) => StudentRADisplay(),
         },
       ),
     );

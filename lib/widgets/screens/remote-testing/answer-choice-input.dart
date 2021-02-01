@@ -16,7 +16,7 @@ class _AnswerChoiceInputState extends State<AnswerChoiceInput> {
   final wrongController = TextEditingController();
   bool _correctEnabled = true;
   final ts = TeacherService();
-  int x = 0;
+  int x = 1;
   final _formKey = GlobalKey<FormState>();
 
   void dispose() {

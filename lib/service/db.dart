@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:quiver/iterables.dart';
+
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/class-data.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/role.dart';
+import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/student.dart';
 import '../models/meeting.dart';
 import '../models/subject.dart';
@@ -42,6 +43,13 @@ class DatabaseService with ChangeNotifier {
         list.docs.map((doc) => Attendance.fromFirestore(doc)).toList());
   }
 
+  //gets data from student collection and checks uid and then makes data into studentuser
+  Stream<StudentUser> streamStudentUser(String uid) {
+    CollectionReference ref = _db.collection('students');
+    return ref.snapshots().map((list) => StudentUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['uid'] == uid)));
+  }
+
   Stream<List<Announcement>> streamAnnouncement() {
     CollectionReference ref = _db.collection('announcements');
     try {
@@ -52,8 +60,8 @@ class DatabaseService with ChangeNotifier {
     }
     return null;
   }
-  
-  Stream<List<RAfromDB>> streamRA(){
+
+  Stream<List<RAfromDB>> streamRA() {
     CollectionReference ref = _db.collection('remote-assessment');
     try {
       return ref.snapshots().map((list) =>
@@ -62,7 +70,6 @@ class DatabaseService with ChangeNotifier {
       print('err in stream RA: $err');
     }
     return null;
-
   }
 
   //gets auth state stream
@@ -155,20 +162,66 @@ class DatabaseService with ChangeNotifier {
 
   //adds remote assessment to cf. only for input
   Future<void> addAssessmentToCF(RemoteAssessment assessment) async {
-    CollectionReference ref =_db.collection('remote-assessment');
-    try{
+    CollectionReference ref = _db.collection('remote-assessment');
+
+    try {
       return await ref.add({
-        'title':assessment.assessmentTitle,
-        'subject':assessment.subject,
-        'timeCreated':assessment.timeAdded,
-        'MCQs':assessment.returnMcqs(),
-        'TextQs':assessment.allTextQs,
+        'title': assessment.assessmentTitle,
+        'subject': assessment.subject,
+        'timeCreated': assessment.timeAdded,
+        'MCQs': assessment.returnMcqs(),
+        'TextQs': assessment.allTextQs,
         'teacherId': assessment.teacherId
       });
-    }catch(err){
+    } catch (err) {
       print('error in add assessment: $err');
     }
     print('function triggered');
+  }
+
+  Future<void> addMCQAnswer(
+    String question,
+    String stat,
+    String ans,
+    String assid,
+    String uid,
+    String title,
+  ) async {
+    DocumentReference ref = _db.collection('assessment-result').doc('$assid');
+    DocumentReference stud = _db.collection('students').doc(uid);
+
+    try {
+      stud.set({
+        'completed-assessment': FieldValue.arrayUnion([assid]),
+      }, SetOptions(merge: true));
+      ref.set({'title': title}, SetOptions(merge: true));
+      return await ref.collection('mcq-answers').doc(uid).set(
+          {
+            '$question': stat,
+          },
+          SetOptions(
+            merge: true,
+          ));
+    } catch (err) {
+      print('err in addMCQans: $err');
+    }
+  }
+
+  Future<void> addTextQAnswer(
+      String q, String a, String assid, String uid, String title) async {
+    DocumentReference ref = _db.collection('assessment-result').doc('$assid');
+    try {
+      ref.set({'title': title}, SetOptions(merge: true));
+      return await ref.collection('text-answers').doc(uid).set(
+          {
+            '$q': a,
+          },
+          SetOptions(
+            merge: true,
+          ));
+    } catch (err) {
+      print('err in addMCQans: $err');
+    }
   }
 
   //adds class data from edit tt to cf
@@ -249,6 +302,15 @@ class DatabaseService with ChangeNotifier {
       return await classRef.doc(id).delete();
     } catch (err) {
       print('error in deleteClass: $err');
+    }
+  }
+
+  Future<void> deleteAssessment(String id) async {
+    final ref = _db.collection('remote-assessment');
+    try {
+      return await ref.doc(id).delete();
+    } catch (err) {
+      print('err in delete Assessment: $err');
     }
   }
 

@@ -23,20 +23,20 @@ class _CalendarAppState extends State<CalendarApp> {
   final db = DatabaseService();
   CalendarController _controller;
   DateTime _jumpToTime = DateTime.now();
-  String _text = '';
+  // String _text = '';
 
   @override
   void initState() {
     _controller = CalendarController();
     _controller.view = CalendarView.workWeek;
-    _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+    //_text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
     super.initState();
   }
 
   void _updateState(DateTime date) {
     setState(() {
       _jumpToTime = date;
-      _text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
+      //_text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
     });
   }
 

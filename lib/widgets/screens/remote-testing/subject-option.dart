@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/remote_assessment.dart';
+
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 import './rt-input.dart';

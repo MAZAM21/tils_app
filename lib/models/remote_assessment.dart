@@ -39,7 +39,7 @@ class RemoteAssessment with ChangeNotifier {
 }
 
 class MCQ with ChangeNotifier {
-  Map<String, String> answerChoices = {};
+  Map answerChoices = {};
   String question;
   MCQ({this.question, this.answerChoices});
 }
@@ -50,30 +50,27 @@ class RAfromDB {
   final String subject;
   final String teacherId;
   final String assessmentTitle;
-  List<MCQ> allMCQs;
-  List<String> allTextQs = [];
-  RAfromDB(
-      {this.id,
-      this.timeAdded,
-      this.subject,
-      this.teacherId,
-      this.assessmentTitle,
-      this.allMCQs,
-      this.allTextQs});
+  List<MCQ> allMCQs = [];
+  List allTextQs = [];
+  RAfromDB({
+    this.id,
+    this.timeAdded,
+    this.subject,
+    this.teacherId,
+    this.assessmentTitle,
+    this.allMCQs,
+    this.allTextQs,
+  });
 
   factory RAfromDB.fromFirestore(QueryDocumentSnapshot doc) {
     final data = doc.data();
-    List<Map> mcqList = data['MCQs'];
-    List<String> textQs = data['TextQs'];
+    final mcqs = Map<String, dynamic>.from(data['MCQs']);
+    final textQs = List<String>.from(data['TextQs']);
     List<MCQ> converted = [];
     Timestamp time = data['timeCreated'];
     DateTime d = DateTime.parse(time.toDate().toString());
-
-    mcqList.forEach((mcqMap) {
-      converted.add(MCQ(
-        question: mcqMap.keys.first as String,
-        answerChoices: mcqMap.values.first as Map,
-      ));
+    mcqs.forEach((q, a) {
+      converted.add(MCQ(question: q, answerChoices: a));
     });
 
     return RAfromDB(

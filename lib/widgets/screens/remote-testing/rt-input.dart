@@ -33,7 +33,8 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
 
   void _saveAssessment() {
     _formKey.currentState.save();
-    if(Provider.of<RemoteAssessment>(context, listen: false).assessmentTitle!=null){
+    bool isValid= _formKey.currentState.validate();
+    if(Provider.of<RemoteAssessment>(context, listen: false).assessmentTitle!=null || !isValid){
       db.addAssessmentToCF(Provider.of<RemoteAssessment>(context, listen: false));
     }
     Navigator.pop(context);
@@ -245,3 +246,14 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
     );
   }
 }
+
+/* 
+Basic structure: 
+  choose subject -> 
+  rt input page (input title and question here, displays added questions, choose between text and mcq) ->
+  input answer options ->
+  save
+  
+  then db is called
+
+*/

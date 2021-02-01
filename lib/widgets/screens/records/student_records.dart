@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:tils_app/models/student.dart';
-import 'package:tils_app/models/subject.dart';
 
 
 import 'package:tils_app/service/db.dart';
@@ -43,36 +41,39 @@ class StudentRecords extends StatelessWidget {
                                 leading: Text(studentsSnapshot.data[i].name),
                                 trailing: Container(
                                   width: 200,
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        for (var x = 0;
-                                            x <
-                                                studentsSnapshot
-                                                    .data[i].attStatStud.length;
-                                            x++)
-                                          CircleAvatar(
-                                            child: Text(studentsSnapshot.data[i]
-                                                        .attStatStud[x] ==
-                                                    1
-                                                ? 'P'
-                                                : studentsSnapshot.data[i]
-                                                            .attStatStud[x] ==
-                                                        3
-                                                    ? 'A'
-                                                    : 'L'),
-                                            backgroundColor: studentsSnapshot
-                                                        .data[i]
-                                                        .attStatStud[x] ==
-                                                    1
-                                                ? Colors.green
-                                                : studentsSnapshot.data[i]
-                                                            .attStatStud[x] ==
-                                                        3
-                                                    ? Colors.red
-                                                    : Colors.yellow,
-                                          )
-                                      ]),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          for (var x = 0;
+                                              x <
+                                                  studentsSnapshot
+                                                      .data[i].attStatStud.length;
+                                              x++)
+                                            CircleAvatar(
+                                              child: Text(studentsSnapshot.data[i]
+                                                          .attStatStud[x] ==
+                                                      1
+                                                  ? 'P'
+                                                  : studentsSnapshot.data[i]
+                                                              .attStatStud[x] ==
+                                                          3
+                                                      ? 'A'
+                                                      : 'L'),
+                                              backgroundColor: studentsSnapshot
+                                                          .data[i]
+                                                          .attStatStud[x] ==
+                                                      1
+                                                  ? Colors.green
+                                                  : studentsSnapshot.data[i]
+                                                              .attStatStud[x] ==
+                                                          3
+                                                      ? Colors.red
+                                                      : Colors.yellow,
+                                            )
+                                        ]),
+                                  ),
                                 ),
                                 onTap: () {
                                   //Navigator.of(context).pushNamed();

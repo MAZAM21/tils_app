@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import './student_records.dart';
-import 'package:tils_app/models/subject.dart';
-import 'package:tils_app/models/student.dart';
+
 import './class_records.dart';
 
 class RecordsPage extends StatelessWidget {

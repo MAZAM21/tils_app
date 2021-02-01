@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/announcement.dart';
-import 'package:tils_app/models/attendance-chart-values.dart';
-import 'package:tils_app/models/attendance.dart';
-import 'package:tils_app/models/meeting.dart';
-import 'package:tils_app/models/subject.dart';
+import '../models/announcement.dart';
+import '../models/attendance-chart-values.dart';
+import '../models/attendance.dart';
+import '../models/meeting.dart';
+import '../models/subject.dart';
+import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
   Meeting getNextClass(List<Meeting> list) {
     final now = DateTime.now();
     Meeting latestClass = list.firstWhere(
       (meeting) {
-        return meeting.from.isAfter(now);
+        return meeting.to.isAfter(now);
       },
       orElse: () => Meeting(
         'no class',
@@ -23,9 +24,9 @@ class TeacherService with ChangeNotifier {
     );
 
     list.forEach((meeting) {
-      if (meeting.from.isAfter(now) &&
-          meeting.from.isBefore(latestClass.from) &&
-          !meeting.from.isAtSameMomentAs(latestClass.from)) {
+      if (meeting.to.isAfter(now) &&
+          meeting.to.isBefore(latestClass.to) &&
+          !meeting.to.isAtSameMomentAs(latestClass.to)) {
         latestClass = meeting;
         print(meeting.eventName);
       }
@@ -84,12 +85,30 @@ class TeacherService with ChangeNotifier {
     return list.reversed.toList();
   }
 
-  List<String> valueList(Map map){
+  List<String> valueList(Map map) {
     return map.values.toList();
   }
-  List<String> keyList(Map map){
+
+  List<String> keyList(Map map) {
     return map.keys.toList();
   }
 
+  List<RAfromDB> getRAfromSub(List<RAfromDB> allRAs, String sub) {
+    List<RAfromDB> subRAs = [];
+    allRAs.forEach((ra) {
+      if (sub == ra.subject) {
+        subRAs.add(ra);
+      }
+    });
+    return subRAs;
+  }
 
+  String mapToStrings(Map mcqs) {
+    print(mcqs.runtimeType);
+    String ans = '';
+    mcqs.forEach((k, v) {
+      ans = ans + '$v ($k)\n';
+    });
+    return ans;
+  }
 }
