@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/widgets/screens/add-students/add-student-form.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-detail.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
 import 'package:tils_app/widgets/screens/announcements/display-announcements.dart';
@@ -14,6 +15,7 @@ import 'package:tils_app/widgets/screens/remote-testing/display-all-ra.dart';
 import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
 import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
+import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 
 import './widgets/screens/attendance/attendance_page.dart';
@@ -65,11 +67,10 @@ class RoutesAndTheme extends StatelessWidget {
           primaryColor: Color.fromARGB(255, 24, 118, 133),
           canvasColor: Color.fromARGB(255, 237, 246, 249),
           appBarTheme: AppBarTheme(
-            elevation: 0,
-            color: Color.fromARGB(255, 237, 246, 249),
-            iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))
-          ),
-          
+              elevation: 0,
+              color: Color.fromARGB(255, 237, 246, 249),
+              iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))),
+
           tabBarTheme:
               TabBarTheme(labelColor: Color.fromARGB(255, 24, 118, 133)),
           //cardcolor removed
@@ -123,6 +124,8 @@ class RoutesAndTheme extends StatelessWidget {
           RASubject.routeName: (context) => RASubject(),
           AllRAs.routeName: (context) => AllRAs(),
           StudentRADisplay.routeName: (context) => StudentRADisplay(),
+          CalendarApp.routeName: (context) => CalendarApp(),
+          AddStudent.routeName: (context) => AddStudent(),
         },
       ),
     );

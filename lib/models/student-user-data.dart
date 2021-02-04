@@ -20,10 +20,10 @@ class StudentUser with ChangeNotifier {
     try {
       final data = doc.data();
       final Map att = {...data['attendance']} ?? {};
-      final name = data['studentName'];
+      final name = data['name'];
       final year = data['year'];
       final Map subs = {...data['registeredSubs']};
-      final compAssessments = [...data['completed-assessment']];
+      final compAssessments = [...data['completed-assessments']];
       List regSubs = [];
 
       //takse internal hash map and checks reg status

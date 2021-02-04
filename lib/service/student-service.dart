@@ -6,9 +6,13 @@ class StudentService {
     StudentUser userData,
     List<RAfromDB> ras,
   ) {
+    //function returns a map containing subjects registered against user and all assessments for that particular subject
     Map<String, List<RAfromDB>> filtered = {};
+    //iterating through each ra.
     ras.forEach((ra) {
+      //if userdata reg subs contains subject of this particular ra
       if (userData.subjects.contains(ra.subject) && ra != null) {
+        //add the ra to the list of assessments in value. key is the string sub name. 
         filtered.update('${ra.subject}', (list) {
           list.add(ra);
           return list;

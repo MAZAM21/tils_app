@@ -64,14 +64,17 @@ class StudentRADisplay extends StatelessWidget {
                                     }
                                   : () {
                                       showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                                content: Text(
-                                                  'This assessment has been submitted \n \n No taksies backsies!',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(fontFamily: 'Raleway', color: Colors.pinkAccent),
-                                                ),
-                                              ));
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          content: Text(
+                                            'This assessment has been submitted \n \n No taksies backsies!',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'Raleway',
+                                                color: Colors.pinkAccent),
+                                          ),
+                                        ),
+                                      );
                                     },
                             ),
                           ),
@@ -92,9 +95,14 @@ class StudentRADisplay extends StatelessWidget {
       builder: (context, _) {
         final allRa = Provider.of<List<RAfromDB>>(context);
         final userData = Provider.of<StudentUser>(context);
+
+        //when student attempts an assessment the id is logged in his doc in cf. 
+        //this list of attempted assessment id is stored in completed.
         List completed = userData.assessments;
+
         Map<String, List<RAfromDB>> myRa =
             {}; //a map with subjects as keys and assessment associated with sub as values
+            
         bool isActive = false;
         if (allRa != null && userData != null) {
           // filtering allra for all of the subs registered.

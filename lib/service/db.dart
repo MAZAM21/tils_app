@@ -107,9 +107,9 @@ class DatabaseService with ChangeNotifier {
     CollectionReference studentRef = _db.collection('students');
     try {
       QuerySnapshot q =
-          await studentRef.where('studentName', isEqualTo: '$name').get();
+          await studentRef.where('name', isEqualTo: '$name').get();
       DocumentSnapshot stDoc = q.docs.firstWhere((doc) {
-        return doc['studentName'] == '$name';
+        return doc['name'] == '$name';
       });
       studentRef.doc(stDoc.id).set({
         'attendance': {'$id': status}
@@ -192,7 +192,7 @@ class DatabaseService with ChangeNotifier {
 
     try {
       stud.set({
-        'completed-assessment': FieldValue.arrayUnion([assid]),
+        'completed-assessments': FieldValue.arrayUnion([assid]),
       }, SetOptions(merge: true));
       ref.set({'title': title}, SetOptions(merge: true));
       return await ref.collection('mcq-answers').doc(uid).set(
@@ -242,6 +242,63 @@ class DatabaseService with ChangeNotifier {
       });
     } catch (err) {
       print('error in adding to database: $err');
+    }
+  }
+
+  Future<void> saveStudent(
+    String email,
+    String password,
+    String name,
+    List<String> subjects,
+    String year,
+  ) async {
+    CollectionReference studRef = _db.collection('students');
+    CollectionReference userRef = _db.collection('users');
+
+    Map<String, bool> subs = {
+      'Conflict': false,
+      'Jurisprudence': false,
+      'Islamic': false,
+      'Trust': false,
+      'Company': false,
+      'Tort': false,
+      'Property': false,
+      'EU': false,
+      'HR': false,
+      'Contract': false,
+      'Criminal': false,
+      'Public': false,
+      'LSM': false,
+    };
+    subs.forEach((k, v) {
+      if (subjects.contains('$k')) {
+        subs[k] = true;
+      }
+    });
+
+    try {
+      UserCredential cred = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await studRef.add({
+        'name': name,
+        'email': email,
+        'password': password,
+        'registeredSubs': subs,
+        'uid': cred.user.uid,
+        'attendance': {},
+        'year': year,
+        'completed-assessments': [],
+      });
+      await userRef.doc(cred.user.uid).set({
+        'role': 'student',
+        'email': email,
+        'password': password,
+        'name': name,
+      }, SetOptions(merge: true));
+    } catch (err) {
+      print('err in save student: $err');
     }
   }
 

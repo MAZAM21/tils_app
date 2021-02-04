@@ -12,7 +12,7 @@ enum StudentYear {
 class Student with ChangeNotifier {
   final String id;
   final String name;
-  final String year;
+  // final String year;
 
  
   Map<String, int> attendance = {};
@@ -20,7 +20,7 @@ class Student with ChangeNotifier {
   Student({
     @required this.id,
     @required this.name,
-    @required this.year,
+    // @required this.year,
     this.attendance,
   });
 
@@ -28,8 +28,8 @@ class Student with ChangeNotifier {
     Map data = doc.data();
     return Student(
       id: doc.id ?? '',
-      name: data['studentName'] ?? '',
-      year: data['year'] ?? '',
+      name: data['name'] ?? '',
+      // year: data['year'] ?? '',
       attendance: {...data['attendance']} ?? {},
     );
   }

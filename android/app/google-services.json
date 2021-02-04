@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "23860424065",
-    "project_id": "tils-app",
-    "storage_bucket": "tils-app.appspot.com"
+    "project_number": "965444014212",
+    "project_id": "tils-portal",
+    "storage_bucket": "tils-portal.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:23860424065:android:9fcefaa3f266aaaade4c80",
+        "mobilesdk_app_id": "1:965444014212:android:d363ef2ca8452e766eb2d1",
         "android_client_info": {
-          "package_name": "com.example.tils_app"
+          "package_name": "com.fluentsolutions.tils_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "23860424065-s9oj8jtjdbsap29p3is3oq1bs5m386gk.apps.googleusercontent.com",
+          "client_id": "965444014212-t51d27lpl0ifb2dsrksihlaiaeb1aps3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDV5n2T2-sKbKA5H7tLhPHJujvsSxKMwho"
+          "current_key": "AIzaSyBtVr08mqDGSQOA-1pMK3_rKAxLGMyrYdQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "23860424065-s9oj8jtjdbsap29p3is3oq1bs5m386gk.apps.googleusercontent.com",
+              "client_id": "965444014212-t51d27lpl0ifb2dsrksihlaiaeb1aps3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

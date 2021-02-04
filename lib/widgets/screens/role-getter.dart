@@ -1,3 +1,5 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/role.dart';
@@ -16,14 +18,16 @@ class RoleGetter extends StatelessWidget {
     bool isLoggedIn = false;
     bool provIsActive = false;
     final authState = Provider.of<User>(context);
-
+    //FirebaseAuth.instance.signOut();
     if (authState != null) {
       isLoggedIn = true;
     }
     return isLoggedIn
         ? FutureProvider<Role>(
             create: (ctx) => db.getRole(authState.uid),
+            // catchError: (context,_){return Role('teacher');},
             builder: (context, _) {
+
               final roleProv = Provider.of<Role>(context);
               if (roleProv != null) {
                 provIsActive = true;

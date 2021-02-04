@@ -31,6 +31,8 @@ dependencies:
   quiver: ^2.1.5
   syncfusion_flutter_charts: ^18.4.34
   syncfusion_flutter_calendar: ^18.4.34
+  file_picker: ^2.1.6
+  excel: ^1.1.5
 
 
   # The following adds the Cupertino Icons font to your application.
