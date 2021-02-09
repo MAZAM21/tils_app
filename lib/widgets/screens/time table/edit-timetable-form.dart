@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -21,7 +20,8 @@ class _EditTTFormState extends State<EditTTForm> {
   DateTime _startTime = DateTime.now();
   DateTime _endTime = DateTime.now();
   SubjectName _subName;
-
+  String _topic = '';
+  String _section;
   String _duration;
   int _customHours = 0;
   int _customMinutes = 0;
@@ -36,6 +36,8 @@ class _EditTTFormState extends State<EditTTForm> {
     if (_isInit) {
       final editClass = ModalRoute.of(context).settings.arguments as Meeting;
       if (editClass != null) {
+        _section = editClass.section;
+        _topic = editClass.topic ?? '';
         _startDate = editClass.from;
         _startTime = editClass.from;
         _endTime = editClass.to;
@@ -64,6 +66,33 @@ class _EditTTFormState extends State<EditTTForm> {
       case 'Islamic':
         _subName = SubjectName.Islamic;
         break;
+      case 'Company':
+        _subName = SubjectName.Company;
+        break;
+      case 'Tort':
+        _subName = SubjectName.Tort;
+        break;
+      case 'Property':
+        _subName = SubjectName.Property;
+        break;
+      case 'EU':
+        _subName = SubjectName.EU;
+        break;
+      case 'HR':
+        _subName = SubjectName.HR;
+        break;
+      case 'Contract':
+        _subName = SubjectName.Contract;
+        break;
+      case 'Criminal':
+        _subName = SubjectName.Criminal;
+        break;
+      case 'LSM':
+        _subName = SubjectName.LSM;
+        break;
+      case 'Public':
+        _subName = SubjectName.Public;
+        break;
       default:
         _subName = SubjectName.Undeclared;
     }
@@ -84,6 +113,33 @@ class _EditTTFormState extends State<EditTTForm> {
       case SubjectName.Islamic:
         return 'Islamic';
         break;
+      case SubjectName.Company:
+        return 'Company';
+        break;
+      case SubjectName.Tort:
+        return 'Tort';
+        break;
+      case SubjectName.Property:
+        return 'Property';
+        break;
+      case SubjectName.EU:
+        return 'EU';
+        break;
+      case SubjectName.HR:
+        return 'HR';
+        break;
+      case SubjectName.Contract:
+        return 'Contract';
+        break;
+      case SubjectName.Criminal:
+        return 'Criminal';
+        break;
+      case SubjectName.LSM:
+        return 'LSM';
+        break;
+      case SubjectName.Public:
+        return 'Public';
+        break;
       default:
         return 'Undeclared';
     }
@@ -103,6 +159,33 @@ class _EditTTFormState extends State<EditTTForm> {
         break;
       case 'Islamic':
         return SubjectName.Islamic;
+        break;
+      case 'Company':
+        return SubjectName.Company;
+        break;
+      case 'Tort':
+        return SubjectName.Tort;
+        break;
+      case 'Property':
+        return SubjectName.Property;
+        break;
+      case 'EU':
+        return SubjectName.EU;
+        break;
+      case 'HR':
+        return SubjectName.HR;
+        break;
+      case 'Contract':
+        return SubjectName.Contract;
+        break;
+      case 'Criminal':
+        return SubjectName.Criminal;
+        break;
+      case 'LSM':
+        return SubjectName.LSM;
+        break;
+      case 'Public':
+        return SubjectName.Public;
         break;
       default:
         return SubjectName.Undeclared;
@@ -280,29 +363,19 @@ class _EditTTFormState extends State<EditTTForm> {
     _endTime = _startTime.add(Duration(hours: h, minutes: m));
   }
 
-// void studentAttendance() {
-
-//     _studentCollection.get().then((allStudDocs) {
-//       allStudDocs.docs.forEach((student) {
-//         // if (student['registeredSubs'] == true) {
-//         attStatus.addAll({student['studentName']: false});
-//         //}
-//       });
-//     }).catchError((err) {
-//       print('$err');
-//     });
-
-//   }
-
   void _saveForm(BuildContext context) {
     if (!_endTime.isBefore(_startTime) &&
         _subName != SubjectName.Undeclared &&
         _duration != null) {
+      _form.currentState.save();
+      _form.currentState.reset();
       if (!_isEdit) {
-        db.addToCF(
+        db.addClassToCF(
           _subName,
           _startTime,
           _endTime,
+          _section,
+          _topic,
         );
         setState(() {
           _subName = null;
@@ -310,11 +383,13 @@ class _EditTTFormState extends State<EditTTForm> {
           _duration = null;
         });
       } else {
-        db.editInCF(
+        db.editClassInCF(
           _editedId,
           enToString(_subName),
           _startTime,
           _endTime,
+          _section,
+          _topic,
         );
       }
     } else {
@@ -348,19 +423,101 @@ class _EditTTFormState extends State<EditTTForm> {
                       SizedBox(
                         height: 20,
                       ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            ElevatedButton(
+                              child: Text('A'),
+                              onPressed: () {
+                                setState(() {
+                                  _section = 'A';
+                                });
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: _section == 'A'
+                                    ? MaterialStateProperty.all(
+                                        Colors.redAccent)
+                                    : MaterialStateProperty.all(
+                                        Colors.greenAccent),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            ElevatedButton(
+                              child: Text('B'),
+                              onPressed: () {
+                                setState(() {
+                                  _section = 'B';
+                                });
+                              },
+                              style: ButtonStyle(
+                                backgroundColor: _section == 'B'
+                                    ? MaterialStateProperty.all(
+                                        Colors.redAccent)
+                                    : MaterialStateProperty.all(
+                                        Colors.greenAccent),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(),
                       //Subject Buttons
                       Container(
-                        height: 200,
-                        width: 150,
-                        child: Column(
-                          // mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                        height: 280,
+                        child: Row(
                           children: <Widget>[
-                            buildSubjectButton('Jurisprudence'),
-                            buildSubjectButton('Trust'),
-                            buildSubjectButton('Conflict'),
-                            buildSubjectButton('Islamic'),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    buildSubjectButton('Jurisprudence'),
+                                    buildSubjectButton('Trust'),
+                                    buildSubjectButton('Conflict'),
+                                    buildSubjectButton('Islamic'),
+                                    buildSubjectButton('Company'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    buildSubjectButton('Tort'),
+                                    buildSubjectButton('Property'),
+                                    buildSubjectButton('EU'),
+                                    buildSubjectButton('HR'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    buildSubjectButton('Criminal'),
+                                    buildSubjectButton('Contract'),
+                                    buildSubjectButton('LSM'),
+                                    buildSubjectButton('Public'),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -392,6 +549,34 @@ class _EditTTFormState extends State<EditTTForm> {
                           ],
                         ),
                       ),
+                      Divider(),
+                      //Topic input field
+                      Text(
+                        'Topic',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontFamily: 'Lato',
+                        ),
+                      ),
+                      Container(
+                        width: 300,
+                        child: TextFormField(
+                          initialValue: _topic,
+                          keyboardType: TextInputType.text,
+                          onSaved: (value) {
+                            _topic = value;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Topic',
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor),
+                            ),
+                          ),
+                        ),
+                      ),
+
                       Divider(),
                       //Duration presets
                       Container(
@@ -545,7 +730,8 @@ class _EditTTFormState extends State<EditTTForm> {
                               Scaffold.of(context).hideCurrentSnackBar();
                               Scaffold.of(context).showSnackBar(SnackBar(
                                 content: _subName != SubjectName.Undeclared &&
-                                        _duration != null
+                                        _duration != null &&
+                                        _section.isNotEmpty
                                     ? Text(
                                         '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime)} added to Time Table')
                                     : Text('Class not added'),

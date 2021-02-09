@@ -1,14 +1,14 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/student-service.dart';
 
+
 class AssessmentPage extends StatefulWidget {
-  final String uid;
-  final RAfromDB ra;
-  AssessmentPage(this.ra, this.uid);
+  static const routeName = '/assessment-page-attempt';
+  // final String uid;
+  // final RAfromDB ra;
+  // AssessmentPage(this.ra, this.uid);
 
   @override
   _AssessmentPageState createState() => _AssessmentPageState();
@@ -32,8 +32,11 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    _question = _ss.getQuestion(widget.ra, _qIndex);
-    _answers = _ss.getAnswers(widget.ra, _qIndex);
+    Map args = ModalRoute.of(context).settings.arguments as Map;
+    final ra = args['ra'];
+    final uid = args['uid'];
+    _question = _ss.getQuestion(ra, _qIndex);
+    _answers = _ss.getAnswers(ra, _qIndex);
     print('$_answers');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -48,9 +51,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                       _question,
                       _selectedStat,
                       _selectedAns,
-                      widget.ra.id,
-                      widget.uid,
-                      widget.ra.assessmentTitle,
+                      ra.id,
+                      uid,
+                      ra.assessmentTitle,
                     );
                     setState(() {
                       _qIndex++;
@@ -68,7 +71,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 } else {
                   if (_ansController.text.isNotEmpty) {
                     _db.addTextQAnswer(_question, _ansController.text,
-                        widget.ra.id, widget.uid, widget.ra.assessmentTitle);
+                        ra.id, uid, ra.assessmentTitle);
                     setState(() {
                       _ansController.clear();
                       _qIndex++;
@@ -84,7 +87,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 }
               }
             : () {
-                Navigator.pop(context);
+                setState(() {
+                  Navigator.pop(context);
+                });
               },
       ),
       body: CustomScrollView(
@@ -101,7 +106,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ? Text(
                         '$_question',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 12,
                           fontFamily: 'Proxima Nova',
                         ),
@@ -109,7 +114,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     : Text(
                         'Assessment Completed',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontSize: 12,
                           fontFamily: 'Proxima Nova',
                         ),

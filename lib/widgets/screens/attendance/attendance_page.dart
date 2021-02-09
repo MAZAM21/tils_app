@@ -1,39 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
 
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';
   // final List<SubjectClass> allClassesAdded;
   // AttendancePage(this.allClassesAdded);
-
-  String enToString(SubjectName name) {
-    switch (name) {
-      case SubjectName.Jurisprudence:
-        return 'Jurisprudence';
-        break;
-      case SubjectName.Trust:
-        return 'Trust';
-        break;
-      case SubjectName.Conflict:
-        return 'Conflict';
-        break;
-      case SubjectName.Islamic:
-        return 'Islamic';
-        break;
-      default:
-        return 'Undeclared';
-    }
-  }
+  final ts = TeacherService();
 
   @override
   Widget build(BuildContext context) {
     final classData = Provider.of<List<SubjectClass>>(context);
-
-    // CollectionReference _allAttCollection =
-    //     FirebaseFirestore.instance.collection('attendance');
+    final teacherData = Provider.of<TeacherUser>(context);
+    final myClasses = ts.getMyAttendance(classData, teacherData.subjects);
 
     return classData == null
         ? Scaffold(
@@ -41,11 +25,9 @@ class AttendancePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             ),
           )
-        : MaterialApp(
-            theme: Theme.of(context),
-            home: Scaffold(
-                body: GridView.builder(
-              itemCount: classData.length,
+        : Scaffold(
+            body: GridView.builder(
+              itemCount: myClasses.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 3 / 2,
@@ -53,29 +35,62 @@ class AttendancePage extends StatelessWidget {
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (ctx, i) {
-                return classData == null
+                return myClasses == null
                     ? Text('No Classes Scheduled for Attendance')
                     : GridTile(
                         child: GestureDetector(
                           child: Card(
-                            child: Text(
-                              classData[i].subjectName,
-                              style: Theme.of(context).textTheme.headline4,
-                              textAlign: TextAlign.center,
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '${myClasses[i].subjectName} ${myClasses[i].section}',
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 250, 235, 215),
+                                      fontFamily: 'Proxima Nova',
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  '${DateFormat('EEE, MMM d').format(myClasses[i].startTime)}',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 250, 235, 215),
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 12,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Spacer(),
+                                Text(
+                                  'Topic: ${myClasses[i].topic}',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 250, 235, 215),
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 14,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                              ],
                             ),
-                            color: classData[i]
+                            color: myClasses[i]
                                 .getColor(), //need to add colors to all subjects
                           ),
                           onTap: () {
                             Navigator.of(context).pushNamed(
                               StudentProvider.routeName,
-                              arguments: classData[i],
+                              arguments: myClasses[i],
                             );
                           },
                         ),
                       );
               },
-            )),
+            ),
           );
   }
 }

@@ -20,6 +20,7 @@ class TeacherService with ChangeNotifier {
         null,
         false,
         'no class',
+        null,
       ),
     );
 
@@ -47,6 +48,7 @@ class TeacherService with ChangeNotifier {
         id: 'no class',
         subjectName: 'no class',
         startTime: null,
+        section: null,
       ),
     );
   }
@@ -110,5 +112,25 @@ class TeacherService with ChangeNotifier {
       ans = ans + '$v ($k)\n';
     });
     return ans;
+  }
+
+  List<Meeting> getMyClasses(List<Meeting> allClasses, List subs){
+    List<Meeting> myClasses=[];
+    allClasses.forEach((cls){
+      if(subs.contains(cls.eventName)){
+        myClasses.add(cls);
+      }
+    });
+    return myClasses;
+  }
+
+  List<SubjectClass> getMyAttendance(List<SubjectClass> allClasses, List subs){
+    List<SubjectClass> myClasses=[];
+    allClasses.forEach((cls){
+      if(subs.contains(cls.subjectName)){
+        myClasses.add(cls);
+      }
+    });
+    return myClasses;
   }
 }

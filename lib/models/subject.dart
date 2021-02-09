@@ -8,6 +8,15 @@ enum SubjectName {
   Jurisprudence,
   Islamic,
   Conflict,
+  Company,
+  Tort,
+  Property,
+  EU,
+  HR,
+  Contract,
+  Criminal,
+  Public,
+  LSM,
   Undeclared,
 }
 enum AttendanceStatus {
@@ -20,13 +29,17 @@ class SubjectClass with ChangeNotifier {
   final String subjectName;
   final String id;
   final DateTime startTime;
+  final String section;
+  final String topic;
   Map<String, dynamic> attendanceStatus = {};
 
   SubjectClass({
     @required this.id,
     @required this.subjectName,
     @required this.startTime,
+    @required this.section,
     this.attendanceStatus,
+    this.topic,
   });
 
   factory SubjectClass.fromFirestore(QueryDocumentSnapshot doc) {
@@ -36,6 +49,8 @@ class SubjectClass with ChangeNotifier {
       id: doc.id,
       subjectName: data['subjectName'],
       startTime: DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
+      section: data['section'],
+      topic: data['topic'] ?? 'Not Added',
     );
   }
 
@@ -64,6 +79,33 @@ class SubjectClass with ChangeNotifier {
       case 'Islamic':
         return Color.fromARGB(255, 39, 59, 92);
         break;
+      case 'Company':
+        return Color.fromARGB(255, 50, 33, 58);
+        break;
+      case 'Tort':
+        return Color.fromARGB(255, 56, 59, 83);
+        break;
+      case 'Property':
+        return Color.fromARGB(255, 102, 113, 126);
+        break;
+      case 'EU':
+        return Color.fromARGB(255, 206, 185, 146);
+        break;
+      case 'HR':
+        return Color.fromARGB(255, 143, 173, 136);
+        break;
+      case 'Contract':
+        return Color.fromARGB(255, 36, 79, 38);
+        break;
+      case 'Criminal':
+        return Color.fromARGB(255, 37, 109, 27);
+        break;
+      case 'LSM':
+        return Color.fromARGB(255, 189, 213, 234);
+        break;
+      case 'Public':
+        return Color.fromARGB(255, 201, 125, 96);
+        break;
       default:
         return Colors.black;
     }
@@ -82,6 +124,33 @@ class SubjectClass with ChangeNotifier {
         break;
       case 'Islamic':
         return SubjectName.Islamic;
+        break;
+      case 'Company':
+        return SubjectName.Company;
+        break;
+      case 'Tort':
+        return SubjectName.Tort;
+        break;
+      case 'Property':
+        return SubjectName.Property;
+        break;
+      case 'EU':
+        return SubjectName.EU;
+        break;
+      case 'HR':
+        return SubjectName.HR;
+        break;
+      case 'Contract':
+        return SubjectName.Contract;
+        break;
+      case 'Criminal':
+        return SubjectName.Criminal;
+        break;
+      case 'LSM':
+        return SubjectName.LSM;
+        break;
+      case 'Public':
+        return SubjectName.Public;
         break;
       default:
         return SubjectName.Undeclared;

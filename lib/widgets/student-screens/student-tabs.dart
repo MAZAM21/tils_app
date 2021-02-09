@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
 
-import 'package:tils_app/widgets/student-screens/student_home.dart';
+import './student_home/student_home.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
@@ -37,7 +37,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
       child: Scaffold(
         drawer: AppDrawer(),
         appBar: AppBar(
-          title:  Text(
+          title: Text(
             'TILS Student\'s Portal',
             style: Theme.of(context).textTheme.headline6,
             textAlign: TextAlign.justify,
@@ -48,7 +48,8 @@ class _AllStudentTabsState extends State<AllStudentTabs>
               color: Color.fromARGB(255, 237, 246, 249),
               tabBar: TabBar(
                   controller: _controller,
-                  labelColor: Theme.of(context).primaryColor,
+                  labelColor: Color.fromARGB(255, 76, 76, 76),
+                  indicatorColor: Color.fromARGB(255, 143, 166, 203),
                   isScrollable: true,
                   tabs: <Widget>[
                     Tab(

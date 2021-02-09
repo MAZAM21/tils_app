@@ -8,10 +8,18 @@ import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 
-class StudentRADisplay extends StatelessWidget {
+class StudentRADisplay extends StatefulWidget {
   static const routeName = '/student-ra-display';
+
+  @override
+  _StudentRADisplayState createState() => _StudentRADisplayState();
+}
+
+class _StudentRADisplayState extends State<StudentRADisplay> {
   final db = DatabaseService();
+
   final ss = StudentService();
+
   final ts = TeacherService();
 
   Widget buildAssessmentListView(List<RAfromDB> raList, Color col,
@@ -55,12 +63,12 @@ class StudentRADisplay extends StatelessWidget {
                               ),
                               onTap: !completed.contains(raList[i].id)
                                   ? () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                AssessmentPage(raList[i], uid),
-                                          ));
+                                      Navigator.popAndPushNamed(
+                                          context, AssessmentPage.routeName,
+                                          arguments: {
+                                            'ra': raList[i],
+                                            'uid': uid
+                                          });
                                     }
                                   : () {
                                       showDialog(
@@ -96,13 +104,13 @@ class StudentRADisplay extends StatelessWidget {
         final allRa = Provider.of<List<RAfromDB>>(context);
         final userData = Provider.of<StudentUser>(context);
 
-        //when student attempts an assessment the id is logged in his doc in cf. 
+        //when student attempts an assessment the id is logged in his doc in cf.
         //this list of attempted assessment id is stored in completed.
         List completed = userData.assessments;
 
         Map<String, List<RAfromDB>> myRa =
             {}; //a map with subjects as keys and assessment associated with sub as values
-            
+
         bool isActive = false;
         if (allRa != null && userData != null) {
           // filtering allra for all of the subs registered.

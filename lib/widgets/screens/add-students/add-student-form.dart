@@ -16,6 +16,8 @@ class _AddStudentState extends State<AddStudent> {
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
+  String _section;
+  var _batch = '';
   final db = DatabaseService();
   List<String> years = [
     'First',
@@ -57,7 +59,9 @@ class _AddStudentState extends State<AddStudent> {
             icon: Icon(Icons.save_outlined),
             onPressed: () {
               _formKey.currentState.validate();
-              if (_formKey.currentState.validate() && _year != '') {
+              if (_formKey.currentState.validate() &&
+                  _year != '' &&
+                  _section.isNotEmpty) {
                 _formKey.currentState.save();
                 db.saveStudent(
                   _userEmail,
@@ -65,6 +69,8 @@ class _AddStudentState extends State<AddStudent> {
                   _userName,
                   _selectedSubs,
                   _year,
+                  _batch,
+                  _section,
                 );
                 _formKey.currentState.reset();
                 setState(() {
@@ -106,6 +112,7 @@ class _AddStudentState extends State<AddStudent> {
                         _userName = value;
                       },
                     ),
+                    Divider(),
                     Text('Student Email'),
                     TextFormField(
                       key: ValueKey('email'),
@@ -120,13 +127,14 @@ class _AddStudentState extends State<AddStudent> {
                         _userEmail = value;
                       },
                     ),
+                    Divider(),
                     Text('Student Password'),
                     TextFormField(
                       key: ValueKey('pass'),
                       keyboardType: TextInputType.visiblePassword,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter email address';
+                          return 'Please enter password';
                         }
                         return null;
                       },
@@ -134,6 +142,22 @@ class _AddStudentState extends State<AddStudent> {
                         _userPassword = value;
                       },
                     ),
+                    Divider(),
+                    Text('Student Batch'),
+                    TextFormField(
+                      key: ValueKey('batch'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter batch';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _batch = value;
+                      },
+                    ),
+                    Divider(),
                     Text('Year'),
                     PopupMenuButton<String>(
                       icon: Icon(Icons.calendar_today),
@@ -155,6 +179,46 @@ class _AddStudentState extends State<AddStudent> {
                         });
                       },
                     ),
+                    Divider(),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ElevatedButton(
+                            child: Text('A'),
+                            onPressed: () {
+                              setState(() {
+                                _section = 'A';
+                              });
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: _section == 'A'
+                                  ? MaterialStateProperty.all(Colors.redAccent)
+                                  : MaterialStateProperty.all(
+                                      Colors.greenAccent),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                            child: Text('B'),
+                            onPressed: () {
+                              setState(() {
+                                _section = 'B';
+                              });
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: _section == 'B'
+                                  ? MaterialStateProperty.all(Colors.redAccent)
+                                  : MaterialStateProperty.all(
+                                      Colors.greenAccent),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(),
                     Text('Registered Subjects'),
                     Container(
                       height: 280,
@@ -209,6 +273,8 @@ class _AddStudentState extends State<AddStudent> {
                         ],
                       ),
                     ),
+                    Divider(thickness: 10,),
+
                     ElevatedButton(
                       child: Text('Add students from spreadsheet'),
                       onPressed: () async {
@@ -229,11 +295,13 @@ class _AddStudentState extends State<AddStudent> {
                               if (row[0] != 'Name') {
                                 List<String> subs = row[3].split(', ');
                                 db.saveStudent(
-                                  "${row[1]}",
-                                  "${row[2]}",
-                                  "${row[0]}",
+                                  '${row[1]}',
+                                  '${row[2]}',
+                                  '${row[0]}',
                                   subs,
                                   "${row[4]}",
+                                  '${row[5]}',
+                                  '${row[6]}',
                                 );
                               }
                             }

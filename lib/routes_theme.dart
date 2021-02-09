@@ -16,7 +16,9 @@ import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
 import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
 import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
+import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
+import 'package:tils_app/widgets/student-screens/student_home/student_home.dart';
 
 import './widgets/screens/attendance/attendance_page.dart';
 import './widgets/screens/records/student_records.dart';
@@ -126,6 +128,8 @@ class RoutesAndTheme extends StatelessWidget {
           StudentRADisplay.routeName: (context) => StudentRADisplay(),
           CalendarApp.routeName: (context) => CalendarApp(),
           AddStudent.routeName: (context) => AddStudent(),
+          StudentHome.routeName: (context) => StudentHome(),
+          AssessmentPage.routeName: (context)=> AssessmentPage(),
         },
       ),
     );

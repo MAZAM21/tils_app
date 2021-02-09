@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-import 'package:tils_app/models/announcement.dart';
-import 'package:tils_app/models/attendance.dart';
-import 'package:tils_app/models/class-data.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/role.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/models/student.dart';
+import '../models/announcement.dart';
+import '../models/attendance.dart';
+import '../models/class-data.dart';
+import '../models/remote_assessment.dart';
+import '../models/role.dart';
+import '../models/student-user-data.dart';
+import '../models/student.dart';
+import '../models/teacher-user-data.dart';
 import '../models/meeting.dart';
 import '../models/subject.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,6 +48,13 @@ class DatabaseService with ChangeNotifier {
   Stream<StudentUser> streamStudentUser(String uid) {
     CollectionReference ref = _db.collection('students');
     return ref.snapshots().map((list) => StudentUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['uid'] == uid)));
+  }
+
+  //gets data from student collection and checks uid and then makes data into studentuser
+  Stream<TeacherUser> streamTeacherUser(String uid) {
+    CollectionReference ref = _db.collection('teachers');
+    return ref.snapshots().map((list) => TeacherUser.fromFirestore(
         list.docs.firstWhere((doc) => doc['uid'] == uid)));
   }
 
@@ -97,6 +105,21 @@ class DatabaseService with ChangeNotifier {
       return ref.docs.map((doc) => Student.fromFirestore(doc)).toList();
     } catch (err) {
       print('err in getallstudents $err');
+    }
+    return null;
+  }
+
+  Future<List<String>> getAllAssessmentIds() async {
+    CollectionReference ref = _db.collection('remote-assessment');
+    List<String> allIds = [];
+    try {
+      QuerySnapshot allDocs = await ref.get();
+      allDocs.docs.forEach((doc) {
+        allIds.add(doc.id);
+      });
+      return allIds;
+    } catch (err) {
+      print('err in getallassessments: $err'); // TODO
     }
     return null;
   }
@@ -208,7 +231,12 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> addTextQAnswer(
-      String q, String a, String assid, String uid, String title) async {
+    String q,
+    String a,
+    String assid,
+    String uid,
+    String title,
+  ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     try {
       ref.set({'title': title}, SetOptions(merge: true));
@@ -225,11 +253,13 @@ class DatabaseService with ChangeNotifier {
   }
 
   //adds class data from edit tt to cf
-  Future<void> addToCF(
+  Future<void> addClassToCF(
     SubjectName name,
     DateTime start,
     DateTime end,
-  ) async {
+    String section, [
+    String topic,
+  ]) async {
     final _classCollection = _db.collection('classes');
     String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
     String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
@@ -239,6 +269,8 @@ class DatabaseService with ChangeNotifier {
         'subjectName': enToString(name),
         'startTime': startString,
         'endTime': endString,
+        'topic': topic ?? '',
+        'section': section,
       });
     } catch (err) {
       print('error in adding to database: $err');
@@ -251,6 +283,8 @@ class DatabaseService with ChangeNotifier {
     String name,
     List<String> subjects,
     String year,
+    String batch,
+    String section,
   ) async {
     CollectionReference studRef = _db.collection('students');
     CollectionReference userRef = _db.collection('users');
@@ -290,6 +324,8 @@ class DatabaseService with ChangeNotifier {
         'attendance': {},
         'year': year,
         'completed-assessments': [],
+        'batch': batch,
+        'section': section,
       });
       await userRef.doc(cred.user.uid).set({
         'role': 'student',
@@ -303,12 +339,14 @@ class DatabaseService with ChangeNotifier {
   }
 
   //adds edited class to cf
-  Future<void> editInCF(
+  Future<void> editClassInCF(
     String id,
     String name,
     DateTime start,
     DateTime end,
-  ) async {
+    String section, [
+    String topic,
+  ]) async {
     final _classCollection = _db.collection('classes');
     String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
     String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
@@ -317,6 +355,8 @@ class DatabaseService with ChangeNotifier {
         'subjectName': name,
         'startTime': startString,
         'endTime': endString,
+        'topic': topic ?? '',
+        'section': section,
       }, SetOptions(merge: true));
     } catch (err) {
       print('error in adding edited class: $err');
@@ -395,6 +435,33 @@ SubjectName setSubject(String sub) {
     case 'Islamic':
       return SubjectName.Islamic;
       break;
+    case 'Company':
+      return SubjectName.Company;
+      break;
+    case 'Tort':
+      return SubjectName.Tort;
+      break;
+    case 'Property':
+      return SubjectName.Property;
+      break;
+    case 'EU':
+      return SubjectName.EU;
+      break;
+    case 'HR':
+      return SubjectName.HR;
+      break;
+    case 'Contract':
+      return SubjectName.Contract;
+      break;
+    case 'Criminal':
+      return SubjectName.Criminal;
+      break;
+    case 'LSM':
+      return SubjectName.LSM;
+      break;
+    case 'Public':
+      return SubjectName.Public;
+      break;
     default:
       return SubjectName.Undeclared;
   }
@@ -413,6 +480,33 @@ String enToString(SubjectName name) {
       break;
     case SubjectName.Islamic:
       return 'Islamic';
+      break;
+    case SubjectName.Company:
+      return 'Company';
+      break;
+    case SubjectName.Tort:
+      return 'Tort';
+      break;
+    case SubjectName.Property:
+      return 'Property';
+      break;
+    case SubjectName.EU:
+      return 'EU';
+      break;
+    case SubjectName.HR:
+      return 'HR';
+      break;
+    case SubjectName.Contract:
+      return 'Contract';
+      break;
+    case SubjectName.Criminal:
+      return 'Criminal';
+      break;
+    case SubjectName.LSM:
+      return 'LSM';
+      break;
+    case SubjectName.Public:
+      return 'Public';
       break;
     default:
       return 'Undeclared';

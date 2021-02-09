@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:tils_app/models/meeting.dart';
 
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:tils_app/service/teachers-service.dart';
 import './edit-timetable-form.dart';
 
 class CalendarApp extends StatefulWidget {
@@ -20,6 +22,7 @@ class CalendarApp extends StatefulWidget {
 
 class _CalendarAppState extends State<CalendarApp> {
   final db = DatabaseService();
+  final ts = TeacherService();
   CalendarController _controller;
   DateTime _jumpToTime = DateTime.now();
   // String _text = '';
@@ -48,6 +51,8 @@ class _CalendarAppState extends State<CalendarApp> {
     'Timeline Week',
     'Timeline WorkWeek'
   ];
+
+  bool myClass = true;
 
   void calendarTapped(CalendarTapDetails calendarTapDetails) {
     dynamic appointments = calendarTapDetails.appointments;
@@ -120,7 +125,9 @@ class _CalendarAppState extends State<CalendarApp> {
   @override
   Widget build(BuildContext context) {
     final meetingsData = Provider.of<List<Meeting>>(context);
-
+    final teacherData = Provider.of<TeacherUser>(context);
+    final myClasses = ts.getMyClasses(meetingsData, teacherData.subjects);
+    var source = myClasses;
     return Scaffold(
       appBar: AppBar(
         leading: PopupMenuButton<String>(
@@ -152,31 +159,57 @@ class _CalendarAppState extends State<CalendarApp> {
           },
         ),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Back'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              if (myClass)
+                Text(
+                  'My Classes',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              if (!myClass)
+                Text(
+                  'All Classes',
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                ),
+              Switch(
+                value: myClass,
+                onChanged: (option) {
+                  setState(() {
+                    myClass = option;
+                  });
+                },
+                inactiveThumbColor: Colors.cyan,
+                inactiveTrackColor: Colors.cyanAccent,
+                activeColor: Colors.lightGreen,
+              ),
+              FlatButton(
+                child: Text('Back'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           )
         ],
       ),
       body: SfCalendar(
         view: _controller.view,
         controller: _controller,
-        dataSource:
-            meetingsData != null ? MeetingDataSource(meetingsData) : null,
-        // by default the month appointment display mode set as Indicator, we can
-        // change the display mode as appointment using the appointment display
-        // mode property
-
+        dataSource: meetingsData != null && myClass
+            ? MeetingDataSource(myClasses)
+            : meetingsData != null && !myClass
+                ? MeetingDataSource(meetingsData)
+                : null,
         monthViewSettings: MonthViewSettings(
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
         onTap: (CalendarTapDetails details) {
           DateTime date = details.date;
-
-          //CalendarElement view = details.targetElement;
           print(date.toString());
-
           calendarTapped(details);
         },
         initialDisplayDate: _jumpToTime,

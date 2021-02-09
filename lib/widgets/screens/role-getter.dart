@@ -6,6 +6,7 @@ import 'package:tils_app/models/role.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/data-providers/student-datastream.dart';
+import 'package:tils_app/widgets/data-providers/teacher-datastream.dart';
 import 'package:tils_app/widgets/screens/all_tabs.dart';
 import 'package:tils_app/widgets/screens/auth_page.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
@@ -25,7 +26,7 @@ class RoleGetter extends StatelessWidget {
     return isLoggedIn
         ? FutureProvider<Role>(
             create: (ctx) => db.getRole(authState.uid),
-            // catchError: (context,_){return Role('teacher');},
+            //catchError: (context,_){return Role('teacher');},
             builder: (context, _) {
 
               final roleProv = Provider.of<Role>(context);
@@ -33,7 +34,7 @@ class RoleGetter extends StatelessWidget {
                 provIsActive = true;
               }
               return provIsActive && roleProv.getRole == 'teacher'
-                  ? AllTabs()
+                  ? TeacherDataStream()
                   : provIsActive && roleProv.getRole == 'student'
                       ? StudentDataStream()
                       : LoadingScreen();

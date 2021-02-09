@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:tils_app/models/meeting.dart';
+import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/widgets/screens/records/choose_records_screen.dart';
 import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
 import '../announcements/display-announcements.dart';
@@ -21,23 +22,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ts = TeacherService();
 
-  Widget _buttonBuilder(
-      String buttName, Object route, BuildContext context, Icon icon) {
+  Widget _buttonBuilder(String buttName, BuildContext context, Icon icon,
+      Widget wid, TeacherUser prov) {
     return Flexible(
       fit: FlexFit.loose,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          // onPressed: () {
-          //   Navigator.of(context).pushNamed(route);
-          // },
-          // style: ButtonStyle(
-          //   minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
-          //   backgroundColor:
-          //       MaterialStateProperty.all(Theme.of(context).primaryColor),
-          //   textStyle: MaterialStateProperty.all(
-          //       Theme.of(context).textTheme.headline6),
-          // ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -52,7 +43,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(route);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: prov,
+                        child: wid,
+                      ),
+                    ),
+                  );
                 },
               ),
               icon,
@@ -65,15 +64,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // print('im called');
-    // Provider.of<RemoteAssessment>(context, listen: false).allMCQs = [];
+    final teacherData = Provider.of<TeacherUser>(context);
     final meetingsList = Provider.of<List<Meeting>>(context);
+
     int estimateTs = 0;
     int endTime = 0;
     bool isActive = false;
     Meeting nextClass;
-    if (meetingsList != null) {
-      nextClass = ts.getNextClass(meetingsList);
+    if (meetingsList != null && teacherData != null) {
+      final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
+      nextClass = ts.getNextClass(myClasses);
       if (nextClass.eventName != 'no class') {
         estimateTs = nextClass.from.millisecondsSinceEpoch;
         endTime = nextClass.to.millisecondsSinceEpoch;
@@ -128,43 +128,47 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       _buttonBuilder(
                                         'Announcements',
-                                        AllAnnouncements.routeName,
                                         context,
                                         Icon(
                                           Icons.announcement,
                                           color:
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),
+                                        AllAnnouncements(),
+                                        teacherData,
                                       ),
                                       _buttonBuilder(
                                         'Remote Assessment',
-                                        AllRAs.routeName,
                                         context,
                                         Icon(
                                           Icons.border_color,
                                           color:
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),
+                                        AllRAs(),
+                                        teacherData,
                                       ),
                                       _buttonBuilder(
                                         'Time Table',
-                                        CalendarApp.routeName,
                                         context,
                                         Icon(
                                           Icons.calendar_today_sharp,
                                           color:
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),
+                                        CalendarApp(),
+                                        teacherData,
                                       ),
                                       _buttonBuilder(
                                         'Records',
-                                        RecordsPage.routeName,
                                         context,
                                         Icon(
                                           Icons.book_outlined,
                                           color:
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),
+                                        RecordsPage(),
+                                        teacherData,
                                       ),
                                     ],
                                   ),

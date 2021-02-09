@@ -8,12 +8,17 @@ class StudentUser with ChangeNotifier {
   final String year;
   final String name;
   final String uid;
+  final String section;
+  final String batch;
+
   StudentUser(
     this.name,
     this.year,
     this.subjects,
     this.attendance,
-    this.uid, [
+    this.uid,
+    this.section,
+    this.batch, [
     this.assessments,
   ]);
   factory StudentUser.fromFirestore(QueryDocumentSnapshot doc) {
@@ -24,6 +29,8 @@ class StudentUser with ChangeNotifier {
       final year = data['year'];
       final Map subs = {...data['registeredSubs']};
       final compAssessments = [...data['completed-assessments']];
+      final section = data['section'];
+      final batch = data['batch'];
       List regSubs = [];
 
       //takse internal hash map and checks reg status
@@ -34,7 +41,16 @@ class StudentUser with ChangeNotifier {
       });
       //print('Student user called');
       print('$compAssessments');
-      return StudentUser(name, year, regSubs, att, doc.id, compAssessments);
+      return StudentUser(
+        name,
+        year,
+        regSubs,
+        att,
+        doc.id,
+        section,
+        batch,
+        compAssessments,
+      );
     } catch (err) {
       print('erro in student user moder: $err');
     }
