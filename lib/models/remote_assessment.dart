@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 class RemoteAssessment with ChangeNotifier {
   DateTime timeAdded;
+  DateTime deployTime;
+  DateTime deadline;
   String subject;
   String teacherId;
   String assessmentTitle;
@@ -50,8 +52,11 @@ class RAfromDB {
   final String subject;
   final String teacherId;
   final String assessmentTitle;
+   DateTime startTime;
+  DateTime endTime;
   List<MCQ> allMCQs = [];
   List allTextQs = [];
+
   RAfromDB({
     this.id,
     this.timeAdded,
@@ -60,6 +65,8 @@ class RAfromDB {
     this.assessmentTitle,
     this.allMCQs,
     this.allTextQs,
+    this.startTime,
+    this.endTime,
   });
 
   factory RAfromDB.fromFirestore(QueryDocumentSnapshot doc) {
@@ -67,8 +74,17 @@ class RAfromDB {
     final mcqs = Map<String, dynamic>.from(data['MCQs']);
     final textQs = List<String>.from(data['TextQs']);
     List<MCQ> converted = [];
+    Timestamp startTime = data['startTime'];
+    Timestamp endTime = data['endTime'];
     Timestamp time = data['timeCreated'];
     DateTime d = DateTime.parse(time.toDate().toString());
+    DateTime start;
+    DateTime end;
+    //print(startTime);
+    if (startTime != null && endTime != null) {
+      start = DateTime.parse(startTime.toDate().toString()?? Timestamp.now());
+      end = DateTime.parse(endTime.toDate().toString() ?? Timestamp.now());
+    }
     mcqs.forEach((q, a) {
       converted.add(MCQ(question: q, answerChoices: a));
     });
@@ -81,6 +97,8 @@ class RAfromDB {
       assessmentTitle: data['title'],
       allMCQs: converted,
       allTextQs: textQs,
+      startTime: start != null ? start : null,
+      endTime: end != null ? end : null,
     );
   }
 }

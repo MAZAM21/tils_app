@@ -1,12 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/attendance.dart';
 
 import 'package:provider/provider.dart';
 
-
 import 'package:tils_app/models/student.dart';
-import 'package:tils_app/models/subject.dart';
+
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
@@ -22,6 +20,7 @@ class AttendanceMarkerBuilder extends StatefulWidget {
 
 class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
   final db = DatabaseService();
+  Map tileColor = {};
 
   Widget buildAttButton(
     String stud,
@@ -37,6 +36,9 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
         child: ElevatedButton(
           onPressed: () {
             db.addAttToCF(stud, status, id);
+            setState(() {
+              tileColor['$stud'] = status;
+            });
           },
           child: Text(
             buttonText,
@@ -51,7 +53,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
   }
 
   Widget buildAttTile(String stud, String classId, BuildContext ctx,
-      [int status]) {
+      [int status, int tc]) {
     return ListTile(
       leading: Container(
         width: 150,
@@ -61,7 +63,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
             Expanded(
               child: Text(
                 stud,
-                style: TextStyle(color: Colors.black, fontSize: 16),
+                style: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Proxima Nova'),
               ),
             ),
           ],
@@ -93,7 +95,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
           ),
         ]),
       ),
-      tileColor: statusColor(status, ctx),
+      tileColor: statusColor(tc, ctx),
     );
   }
 
@@ -115,26 +117,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
         return Colors.yellow;
         break;
       default:
-        return Theme.of(ctx).backgroundColor;
-    }
-  }
-
-  String enToString(SubjectName name) {
-    switch (name) {
-      case SubjectName.Jurisprudence:
-        return 'Jurisprudence';
-        break;
-      case SubjectName.Trust:
-        return 'Trust';
-        break;
-      case SubjectName.Conflict:
-        return 'Conflict';
-        break;
-      case SubjectName.Islamic:
-        return 'Islamic';
-        break;
-      default:
-        return 'Undeclared';
+        return Theme.of(ctx).canvasColor;
     }
   }
 
@@ -148,10 +131,12 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
       attendanceProvider.forEach((sheet) {
         if (widget.classId == sheet.id) {
           att = sheet.attStat;
+          tileColor = sheet.attStat;
         }
       });
     } else {
       att = {};
+      tileColor = {};
     }
     if (studentProvider != null) {
       streamActive = true;
@@ -165,13 +150,21 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
               itemCount: studentProvider.length,
               itemBuilder: (ctx, i) {
                 int stat = 0;
+                int tc = 0;
+                //att is a map <student name, status>
                 att.forEach((k, v) {
                   if (k == studentProvider[i].name) {
                     stat = v;
                   }
                 });
+                //tileColor is added so that color is not dependant upon a read of the db 
+                tileColor.forEach((k, v) {
+                  if (k == studentProvider[i].name) {
+                    tc = v;
+                  }
+                });
                 return buildAttTile(
-                    studentProvider[i].name, widget.classId, context, stat);
+                    studentProvider[i].name, widget.classId, context, stat, tc);
               },
             ),
     );

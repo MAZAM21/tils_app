@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
@@ -22,8 +23,14 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
 
   final ts = TeacherService();
 
-  Widget buildAssessmentListView(List<RAfromDB> raList, Color col,
-      String subName, BuildContext context, String uid, List completed) {
+  Widget buildAssessmentListView(
+      List<RAfromDB> raList,
+      Color col,
+      String subName,
+      BuildContext context,
+      String uid,
+      List completed,
+      String name) {
     return Container(
       height: 320,
       child: Column(
@@ -45,48 +52,65 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                   : ListView.builder(
                       itemCount: raList.length,
                       itemBuilder: (context, i) {
-                        return Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: GestureDetector(
-                              child: ListTile(
-                                tileColor: completed.contains(raList[i].id)
-                                    ? Colors.green[100]
-                                    : col,
-                                title: Text(
-                                  '${raList[i].assessmentTitle}',
-                                  overflow: TextOverflow.ellipsis,
+                        bool isDeployed = false;
+                        if (raList[i].startTime != null) {
+                          print('${raList[i].assessmentTitle}');
+                          print(
+                              'Start: (${DateFormat('EEE, hh:mm a').format(raList[i].startTime)})');
+                          print(
+                              'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})');
+                          if (raList[i].startTime.isBefore(DateTime.now()) &&
+                              raList[i].endTime.isAfter(DateTime.now()))
+                            isDeployed = true;
+                        }
+                        return !isDeployed
+                            ? null
+                            : Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: GestureDetector(
+                                    child: ListTile(
+                                      tileColor:
+                                          completed.contains(raList[i].id)
+                                              ? Colors.green[100]
+                                              : col,
+                                      title: Text(
+                                        '${raList[i].assessmentTitle} ',
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      subtitle: raList[i].startTime == null
+                                          ? null
+                                          : Text(
+                                              'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})'),
+                                    ),
+                                    onTap: !completed.contains(raList[i].id)
+                                        ? () {
+                                            Navigator.popAndPushNamed(context,
+                                                AssessmentPage.routeName,
+                                                arguments: {
+                                                  'ra': raList[i],
+                                                  'uid': uid,
+                                                  'name': name,
+                                                });
+                                          }
+                                        : () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                content: Text(
+                                                  'This assessment has been submitted \n \n No taksies backsies!',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Raleway',
+                                                      color: Colors.pinkAccent),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                  ),
                                 ),
-                                subtitle: Text(
-                                    'MCQ: ${raList[i].allMCQs.length} , Text Questions: ${raList[i].allTextQs.length}'),
-                              ),
-                              onTap: !completed.contains(raList[i].id)
-                                  ? () {
-                                      Navigator.popAndPushNamed(
-                                          context, AssessmentPage.routeName,
-                                          arguments: {
-                                            'ra': raList[i],
-                                            'uid': uid
-                                          });
-                                    }
-                                  : () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          content: Text(
-                                            'This assessment has been submitted \n \n No taksies backsies!',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'Raleway',
-                                                color: Colors.pinkAccent),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                            ),
-                          ),
-                        );
+                              );
                       },
                     ),
             ),
@@ -140,6 +164,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                 context,
                                 userData.uid,
                                 completed,
+                                userData.name,
                               ),
                           ],
                         ),

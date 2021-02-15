@@ -35,9 +35,10 @@ class _AssessmentPageState extends State<AssessmentPage> {
     Map args = ModalRoute.of(context).settings.arguments as Map;
     final ra = args['ra'];
     final uid = args['uid'];
+    final name = args['name'];
     _question = _ss.getQuestion(ra, _qIndex);
     _answers = _ss.getAnswers(ra, _qIndex);
-    print('$_answers');
+    //print('$_answers');
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
@@ -71,7 +72,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 } else {
                   if (_ansController.text.isNotEmpty) {
                     _db.addTextQAnswer(_question, _ansController.text,
-                        ra.id, uid, ra.assessmentTitle);
+                        ra.id, uid, ra.assessmentTitle, name);
                     setState(() {
                       _ansController.clear();
                       _qIndex++;

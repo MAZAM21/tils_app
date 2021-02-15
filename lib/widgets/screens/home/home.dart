@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/widgets/screens/mark-TextQs/all-textQs.dart';
 import 'package:tils_app/widgets/screens/records/choose_records_screen.dart';
 import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
 import '../announcements/display-announcements.dart';
@@ -61,6 +62,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +171,17 @@ class _HomePageState extends State<HomePage> {
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),
                                         RecordsPage(),
+                                        teacherData,
+                                      ),
+                                       _buttonBuilder(
+                                        'Check Answers',
+                                        context,
+                                        Icon(
+                                          Icons.assignment_turned_in_outlined,
+                                          color:
+                                              Color.fromARGB(255, 76, 76, 76),
+                                        ),
+                                        AllTextQs(),
                                         teacherData,
                                       ),
                                     ],

@@ -1,5 +1,5 @@
 
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -16,11 +16,12 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
   final db = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
+  
   bool _isMCQ = true;
   String question;
 
   void initState() {
-    print('im called');
+  
     Provider.of<RemoteAssessment>(context, listen: false).allMCQs = [];
     Provider.of<RemoteAssessment>(context, listen: false).allTextQs = [];
     super.initState();
@@ -30,7 +31,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
     queController.dispose();
     super.dispose();
   }
-
+ 
   void _saveAssessment() {
     _formKey.currentState.save();
     bool isValid= _formKey.currentState.validate();
@@ -48,9 +49,9 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
     assessment.teacherId = routeArgs['id'];
     assessment.timeAdded = routeArgs['time'];
 
-    for (var x = 0; x < assessment.allMCQs.length; x++) {
-      print('${assessment.allMCQs[x].question}');
-    }
+    // for (var x = 0; x < assessment.allMCQs.length; x++) {
+    //   print('${assessment.allMCQs[x].question}');
+    // }
 
     return Scaffold(
       appBar: AppBar(
@@ -78,6 +79,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                   children: <Widget>[
                     SizedBox(height: 30),
                     Text('Assessment Title'),
+                    //Title input text field
                     TextFormField(
                       key: ValueKey('assessment-title'),
                       validator: (value) {
@@ -105,6 +107,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                       height: 20,
                     ),
                     Text('Enter Question'),
+                    //Question input text field
                     TextFormField(
                       controller: queController,
                       key: ValueKey('question'),
@@ -181,6 +184,9 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                     SizedBox(
                       height: 10,
                     ),
+                    Divider(),
+                    Text('Deploy time'),
+                    Divider(),
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.indigo)),

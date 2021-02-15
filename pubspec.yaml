@@ -31,6 +31,8 @@ dependencies:
   quiver: ^2.1.5
   syncfusion_flutter_charts: ^18.4.34
   syncfusion_flutter_calendar: ^18.4.34
+  syncfusion_flutter_datagrid: ^18.4.41-beta
+  syncfusion_flutter_sliders: ^18.4.42-beta
   file_picker: ^2.1.6
   excel: ^1.1.5
 

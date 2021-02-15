@@ -2,12 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
+import 'package:tils_app/widgets/screens/remote-testing/deploy-assessment.dart';
 
-class EditRA extends StatelessWidget {
-  final db = DatabaseService();
-  final ts = TeacherService();
+class EditRA extends StatefulWidget {
   final RAfromDB ra;
   EditRA(this.ra);
+
+  @override
+  _EditRAState createState() => _EditRAState();
+}
+
+class _EditRAState extends State<EditRA> {
+  final db = DatabaseService();
+
+  final ts = TeacherService();
+
   Widget buildMCQListTile(List<MCQ> mcqList) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -118,7 +127,13 @@ class EditRA extends StatelessWidget {
     );
   }
 
- 
+  void showDeploySheet(String assid) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return DeployAssessment(assid);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +142,8 @@ class EditRA extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete),
-            onPressed: (){
-              db.deleteAssessment(ra.id);
+            onPressed: () {
+              db.deleteAssessment(widget.ra.id);
               Navigator.pop(context);
             },
           )
@@ -148,11 +163,17 @@ class EditRA extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    '${ra.assessmentTitle}',
+                    '${widget.ra.assessmentTitle}',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   SizedBox(
                     height: 20,
+                  ),
+                  ElevatedButton(
+                    child: Text('Choose Deployment Time'),
+                    onPressed: () {
+                      showDeploySheet(widget.ra.id);
+                    },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -164,7 +185,7 @@ class EditRA extends StatelessWidget {
                       ),
                     ],
                   ),
-                  buildMCQListTile(ra.allMCQs),
+                  buildMCQListTile(widget.ra.allMCQs),
                   SizedBox(
                     height: 10,
                   ),
@@ -178,7 +199,7 @@ class EditRA extends StatelessWidget {
                       ),
                     ],
                   ),
-                  buildTextQListTile(ra.allTextQs),
+                  buildTextQListTile(widget.ra.allTextQs),
                 ],
               ),
             ),

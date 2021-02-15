@@ -81,13 +81,14 @@ class StudentHome extends StatelessWidget {
                             Consumer<List<String>>(
                               builder: (context, allIds, _) {
                                 bool idActive = false;
+                                String pending=''; 
                                 if (allIds != null) {
                                   idActive = true;
-                                }
-                                final pending = ss.getPendingAssessmentNum(
+                                  pending = ss.getPendingAssessmentNum(
                                     studData.assessments, allIds);
+                                }
                                 return !idActive
-                                    ? LoadingScreen
+                                    ? CircularProgressIndicator()
                                     : Flexible(
                                         fit: FlexFit.loose,
                                         child: Padding(

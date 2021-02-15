@@ -79,7 +79,7 @@ class StudentService {
     all.forEach((cls) {
       if (subs.contains(cls.subjectName) &&
           cls.section == section &&
-          cls.startTime.isBefore(now)) {
+          cls.startTime.isAfter(now)) {
         myClasses.add(cls);
       }
     });

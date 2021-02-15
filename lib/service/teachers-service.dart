@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/allTextQAs.dart';
+import 'package:tils_app/widgets/screens/mark-TextQs/all-textQs.dart';
+
+import '../models/teacher-user-data.dart';
 import '../models/announcement.dart';
 import '../models/attendance-chart-values.dart';
 import '../models/attendance.dart';
@@ -104,6 +108,27 @@ class TeacherService with ChangeNotifier {
     });
     return subRAs;
   }
+  Map<String, List<RAfromDB>> getRAForTeacher(
+    TeacherUser userData,
+    List<RAfromDB> ras,
+  ) {
+    //function returns a map containing subjects registered against user and all assessments for that particular subject
+    Map<String, List<RAfromDB>> filtered = {};
+    //iterating through each ra.
+    ras.forEach((ra) {
+      //if userdata reg subs contains subject of this particular ra
+      if (userData.subjects.contains(ra.subject) && ra != null) {
+        //add the ra to the list of assessments in value. key is the string sub name.
+        filtered.update('${ra.subject}', (list) {
+          list.add(ra);
+          return list;
+        }, ifAbsent: () {
+          return [ra];
+        });
+      }
+    });
+    return filtered;
+  }
 
   String mapToStrings(Map mcqs) {
     print(mcqs.runtimeType);
@@ -133,4 +158,8 @@ class TeacherService with ChangeNotifier {
     });
     return myClasses;
   }
+
+  
+
+  
 }

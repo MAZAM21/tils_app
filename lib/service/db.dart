@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:quiver/iterables.dart';
+import 'package:tils_app/models/allTextQAs.dart';
+import 'package:tils_app/models/student-textAnswers.dart';
 
 import '../models/announcement.dart';
 import '../models/attendance.dart';
@@ -76,6 +79,35 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => RAfromDB.fromFirestore(doc)).toList());
     } catch (err) {
       print('err in stream RA: $err');
+    }
+    return null;
+  }
+
+  //stream all submitted text answers scripts for all assessments
+  Stream<List<TextQAs>> streamTextQAs() {
+    CollectionReference ref = _db.collection('assessment-result');
+
+    try {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => TextQAs.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('error in stream textqas: $err');
+    }
+    return null;
+  }
+
+  //stream list of scripts for chosen assessment
+  Stream<List<StudentTextAns>> streamAnsFromID(String assid) {
+    try {
+      CollectionReference ref = _db
+          .collection('assessment-result')
+          .doc('$assid')
+          .collection('text-answers');
+      return ref.snapshots().map(
+          (list) => list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
+    }  catch (err) {
+      print('error in stream ans from id db: $err');
+      // TODO
     }
     return null;
   }
@@ -194,12 +226,24 @@ class DatabaseService with ChangeNotifier {
         'timeCreated': assessment.timeAdded,
         'MCQs': assessment.returnMcqs(),
         'TextQs': assessment.allTextQs,
-        'teacherId': assessment.teacherId
+        'teacherId': assessment.teacherId,
+        'startTime': null,
+        'endTime': null,
+        'isText': assessment.allTextQs.isEmpty ? true : false,
       });
     } catch (err) {
       print('error in add assessment: $err');
     }
     print('function triggered');
+  }
+
+  Future<void> addAssessmentDeployment(
+      DateTime start, DateTime end, String assid) async {
+    DocumentReference ref = _db.collection('remote-assessment').doc('$assid');
+    return await ref.set({
+      'startTime': start,
+      'endTime': end,
+    }, SetOptions(merge: true));
   }
 
   Future<void> addMCQAnswer(
@@ -221,6 +265,9 @@ class DatabaseService with ChangeNotifier {
       return await ref.collection('mcq-answers').doc(uid).set(
           {
             '$question': stat,
+            'marks': stat == 'correct'
+                ? FieldValue.increment(1)
+                : FieldValue.increment(0),
           },
           SetOptions(
             merge: true,
@@ -230,19 +277,29 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> addMarksToTextAns(Map<String, double> qMarks, String assid, String uid)async{
+    DocumentReference ref = _db.collection('assessment-result').doc('$assid');
+
+  }
   Future<void> addTextQAnswer(
     String q,
     String a,
     String assid,
     String uid,
     String title,
+    String name,
   ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     try {
-      ref.set({'title': title}, SetOptions(merge: true));
+      ref.set({
+        'title': title,
+        'isText': true,
+      }, SetOptions(merge: true));
       return await ref.collection('text-answers').doc(uid).set(
           {
-            '$q': a,
+            'name': name,
+            'QAs': {'$q': a},
+            'QMarks': {},
           },
           SetOptions(
             merge: true,

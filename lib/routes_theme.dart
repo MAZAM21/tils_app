@@ -125,7 +125,7 @@ class RoutesAndTheme extends StatelessWidget {
           AnswerChoiceInput.routeName: (context) => AnswerChoiceInput(),
           RASubject.routeName: (context) => RASubject(),
           AllRAs.routeName: (context) => AllRAs(),
-          StudentRADisplay.routeName: (context) => StudentRADisplay(),
+         StudentRADisplay.routeName: (context) => StudentRADisplay(),
           CalendarApp.routeName: (context) => CalendarApp(),
           AddStudent.routeName: (context) => AddStudent(),
           StudentHome.routeName: (context) => StudentHome(),
