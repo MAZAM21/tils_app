@@ -108,6 +108,7 @@ class TeacherService with ChangeNotifier {
     });
     return subRAs;
   }
+
   Map<String, List<RAfromDB>> getRAForTeacher(
     TeacherUser userData,
     List<RAfromDB> ras,
@@ -139,27 +140,53 @@ class TeacherService with ChangeNotifier {
     return ans;
   }
 
-  List<Meeting> getMyClasses(List<Meeting> allClasses, List subs){
-    List<Meeting> myClasses=[];
-    allClasses.forEach((cls){
-      if(subs.contains(cls.eventName)){
+  List<Meeting> getMyClasses(List<Meeting> allClasses, List subs) {
+    List<Meeting> myClasses = [];
+    allClasses.forEach((cls) {
+      if (subs.contains(cls.eventName)) {
         myClasses.add(cls);
       }
     });
     return myClasses;
   }
 
-  List<SubjectClass> getMyAttendance(List<SubjectClass> allClasses, List subs){
-    List<SubjectClass> myClasses=[];
-    allClasses.forEach((cls){
-      if(subs.contains(cls.subjectName)){
+  List<SubjectClass> getMyAttendance(List<SubjectClass> allClasses, List subs) {
+    List<SubjectClass> myClasses = [];
+    allClasses.forEach((cls) {
+      if (subs.contains(cls.subjectName)) {
         myClasses.add(cls);
       }
     });
     return myClasses;
   }
 
-  
+  List<double> getMarksList(Map marks, int l) {
+    List<double> markList = [];
+    try {
+      if (marks.isEmpty) {
+        print('marks = null');
+        for (var x = 0; x < l; x++) {
+          markList.add(0);
+        }
+      } else {
+        print('marks!=null');
+          markList = marks.values.toList();
+        
+      }
+      return markList;
+    }  catch (e) {
+      print('err in getmarklist: $e');
+    }
+    return null;
+  }
 
-  
+  List<TextQAs> getTeacherScripts(List<TextQAs> ques, TeacherUser tData){
+    List<TextQAs> textAs = [];
+          ques.forEach((q) {
+            if (q.isText && tData.subjects.contains(q.subject) ) {
+              textAs.add(q);
+            }
+          });
+    return textAs;
+  }
 }

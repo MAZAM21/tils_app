@@ -33,7 +33,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
   @override
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments as Map;
-    final ra = args['ra'];
+    final ra = args['ra'] as RAfromDB;
     final uid = args['uid'];
     final name = args['name'];
     _question = _ss.getQuestion(ra, _qIndex);
@@ -55,6 +55,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                       ra.id,
                       uid,
                       ra.assessmentTitle,
+                      ra.subject,
                     );
                     setState(() {
                       _qIndex++;
@@ -72,7 +73,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 } else {
                   if (_ansController.text.isNotEmpty) {
                     _db.addTextQAnswer(_question, _ansController.text,
-                        ra.id, uid, ra.assessmentTitle, name);
+                        ra.id, uid, ra.assessmentTitle, name, ra.subject);
                     setState(() {
                       _ansController.clear();
                       _qIndex++;

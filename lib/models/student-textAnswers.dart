@@ -30,7 +30,7 @@ class StudentTextAns {
           qMarks['$q'] = m;
         });
       }
-
+      print(name);
       return StudentTextAns(qas, doc.id, name, qMarks);
     } catch (e) {
       // TODO

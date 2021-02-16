@@ -36,16 +36,16 @@ class _StudentAnswerScriptsState extends State<StudentAnswerScripts> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: 400,
                   width: MediaQuery.of(context).size.width * 0.87,
                   child: Column(
                     children: <Widget>[
                       Text(
                         '${widget.title}',
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                             fontFamily: 'Proxima Nova',
-                            color: Theme.of(context).textTheme.headline4.color),
+                            color: Color.fromARGB(255, 76, 76, 76),),
                       ),
                       SizedBox(
                         height: 20,

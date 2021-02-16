@@ -103,9 +103,9 @@ class DatabaseService with ChangeNotifier {
           .collection('assessment-result')
           .doc('$assid')
           .collection('text-answers');
-      return ref.snapshots().map(
-          (list) => list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
-    }  catch (err) {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
+    } catch (err) {
       print('error in stream ans from id db: $err');
       // TODO
     }
@@ -229,12 +229,12 @@ class DatabaseService with ChangeNotifier {
         'teacherId': assessment.teacherId,
         'startTime': null,
         'endTime': null,
-        'isText': assessment.allTextQs.isEmpty ? true : false,
+        'isText': assessment.allTextQs.isNotEmpty ? true : false,
       });
     } catch (err) {
       print('error in add assessment: $err');
     }
-    print('function triggered');
+    //print('function triggered');
   }
 
   Future<void> addAssessmentDeployment(
@@ -253,6 +253,7 @@ class DatabaseService with ChangeNotifier {
     String assid,
     String uid,
     String title,
+    String subject,
   ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     DocumentReference stud = _db.collection('students').doc(uid);
@@ -261,7 +262,10 @@ class DatabaseService with ChangeNotifier {
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
       }, SetOptions(merge: true));
-      ref.set({'title': title}, SetOptions(merge: true));
+      ref.set({
+        'title': title,
+        'subject': subject,
+      }, SetOptions(merge: true));
       return await ref.collection('mcq-answers').doc(uid).set(
           {
             '$question': stat,
@@ -277,10 +281,18 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addMarksToTextAns(Map<String, double> qMarks, String assid, String uid)async{
-    DocumentReference ref = _db.collection('assessment-result').doc('$assid');
-
+  Future<void> addMarksToTextAns(
+      String q, double mark, String assid, String uid) async {
+    DocumentReference ref = _db
+        .collection('assessment-result')
+        .doc('$assid')
+        .collection('text-answers')
+        .doc(uid);
+    return await ref.set({
+      'QMarks': {'$q': mark},
+    }, SetOptions(merge: true));
   }
+
   Future<void> addTextQAnswer(
     String q,
     String a,
@@ -288,12 +300,19 @@ class DatabaseService with ChangeNotifier {
     String uid,
     String title,
     String name,
+    String subject,
   ) async {
+    DocumentReference stud = _db.collection('students').doc(uid);
+
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     try {
+      stud.set({
+        'completed-assessments': FieldValue.arrayUnion([assid]),
+      }, SetOptions(merge: true));
       ref.set({
         'title': title,
         'isText': true,
+        'subject': subject,
       }, SetOptions(merge: true));
       return await ref.collection('text-answers').doc(uid).set(
           {

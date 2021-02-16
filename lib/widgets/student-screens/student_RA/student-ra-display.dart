@@ -31,6 +31,9 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
       String uid,
       List completed,
       String name) {
+    if (subName == 'Trust') {
+      print(raList.length);
+    }
     return Container(
       height: 320,
       child: Column(
@@ -52,20 +55,22 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                   : ListView.builder(
                       itemCount: raList.length,
                       itemBuilder: (context, i) {
-                        bool isDeployed = false;
-                        if (raList[i].startTime != null) {
-                          print('${raList[i].assessmentTitle}');
-                          print(
-                              'Start: (${DateFormat('EEE, hh:mm a').format(raList[i].startTime)})');
-                          print(
-                              'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})');
-                          if (raList[i].startTime.isBefore(DateTime.now()) &&
-                              raList[i].endTime.isAfter(DateTime.now()))
-                            isDeployed = true;
-                        }
-                        return !isDeployed
-                            ? null
-                            : Padding(
+                        // print(i);
+                        // bool isDeployed = false;
+                        // if (subName == 'Trust') {
+                        //   print('before if:${raList[i].assessmentTitle}');
+                        // }
+                        // if (raList[i].startTime != null) {
+                        //   // /print('${raList[i].assessmentTitle}');
+                        //   // //print(
+                        //   //     'Start: (${DateFormat('EEE, hh:mm a').format(raList[i].startTime)})');
+                        //   // print(
+                        //   //     'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})');
+                        //   if (raList[i].startTime.isBefore(DateTime.now()) &&
+                        //       raList[i].endTime.isAfter(DateTime.now()))
+                        //     isDeployed = true;
+                        // }
+                        return  Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
@@ -74,7 +79,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                       tileColor:
                                           completed.contains(raList[i].id)
                                               ? Colors.green[100]
-                                              : col,
+                                              : !raList[i].isDeployed? Colors.grey[300]: col,
                                       title: Text(
                                         '${raList[i].assessmentTitle} ',
                                         overflow: TextOverflow.ellipsis,
@@ -84,7 +89,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                           : Text(
                                               'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})'),
                                     ),
-                                    onTap: !completed.contains(raList[i].id)
+                                    onTap: !completed.contains(raList[i].id) && raList[i].isDeployed
                                         ? () {
                                             Navigator.popAndPushNamed(context,
                                                 AssessmentPage.routeName,
@@ -94,7 +99,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                                   'name': name,
                                                 });
                                           }
-                                        : () {
+                                        : completed.contains(raList[i].id)?() {
                                             showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
@@ -107,7 +112,20 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                                 ),
                                               ),
                                             );
-                                          },
+                                          } :  !raList[i].isDeployed ? () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                content: Text(
+                                                  'This assessment has not been deployed',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Raleway',
+                                                      color: Colors.pinkAccent),
+                                                ),
+                                              ),
+                                            );
+                                          }: {},
                                   ),
                                 ),
                               );
@@ -160,7 +178,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                               buildAssessmentListView(
                                 myRa.values.toList()[x],
                                 Colors.white,
-                                myRa.keys.toList()[x],
+                                myRa.keys.toList()[x], //list of ras per sub
                                 context,
                                 userData.uid,
                                 completed,

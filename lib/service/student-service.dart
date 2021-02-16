@@ -11,6 +11,7 @@ class StudentService {
     Map<String, List<RAfromDB>> filtered = {};
     //iterating through each ra.
     ras.forEach((ra) {
+
       //if userdata reg subs contains subject of this particular ra
       if (userData.subjects.contains(ra.subject) && ra != null) {
         //add the ra to the list of assessments in value. key is the string sub name.
@@ -22,6 +23,7 @@ class StudentService {
         });
       }
     });
+   
     return filtered;
   }
 

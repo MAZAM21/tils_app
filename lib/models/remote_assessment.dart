@@ -52,10 +52,11 @@ class RAfromDB {
   final String subject;
   final String teacherId;
   final String assessmentTitle;
-   DateTime startTime;
+  DateTime startTime;
   DateTime endTime;
   List<MCQ> allMCQs = [];
   List allTextQs = [];
+  bool isDeployed;
 
   RAfromDB({
     this.id,
@@ -67,38 +68,55 @@ class RAfromDB {
     this.allTextQs,
     this.startTime,
     this.endTime,
+    this.isDeployed,
   });
 
   factory RAfromDB.fromFirestore(QueryDocumentSnapshot doc) {
-    final data = doc.data();
-    final mcqs = Map<String, dynamic>.from(data['MCQs']);
-    final textQs = List<String>.from(data['TextQs']);
-    List<MCQ> converted = [];
-    Timestamp startTime = data['startTime'];
-    Timestamp endTime = data['endTime'];
-    Timestamp time = data['timeCreated'];
-    DateTime d = DateTime.parse(time.toDate().toString());
-    DateTime start;
-    DateTime end;
-    //print(startTime);
-    if (startTime != null && endTime != null) {
-      start = DateTime.parse(startTime.toDate().toString()?? Timestamp.now());
-      end = DateTime.parse(endTime.toDate().toString() ?? Timestamp.now());
-    }
-    mcqs.forEach((q, a) {
-      converted.add(MCQ(question: q, answerChoices: a));
-    });
+    try {
+      final data = doc.data();
+      final mcqs = Map<String, dynamic>.from(data['MCQs']);
+      final textQs = List<String>.from(data['TextQs']);
+      List<MCQ> converted = [];
+      Timestamp startTime = data['startTime'];
+      Timestamp endTime = data['endTime'];
+      Timestamp time = data['timeCreated'];
+      DateTime d = DateTime.parse(time.toDate().toString());
+      DateTime start;
+      DateTime end;
+      bool isDep;
+      //print(startTime);
+      if (startTime != null && endTime != null) {
+        start =
+            DateTime.parse(startTime.toDate().toString() ?? Timestamp.now());
+        end = DateTime.parse(endTime.toDate().toString() ?? Timestamp.now());
+      }
+      mcqs.forEach((q, a) {
+        converted.add(MCQ(question: q, answerChoices: a));
+      });
 
-    return RAfromDB(
-      id: doc.id,
-      timeAdded: d,
-      subject: data['subject'],
-      teacherId: data['id'],
-      assessmentTitle: data['title'],
-      allMCQs: converted,
-      allTextQs: textQs,
-      startTime: start != null ? start : null,
-      endTime: end != null ? end : null,
-    );
+      if (start.isBefore(DateTime.now()) && end.isAfter(DateTime.now())) {
+        isDep = true;
+      } else {
+        isDep = false;
+      }
+      print(isDep);
+      //print('constructor called for: ${data['title']}');
+      return RAfromDB(
+        id: doc.id,
+        timeAdded: d,
+        subject: data['subject'],
+        teacherId: data['id'],
+        assessmentTitle: data['title'],
+        allMCQs: converted,
+        allTextQs: textQs,
+        startTime: start != null ? start : null,
+        endTime: end != null ? end : null,
+        isDeployed: isDep
+      );
+    } catch (e) {
+      print('err in rafromdb constructor: $e');
+      // TODO
+    }
+    return null;
   }
 }
