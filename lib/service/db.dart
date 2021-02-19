@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +16,7 @@ import '../models/student.dart';
 import '../models/teacher-user-data.dart';
 import '../models/meeting.dart';
 import '../models/subject.dart';
+import '../models/assessment-result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService with ChangeNotifier {
@@ -102,7 +104,7 @@ class DatabaseService with ChangeNotifier {
       CollectionReference ref = _db
           .collection('assessment-result')
           .doc('$assid')
-          .collection('text-answers');
+          .collection('student-IDs');
       return ref.snapshots().map((list) =>
           list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
     } catch (err) {
@@ -152,6 +154,97 @@ class DatabaseService with ChangeNotifier {
       return allIds;
     } catch (err) {
       print('err in getallassessments: $err'); // TODO
+    }
+    return null;
+  }
+
+  Future<List<String>> getAllARTitles(String subject) async {
+    CollectionReference ref = _db.collection('assessment-result');
+    List<String> titles = [];
+    try {
+      QuerySnapshot qtitles =
+          await ref.where('subject', isEqualTo: '$subject').get();
+      //all titles and doc ids of the assessments of that subject
+      qtitles.docs.forEach((doc) {
+        titles.add(doc['title']);
+      });
+      //print(titles);
+      return titles;
+    } catch (e) {
+      print('error in getAllartitles: $e');
+    }
+    return null;
+  }
+
+  Future<List<ARStudent>> getARData(
+    String subject,
+  ) async {
+    CollectionReference ref = _db.collection('assessment-result');
+    CollectionReference assref = _db.collection('remote-assessment');
+    CollectionReference stu = _db.collection('students');
+
+    //map containing {ids, titles}
+    Map<String, String> idTitles = {};
+
+    //map of number of questions and assid
+    Map<String, int> idL = {};
+
+    try {
+      //all assessments results of subject
+      QuerySnapshot qtitles =
+          await ref.where('subject', isEqualTo: '$subject').get();
+      //all titles and doc ids of the assessments of that subject
+      qtitles.docs.forEach((doc) {
+        idTitles.addAll({doc.id: doc['title']});
+      });
+      // print(idTitles);
+      //query for all assessment docs
+      QuerySnapshot ql = await assref.get();
+
+      //checks all docs in ra against those fetched from ar, adds id and length if present
+      ql.docs.forEach((doc) {
+        if (idTitles.containsKey(doc.id)) {
+          idL.addAll({doc.id: doc['TextQs'].length ?? 0});
+        }
+      });
+      // print(idL);
+
+      //checks student collection for all registered students fro this sub
+      QuerySnapshot qs =
+          await stu.where('registeredSubs.$subject', isEqualTo: true).get();
+      return qs.docs.map((doc) {
+        // print(doc['name']);
+        return ARStudent.fromFirebase(doc, idTitles, idL);
+      }).toList();
+    } catch (e) {
+      print('err in getARDATA db: $e');
+    }
+    return null;
+  }
+
+  Future<Map<String, int>> getAllStudentMarks(String assid) async {
+    try {
+      CollectionReference ref = _db
+          .collection('assessment-result')
+          .doc('$assid')
+          .collection('student-IDs');
+      Map<String, int> allStMarks = {};
+      QuerySnapshot q = await ref.get();
+      q.docs.forEach((doc) {
+        final Map tqmarks = {...doc['TQMarks']};
+        final name = doc['name'];
+        int l = tqmarks.length;
+        print(l);
+        if (l != 0) {
+          int allTotal = tqmarks.values.fold(0, (p, e) => p + e);
+          double aggregate = ((allTotal / (l * 100)) * 100);
+          print(aggregate);
+          allStMarks.addAll({name: aggregate.toInt()});
+        }
+      });
+      return allStMarks;
+    } catch (e) {
+      print('error in getAllStudentMarks db: $e'); // TODO
     }
     return null;
   }
@@ -266,10 +359,10 @@ class DatabaseService with ChangeNotifier {
         'title': title,
         'subject': subject,
       }, SetOptions(merge: true));
-      return await ref.collection('mcq-answers').doc(uid).set(
+      return await ref.collection('student-IDs').doc(uid).set(
           {
-            '$question': stat,
-            'marks': stat == 'correct'
+            'MCQAns': {'$question': stat},
+            'MCQmarks': stat == 'correct'
                 ? FieldValue.increment(1)
                 : FieldValue.increment(0),
           },
@@ -281,18 +374,24 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  //add the marks awarded by teacher to student's answer to db
   Future<void> addMarksToTextAns(
-      String q, double mark, String assid, String uid) async {
+      String q, int mark, String assid, String uid) async {
     DocumentReference ref = _db
         .collection('assessment-result')
         .doc('$assid')
-        .collection('text-answers')
-        .doc(uid);
+        .collection('student-IDs')
+        .doc('$uid');
+    DocumentReference stuRef = _db.collection('students').doc('$uid');
+    await stuRef.set({
+      'Assessment-textqMarks': {'$assid': FieldValue.increment(mark)}
+    }, SetOptions(merge: true));
     return await ref.set({
-      'QMarks': {'$q': mark},
+      'TQMarks': {'$q': mark},
     }, SetOptions(merge: true));
   }
 
+  //add answer of text q to db
   Future<void> addTextQAnswer(
     String q,
     String a,
@@ -306,6 +405,7 @@ class DatabaseService with ChangeNotifier {
 
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     try {
+      //first, adds assid to student doc to indicate that assessment has been attempted
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
       }, SetOptions(merge: true));
@@ -314,11 +414,12 @@ class DatabaseService with ChangeNotifier {
         'isText': true,
         'subject': subject,
       }, SetOptions(merge: true));
-      return await ref.collection('text-answers').doc(uid).set(
+      //then saves to assessment-result
+      return await ref.collection('student-IDs').doc(uid).set(
           {
             'name': name,
-            'QAs': {'$q': a},
-            'QMarks': {},
+            'TQAs': {'$q': a},
+            'TQMarks': {},
           },
           SetOptions(
             merge: true,

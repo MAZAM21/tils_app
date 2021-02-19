@@ -77,8 +77,8 @@ class RAfromDB {
       final mcqs = Map<String, dynamic>.from(data['MCQs']);
       final textQs = List<String>.from(data['TextQs']);
       List<MCQ> converted = [];
-      Timestamp startTime = data['startTime'];
-      Timestamp endTime = data['endTime'];
+      Timestamp startTime = data['startTime'] ?? Timestamp.now();
+      Timestamp endTime = data['endTime']?? Timestamp.now();
       Timestamp time = data['timeCreated'];
       DateTime d = DateTime.parse(time.toDate().toString());
       DateTime start;

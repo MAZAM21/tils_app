@@ -15,51 +15,7 @@ class AllTextQs extends StatefulWidget {
 class _AllTextQsState extends State<AllTextQs> {
   final db = DatabaseService();
   final ts = TeacherService();
-  Color getColor(String sub) {
-    switch (sub) {
-      case 'Jurisprudence':
-        return Color.fromARGB(255, 56, 85, 89);
-        break;
-      case 'Trust':
-        return Color.fromARGB(255, 68, 137, 156);
-        break;
-      case 'Conflict':
-        return Color.fromARGB(255, 37, 31, 87);
-        break;
-      case 'Islamic':
-        return Color.fromARGB(255, 39, 59, 92);
-        break;
-      case 'Company':
-        return Color.fromARGB(255, 50, 33, 58);
-        break;
-      case 'Tort':
-        return Color.fromARGB(255, 56, 59, 83);
-        break;
-      case 'Property':
-        return Color.fromARGB(255, 102, 113, 126);
-        break;
-      case 'EU':
-        return Color.fromARGB(255, 206, 185, 146);
-        break;
-      case 'HR':
-        return Color.fromARGB(255, 143, 173, 136);
-        break;
-      case 'Contract':
-        return Color.fromARGB(255, 36, 79, 38);
-        break;
-      case 'Criminal':
-        return Color.fromARGB(255, 37, 109, 27);
-        break;
-      case 'LSM':
-        return Color.fromARGB(255, 189, 213, 234);
-        break;
-      case 'Public':
-        return Color.fromARGB(255, 201, 125, 96);
-        break;
-      default:
-        return Colors.black;
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +92,7 @@ class _AllTextQsState extends State<AllTextQs> {
                                           color: Color.fromARGB(
                                               255, 250, 235, 215),
                                         ),
-                                  tileColor: getColor(textAs[i].subject),
+                                  tileColor: ts.getColor(textAs[i].subject),
                                   onTap: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(

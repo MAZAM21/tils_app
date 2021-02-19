@@ -4,7 +4,7 @@ class StudentTextAns {
   final Map<String, String> qaMap;
   final String studentId;
   final String name;
-  Map<String, double> qMarks;
+  Map<String, int> qMarks;
 
   StudentTextAns(
     this.qaMap,
@@ -16,9 +16,9 @@ class StudentTextAns {
     try {
       final data = doc.data();
       final String name = data['name'] ?? '';
-      final Map dbMap = {...data['QAs']} ?? '';
-      Map marks = {...data['QMarks']} ?? {};
-      Map<String, double> qMarks = {};
+      final Map dbMap = {...data['TQAs']} ?? '';
+      Map marks = {...data['TQMarks']} ?? {};
+      Map<String, int> qMarks = {};
       Map<String, String> qas = {};
       if (dbMap.isNotEmpty) {
         dbMap.forEach((q, a) {
@@ -27,7 +27,7 @@ class StudentTextAns {
       }
       if (marks.isNotEmpty) {
         marks.forEach((q, m) {
-          qMarks['$q'] = m;
+          qMarks['$q'] = m.toInt();
         });
       }
       print(name);

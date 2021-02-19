@@ -90,7 +90,7 @@ class _MarkScriptState extends State<MarkScript> {
     List<String> answerList = sta.qaMap.values.toList();
 
     int l = sta.qaMap.length;
-    List<double> markList = ts.getMarksList(sta.qMarks, l);
+    List<int> markList = ts.getMarksList(sta.qMarks, l);
     print(markList);
     return Scaffold(
       appBar: AppBar(),

@@ -4,6 +4,7 @@ import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/widgets/screens/mark-TextQs/all-textQs.dart';
 import 'package:tils_app/widgets/screens/records/choose_records_screen.dart';
+import 'package:tils_app/widgets/screens/results/subject-results-display.dart';
 import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
 import '../announcements/display-announcements.dart';
 import '../loading-screen.dart';
@@ -63,8 +64,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     final teacherData = Provider.of<TeacherUser>(context);
@@ -93,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Expanded(
                     child: Container(
-                      width: 400,
+                      // width: MediaQuery.of(context).size.width * 0.8,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -110,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.elliptical(15, 15)),
                                 child: Container(
-                                  height: 350,
+                                  height: 450,
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
                                       colors: [
@@ -173,7 +172,7 @@ class _HomePageState extends State<HomePage> {
                                         RecordsPage(),
                                         teacherData,
                                       ),
-                                       _buttonBuilder(
+                                      _buttonBuilder(
                                         'Check Answers',
                                         context,
                                         Icon(
@@ -182,6 +181,17 @@ class _HomePageState extends State<HomePage> {
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),
                                         AllTextQs(),
+                                        teacherData,
+                                      ),
+                                      _buttonBuilder(
+                                        'My Results',
+                                        context,
+                                        Icon(
+                                          Icons.assignment_turned_in_outlined,
+                                          color:
+                                              Color.fromARGB(255, 76, 76, 76),
+                                        ),
+                                        SubjectResultsDisplay(),
                                         teacherData,
                                       ),
                                     ],

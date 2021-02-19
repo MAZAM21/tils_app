@@ -7,7 +7,7 @@ class MarkIndividualQA extends StatefulWidget {
   final assid;
   final question;
   final answer;
-  final mark;
+  final int mark;
   MarkIndividualQA(
       this.stuId, this.assid, this.question, this.answer, this.mark);
   @override
@@ -23,7 +23,7 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
     // TODO: implement initState
     _isInit = true;
     if (widget.mark != 0) {
-      _initval = widget.mark;
+      _initval = widget.mark.toDouble();
     } else {
       _initval = 0;
     }
@@ -98,7 +98,7 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
                       });
                       db.addMarksToTextAns(
                         '${widget.question}',
-                        _initval,
+                        _initval.toInt(),
                         widget.assid,
                         widget.stuId,
                       );
@@ -107,7 +107,7 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '$_initval',
+                      '${_initval.toInt()}',
                       style: TextStyle(
                           fontFamily: 'Proxima Nova',
                           fontSize: 17,
