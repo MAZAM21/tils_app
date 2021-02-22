@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject.dart';
@@ -11,7 +13,6 @@ class StudentService {
     Map<String, List<RAfromDB>> filtered = {};
     //iterating through each ra.
     ras.forEach((ra) {
-
       //if userdata reg subs contains subject of this particular ra
       if (userData.subjects.contains(ra.subject) && ra != null) {
         //add the ra to the list of assessments in value. key is the string sub name.
@@ -23,7 +24,7 @@ class StudentService {
         });
       }
     });
-   
+
     return filtered;
   }
 
@@ -48,6 +49,7 @@ class StudentService {
   }
 
   Map getAnswers(RAfromDB ra, int index) {
+    //tl is total length of assessment q maps
     int tl = ra.allMCQs.length + ra.allTextQs.length;
     if (index < ra.allMCQs.length) {
       return ra.allMCQs[index].answerChoices;

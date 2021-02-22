@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/student-service.dart';
-
 
 class AssessmentPage extends StatefulWidget {
   static const routeName = '/assessment-page-attempt';
@@ -72,8 +73,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   }
                 } else {
                   if (_ansController.text.isNotEmpty) {
-                    _db.addTextQAnswer(_question, _ansController.text,
-                        ra.id, uid, ra.assessmentTitle, name, ra.subject);
+                    _db.addTextQAnswer(_question, _ansController.text, ra.id,
+                        uid, ra.assessmentTitle, name, ra.subject);
                     setState(() {
                       _ansController.clear();
                       _qIndex++;
@@ -129,6 +130,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             itemExtent: 150,
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
+               
                 return _answers != null
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -153,7 +155,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                               _selectedStat = _answers.keys.toList()[index];
                               _selectedAns = _answers.values.toList()[index];
                             });
-                            print('$_selectedStat');
+                            //print('$_selectedStat');
                           },
                         ),
                       )
@@ -166,6 +168,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
                               child: TextField(
                                 controller: _ansController,
                                 keyboardType: TextInputType.multiline,
+                                maxLines: 12,
+                                minLines: 10,
                                 decoration: InputDecoration(
                                   labelText: 'Answer',
                                   border: OutlineInputBorder(

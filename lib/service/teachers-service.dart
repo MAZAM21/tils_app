@@ -75,6 +75,18 @@ class TeacherService with ChangeNotifier {
     return chartVals;
   }
 
+  Map randomiseChoices(Map ansChoices){
+    List keys = ansChoices.keys.toList();
+    
+    
+    Map<String, String> randomised ={};
+    keys.shuffle();
+    keys.forEach((k){
+      randomised.addAll({k: ansChoices['$k']});
+    });
+    return randomised;
+  }
+
   List<Announcement> orderAnnouncement(List<Announcement> listIn) {
     final list = listIn;
     for (int i = 0; i < list.length; i++) {
@@ -132,7 +144,7 @@ class TeacherService with ChangeNotifier {
   }
 
   String mapToStrings(Map mcqs) {
-    print(mcqs.runtimeType);
+    //print(mcqs.runtimeType);
     String ans = '';
     mcqs.forEach((k, v) {
       ans = ans + '$v ($k)\n';

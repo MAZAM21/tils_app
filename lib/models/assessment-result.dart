@@ -3,34 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:tils_app/service/db.dart';
 
-class ARDataGrid {
-  /// this class will be used to display the assessment result data in SFGrid.
-  /// rows will be student, columns will be assessments
-  ///  for each student, we need all assessments and marks for each assessment.
-  /// the object will represent all assessment results of a single subject
-
-  /// assessmentData will contain a map of string key which is assessment name
-  /// with value being a map of student name and marks
-  Map<String, int> assessmentData = {};
-  final String subject;
-  final String assessmentTitle;
-  final String assid;
-
-  ARDataGrid({
-    this.assessmentData,
-    @required this.subject,
-    @required this.assessmentTitle,
-    @required this.assid,
-  });
-
-  factory ARDataGrid.fromFirestore(QueryDocumentSnapshot doc) {
-    final data = doc.data();
-    final title = data['title'];
-    final subject = data['subject'];
-    return ARDataGrid(assessmentTitle: title, subject: subject, assid: doc.id);
-  }
-}
-
 class ARStudent {
   final String name;
 

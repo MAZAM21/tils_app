@@ -36,8 +36,9 @@ class _AnswerChoiceInputState extends State<AnswerChoiceInput> {
     final isValid = _formKey.currentState.validate();
     _formKey.currentState.save();
     if (answerChoices.isNotEmpty && isValid) {
+      final randomisedAnsChoices = ts.randomiseChoices(answerChoices);
       Provider.of<RemoteAssessment>(context, listen: false)
-          .addMCQ(MCQ(question: que, answerChoices: answerChoices));
+          .addMCQ(MCQ(question: que, answerChoices: randomisedAnsChoices));
 
       _formKey.currentState.reset();
       Navigator.pop(context);

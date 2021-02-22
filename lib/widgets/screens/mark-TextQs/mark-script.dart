@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/mark-TextQs/mark-individual-qa.dart';
 
@@ -13,8 +14,18 @@ class MarkScript extends StatefulWidget {
 }
 
 class _MarkScriptState extends State<MarkScript> {
-  double initval =0;
+  double initval = 0;
+  int aggMarks = 0;
   final ts = TeacherService();
+  final db = DatabaseService();
+
+  void aggregateAllMarks(
+    int mark,
+  ) {
+    aggMarks += mark;
+    print(aggMarks);
+  }
+
   Widget buildQA(
     String question,
     String answer,
@@ -94,6 +105,12 @@ class _MarkScriptState extends State<MarkScript> {
     print(markList);
     return Scaffold(
       appBar: AppBar(),
+      floatingActionButton: FloatingActionButton(child: Icon(Icons.save_outlined),
+        onPressed: () {
+          db.addTotalMarkToStudent(aggMarks, sta.studentId, widget.assid);
+          Navigator.pop(context);
+        },
+      ),
       body: SingleChildScrollView(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -110,6 +127,7 @@ class _MarkScriptState extends State<MarkScript> {
                       questionList[x],
                       answerList[x],
                       markList[x],
+                      aggregateAllMarks,
                     ),
                 ],
               ),

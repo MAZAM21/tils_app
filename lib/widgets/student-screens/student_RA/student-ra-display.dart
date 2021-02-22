@@ -32,7 +32,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
       List completed,
       String name) {
     if (subName == 'Trust') {
-      print(raList.length);
+      //print(raList.length);
     }
     return Container(
       height: 320,

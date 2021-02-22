@@ -35,6 +35,12 @@ dependencies:
   syncfusion_flutter_sliders: ^18.4.42-beta
   file_picker: ^2.1.6
   excel: ^1.1.5
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/TilsLogo.jpeg"
 
 
   # The following adds the Cupertino Icons font to your application.

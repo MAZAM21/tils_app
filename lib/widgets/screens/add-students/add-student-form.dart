@@ -294,6 +294,7 @@ class _AddStudentState extends State<AddStudent> {
                               print('${row[3]}');
                               if (row[0] != 'Name') {
                                 List<String> subs = row[3].split(', ');
+                                print(row[1]);
                                 db.saveStudent(
                                   '${row[1]}',
                                   '${row[2]}',

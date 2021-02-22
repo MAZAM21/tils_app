@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
                                         'My Results',
                                         context,
                                         Icon(
-                                          Icons.assignment_turned_in_outlined,
+                                          Icons.list_alt_sharp,
                                           color:
                                               Color.fromARGB(255, 76, 76, 76),
                                         ),

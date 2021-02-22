@@ -234,11 +234,11 @@ class DatabaseService with ChangeNotifier {
         final Map tqmarks = {...doc['TQMarks']};
         final name = doc['name'];
         int l = tqmarks.length;
-        print(l);
+        //print(l);
         if (l != 0) {
           int allTotal = tqmarks.values.fold(0, (p, e) => p + e);
           double aggregate = ((allTotal / (l * 100)) * 100);
-          print(aggregate);
+          //print(aggregate);
           allStMarks.addAll({name: aggregate.toInt()});
         }
       });
@@ -354,6 +354,7 @@ class DatabaseService with ChangeNotifier {
     try {
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
+        
       }, SetOptions(merge: true));
       ref.set({
         'title': title,
@@ -374,6 +375,13 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> addTotalMarkToStudent(int mark, String uid, String assid) async {
+    DocumentReference stuRef = _db.collection('students').doc('$uid');
+    await stuRef.set({
+      'Assessment-textqMarks': {'$assid':mark}
+    }, SetOptions(merge: true));
+  }
+
   //add the marks awarded by teacher to student's answer to db
   Future<void> addMarksToTextAns(
       String q, int mark, String assid, String uid) async {
@@ -382,10 +390,7 @@ class DatabaseService with ChangeNotifier {
         .doc('$assid')
         .collection('student-IDs')
         .doc('$uid');
-    DocumentReference stuRef = _db.collection('students').doc('$uid');
-    await stuRef.set({
-      'Assessment-textqMarks': {'$assid': FieldValue.increment(mark)}
-    }, SetOptions(merge: true));
+
     return await ref.set({
       'TQMarks': {'$q': mark},
     }, SetOptions(merge: true));
