@@ -85,7 +85,7 @@ class _AnswerChoiceInputState extends State<AnswerChoiceInput> {
                       Container(
                         width: double.infinity,
                         child: Card(
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.green.shade100,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(

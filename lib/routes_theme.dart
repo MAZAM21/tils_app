@@ -4,18 +4,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/student.dart';
+import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/widgets/screens/add-students/add-student-form.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-detail.dart';
 import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
 import 'package:tils_app/widgets/screens/announcements/display-announcements.dart';
 import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
+import 'package:tils_app/widgets/screens/rankings/ranking-display.dart';
 import 'package:tils_app/widgets/screens/remote-testing/answer-choice-input.dart';
 import 'package:tils_app/widgets/screens/remote-testing/display-all-ra.dart';
 import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
 import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
 import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
+import 'package:tils_app/widgets/student-screens/edit-student-profile.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student_home.dart';
@@ -56,6 +60,12 @@ class RoutesAndTheme extends StatelessWidget {
         ),
         StreamProvider<User>(
           create: (ctx) => db.authStateStream(),
+        ),
+        StreamProvider<List<StudentRank>>(
+          create: (ctx) => db.streamStudents(),
+        ),
+        StreamProvider<List<RAfromDB>>(
+          create: (ctx) => db.streamRA(),
         ),
       ],
       child: MaterialApp(
@@ -125,11 +135,13 @@ class RoutesAndTheme extends StatelessWidget {
           AnswerChoiceInput.routeName: (context) => AnswerChoiceInput(),
           RASubject.routeName: (context) => RASubject(),
           AllRAs.routeName: (context) => AllRAs(),
-         StudentRADisplay.routeName: (context) => StudentRADisplay(),
+          StudentRADisplay.routeName: (context) => StudentRADisplay(),
           CalendarApp.routeName: (context) => CalendarApp(),
           AddStudent.routeName: (context) => AddStudent(),
           StudentHome.routeName: (context) => StudentHome(),
-          AssessmentPage.routeName: (context)=> AssessmentPage(),
+          AssessmentPage.routeName: (context) => AssessmentPage(),
+          EditStudentProfile.routeName: (context) => EditStudentProfile(),
+          RankingDisplay.routeName: (context) => RankingDisplay(),
         },
       ),
     );

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:quiver/iterables.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
+import 'package:tils_app/models/student_rank.dart';
 
 import '../models/announcement.dart';
 import '../models/attendance.dart';
@@ -49,6 +50,17 @@ class DatabaseService with ChangeNotifier {
         list.docs.map((doc) => Attendance.fromFirestore(doc)).toList());
   }
 
+  Stream<List<StudentRank>> streamStudents() {
+    try {
+      CollectionReference ref = _db.collection('students');
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => StudentRank.fromFirestore(doc)).toList());
+    } catch (e) {
+      print('error in student list stream db:' + e);
+    }
+    return null;
+  }
+
   //gets data from student collection and checks uid and then makes data into studentuser
   Stream<StudentUser> streamStudentUser(String uid) {
     CollectionReference ref = _db.collection('students');
@@ -56,7 +68,7 @@ class DatabaseService with ChangeNotifier {
         list.docs.firstWhere((doc) => doc['uid'] == uid)));
   }
 
-  //gets data from student collection and checks uid and then makes data into studentuser
+  //gets data from student collection and checks uid and then makes data into teacheruser
   Stream<TeacherUser> streamTeacherUser(String uid) {
     CollectionReference ref = _db.collection('teachers');
     return ref.snapshots().map((list) => TeacherUser.fromFirestore(
@@ -354,7 +366,11 @@ class DatabaseService with ChangeNotifier {
     try {
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
-        
+        'Assessment-MCQMarks': {
+          question: stat == 'correct'
+              ? FieldValue.increment(1)
+              : FieldValue.increment(0),
+        },
       }, SetOptions(merge: true));
       ref.set({
         'title': title,
@@ -378,7 +394,7 @@ class DatabaseService with ChangeNotifier {
   Future<void> addTotalMarkToStudent(int mark, String uid, String assid) async {
     DocumentReference stuRef = _db.collection('students').doc('$uid');
     await stuRef.set({
-      'Assessment-textqMarks': {'$assid':mark}
+      'Assessment-textqMarks': {'$assid': mark}
     }, SetOptions(merge: true));
   }
 

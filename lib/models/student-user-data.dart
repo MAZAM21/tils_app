@@ -10,6 +10,7 @@ class StudentUser with ChangeNotifier {
   final String uid;
   final String section;
   final String batch;
+  final String imageURL;
 
   StudentUser(
     this.name,
@@ -20,6 +21,7 @@ class StudentUser with ChangeNotifier {
     this.section,
     this.batch, [
     this.assessments,
+    this.imageURL,
   ]);
   factory StudentUser.fromFirestore(QueryDocumentSnapshot doc) {
     try {
@@ -31,6 +33,7 @@ class StudentUser with ChangeNotifier {
       final compAssessments = [...data['completed-assessments']];
       final section = data['section'];
       final batch = data['batch'];
+      final url = data['profile-pic-url'];
       List regSubs = [];
 
       //takse internal hash map and checks reg status
@@ -40,7 +43,7 @@ class StudentUser with ChangeNotifier {
         }
       });
       //print('Student user called');
-      print('$compAssessments');
+      //print('$compAssessments');
       return StudentUser(
         name,
         year,
@@ -50,6 +53,7 @@ class StudentUser with ChangeNotifier {
         section,
         batch,
         compAssessments,
+        url,
       );
     } catch (err) {
       print('erro in student user moder: $err');

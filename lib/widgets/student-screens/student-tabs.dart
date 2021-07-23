@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/widgets/screens/rankings/ranking-display.dart';
 
-import 'package:tils_app/widgets/drawer.dart';
+import 'package:tils_app/widgets/student-screens/student-drawer.dart';
 
 import './student_home/student_home.dart';
 
@@ -32,10 +33,10 @@ class _AllStudentTabsState extends State<AllStudentTabs>
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 1,
+      length: 2,
       initialIndex: 0,
       child: Scaffold(
-        drawer: AppDrawer(),
+        drawer: StudentDrawer(),
         appBar: AppBar(
           title: Text(
             'TILS Student\'s Portal',
@@ -50,10 +51,13 @@ class _AllStudentTabsState extends State<AllStudentTabs>
                   controller: _controller,
                   labelColor: Color.fromARGB(255, 76, 76, 76),
                   indicatorColor: Color.fromARGB(255, 143, 166, 203),
-                  isScrollable: true,
+                  isScrollable: false,
                   tabs: <Widget>[
                     Tab(
                       text: 'Home',
+                    ),
+                    Tab(
+                      text: 'Rankings',
                     ),
                   ]),
             ),
@@ -61,6 +65,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
         ),
         body: TabBarView(children: <Widget>[
           StudentHome(),
+          RankingDisplay(),
         ]),
       ),
     );

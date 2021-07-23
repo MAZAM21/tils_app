@@ -79,7 +79,7 @@ class _AddStudentState extends State<AddStudent> {
               } else {
                 showDialog(
                   context: context,
-                  child: AlertDialog(
+                  builder: (context) => AlertDialog(
                     content: Text('All fields are required'),
                   ),
                 );

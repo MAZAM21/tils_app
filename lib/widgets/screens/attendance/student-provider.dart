@@ -21,3 +21,6 @@ class StudentProvider extends StatelessWidget {
     );
   }
 }
+
+// this is where I fetch student's from database based on subjects. I need to do this in root file because 
+//I need to fetch student's all the time.

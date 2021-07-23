@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 onPressed: () {
+                  //in order to extend scope of provider use MaterialPageRoute and apple ChangeNotifierProvider as done below
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (BuildContext context) =>

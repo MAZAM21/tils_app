@@ -119,9 +119,12 @@ class ARDataGridSource extends DataGridSource<ARStudent> {
   List<ARStudent> get dataSource => gData;
   @override
   getValue(ARStudent student, String columnHeader) {
+    //first column is for student names
     if (columnHeader == 'name') {
+      //returns all student names for column Name
       return student.name;
     } else if (columnHeader != 'name') {
+      //returns all marks for assessment title column
       if (student.titleMarks['$columnHeader'] == null) {
         return '0';
       } else {

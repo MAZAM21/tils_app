@@ -51,11 +51,17 @@ class StudentHome extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
+                                CircleAvatar(
+                                  backgroundImage: studData.imageURL != null
+                                      ? NetworkImage(studData.imageURL)
+                                      : null,
+                                  radius: 30,
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8.0),
                                   child: Text(
-                                    'Welcome ${studData.name}',
+                                    '${studData.name}',
                                     style: TextStyle(
                                       color: Color.fromARGB(255, 76, 76, 76),
                                       fontSize: 20,
@@ -91,4 +97,3 @@ class StudentHome extends StatelessWidget {
             });
   }
 }
-

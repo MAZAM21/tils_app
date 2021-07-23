@@ -35,7 +35,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
       //print(raList.length);
     }
     return Container(
-      height: 320,
+      height: 286,
       child: Column(
         children: <Widget>[
           Padding(
@@ -48,58 +48,50 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Container(
+              constraints: BoxConstraints(maxHeight: 250),
               color: Color.fromARGB(50, 172, 216, 211),
               height: 250,
               child: raList.isEmpty
                   ? Text('No Assessments')
-                  : ListView.builder(
-                      itemCount: raList.length,
-                      itemBuilder: (context, i) {
-                        // print(i);
-                        // bool isDeployed = false;
-                        // if (subName == 'Trust') {
-                        //   print('before if:${raList[i].assessmentTitle}');
-                        // }
-                        // if (raList[i].startTime != null) {
-                        //   // /print('${raList[i].assessmentTitle}');
-                        //   // //print(
-                        //   //     'Start: (${DateFormat('EEE, hh:mm a').format(raList[i].startTime)})');
-                        //   // print(
-                        //   //     'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})');
-                        //   if (raList[i].startTime.isBefore(DateTime.now()) &&
-                        //       raList[i].endTime.isAfter(DateTime.now()))
-                        //     isDeployed = true;
-                        // }
-                        return  Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: GestureDetector(
-                                    child: ListTile(
-                                      tileColor:
-                                          completed.contains(raList[i].id)
-                                              ? Colors.green[100]
-                                              : !raList[i].isDeployed? Colors.grey[300]: col,
-                                      title: Text(
-                                        '${raList[i].assessmentTitle} ',
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      subtitle: raList[i].startTime == null
-                                          ? null
-                                          : Text(
-                                              'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})'),
-                                    ),
-                                    onTap: !completed.contains(raList[i].id) && raList[i].isDeployed
+                  : Container(
+                    height: 250,
+                    child: ListView.builder(
+                      cacheExtent: 0.0,
+                        itemCount: raList.length,
+                        itemBuilder: (context, i) {
+                          return Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: GestureDetector(
+                                child: ListTile(
+                                  tileColor: completed.contains(raList[i].id)
+                                      ? Colors.green[100]
+                                      : !raList[i].isDeployed
+                                          ? Colors.grey[300]
+                                          : col,
+                                  title: Text(
+                                    '${raList[i].assessmentTitle} ',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  subtitle: raList[i].startTime == null
+                                      ? null
+                                      : Text(
+                                          'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})'),
+                                ),
+                                onTap: !completed.contains(raList[i].id) &&
+                                        raList[i].isDeployed
+                                    ? () {
+                                        Navigator.popAndPushNamed(
+                                            context, AssessmentPage.routeName,
+                                            arguments: {
+                                              'ra': raList[i],
+                                              'uid': uid,
+                                              'name': name,
+                                            });
+                                      }
+                                    : completed.contains(raList[i].id)
                                         ? () {
-                                            Navigator.popAndPushNamed(context,
-                                                AssessmentPage.routeName,
-                                                arguments: {
-                                                  'ra': raList[i],
-                                                  'uid': uid,
-                                                  'name': name,
-                                                });
-                                          }
-                                        : completed.contains(raList[i].id)?() {
                                             showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
@@ -112,25 +104,31 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                                 ),
                                               ),
                                             );
-                                          } :  !raList[i].isDeployed ? () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                content: Text(
-                                                  'This assessment has not been deployed',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Raleway',
-                                                      color: Colors.pinkAccent),
-                                                ),
-                                              ),
-                                            );
-                                          }: {},
-                                  ),
-                                ),
-                              );
-                      },
-                    ),
+                                          }
+                                        : !raList[i].isDeployed
+                                            ? () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    content: Text(
+                                                      'This assessment has not been deployed',
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontFamily: 'Raleway',
+                                                          color:
+                                                              Colors.pinkAccent),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            : {},
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                  ),
             ),
           ),
         ],
@@ -140,58 +138,53 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider(
-      create: (context) => db.streamRA(),
-      builder: (context, _) {
-        final allRa = Provider.of<List<RAfromDB>>(context);
-        final userData = Provider.of<StudentUser>(context);
+    final allRa = Provider.of<List<RAfromDB>>(context);
+    final userData = Provider.of<StudentUser>(context);
 
-        //when student attempts an assessment the id is logged in his doc in cf.
-        //this list of attempted assessment id is stored in completed.
-        List completed = userData.assessments;
+    //when student attempts an assessment the id is logged in his doc in cf.
+    //this list of attempted assessment id is stored in completed.
+    List completed = userData.assessments;
 
-        Map<String, List<RAfromDB>> myRa =
-            {}; //a map with subjects as keys and assessment associated with sub as values
+    Map<String, List<RAfromDB>> myRa =
+        {}; //a map with subjects as keys and assessment associated with sub as values
 
-        bool isActive = false;
-        if (allRa != null && userData != null) {
-          // filtering allra for all of the subs registered.
-          isActive = true;
-          myRa = ss.getRAForStud(userData, allRa);
-        }
+    bool isActive = false;
+    if (allRa != null && userData != null) {
+      // filtering allra for all of the subs registered.
+      isActive = true;
+      myRa = ss.getRAForStud(userData, allRa);
+    }
 
-        return !isActive
-            ? LoadingScreen()
-            : Scaffold(
-                appBar: AppBar(),
-                body: SingleChildScrollView(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: 300,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            for (var x = 0; x < myRa.length; x++)
-                              buildAssessmentListView(
-                                myRa.values.toList()[x],
-                                Colors.white,
-                                myRa.keys.toList()[x], //list of ras per sub
-                                context,
-                                userData.uid,
-                                completed,
-                                userData.name,
-                              ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-      },
-    );
+    return !isActive
+        ? LoadingScreen()
+        : Scaffold(
+            appBar: AppBar(),
+            body: SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 300,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (var x = 0; x < myRa.length; x++)
+                          buildAssessmentListView(
+                            myRa.values.toList()[x],
+                            Colors.white,
+                            myRa.keys.toList()[x], //list of ras per sub
+                            context,
+                            userData.uid,
+                            completed,
+                            userData.name,
+                          ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
   }
 }
