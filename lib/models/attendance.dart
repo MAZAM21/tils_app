@@ -7,6 +7,7 @@ class Attendance {
   final String id;
   final Map<String, dynamic> attendanceStatus;
   Attendance({@required this.id, this.attendanceStatus});
+  
   factory Attendance.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data();
     return Attendance(id: doc.id, attendanceStatus: data);

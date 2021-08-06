@@ -38,8 +38,9 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
       height: 286,
       child: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          Container(
+            width: 300,
+            color: Theme.of(context).canvasColor,
             child: Text(
               '$subName',
               style: Theme.of(context).textTheme.headline4,

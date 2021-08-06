@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:quiver/iterables.dart';
 import 'package:tils_app/models/allTextQAs.dart';
+import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
 
@@ -73,6 +74,12 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('teachers');
     return ref.snapshots().map((list) => TeacherUser.fromFirestore(
         list.docs.firstWhere((doc) => doc['uid'] == uid)));
+  }
+
+  Stream<ParentUser> streamParentUser(String puid) {
+    CollectionReference ref = _db.collection('students');
+    return ref.snapshots().map((list) => ParentUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['parent-uid'] == puid)));
   }
 
   Stream<List<Announcement>> streamAnnouncement() {
@@ -362,12 +369,13 @@ class DatabaseService with ChangeNotifier {
   ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     DocumentReference stud = _db.collection('students').doc(uid);
-
+    ///for student collection, the assessment-mcqmarks map has been modified
+    ///the key is now the assid and the value will a number indicating correct answers
     try {
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
         'Assessment-MCQMarks': {
-          question: stat == 'correct'
+          assid: stat == 'correct'
               ? FieldValue.increment(1)
               : FieldValue.increment(0),
         },

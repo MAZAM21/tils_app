@@ -1,10 +1,9 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/role.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/widgets/data-providers/parent-datastream.dart';
 import 'package:tils_app/widgets/data-providers/student-datastream.dart';
 import 'package:tils_app/widgets/data-providers/teacher-datastream.dart';
 import 'package:tils_app/widgets/screens/all_tabs.dart';
@@ -28,7 +27,6 @@ class RoleGetter extends StatelessWidget {
             create: (ctx) => db.getRole(authState.uid),
             //catchError: (context,_){return Role('teacher');},
             builder: (context, _) {
-
               final roleProv = Provider.of<Role>(context);
               if (roleProv != null) {
                 provIsActive = true;
@@ -37,7 +35,9 @@ class RoleGetter extends StatelessWidget {
                   ? TeacherDataStream()
                   : provIsActive && roleProv.getRole == 'student'
                       ? StudentDataStream()
-                      : LoadingScreen();
+                      : provIsActive && roleProv.getRole == 'parent'
+                          ? ParentDataStream()
+                          : LoadingScreen();
             },
           )
         : AuthScreen();
