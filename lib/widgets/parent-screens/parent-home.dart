@@ -13,6 +13,9 @@ import 'package:tils_app/widgets/parent-screens/parent-classposition-panel.dart'
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import './parent-drawer.dart';
 
+///Unlike teacher homes, each widget here defines its width with the help of mediaquery. 
+/// It is yet to be determined which is the better approach. 
+
 class ParentHome extends StatefulWidget {
   const ParentHome({Key key}) : super(key: key);
 

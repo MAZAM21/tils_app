@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/widgets/screens/home/teacher-tt-panel.dart';
 import 'package:tils_app/widgets/screens/mark-TextQs/all-textQs.dart';
 import 'package:tils_app/widgets/screens/records/choose_records_screen.dart';
 import 'package:tils_app/widgets/screens/results/subject-results-display.dart';
@@ -101,6 +102,37 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           //Subject Notifier
                           ClassTimerPanel(estimateTs, nextClass, endTime),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                      Color.fromARGB(255, 219, 244, 167),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ChangeNotifierProvider.value(
+                                          value: teacherData,
+                                          child: CalendarApp(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Time Table',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 76, 76, 76),
+                                    ),
+                                  )),
+                              ElevatedButton(
+                                  onPressed: () {}, child: Text('Add Class')),
+                            ],
+                          ),
+                          TeacherTTPanel(),
                           Flexible(
                             fit: FlexFit.loose,
                             child: Padding(

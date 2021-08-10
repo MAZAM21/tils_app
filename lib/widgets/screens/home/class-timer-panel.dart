@@ -55,104 +55,13 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
                       remaining <= Duration.zero && toEnd > Duration.zero;
 
                   //print(dateString)${remaining.inHours}:;
-                  return Flexible(
-                    fit: FlexFit.loose,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 15),
-                      child: ClipRRect(
-                        //change this to shape rounded rect
-                        borderRadius:
-                            BorderRadius.all(Radius.elliptical(15, 15)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color.fromARGB(215, 143, 166, 203)
-                                    .withOpacity(0.5),
-                                Color.fromARGB(255, 219, 244, 167)
-                                    .withOpacity(0.9),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              stops: [0, 1],
-                            ),
-                          ),
-                          height: 150,
-                          child: Column(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: inSession
-                                    ? Text(
-                                        '${widget.meeting.eventName} is in session',
-                                        style: TextStyle(
-                                          fontFamily: 'Proxima Nova',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 22,
-                                          letterSpacing: 1,
-                                          fontStyle: FontStyle.normal,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      )
-                                    : Text(
-                                        '${widget.meeting.eventName} in $dateString',
-                                        style: TextStyle(
-                                          fontFamily: 'Proxima Nova',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 22,
-                                          letterSpacing: 1,
-                                          fontStyle: FontStyle.normal,
-                                          color:
-                                              Color.fromARGB(255, 76, 76, 76),
-                                        ),
-                                      ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  FlatButton(
-                                    textColor: Color.fromARGB(255, 76, 76, 76),
-
-                                    child: Text('Reschedule'),
-                                    // style: Theme.of(context).buttonTheme,
-                                    onPressed: timeUp
-                                        ? null
-                                        : () {
-                                            Navigator.pushNamed(
-                                                context, EditTTForm.routeName,
-                                                arguments: widget.meeting);
-                                          },
-                                  ),
-                                  SizedBox(
-                                    width: 50,
-                                  ),
-                                  FlatButton(
-                                    textColor: Color.fromARGB(255, 76, 76, 76),
-                                    child: Text('Attendance'),
-                                    onPressed: !timeClose
-                                        ? null
-                                        : () {
-                                            Navigator.pushNamed(context,
-                                                StudentProvider.routeName,
-                                                arguments: subClassNext);
-                                          },
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  return TimerText(
+                      inSession: inSession,
+                      widget: widget,
+                      dateString: dateString,
+                      timeUp: timeUp,
+                      timeClose: timeClose,
+                      subClassNext: subClassNext);
                 })
             : widget.meeting.eventName == 'no class'
                 ? Flexible(
@@ -195,5 +104,128 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
                     ),
                   )
                 : Text('Error in ternary expression is class timer panel');
+  }
+}
+
+class TimerText extends StatelessWidget {
+  const TimerText({
+    Key key,
+    @required this.inSession,
+    @required this.widget,
+    @required this.dateString,
+    @required this.timeUp,
+    @required this.timeClose,
+    @required this.subClassNext,
+  }) : super(key: key);
+
+  final bool inSession;
+  final ClassTimerPanel widget;
+
+  final String dateString;
+  final bool timeUp;
+
+  final bool timeClose;
+  final SubjectClass subClassNext;
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      fit: FlexFit.loose,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        child: ClipRRect(
+          //change this to shape rounded rect
+          borderRadius: BorderRadius.all(Radius.elliptical(15, 15)),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color.fromARGB(215, 143, 166, 203).withOpacity(0.5),
+                  Color.fromARGB(255, 219, 244, 167).withOpacity(0.9),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: [0, 1],
+              ),
+            ),
+            height: 150,
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: inSession
+                      ? Text(
+                          '${widget.meeting.eventName} is in session',
+                          style: TextStyle(
+                            fontFamily: 'Proxima Nova',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                            letterSpacing: 1,
+                            fontStyle: FontStyle.normal,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        )
+                      : Text(
+                          '${widget.meeting.eventName} in $dateString',
+                          style: TextStyle(
+                            fontFamily: 'Proxima Nova',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
+                            letterSpacing: 1,
+                            fontStyle: FontStyle.normal,
+                            color: Color.fromARGB(255, 76, 76, 76),
+                          ),
+                        ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    TextButton(
+                      child: Text(
+                        'Reschedule',
+                        style:
+                            TextStyle(color: Color.fromARGB(255, 76, 76, 76)),
+                      ),
+                      // style: Theme.of(context).buttonTheme,
+                      onPressed: timeUp
+                          ? null
+                          : () {
+                              Navigator.pushNamed(context, EditTTForm.routeName,
+                                  arguments: widget.meeting);
+                            },
+                    ),
+                    SizedBox(
+                      width: 50,
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          color: Color.fromARGB(255, 76, 76, 76),
+                        ),
+                      ),
+                      child: Text('Attendance'),
+                      onPressed: !timeClose
+                          ? null
+                          : () {
+                              Navigator.pushNamed(
+                                  context, StudentProvider.routeName,
+                                  arguments: subClassNext);
+                            },
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
