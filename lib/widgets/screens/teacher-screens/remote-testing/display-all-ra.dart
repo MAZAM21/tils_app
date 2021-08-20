@@ -7,8 +7,9 @@ import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/widgets/screens/remote-testing/edit-ra.dart';
-import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 
 class AllRAs extends StatefulWidget {
   static const routeName = '/all-remote-assessments';

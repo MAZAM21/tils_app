@@ -5,7 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
 
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';

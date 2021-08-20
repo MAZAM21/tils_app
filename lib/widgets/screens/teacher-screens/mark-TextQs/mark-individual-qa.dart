@@ -21,7 +21,6 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
   bool _isInit = false;
   @override
   void initState() {
-    // TODO: implement initState
     _isInit = true;
     if (widget.mark != 0) {
       _initval = widget.mark.toDouble();

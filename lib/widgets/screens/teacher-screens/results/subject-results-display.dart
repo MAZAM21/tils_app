@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/results/result-datagrid.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/results/result-datagrid.dart';
 
 class SubjectResultsDisplay extends StatelessWidget {
   final ts = TeacherService();

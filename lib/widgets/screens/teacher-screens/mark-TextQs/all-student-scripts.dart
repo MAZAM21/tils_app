@@ -3,7 +3,8 @@ import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/mark-TextQs/mark-script.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-script.dart';
 
 class StudentAnswerScripts extends StatefulWidget {
   final assid;

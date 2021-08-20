@@ -3,7 +3,8 @@ import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/mark-TextQs/mark-individual-qa.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-individual-qa.dart';
 
 class MarkScript extends StatefulWidget {
   final StudentTextAns ans;

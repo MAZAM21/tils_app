@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/screens/remote-testing/answer-choice-input.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
 
 class RemoteAssessmentInput extends StatefulWidget {
   static const routeName = '/remote-assessment-input';

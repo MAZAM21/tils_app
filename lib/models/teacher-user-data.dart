@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class TeacherUser with ChangeNotifier{
   final String name;
   final String year;
-  final List subjects;
+  final List<String> subjects;
   final String uid;
   final bool isAdmin;
   TeacherUser({
@@ -23,7 +23,7 @@ class TeacherUser with ChangeNotifier{
       final uid = data['uid'];
       final isAdmin = data['isAdmin'];
       final Map subs = {...data['subjects']};
-      List tsubs = [];
+      List<String> tsubs = [];
       subs.forEach((k, v) {
         if (v == true) {
           tsubs.add(k);

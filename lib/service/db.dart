@@ -104,7 +104,7 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  //stream all submitted text answers scripts for all assessments
+  ///stream all submitted text answers scripts for all assessments
   Stream<List<TextQAs>> streamTextQAs() {
     CollectionReference ref = _db.collection('assessment-result');
 
@@ -117,7 +117,7 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  //stream list of scripts for chosen assessment
+  ///stream list of scripts for chosen assessment
   Stream<List<StudentTextAns>> streamAnsFromID(String assid) {
     try {
       CollectionReference ref = _db
@@ -133,12 +133,12 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  //gets auth state stream
+  ///gets auth state stream
   Stream<User> authStateStream() {
     return auth.authStateChanges();
   }
 
-  //gets students collection data as per the registeration status of student
+  ///gets students collection data as per the registeration status of student
   Future<List<Student>> getStudentsBySub(String subName) async {
     CollectionReference ref = _db.collection('students');
     try {
@@ -151,7 +151,7 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  //get all student docs from student collection
+  ///get all student docs from student collection
   Future<List<Student>> getAllStudents() async {
     try {
       QuerySnapshot ref = await _db.collection('students').get();
@@ -202,7 +202,7 @@ class DatabaseService with ChangeNotifier {
     CollectionReference assref = _db.collection('remote-assessment');
     CollectionReference stu = _db.collection('students');
 
-    //map containing {ids, titles}
+    ///map containing {ids, titles}
     Map<String, String> idTitles = {};
 
     //map of number of questions and assid
@@ -358,6 +358,7 @@ class DatabaseService with ChangeNotifier {
     }, SetOptions(merge: true));
   }
 
+  ///Used in student portal to add stundent's answers to db
   Future<void> addMCQAnswer(
     String question,
     String stat,
@@ -406,7 +407,7 @@ class DatabaseService with ChangeNotifier {
     }, SetOptions(merge: true));
   }
 
-  //add the marks awarded by teacher to student's answer to db
+  ///add the marks awarded by teacher to student's answer to db
   Future<void> addMarksToTextAns(
       String q, int mark, String assid, String uid) async {
     DocumentReference ref = _db

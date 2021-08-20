@@ -7,32 +7,36 @@ import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject.dart';
-import 'package:tils_app/widgets/screens/add-students/add-student-form.dart';
-import 'package:tils_app/widgets/screens/announcements/announcement-detail.dart';
-import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
-import 'package:tils_app/widgets/screens/announcements/display-announcements.dart';
-import 'package:tils_app/widgets/screens/attendance/student-provider.dart';
-import 'package:tils_app/widgets/screens/rankings/ranking-display.dart';
-import 'package:tils_app/widgets/screens/remote-testing/answer-choice-input.dart';
-import 'package:tils_app/widgets/screens/remote-testing/display-all-ra.dart';
-import 'package:tils_app/widgets/screens/remote-testing/rt-input.dart';
-import 'package:tils_app/widgets/screens/remote-testing/subject-option.dart';
+
 import 'package:tils_app/widgets/screens/role-getter.dart';
-import 'package:tils_app/widgets/screens/time%20table/time_table.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/records/choose_records_screen.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/records/class_record_detail.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/records/class_records.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/records/student_records.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/rt-input.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
+
 import 'package:tils_app/widgets/student-screens/edit-student-profile.dart';
+import 'package:tils_app/widgets/student-screens/rankings/ranking-display.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student_home.dart';
 
-import './widgets/screens/attendance/attendance_page.dart';
-import './widgets/screens/records/student_records.dart';
+
 
 import './models/meeting.dart';
-import './widgets/screens/records/class_records.dart';
-import './widgets/screens/records/choose_records_screen.dart';
-import './widgets/screens/records/class_record_detail.dart';
-import './widgets/screens/time table/edit-timetable-form.dart';
-import './widgets/screens/home/home.dart';
+
 
 import './service/db.dart';
 
@@ -74,7 +78,7 @@ class RoutesAndTheme extends StatelessWidget {
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 154, 23, 80)))),
+                      Color.fromARGB(255, 76, 76, 76)))),
           //backgroundColor: Colors.black12,
           primaryColor: Color.fromARGB(255, 24, 118, 133),
           canvasColor: Color.fromARGB(255, 237, 246, 249),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/allTextQAs.dart';
-import 'package:tils_app/widgets/screens/mark-TextQs/all-textQs.dart';
+
 
 import '../models/teacher-user-data.dart';
 import '../models/announcement.dart';
@@ -31,9 +31,9 @@ class TeacherService with ChangeNotifier {
     list.forEach((meeting) {
       if (meeting.to.isAfter(now) &&
           meeting.to.isBefore(latestClass.to) &&
-          !meeting.to.isAtSameMomentAs(latestClass.to)) {
+          meeting.docId != latestClass.docId) {
         latestClass = meeting;
-        print(meeting.eventName);
+        //print('${meeting.eventName} latest class');
       }
     });
     if (latestClass.eventName == 'no class') {
@@ -57,6 +57,33 @@ class TeacherService with ChangeNotifier {
     );
   }
 
+  List<SubjectClass> orderSubjectClass(List<SubjectClass> listIn) {
+    final list = listIn;
+    for (int i = 0; i < list.length; i++) {
+      SubjectClass temp = list[i];
+      for (int z = 0; z < list.length; z++) {
+        SubjectClass tempZ = list[z];
+        if (z != i && list[i].startTime.isBefore(list[z].startTime)) {
+          list[i] = list[z];
+          list[z] = temp;
+          temp = tempZ;
+        }
+      }
+    }
+    return list.toList();
+  }
+
+  List<SubjectClass> getClassesForGrid(List<SubjectClass> all) {
+    List<SubjectClass> myClasses = [];
+    var now = DateTime.now();
+    all.forEach((cls) {
+      if (cls.startTime.isAfter(now)) {
+        myClasses.add(cls);
+      }
+    });
+    return orderSubjectClass(myClasses);
+  }
+
   List<AttChartVals> getChartVals(
     List<Meeting> meetings,
     List<Attendance> att,
@@ -75,13 +102,12 @@ class TeacherService with ChangeNotifier {
     return chartVals;
   }
 
-  Map randomiseChoices(Map ansChoices){
+  Map randomiseChoices(Map ansChoices) {
     List keys = ansChoices.keys.toList();
-    
-    
-    Map<String, String> randomised ={};
+
+    Map<String, String> randomised = {};
     keys.shuffle();
-    keys.forEach((k){
+    keys.forEach((k) {
       randomised.addAll({k: ansChoices['$k']});
     });
     return randomised;
@@ -172,6 +198,7 @@ class TeacherService with ChangeNotifier {
     return myClasses;
   }
 
+
   List<int> getMarksList(Map marks, int l) {
     List<int> markList = [];
     try {
@@ -182,25 +209,41 @@ class TeacherService with ChangeNotifier {
         }
       } else {
         print('marks!=null');
-          markList = marks.values.toList();
-        
+        markList = marks.values.toList();
       }
       return markList;
-    }  catch (e) {
+    } catch (e) {
       print('err in getmarklist: $e');
     }
     return null;
   }
 
-  List<TextQAs> getTeacherScripts(List<TextQAs> ques, TeacherUser tData){
+  ///List of textQAs sorted on the basis of whether the teacher has the subject
+  List<TextQAs> getTeacherScripts(List<TextQAs> ques, TeacherUser tData) {
     List<TextQAs> textAs = [];
-          ques.forEach((q) {
-            if (q.isText && tData.subjects.contains(q.subject) ) {
-              textAs.add(q);
-            }
-          });
+    ques.forEach((q) {
+      if (q.isText && tData.subjects.contains(q.subject)) {
+        textAs.add(q);
+      }
+    });
     return textAs;
   }
+
+  ///Number of Remote assessments deployed.
+  int getDeployedRA(List<RAfromDB> raList, TeacherUser tData) {
+    int num = 0;
+    raList.forEach((ra) {
+      if (ra.startTime.isAfter(DateTime.now()) &&
+          ra.endTime.isBefore(DateTime.now()) &&
+          tData.subjects.contains(ra.subject)) {
+        num++;
+      }
+    });
+    return num;
+  }
+
+
+
   Color getColor(String sub) {
     switch (sub) {
       case 'Jurisprudence':

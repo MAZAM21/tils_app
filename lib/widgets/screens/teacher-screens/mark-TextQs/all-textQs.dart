@@ -5,7 +5,8 @@ import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/mark-TextQs/all-student-scripts.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-student-scripts.dart';
 
 class AllTextQs extends StatefulWidget {
   @override
@@ -15,7 +16,6 @@ class AllTextQs extends StatefulWidget {
 class _AllTextQsState extends State<AllTextQs> {
   final db = DatabaseService();
   final ts = TeacherService();
-
 
   @override
   Widget build(BuildContext context) {

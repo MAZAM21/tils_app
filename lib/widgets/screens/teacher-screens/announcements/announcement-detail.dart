@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/screens/announcements/announcement-form.dart';
+
+import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
 
 class AnnouncementDetail extends StatelessWidget {
   static const routeName = '/announcement-detail';
