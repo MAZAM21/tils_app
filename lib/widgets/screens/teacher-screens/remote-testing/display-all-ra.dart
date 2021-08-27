@@ -9,6 +9,7 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
+
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 
 class AllRAs extends StatefulWidget {
@@ -100,7 +101,9 @@ class _AllRAsState extends State<AllRAs> {
                                 child: ListTile(
                                   tileColor: Colors.white,
                                   title: Text(
-                                    '${raList[i].assessmentTitle}', style: TextStyle(fontFamily: 'Proxima Nova'),
+                                    '${raList[i].assessmentTitle}',
+                                    style:
+                                        TextStyle(fontFamily: 'Proxima Nova'),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   subtitle: raList[i].startTime == null
@@ -150,13 +153,21 @@ class _AllRAsState extends State<AllRAs> {
             : Scaffold(
                 appBar: AppBar(
                   actions: <Widget>[
-                    FlatButton(
+                    TextButton(
                       child: Text(
                         'Add Assessment',
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed(RASubject.routeName);
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                ChangeNotifierProvider.value(
+                              value: userData,
+                              child: RASubject(),
+                            ),
+                          ),
+                        );
                       },
                     )
                   ],

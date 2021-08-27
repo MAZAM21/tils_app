@@ -5,13 +5,11 @@ import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/class-scheduler-buttons.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
 
-
-
 import 'package:tils_app/widgets/student-screens/student_home/classes-grid.dart';
-
 
 import './class-timer-panel.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +78,7 @@ class _HomePageState extends State<HomePage> {
     List<SubjectClass> gridList = [];
     Meeting nextClass;
 
-    if (meetingsList != null && teacherData != null) {
+    if (meetingsList != null && teacherData != null && subClassList!=null) {
       gridList = ts.getClassesForGrid(subClassList);
       final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
       nextClass = ts.getNextClass(myClasses);
@@ -116,7 +114,21 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 30),
                         ClassSchedulerButtons(teacherData: teacherData),
                         Divider(),
-                        TeacherAssessmentPanel(teacherData: teacherData)
+                        TeacherAssessmentPanel(teacherData: teacherData),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  settings: RouteSettings(name: '/assignment-main'),
+                                  builder: (BuildContext context) =>
+                                      ChangeNotifierProvider.value(
+                                    value: teacherData,
+                                    child: AssignmentMain(),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text('Assignments'))
                       ],
                     ),
                   ),

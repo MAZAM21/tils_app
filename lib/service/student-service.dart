@@ -1,15 +1,30 @@
 import 'dart:math';
 
+import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject.dart';
 
 class StudentService {
+  /// Student Get classes for timetable
+  List<Meeting> getMyClassesForTT(
+    List<Meeting> allClasses,
+    List subs,
+  ) {
+    List<Meeting> myClasses = [];
+    allClasses.forEach((cls) {
+      if (subs.contains(cls.eventName)) {
+        myClasses.add(cls);
+      }
+    });
+    return myClasses;
+  }
+
   Map<String, List<RAfromDB>> getRAForStud(
     StudentUser userData,
     List<RAfromDB> ras,
   ) {
-    //function returns a map containing subjects registered against user and all assessments for that particular subject
+    ///function returns a map containing subjects registered against user and all assessments for that particular subject
     Map<String, List<RAfromDB>> filtered = {};
     //iterating through each ra.
     ras.forEach((ra) {
@@ -77,7 +92,10 @@ class StudentService {
   }
 
   List<SubjectClass> getMyClasses(
-      List<SubjectClass> all, List subs, String section) {
+    List<SubjectClass> all,
+    List subs,
+    String section,
+  ) {
     List<SubjectClass> myClasses = [];
     var now = DateTime.now();
     all.forEach((cls) {

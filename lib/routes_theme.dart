@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/student.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject.dart';
-
 import 'package:tils_app/widgets/screens/role-getter.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
@@ -26,18 +26,12 @@ import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/rt-input
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
-
 import 'package:tils_app/widgets/student-screens/edit-student-profile.dart';
 import 'package:tils_app/widgets/student-screens/rankings/ranking-display.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student_home.dart';
-
-
-
 import './models/meeting.dart';
-
-
 import './service/db.dart';
 
 class RoutesAndTheme extends StatelessWidget {
@@ -52,6 +46,9 @@ class RoutesAndTheme extends StatelessWidget {
         ),
         ChangeNotifierProvider<RemoteAssessment>(
           create: (ctx) => RemoteAssessment(),
+        ),
+        ChangeNotifierProvider<AssignmentMarks>(
+          create: (ctx) => AssignmentMarks(),
         ),
         StreamProvider<List<Meeting>>(
           create: (ctx) => db.streamMeetings(),
@@ -71,6 +68,9 @@ class RoutesAndTheme extends StatelessWidget {
         StreamProvider<List<RAfromDB>>(
           create: (ctx) => db.streamRA(),
         ),
+        StreamProvider<List<AMfromDB>>(
+          create: (ctx) => db.streamAM(),
+        )
       ],
       child: MaterialApp(
         initialRoute: '/',
@@ -83,6 +83,7 @@ class RoutesAndTheme extends StatelessWidget {
           primaryColor: Color.fromARGB(255, 24, 118, 133),
           canvasColor: Color.fromARGB(255, 237, 246, 249),
           appBarTheme: AppBarTheme(
+            
               elevation: 0,
               color: Color.fromARGB(255, 237, 246, 249),
               iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))),
@@ -146,6 +147,8 @@ class RoutesAndTheme extends StatelessWidget {
           AssessmentPage.routeName: (context) => AssessmentPage(),
           EditStudentProfile.routeName: (context) => EditStudentProfile(),
           RankingDisplay.routeName: (context) => RankingDisplay(),
+          AssignmentMain.routeName: (context) => AssignmentMain(),
+          AddAssignment.routeName: (context) => AddAssignment(),
         },
       ),
     );

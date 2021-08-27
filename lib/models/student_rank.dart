@@ -21,6 +21,7 @@ class StudentRank with ChangeNotifier {
   List completedAssessements;
   double score;
   int position;
+  List subjects;
 
   StudentRank({
     @required this.id,
@@ -35,6 +36,7 @@ class StudentRank with ChangeNotifier {
     this.completedAssessements,
     this.score,
     this.position,
+    this.subjects,
   });
 
   factory StudentRank.fromFirestore(QueryDocumentSnapshot doc) {
@@ -43,8 +45,16 @@ class StudentRank with ChangeNotifier {
       Map att = {...data['attendance']} ?? {};
       Map tqm = {};
       Map mcqm = {};
-
+      final Map subs = {...data['registeredSubs']};
       final completed = List<String>.from(data['completed-assessments']);
+      List regSubs = [];
+
+      //takse internal hash map and checks reg status
+      subs.forEach((k, v) {
+        if (v == true) {
+          regSubs.add(k);
+        }
+      });
 
       if (data['Assessment-textqMarks'] != null) {
         tqm = {...data['Assessment-textqMarks']} ?? {};
@@ -75,6 +85,7 @@ class StudentRank with ChangeNotifier {
         textMarks: tqm,
         mcqMarks: mcqm,
         completedAssessements: completed,
+        subjects: regSubs
       );
     } catch (e) {
       print('error in StudentRank model: $e');

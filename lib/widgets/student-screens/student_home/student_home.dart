@@ -7,6 +7,7 @@ import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:tils_app/widgets/student-screens/student_home/assessment_home_panel.dart';
+import 'package:tils_app/widgets/student-screens/time-table-student/student-calendarapp.dart';
 import './classes-grid.dart';
 
 class StudentHome extends StatelessWidget {
@@ -87,6 +88,38 @@ class StudentHome extends StatelessWidget {
                             ),
                             AssessmentHomePanel(ss: ss, studData: studData),
                             Divider(),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    settings: RouteSettings(
+                                        name: '/student-time-table'),
+                                    builder: (BuildContext context) =>
+                                        ChangeNotifierProvider.value(
+                                      value: studData,
+                                      child: StudentCalendar(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text('Time-Table'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    settings: RouteSettings(
+                                        name: '/student-time-table'),
+                                    builder: (BuildContext context) =>
+                                        ChangeNotifierProvider.value(
+                                      value: studData,
+                                      child: StudentCalendar(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text('Attendance Record'),
+                            )
                           ],
                         ),
                       )

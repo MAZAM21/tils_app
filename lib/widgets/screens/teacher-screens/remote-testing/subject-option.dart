@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/teacher-user-data.dart';
 
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
@@ -45,8 +46,11 @@ class RASubject extends StatelessWidget {
   Widget build(BuildContext context) {
     bool _idRecieved = false;
     final id = Provider.of<User>(context).uid;
-    if (id != null) {
+    final td = Provider.of<TeacherUser>(context);
+    List<String> subs = [];
+    if (id != null && td != null) {
       _idRecieved = true;
+      subs = td.subjects;
     }
     final time = DateTime.now();
     return Scaffold(
@@ -64,13 +68,8 @@ class RASubject extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         //Subject Notifier
-
-                        _buttonBuilder(
-                            'Juris', 'Jurisprudence', id, time, context),
-                        _buttonBuilder(
-                            'Conflict', 'Conflict', id, time, context),
-                        _buttonBuilder('Islamic', 'Islamic', id, time, context),
-                        _buttonBuilder('Trust', 'Trust', id, time, context),
+                        for (var x = 0; x < subs.length; x++)
+                          _buttonBuilder(subs[x], subs[x], id, time, context),
                       ],
                     ),
                   ),

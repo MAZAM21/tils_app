@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:quiver/iterables.dart';
 import 'package:tils_app/models/allTextQAs.dart';
+import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
@@ -89,6 +90,18 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => Announcement.fromFirestore(doc)).toList());
     } catch (err) {
       print('err in stream announcement: $err');
+    }
+    return null;
+  }
+
+  /// stream Assignment Marks
+  Stream<List<AMfromDB>> streamAM() {
+    CollectionReference ref = _db.collection('assignment-marks');
+    try {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => AMfromDB.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('error in streamAM: $err');
     }
     return null;
   }
@@ -327,6 +340,70 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> addAssignmentToCF([AssignmentMarks am, AMfromDB editAm]) async {
+    ///New approach is being tested here
+    try {
+      /// if editAm is not passed then adding new assignment code executes
+      if (editAm == null) {
+        CollectionReference ref = _db.collection('assignment-marks');
+        return await ref.add(
+          {
+            'title': am.title,
+            'subject': am.subject,
+            'student-marks': am.marks,
+            'totalMarks': am.totalMarks,
+            'uploader': am.teacherName,
+            'uploader-id': am.teacherId,
+            'time-created': DateTime.now(),
+            'uid-marks': am.uidMarks,
+          },
+
+          ///after which each student doc is individually updated
+        ).then((value) => Future.forEach(
+            am.uidMarks.entries,
+            (MapEntry element) => addAssignmentMarksToStudent(
+                  element.value,
+                  element.key,
+                  value.id,
+                )));
+
+        ///if editAm is there, then only student marks and uid marks are updated and indivual student
+        ///docs as well
+      } else if (editAm != null) {
+        DocumentReference eref =
+            _db.collection('assignment-marks').doc(editAm.docId);
+        return await eref.set(
+          {
+            'student-marks': editAm.nameMarks,
+            'uid-marks': editAm.uidMarks,
+          },
+          SetOptions(merge: true),
+        ).then((value) => Future.forEach(
+            editAm.uidMarks.entries,
+            (MapEntry element) => addAssignmentMarksToStudent(
+                  element.value,
+                  element.key,
+                  editAm.docId,
+                )));
+      }
+    } catch (err) {
+      print('error in addAssignmentToCF: $err');
+    }
+  }
+
+  Future<void> addAssignmentMarksToStudent(
+      int m, String id, String docId) async {
+    try {
+      DocumentReference ref = _db.collection('students').doc(id);
+
+      ref.set({
+        'assignment-marks': {'$docId': m}
+      }, SetOptions(merge: true));
+    } catch (err) {
+      print('error in addAssignmentMarkstoStudent: $err');
+    }
+  }
+
   //adds remote assessment to cf. only for input
   Future<void> addAssessmentToCF(RemoteAssessment assessment) async {
     CollectionReference ref = _db.collection('remote-assessment');
@@ -370,6 +447,7 @@ class DatabaseService with ChangeNotifier {
   ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     DocumentReference stud = _db.collection('students').doc(uid);
+
     ///for student collection, the assessment-mcqmarks map has been modified
     ///the key is now the assid and the value will a number indicating correct answers
     try {

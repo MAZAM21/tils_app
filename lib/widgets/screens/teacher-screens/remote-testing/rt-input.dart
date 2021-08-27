@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
-
+///This is the main RA creation page where you input questions
 class RemoteAssessmentInput extends StatefulWidget {
   static const routeName = '/remote-assessment-input';
   @override

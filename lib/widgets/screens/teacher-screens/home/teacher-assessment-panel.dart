@@ -3,6 +3,7 @@ import 'package:tils_app/models/teacher-user-data.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 
 class TeacherAssessmentPanel extends StatelessWidget {
   const TeacherAssessmentPanel({
@@ -114,7 +115,17 @@ class TeacherAssessmentPanel extends StatelessWidget {
               child: Text('Mark Answers'),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ChangeNotifierProvider.value(
+                      value: teacherData,
+                      child: AllRAs(),
+                    ),
+                  ),
+                );
+              },
               child: Text('Deploy Assessments'),
             ),
             ElevatedButton(

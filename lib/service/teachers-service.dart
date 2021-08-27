@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/allTextQAs.dart';
-
+import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/student_rank.dart';
 
 import '../models/teacher-user-data.dart';
 import '../models/announcement.dart';
@@ -11,6 +12,35 @@ import '../models/subject.dart';
 import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
+
+  ///
+
+  ///Gets teachers assignments
+  List<AMfromDB> getTeachersAssignments(
+      List<AMfromDB> amList, TeacherUser tdata) {
+    List subs = tdata.subjects;
+    List<AMfromDB> tam = [];
+    amList.forEach((element) {
+      if (subs.contains(element.subject)) {
+        tam.add(element);
+      }
+    });
+    return tam;
+  }
+
+  ///Gets students registered for the subject
+  List<StudentRank> getStudentsOfSub(
+      List<StudentRank> students, String subject) {
+    List<StudentRank> regStuds = [];
+    students.forEach((stud) {
+      if (stud.subjects.contains(subject)) {
+        regStuds.add(stud);
+      }
+    });
+    regStuds.sort((a, b) => a.name.compareTo(b.name));
+    return regStuds;
+  }
+
   Meeting getNextClass(List<Meeting> list) {
     final now = DateTime.now();
     Meeting latestClass = list.firstWhere(
@@ -195,9 +225,9 @@ class TeacherService with ChangeNotifier {
         myClasses.add(cls);
       }
     });
+
     return myClasses;
   }
-
 
   List<int> getMarksList(Map marks, int l) {
     List<int> markList = [];
@@ -241,8 +271,6 @@ class TeacherService with ChangeNotifier {
     });
     return num;
   }
-
-
 
   Color getColor(String sub) {
     switch (sub) {
