@@ -23,18 +23,23 @@ class StudentUser with ChangeNotifier {
     this.assessments,
     this.imageURL,
   ]);
-  factory StudentUser.fromFirestore(QueryDocumentSnapshot doc) {
+  factory StudentUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final Map att = {...data['attendance']} ?? {};
       final name = data['name'];
       final year = data['year'];
       final Map subs = {...data['registeredSubs']};
-      final compAssessments = [...data['completed-assessments']];
+      List compAss;
       final section = data['section'];
       final batch = data['batch'];
       final url = data['profile-pic-url'];
       List regSubs = [];
+      if (data['completed-assessments'] != null) {
+        compAss = [...data['completed-assessments']] ?? [];
+      } else {
+        compAss = [];
+      }
 
       //takse internal hash map and checks reg status
       subs.forEach((k, v) {
@@ -52,7 +57,7 @@ class StudentUser with ChangeNotifier {
         doc.id,
         section,
         batch,
-        compAssessments,
+        compAss,
         url,
       );
     } catch (err) {

@@ -15,7 +15,7 @@ class TeacherUser with ChangeNotifier{
     @required this.subjects,
   });
 
-  factory TeacherUser.fromFirestore(QueryDocumentSnapshot doc) {
+  factory TeacherUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final name = data['name'];

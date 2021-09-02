@@ -75,34 +75,25 @@ class _DGState extends State<DG> {
       appBar: AppBar(),
       body: SfDataGridTheme(
         data: SfDataGridThemeData(
-          headerStyle: DataGridHeaderCellStyle(
-            textStyle: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: 'Proxima Nova'),
-            backgroundColor: getColor(widget.subject),
-          ),
+          headerColor: getColor(widget.subject),
         ),
         child: SfDataGrid(
           allowSorting: true,
           source: _dataSource,
           columns: [
-            GridTextColumn(
-              headerText: 'Name',
-              mappingName: 'name',
+            GridColumn(
+              label: Text('Name'),
+              columnName: 'name',
               minimumWidth: 150,
               maximumWidth: 200,
               allowSorting: true,
             ),
             for (var x = 0; x < widget.titles.length; x++)
-              GridTextColumn(
-                headerText: '${widget.titles[x]}',
-                mappingName: '${widget.titles[x]}',
+              GridColumn(
+                label: Text('${widget.titles[x]}'),
+                columnName: '${widget.titles[x]}',
                 minimumWidth: 200,
                 maximumWidth: 500,
-                maxLines: 3,
-                textAlignment: Alignment.center,
                 allowSorting: true,
               ),
           ],
@@ -112,25 +103,23 @@ class _DGState extends State<DG> {
   }
 }
 
-class ARDataGridSource extends DataGridSource<ARStudent> {
+class ARDataGridSource extends DataGridSource {
   List<ARStudent> gData;
   ARDataGridSource(this.gData);
   @override
-  List<ARStudent> get dataSource => gData;
+  List<DataGridRow> get rows =>
+      gData.map<DataGridRow>((dRow) => DataGridRow(cells: [
+            DataGridCell<String>(columnName: 'name', value: dRow.name),
+            for (int v = 0; v < dRow.titleMarks.length; v++)
+              DataGridCell<String>(
+                  columnName: '${dRow.titleMarks.keys.toList()[v]}',
+                  value: '${dRow.titleMarks.values.toList()[v]}')
+          ]));
   @override
-  getValue(ARStudent student, String columnHeader) {
-    //first column is for student names
-    if (columnHeader == 'name') {
-      //returns all student names for column Name
-      return student.name;
-    } else if (columnHeader != 'name') {
-      //returns all marks for assessment title column
-      if (student.titleMarks['$columnHeader'] == null) {
-        return '0';
-      } else {
-        return student.titleMarks['$columnHeader'].toString();
-      }
-    }
-    return 'nul';
+  DataGridRowAdapter buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+        cells: row.getCells().map<Widget>((dataCell) {
+      return Text(dataCell.value.toString());
+    }).toList());
   }
 }

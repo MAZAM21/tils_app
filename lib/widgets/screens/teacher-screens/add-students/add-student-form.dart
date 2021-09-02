@@ -292,8 +292,8 @@ class _AddStudentState extends State<AddStudent> {
                             for (var row in excel.tables[table].rows) {
                               print("$row");
                               print('${row[3]}');
-                              if (row[0] != 'Name') {
-                                List<String> subs = row[3].split(', ');
+                              if (row[0].toString() != 'Name') {
+                                List<String> subs = row[3].toString().split(', ');
                                 print(row[1]);
                                 db.saveStudent(
                                   '${row[1]}',

@@ -12,8 +12,49 @@ import '../models/subject.dart';
 import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
+  ///Get top three assingments for teachers assignment panel
+   List<AMfromDB> getTopThreeAM(
+    List<AMfromDB> allAm,
+    TeacherUser tdata,
+  ) {
+    List<AMfromDB> myAM = [];
+    final List<String> subjects = tdata.subjects;
+    allAm.forEach((am) {
+      if (subjects.contains(am.subject)) {
+        myAM.add(am);
+      }
+    });
+    myAM.sort((a, b) => a.timeCreated.compareTo(b.timeCreated));
+    List<AMfromDB> topthree = myAM.sublist(0, 3);
+    return topthree;
+  }
 
-  ///
+  ///Get deadline status
+  String getdeadlineStatus(RAfromDB ra) {
+    if (ra.endTime.isAfter(DateTime.now())) {
+      return 'Pending';
+    } else if (ra.endTime.isBefore(DateTime.now())) {
+      return 'Finished';
+    }
+    return null;
+  }
+
+  ///Gets top three assessments for teachers assessment panel
+  List<RAfromDB> getTopThree(
+    List<RAfromDB> allRa,
+    TeacherUser tdata,
+  ) {
+    List<RAfromDB> myRA = [];
+    final List<String> subjects = tdata.subjects;
+    allRa.forEach((ra) {
+      if (subjects.contains(ra.subject)) {
+        myRA.add(ra);
+      }
+    });
+    myRA.sort((a, b) => a.startTime.compareTo(b.startTime));
+    List<RAfromDB> topthree = myRA.sublist(0, 3);
+    return topthree;
+  }
 
   ///Gets teachers assignments
   List<AMfromDB> getTeachersAssignments(

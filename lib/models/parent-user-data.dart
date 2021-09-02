@@ -24,7 +24,7 @@ class ParentUser with ChangeNotifier {
     this.completedAssessments,
   });
 
-  factory ParentUser.fromFirestore(QueryDocumentSnapshot doc) {
+  factory ParentUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final name = data['name'] ?? '';

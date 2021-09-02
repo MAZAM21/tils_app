@@ -15,70 +15,55 @@ class MyClassesGrid extends StatelessWidget {
     return GridView.builder(
       itemCount: myClasses.length,
       scrollDirection: Axis.horizontal,
+
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 100,
-        childAspectRatio: 0.75,
+        mainAxisExtent: 138,
+        maxCrossAxisExtent: 140,
+        childAspectRatio: 1,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
+        
       ),
       itemBuilder: (context, i) {
-        return ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 253, 255, 182).withOpacity(0.5),
-                  myClasses[i].getColor().withOpacity(0.7),
-                ],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-                stops: [0, 1],
+        return Container(
+          child: Column(
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Container(
+                  height: 86,
+                  width: 138,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('lib/assets/subject-images/${myClasses[i].subjectName}.jpg'),
+                      fit: BoxFit.fill,
+                    ),
+                    // shape: BoxShape.rectangle,
+                  ),
+                ),
               ),
-            ),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 5,
-                ),
+              SizedBox(height: 6,),
+              Text(
+                '${myClasses[i].subjectName}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Color(0xff161616),
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14),
+              ),
+               SizedBox(height: 3,),
                 Text(
-                  '${myClasses[i].subjectName}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 76, 76, 76),
-                      fontFamily: 'Proxima Nova',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15),
-                ),
-                 Spacer(),
-                 Text(
-                  '${DateFormat('hh:mm a').format(myClasses[i].startTime)}',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 76, 76, 76),
-                      fontFamily: 'Proxima Nova',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13),
-                ),
-                Text(
-                  '${DateFormat('EEE, MMM d').format(myClasses[i].startTime)}',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 76, 76, 76),
-                      fontFamily: 'Proxima Nova',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13),
-                ),
-                Spacer(),
-                Text(
-                  '${myClasses[i].topic}',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 76, 76, 76),
-                      fontFamily: 'Proxima Nova',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13),
-                ),
-                SizedBox(height: 5,)
-              ],
-            ),
+                '${DateFormat('MMM dd, yyyy - hh:mm a').format(myClasses[i].startTime)}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Color(0xff5f686f),
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 10),
+              ),
+             
+            ],
           ),
         );
       },

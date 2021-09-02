@@ -24,6 +24,7 @@ class RoleGetter extends StatelessWidget {
     }
     return isLoggedIn
         ? FutureProvider<Role>(
+          initialData: null,
             create: (ctx) => db.getRole(authState.uid),
             //catchError: (context,_){return Role('teacher');},
             builder: (context, _) {

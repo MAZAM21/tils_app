@@ -155,7 +155,7 @@ class DatabaseService with ChangeNotifier {
   Future<List<Student>> getStudentsBySub(String subName) async {
     CollectionReference ref = _db.collection('students');
     try {
-      QuerySnapshot query =
+      QuerySnapshot<Map<String,dynamic>> query =
           await ref.where('registeredSubs.$subName', isEqualTo: true).get();
       return query.docs.map((doc) => Student.fromFirestore(doc)).toList();
     } catch (err) {
@@ -167,7 +167,7 @@ class DatabaseService with ChangeNotifier {
   ///get all student docs from student collection
   Future<List<Student>> getAllStudents() async {
     try {
-      QuerySnapshot ref = await _db.collection('students').get();
+      QuerySnapshot<Map<String,dynamic>> ref = await _db.collection('students').get();
       return ref.docs.map((doc) => Student.fromFirestore(doc)).toList();
     } catch (err) {
       print('err in getallstudents $err');
@@ -179,7 +179,7 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('remote-assessment');
     List<String> allIds = [];
     try {
-      QuerySnapshot allDocs = await ref.get();
+      QuerySnapshot<Map<String,dynamic>> allDocs = await ref.get();
       allDocs.docs.forEach((doc) {
         allIds.add(doc.id);
       });
@@ -194,7 +194,7 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('assessment-result');
     List<String> titles = [];
     try {
-      QuerySnapshot qtitles =
+      QuerySnapshot<Map<String,dynamic>> qtitles =
           await ref.where('subject', isEqualTo: '$subject').get();
       //all titles and doc ids of the assessments of that subject
       qtitles.docs.forEach((doc) {
@@ -223,7 +223,7 @@ class DatabaseService with ChangeNotifier {
 
     try {
       //all assessments results of subject
-      QuerySnapshot qtitles =
+      QuerySnapshot<Map<String,dynamic>> qtitles =
           await ref.where('subject', isEqualTo: '$subject').get();
       //all titles and doc ids of the assessments of that subject
       qtitles.docs.forEach((doc) {
@@ -242,7 +242,7 @@ class DatabaseService with ChangeNotifier {
       // print(idL);
 
       //checks student collection for all registered students fro this sub
-      QuerySnapshot qs =
+      QuerySnapshot<Map<String,dynamic>> qs =
           await stu.where('registeredSubs.$subject', isEqualTo: true).get();
       return qs.docs.map((doc) {
         // print(doc['name']);
@@ -261,7 +261,7 @@ class DatabaseService with ChangeNotifier {
           .doc('$assid')
           .collection('student-IDs');
       Map<String, int> allStMarks = {};
-      QuerySnapshot q = await ref.get();
+      QuerySnapshot<Map<String,dynamic>> q = await ref.get();
       q.docs.forEach((doc) {
         final Map tqmarks = {...doc['TQMarks']};
         final name = doc['name'];
@@ -286,7 +286,7 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('attendance');
     CollectionReference studentRef = _db.collection('students');
     try {
-      QuerySnapshot q =
+      QuerySnapshot<Map<String,dynamic>> q =
           await studentRef.where('name', isEqualTo: '$name').get();
       DocumentSnapshot stDoc = q.docs.firstWhere((doc) {
         return doc['name'] == '$name';

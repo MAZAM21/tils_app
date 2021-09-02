@@ -71,7 +71,7 @@ class RAfromDB {
     this.isDeployed,
   });
 
-  factory RAfromDB.fromFirestore(QueryDocumentSnapshot doc) {
+  factory RAfromDB.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final mcqs = Map<String, dynamic>.from(data['MCQs']);
@@ -99,7 +99,7 @@ class RAfromDB {
       } else {
         isDep = false;
       }
-      print(isDep);
+      //print(isDep);
       //print('constructor called for: ${data['title']}');
       return RAfromDB(
         id: doc.id,

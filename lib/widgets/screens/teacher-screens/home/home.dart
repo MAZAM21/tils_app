@@ -1,4 +1,7 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:tils_app/main.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -8,6 +11,11 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/class-scheduler-buttons.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/records/choose_records_screen.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/results/subject-results-display.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
 import 'package:tils_app/widgets/student-screens/student_home/classes-grid.dart';
 
@@ -24,8 +32,73 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String token;
   final ts = TeacherService();
+  @override
+  void initState() {
+    super.initState();
+    final teacherData = Provider.of<TeacherUser>(context, listen: false);
 
+    ///this is for foreground notifications supposedly
+
+    var initialzationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+        InitializationSettings(android: initialzationSettingsAndroid);
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                icon: android?.smallIcon,
+              ),
+            ));
+      }
+    });
+    if (teacherData != null) {
+      for (var i = 0; i < teacherData.subjects.length; i++) {
+        print('${teacherData.subjects[i]}');
+        FirebaseMessaging.instance
+            .subscribeToTopic('${teacherData.subjects[i]}');
+      }
+    }
+    getToken();
+    // getTopics();
+  }
+
+  getToken() async {
+    token = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      token = token;
+    });
+    print(token);
+  }
+
+//   getTopics() async {
+//     await FirebaseFirestore.instance
+//         .collection('topics')
+//         .get()
+//         .then((value) => value.docs.forEach((element) {
+//               if (token == element.id) {
+//                 subscribed = element.data().keys.toList();
+//               }
+//             }));
+
+//     setState(() {
+//       subscribed = subscribed;
+//     });
+//   }
+// }
   Widget _buttonBuilder(String buttName, BuildContext context, Icon icon,
       Widget wid, TeacherUser prov) {
     return Padding(
@@ -78,7 +151,10 @@ class _HomePageState extends State<HomePage> {
     List<SubjectClass> gridList = [];
     Meeting nextClass;
 
-    if (meetingsList != null && teacherData != null && subClassList!=null) {
+    if (meetingsList != null &&
+        teacherData != null &&
+        subClassList != null &&
+        raList != null) {
       gridList = ts.getClassesForGrid(subClassList);
       final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
       nextClass = ts.getNextClass(myClasses);
@@ -92,52 +168,116 @@ class _HomePageState extends State<HomePage> {
     }
     return !isActive
         ? LoadingScreen()
-        : Scaffold(
-            drawer: AppDrawer(),
-            body: SingleChildScrollView(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      //mainAxisAlignment: MainAxisAlignment.start,
-                      //crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        //Subject Notifier
-                        ClassTimerPanel(estimateTs, nextClass, endTime),
-                        Container(
-                          child: MyClassesGrid(myClasses: gridList),
-                          height: 100,
-                        ),
-                        SizedBox(height: 30),
-                        ClassSchedulerButtons(teacherData: teacherData),
-                        Divider(),
-                        TeacherAssessmentPanel(teacherData: teacherData),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  settings: RouteSettings(name: '/assignment-main'),
-                                  builder: (BuildContext context) =>
-                                      ChangeNotifierProvider.value(
-                                    value: teacherData,
-                                    child: AssignmentMain(),
+        : SafeArea(
+            child: Scaffold(
+              drawer: AppDrawer(),
+              body: SingleChildScrollView(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.915,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 10,
+                          ),
+
+                          ///Name and avatar panel
+                          TeacherAvatarPanel(teacherData: teacherData),
+
+                          SizedBox(
+                            height: 25,
+                          ),
+
+                          /// Class countdown
+                          ClassTimerPanel(
+                            estimateTs,
+                            nextClass,
+                            endTime,
+                            teacherData,
+                          ),
+
+                          SizedBox(
+                            height: 14,
+                          ),
+
+                          /// Classes Grid (Stored in student screens)
+                          Container(
+                            child: MyClassesGrid(myClasses: gridList),
+                            height: 140,
+                          ),
+
+                          ///Schedule Class button
+                          Row(
+                            children: <Widget>[
+                              SizedBox(
+                                width: 5,
+                              ),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color(0xffC54134)),
+                                    minimumSize: MaterialStateProperty.all(
+                                        Size(107, 25)),
+                                    fixedSize: MaterialStateProperty.all(
+                                        Size(117, 27)),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(23)),
+                                    )),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      settings: RouteSettings(
+                                          name: '/edit-time-table'),
+                                      builder: (BuildContext context) =>
+                                          ChangeNotifierProvider.value(
+                                        value: teacherData,
+                                        child: EditTTForm(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Schedule Class',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                              );
-                            },
-                            child: Text('Assignments'))
-                      ],
+                              ),
+                            ],
+                          ),
+
+                          /// Teacher Assessment Panel
+                          /// includes list of latest three assessments and buttons
+                          TeacherAssessmentPanel(teacherData: teacherData),
+
+                          const SizedBox(height: 20,),
+
+                          ///teacher assignment panel
+                          ///built on same format as assessment panel
+                          TeacherAssignmentPanel(teacherData: teacherData),
+                          
+                          const SizedBox(height: 30,),
+
+                         
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
   }
 }
+
+
 
 
 
@@ -238,3 +378,35 @@ class _HomePageState extends State<HomePage> {
 //                             ),
 //                           ),
 //                         ),
+
+ // ElevatedButton(
+                          //   onPressed: () {
+                          //     Navigator.of(context).push(
+                          //       MaterialPageRoute(
+                          //         settings:
+                          //             RouteSettings(name: '/assignment-main'),
+                          //         builder: (BuildContext context) =>
+                          //             ChangeNotifierProvider.value(
+                          //           value: teacherData,
+                          //           child: AssignmentMain(),
+                          //         ),
+                          //       ),
+                          //     );
+                          //   },
+                          //   child: Text('Assignments'),
+                          // ),
+                          // ElevatedButton(
+                          //   onPressed: () {
+                          //     Navigator.of(context).push(
+                          //       MaterialPageRoute(
+                          //         settings: RouteSettings(name: '/records-page'),
+                          //         builder: (BuildContext context) =>
+                          //             ChangeNotifierProvider.value(
+                          //           value: teacherData,
+                          //           child: SubjectResultsDisplay(),
+                          //         ),
+                          //       ),
+                          //     );
+                          //   },
+                          //   child: Text('Records'),
+                          // )

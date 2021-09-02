@@ -14,7 +14,7 @@ class Student with ChangeNotifier {
   final String batch;
   final String section;
   final String year;
-  Map<String, int> attendance = {};
+  Map attendance = {};
   Map textMarks = {};
   Map mcqMarks = {};
 
@@ -29,18 +29,21 @@ class Student with ChangeNotifier {
     this.mcqMarks,
   });
 
-  factory Student.fromFirestore(QueryDocumentSnapshot doc) {
+  factory Student.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       Map data = doc.data();
+      
+
       return Student(
         id: doc.id ?? '',
         name: data['name'] ?? '',
         year: data['year'] ?? '',
-        batch: data['batch'],
-        section: data['section'],
-        attendance: {...data['attendance']} ?? {},
-        textMarks: {...data['Assessment-textqMarks']} ?? {},
-        mcqMarks: {...data['Assessment-MCQMarks']} ?? {},
+        batch: data['batch'] ?? '',
+        section: data['section'] ?? '',
+        attendance: {...data['attendance'] ?? {}} ?? {},
+        textMarks: {...data['Assessment-textqMarks'] ?? {}} ?? {},
+        mcqMarks: {...data['Assessment-MCQMarks'] ?? {}} ?? {},
       );
     } catch (e) {
       print('error in Student model:' + e);

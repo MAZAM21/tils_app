@@ -10,7 +10,7 @@ class ARStudent {
   ARStudent({this.name, this.titleMarks});
 
   factory ARStudent.fromFirebase(
-    QueryDocumentSnapshot studentDoc,
+    QueryDocumentSnapshot<Map<String, dynamic>> studentDoc,
     Map<String, String> idTitles,
     Map<String, int> idL,
   ) {

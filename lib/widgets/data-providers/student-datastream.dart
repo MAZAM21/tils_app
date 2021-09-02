@@ -18,6 +18,7 @@ class StudentDataStream extends StatelessWidget {
     return !isActive
         ? LoadingScreen()
         : StreamProvider<StudentUser>(
+          initialData: null,
             create: (context) => db.streamStudentUser(uid),
             builder: (context, _) => AllStudentTabs(),
           );

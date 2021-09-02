@@ -634,20 +634,20 @@ class _EditTTFormState extends State<EditTTForm> {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return NumberPickerDialog.integer(
-                                            initialIntegerValue: 0,
+                                          return NumberPicker(
+                                            value: 0,
                                             minValue: 0,
                                             maxValue: 12,
-                                            title: Text('H'),
+                                            onChanged: (v) {
+                                              setState(() {
+                                                _customMinutes = v;
+                                                setDuration(_customHours,
+                                                    _customMinutes, '');
+                                              });
+                                            },
                                           );
-                                        },
-                                      ).then((value) {
-                                        setState(() {
-                                          _customHours = value;
-                                          setDuration(
-                                              _customHours, _customMinutes, '');
                                         });
-                                      });
+                                      
                                     },
                                   ),
                                 ),
@@ -680,20 +680,20 @@ class _EditTTFormState extends State<EditTTForm> {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
-                                          return NumberPickerDialog.integer(
-                                            initialIntegerValue: 0,
+                                          return NumberPicker(
+                                            value: 0,
                                             minValue: 0,
                                             maxValue: 60,
-                                            title: Text('Minutes'),
+                                            onChanged: (v) {
+                                              setState(() {
+                                                _customMinutes = v;
+                                                setDuration(_customHours,
+                                                    _customMinutes, '');
+                                              });
+                                            },
                                           );
                                         },
-                                      ).then((value) {
-                                        setState(() {
-                                          _customMinutes = value;
-                                          setDuration(
-                                              _customHours, _customMinutes, '');
-                                        });
-                                      });
+                                      );
                                     },
                                   ),
                                 ),

@@ -7,7 +7,6 @@ import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/all_tabs.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
-
 class TeacherDataStream extends StatelessWidget {
   final db = DatabaseService();
   @override
@@ -20,6 +19,7 @@ class TeacherDataStream extends StatelessWidget {
     return !isActive
         ? LoadingScreen()
         : StreamProvider<TeacherUser>(
+            initialData: null,
             create: (context) => db.streamTeacherUser(uid),
             builder: (context, _) => AllTabs(),
           );

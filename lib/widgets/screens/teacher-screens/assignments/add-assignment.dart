@@ -174,18 +174,18 @@ class _AddAssignmentState extends State<AddAssignment> {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return NumberPickerDialog.integer(
-                                  initialIntegerValue: 10,
+                                return NumberPicker(
+                                  value: 10,
                                   minValue: 10,
                                   maxValue: 100,
-                                  title: Text('Total Marks'),
+                                  onChanged: (v) {
+                                    setState(() {
+                                      assignmentMarks.totalMarks = v;
+                                    });
+                                  },
                                 );
                               },
-                            ).then((value) {
-                              setState(() {
-                                assignmentMarks.totalMarks = value;
-                              });
-                            });
+                            );
                           },
                         ),
                         Text(

@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,6 +39,7 @@ class RoutesAndTheme extends StatelessWidget {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final db = DatabaseService();
   @override
+  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -52,24 +54,31 @@ class RoutesAndTheme extends StatelessWidget {
         ),
         StreamProvider<List<Meeting>>(
           create: (ctx) => db.streamMeetings(),
+          initialData: [],
         ),
         StreamProvider<List<SubjectClass>>(
           create: (ctx) => db.streamClasses(),
+          initialData: [],
         ),
         StreamProvider<List<Attendance>>(
           create: (ctx) => db.streamAttendance(),
+          initialData: [],
         ),
         StreamProvider<User>(
           create: (ctx) => db.authStateStream(),
+          initialData: null,
         ),
         StreamProvider<List<StudentRank>>(
           create: (ctx) => db.streamStudents(),
+          initialData: [],
         ),
         StreamProvider<List<RAfromDB>>(
           create: (ctx) => db.streamRA(),
+          initialData: [],
         ),
         StreamProvider<List<AMfromDB>>(
           create: (ctx) => db.streamAM(),
+          initialData: [],
         )
       ],
       child: MaterialApp(
@@ -81,11 +90,10 @@ class RoutesAndTheme extends StatelessWidget {
                       Color.fromARGB(255, 76, 76, 76)))),
           //backgroundColor: Colors.black12,
           primaryColor: Color.fromARGB(255, 24, 118, 133),
-          canvasColor: Color.fromARGB(255, 237, 246, 249),
+          canvasColor: Color(0xfff4f6f9),
           appBarTheme: AppBarTheme(
-            
               elevation: 0,
-              color: Color.fromARGB(255, 237, 246, 249),
+              color: Color(0xfff4f6f9),
               iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))),
 
           tabBarTheme:
@@ -98,17 +106,22 @@ class RoutesAndTheme extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
               ),
+
+              /// HL5 is for titles
               headline5: TextStyle(
-                color: Color.fromARGB(255, 0, 0, 179),
-                fontFamily: 'Proxima Nova',
                 fontSize: 18,
+                fontFamily: 'Proxima Nova',
+                fontWeight: FontWeight.w700,
+                color: Color(0xff21353f),
               ),
+
+              /// HL4 is for descriptive text
+              /// e.g subject names and assessment titles
               headline4: TextStyle(
-                color: Color.fromARGB(255, 154, 23, 80),
-                fontFamily: 'Proxima Nova',
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+                  color: Color(0xff161616),
+                  fontFamily: 'Proxima Nova',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14),
               headline3: TextStyle(
                 color: Color.fromARGB(255, 10, 50, 0),
                 fontFamily: 'Proxima Nova',

@@ -16,10 +16,16 @@ class StudentProvider extends StatelessWidget {
     final subName= sub.subjectName;
     final subId = sub.id;
     db.addClassDetailToAttColl(subName, subId, sub.startTime);
-    return FutureProvider<List<Student>>(
-      create: (ctx) => db.getStudentsBySub(subName),
-      child: AttendanceMarkerBuilder(subId),
-    );
+    try {
+      return FutureProvider<List<Student>>(
+        initialData: [],
+        create: (ctx) => db.getStudentsBySub(subName),
+        child: AttendanceMarkerBuilder(subId),
+      );
+    } on Exception catch (e) {
+      print('error in studentprovider attendance: $e');
+    }
+    return null;
   }
 }
 

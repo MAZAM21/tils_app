@@ -67,7 +67,11 @@ class AMfromDB {
   /// doc Id
   String docId;
 
+  /// time created
+  final DateTime timeCreated;
+
   AMfromDB({
+    this.timeCreated,
     this.title,
     this.subject,
     this.teacherName,
@@ -79,7 +83,8 @@ class AMfromDB {
     this.docId,
   });
 
-  factory AMfromDB.fromFirestore(QueryDocumentSnapshot doc) {
+  factory AMfromDB.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       String t = data['title'] ?? '';
@@ -89,7 +94,16 @@ class AMfromDB {
       String teachid = data['uploader-id'];
       String teacherName = data['uploader'];
       int totalMarks = data['totalMarks'];
+      Timestamp timeCreated = data['time-created'] ?? Timestamp.now();
+      DateTime time;
+      if (timeCreated != null) {
+        time =
+            DateTime.parse(timeCreated.toDate().toString() ?? Timestamp.now());
+      } else {
+        time = DateTime.now();
+      }
       return AMfromDB(
+        timeCreated: time,
         title: t,
         subject: sub,
         teacherId: teachid,

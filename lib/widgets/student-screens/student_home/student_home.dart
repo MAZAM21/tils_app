@@ -5,6 +5,7 @@ import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:tils_app/widgets/student-screens/attendance-record/student-attendance-record.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:tils_app/widgets/student-screens/student_home/assessment_home_panel.dart';
 import 'package:tils_app/widgets/student-screens/time-table-student/student-calendarapp.dart';
@@ -27,106 +28,104 @@ class StudentHome extends StatelessWidget {
     }
     return !isActive
         ? LoadingScreen()
+        :
 
         ///futureprovider for a list of strings of all doc ids of assessments
         ///will be used to display pending assessments
-        : FutureProvider(
-            create: (context) => db.getAllAssessmentIds(),
-            builder: (ctx, _) {
-              return Scaffold(
-                body: SingleChildScrollView(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: 350,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
+
+        Scaffold(
+            body: SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    width: 350,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(
-                              height: 10,
+                            CircleAvatar(
+                              backgroundImage: studData.imageURL != null
+                                  ? NetworkImage(studData.imageURL)
+                                  : null,
+                              radius: 30,
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundImage: studData.imageURL != null
-                                      ? NetworkImage(studData.imageURL)
-                                      : null,
-                                  radius: 30,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                '${studData.name}',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 76, 76, 76),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Proxima Nova',
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Text(
-                                    '${studData.name}',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 76, 76, 76),
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Proxima Nova',
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Container(
-                                height: 100,
-                                child: MyClassesGrid(myClasses: myClasses),
                               ),
                             ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            AssessmentHomePanel(ss: ss, studData: studData),
-                            Divider(),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    settings: RouteSettings(
-                                        name: '/student-time-table'),
-                                    builder: (BuildContext context) =>
-                                        ChangeNotifierProvider.value(
-                                      value: studData,
-                                      child: StudentCalendar(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Text('Time-Table'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    settings: RouteSettings(
-                                        name: '/student-time-table'),
-                                    builder: (BuildContext context) =>
-                                        ChangeNotifierProvider.value(
-                                      value: studData,
-                                      child: StudentCalendar(),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Text('Attendance Record'),
-                            )
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            });
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Container(
+                            height: 100,
+                            child: MyClassesGrid(myClasses: myClasses),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        AssessmentHomePanel(ss: ss, studData: studData),
+                        Divider(),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                settings:
+                                    RouteSettings(name: '/student-time-table'),
+                                builder: (BuildContext context) =>
+                                    ChangeNotifierProvider.value(
+                                  value: studData,
+                                  child: StudentCalendar(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text('Time-Table'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                settings: RouteSettings(
+                                    name: '/student-attendance-record'),
+                                builder: (BuildContext context) =>
+                                    ChangeNotifierProvider.value(
+                                  value: studData,
+                                  child: StudentAttendanceRecord(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text('Attendance Record'),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
   }
 }

@@ -23,7 +23,7 @@ class StudentTextAns {
     this.name, [
     this.qMarks,
   ]);
-  factory StudentTextAns.fromFirestore(QueryDocumentSnapshot doc) {
+  factory StudentTextAns.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     ///if Tqas not empty creates map
     ///if marks not empty creates map
 

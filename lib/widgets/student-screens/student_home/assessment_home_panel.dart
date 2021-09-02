@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/service/student-service.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +17,13 @@ class AssessmentHomePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<List<String>>(
-      builder: (context, allIds, _) {
-        bool idActive = false;
-        String pending=''; 
-        if (allIds != null) {
+    final raList = Provider.of<List<RAfromDB>>(context);
+    bool idActive = false;
+    String pending;
+        if (raList != null) {
           idActive = true;
           pending = ss.getPendingAssessmentNum(
-            studData.assessments, allIds);
+            studData.assessments, raList);
         }
         return !idActive
             ? CircularProgressIndicator()
@@ -148,7 +148,6 @@ class AssessmentHomePanel extends StatelessWidget {
                   ),
                 ),
               );
-      },
-    );
+     
   }
 }

@@ -6,6 +6,20 @@ import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject.dart';
 
 class StudentService {
+
+  /// 
+  List<SubjectClass> getMarkedClasses(List<SubjectClass> allClasses, Map att) {
+    List<SubjectClass> marked = [];
+    allClasses.forEach((element) {
+      if (att.containsKey(element.id)) {
+        marked.add(element);
+      }
+    });
+    marked.sort((a, b) => b.startTime.compareTo(
+        a.startTime)); // easy sorting of dates. Use in attendance grid as well
+    return marked;
+  }
+
   /// Student Get classes for timetable
   List<Meeting> getMyClassesForTT(
     List<Meeting> allClasses,
@@ -108,10 +122,10 @@ class StudentService {
     return orderSubjectClass(myClasses);
   }
 
-  String getPendingAssessmentNum(List comp, List<String> all) {
+  String getPendingAssessmentNum(List comp, List<RAfromDB> all) {
     int a = 0;
-    all.forEach((id) {
-      if (!comp.contains(id)) {
+    all.forEach((ra) {
+      if (!comp.contains(ra.id)) {
         a++;
       }
     });

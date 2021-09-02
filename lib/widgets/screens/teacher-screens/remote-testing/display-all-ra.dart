@@ -134,6 +134,7 @@ class _AllRAsState extends State<AllRAs> {
   Widget build(BuildContext context) {
     //final screenWidth = MediaQuery.of(context).size.width;
     return StreamProvider(
+      initialData: [],
       create: (context) => db.streamRA(),
       builder: (context, _) {
         final allRa = Provider.of<List<RAfromDB>>(context);
