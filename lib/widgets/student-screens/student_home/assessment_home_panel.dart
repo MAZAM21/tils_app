@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/service/student-service.dart';
@@ -18,136 +19,102 @@ class AssessmentHomePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final raList = Provider.of<List<RAfromDB>>(context);
+    int totalNumRA = raList.length;
+    List<RAfromDB> topThree = [];
     bool idActive = false;
-    String pending;
-        if (raList != null) {
-          idActive = true;
-          pending = ss.getPendingAssessmentNum(
-            studData.assessments, raList);
-        }
-        return !idActive
-            ? CircularProgressIndicator()
-            : Flexible(
-                fit: FlexFit.loose,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 10),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(
-                        Radius.elliptical(15, 15)),
-                    child: GestureDetector(
-                      child: Container(
-                        height: 100,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color.fromARGB(215, 143,
-                                      166, 203)
-                                  .withOpacity(0.9),
-                              Color.fromARGB(255, 219,
-                                      244, 167)
-                                  .withOpacity(0.5),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomCenter,
-                            stops: [0, 1],
+
+    if (raList.isNotEmpty) {
+      topThree = ss.getTopThree(raList, studData);
+      print(topThree.length);
+      idActive = true;
+    }
+
+    return !idActive
+        ? CircularProgressIndicator()
+        : Column(
+            children: <Widget>[
+              SizedBox(height: 20),
+              Row(
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          settings: RouteSettings(name: '/all-ras'),
+                          builder: (BuildContext context) =>
+                              ChangeNotifierProvider.value(
+                            value: studData,
+                            child: StudentRADisplay(),
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .stretch,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .center,
-                              children: <Widget>[
-                                Padding(
-                                  padding:
-                                      const EdgeInsets
-                                          .all(8.0),
-                                  child: Text(
-                                    'Assessments',
-                                    style: TextStyle(
-                                      color: Color
-                                          .fromARGB(
-                                              255,
-                                              76,
-                                              76,
-                                              76),
-                                      fontSize: 20,
-                                      fontWeight:
-                                          FontWeight
-                                              .bold,
-                                      fontFamily:
-                                          'Proxima Nova',
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .center,
-                              children: <Widget>[
-                                if (pending != '0')
-                                  Text(
-                                    'Pending: $pending',
-                                    style: TextStyle(
-                                      color: Color
-                                          .fromARGB(
-                                              255,
-                                             186, 18, 0),
-                                      fontSize: 16,
-                                      fontWeight:
-                                          FontWeight
-                                              .bold,
-                                      fontFamily:
-                                          'Proxima Nova',
-                                    ),
-                                  ),
-                                if (pending == '0')
-                                  Text(
-                                    'No pending assessments',
-                                    style: TextStyle(
-                                      color: Color
-                                          .fromARGB(
-                                              255,
-                                              76,
-                                              76,
-                                              76),
-                                      fontSize: 16,
-                                      fontWeight:
-                                          FontWeight
-                                              .normal,
-                                      fontFamily:
-                                          'Proxima Nova',
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext
-                                    context) =>
-                                ChangeNotifierProvider
-                                    .value(
-                              value: studData,
-                              child: StudentRADisplay(),
-                            ),
-                          ),
-                        );
-                      },
+                      );
+                    },
+                    child: Text(
+                      'Assessements',
+                      style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
+                  Text(
+                    '($totalNumRA)',
+                    style: TextStyle(
+                      color: Color(0xff5f686f),
+                      fontFamily: 'Proxima Nova',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: topThree.length,
+                  shrinkWrap: true,
+                  itemBuilder: (ctx, i) {
+                    String dStat = ss.getdeadlineStatus(topThree[i]);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.5),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        tileColor: Colors.white,
+                        title: Text(
+                          '${topThree[i].assessmentTitle}',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        subtitle: Text(
+                          'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime)}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Proxima Nova',
+                            color: Color(0xff5F686F),
+                          ),
+                        ),
+                        trailing: Text(
+                          '$dStat',
+                          style: TextStyle(
+                            color: Color(0xffC54134),
+                            fontFamily: 'Proxima Nova',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              );
-     
+              ),
+              const SizedBox(
+                height: 19,
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+            ],
+          );
   }
 }

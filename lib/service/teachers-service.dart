@@ -13,7 +13,7 @@ import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
   ///Get top three assingments for teachers assignment panel
-   List<AMfromDB> getTopThreeAM(
+  List<AMfromDB> getTopThreeAM(
     List<AMfromDB> allAm,
     TeacherUser tdata,
   ) {
@@ -260,14 +260,43 @@ class TeacherService with ChangeNotifier {
   }
 
   List<SubjectClass> getMyAttendance(List<SubjectClass> allClasses, List subs) {
+    ///TODO
+    ///implement algo where:
+    ///the class next up is shown but the classes after that are not shown
+    ///the classes that are done are also shown.
+
     List<SubjectClass> myClasses = [];
+    List<SubjectClass> displayClasses = [];
+    allClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
+    int x;
+    int y;
+    int clsAfterNext;
+
+    /// all classes with teachers subs get separated
     allClasses.forEach((cls) {
       if (subs.contains(cls.subjectName)) {
         myClasses.add(cls);
       }
     });
 
-    return myClasses;
+    /// the class id of the class after the next one is extracted
+    for (int i = 0; i < myClasses.length; i++) {
+      x = i + 1;
+      y = i - 1;
+      if (myClasses[i].startTime.isAfter(DateTime.now()) &&
+          myClasses[x].startTime.isBefore(DateTime.now())) {
+        clsAfterNext = y;
+      }
+    }
+    /// display classes are the next up and the rest (hopefully)
+    myClasses.forEach((cls) {
+      if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
+        displayClasses.add(cls);
+      }
+    });
+
+    displayClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
+    return displayClasses;
   }
 
   List<int> getMarksList(Map marks, int l) {

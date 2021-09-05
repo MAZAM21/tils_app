@@ -1,4 +1,4 @@
-package com.example.tils_app
+package com.fluentsolutions.tils_app
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback

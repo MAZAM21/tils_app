@@ -7,7 +7,7 @@ class TimerText extends StatelessWidget {
   const TimerText({
     Key key,
     @required this.inSession,
-    @required this.widget,
+    
     @required this.dateString,
     @required this.timeUp,
     @required this.timeClose,
@@ -17,7 +17,7 @@ class TimerText extends StatelessWidget {
   }) : super(key: key);
 
   final bool inSession;
-  final ClassTimerPanel widget;
+  
   final String dateString;
   final bool timeUp;
   final bool timeClose;

@@ -86,6 +86,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
         ),
         Container(
           child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
             itemCount: topThree.length,
             shrinkWrap: true,
             itemBuilder: (ctx, i) {

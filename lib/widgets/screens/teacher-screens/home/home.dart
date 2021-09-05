@@ -32,7 +32,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String token;
+  String _token;
   final ts = TeacherService();
   @override
   void initState() {
@@ -51,6 +51,8 @@ class _HomePageState extends State<HomePage> {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${notification.title}'),));
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
@@ -77,11 +79,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   getToken() async {
-    token = await FirebaseMessaging.instance.getToken();
+   String token = await FirebaseMessaging.instance.getToken();
     setState(() {
-      token = token;
+      _token = token;
     });
-    print(token);
+    print(_token);
   }
 
 //   getTopics() async {
@@ -99,43 +101,7 @@ class _HomePageState extends State<HomePage> {
 //     });
 //   }
 // }
-  Widget _buttonBuilder(String buttName, BuildContext context, Icon icon,
-      Widget wid, TeacherUser prov) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            FlatButton(
-              child: Text(
-                '$buttName',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 76, 76, 76),
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16,
-                  fontFamily: 'Proxima Nova',
-                ),
-              ),
-              onPressed: () {
-                //in order to extend scope of provider use MaterialPageRoute and apple ChangeNotifierProvider as done below
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        ChangeNotifierProvider.value(
-                      value: prov,
-                      child: wid,
-                    ),
-                  ),
-                );
-              },
-            ),
-            icon,
-          ],
-        ),
-      ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +140,7 @@ class _HomePageState extends State<HomePage> {
               body: SingleChildScrollView(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     Container(
                       width: MediaQuery.of(context).size.width * 0.915,
                       child: Column(

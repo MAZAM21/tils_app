@@ -6,8 +6,77 @@ import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject.dart';
 
 class StudentService {
+  ///Get deadline status
+  String getdeadlineStatus(RAfromDB ra) {
+    if (ra.endTime.isAfter(DateTime.now())) {
+      return 'Pending';
+    } else if (ra.endTime.isBefore(DateTime.now())) {
+      return 'Finished';
+    }
+    return null;
+  }
 
-  /// 
+  ///Gets top three assessments for students assessment panel
+  List<RAfromDB> getTopThree(
+    List<RAfromDB> allRa,
+    StudentUser stdata,
+  ) {
+    List<RAfromDB> myRA = [];
+    final List subjects = stdata.subjects;
+    allRa.forEach((ra) {
+      if (subjects.contains(ra.subject)) {
+        myRA.add(ra);
+      }
+    });
+    myRA.sort((a, b) => a.startTime.compareTo(b.startTime));
+    List<RAfromDB> topthree = myRA.sublist(0, 3);
+    return topthree;
+  }
+
+  List<Meeting> getMyClassesforTimer(
+      List<Meeting> allClasses, List subs, String section) {
+    List<Meeting> myClasses = [];
+    allClasses.forEach((cls) {
+      if (subs.contains(cls.eventName) && cls.section == section) {
+        myClasses.add(cls);
+      }
+    });
+    return myClasses;
+  }
+
+  Meeting getNextClass(List<Meeting> list) {
+    final now = DateTime.now();
+    Meeting latestClass = list.firstWhere(
+      (meeting) {
+        return meeting.to.isAfter(now);
+      },
+      orElse: () => Meeting(
+        'no class',
+        null,
+        null,
+        null,
+        false,
+        'no class',
+        null,
+      ),
+    );
+
+    list.forEach((meeting) {
+      if (meeting.to.isAfter(now) &&
+          meeting.to.isBefore(latestClass.to) &&
+          meeting.docId != latestClass.docId) {
+        latestClass = meeting;
+        //print('${meeting.eventName} latest class');
+      }
+    });
+    if (latestClass.eventName == 'no class') {
+      print('no class');
+      return latestClass;
+    }
+    return latestClass;
+  }
+
+  ///
   List<SubjectClass> getMarkedClasses(List<SubjectClass> allClasses, Map att) {
     List<SubjectClass> marked = [];
     allClasses.forEach((element) {

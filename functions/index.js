@@ -19,7 +19,8 @@ exports.myFunction = functions.firestore
             notification:
            {
              title: "New Class Scheduled",
-             body: snapshot.data().subjectName,
+             body: snapshot.data().subjectName.concat(" at ")
+                 .concat(snapshot.data().startTime),
              clickAction: "FLUTTER_NOTIFICATION_CLICK",
            },
           });

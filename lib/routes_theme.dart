@@ -89,7 +89,7 @@ class RoutesAndTheme extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all(
                       Color.fromARGB(255, 76, 76, 76)))),
           //backgroundColor: Colors.black12,
-          primaryColor: Color.fromARGB(255, 24, 118, 133),
+          primaryColor: Color(0xffC54134),
           canvasColor: Color(0xfff4f6f9),
           appBarTheme: AppBarTheme(
               elevation: 0,

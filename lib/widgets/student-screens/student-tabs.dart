@@ -46,7 +46,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(30),
             child: ColoredTabBar(
-              color: Color.fromARGB(255, 237, 246, 249),
+              color: Theme.of(context).canvasColor,
               tabBar: TabBar(
                   controller: _controller,
                   labelColor: Color.fromARGB(255, 76, 76, 76),

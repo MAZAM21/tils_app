@@ -12,7 +12,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/timer-text.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 import 'package:tils_app/widgets/student-screens/time-table-student/student-calendarapp.dart';
 
-class ClassTimerPanel extends StatefulWidget {
+class StudentClassTimerPanel extends StatefulWidget {
   ///start time
   final int timer;
 
@@ -22,16 +22,17 @@ class ClassTimerPanel extends StatefulWidget {
   ///meeting object
   final Meeting meeting;
 
-  ///teacher data
-  final TeacherUser teacherData;
+  ///student data
+  final StudentUser studData;
 
-  ClassTimerPanel(this.timer, this.meeting, this.end, this.teacherData);
+  const StudentClassTimerPanel(
+      this.timer, this.end, this.meeting, this.studData);
 
   @override
-  _ClassTimerPanelState createState() => _ClassTimerPanelState();
+  _StudentClassTimerPanelState createState() => _StudentClassTimerPanelState();
 }
 
-class _ClassTimerPanelState extends State<ClassTimerPanel> {
+class _StudentClassTimerPanelState extends State<StudentClassTimerPanel> {
   final ts = TeacherService();
 
   @override
@@ -47,7 +48,6 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
         subClassNext = ts.getSubjectClass(subClassList, meetingID);
       }
     }
-
     return !isActive
         ? CircularProgressIndicator()
         : StreamBuilder(
@@ -112,7 +112,7 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
                               settings: RouteSettings(name: '/assignment-main'),
                               builder: (BuildContext context) =>
                                   ChangeNotifierProvider.value(
-                                value: widget.teacherData,
+                                value: widget.studData,
                                 child: CalendarApp(),
                               ),
                             ),
@@ -144,59 +144,3 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
             });
   }
 }
-
-
-
-///   decoration. 
-
-// decoration: BoxDecoration(
-//               gradient: LinearGradient(
-//                 colors: [
-//                   Color.fromARGB(215, 143, 166, 203).withOpacity(0.5),
-//                   Color.fromARGB(255, 219, 244, 167).withOpacity(0.9),
-//                 ],
-//                 begin: Alignment.topLeft,
-//                 end: Alignment.bottomRight,
-//                 stops: [0, 1],
-//               ),
-//             ),
-
-///     Buttons row on old timer panel
-// Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   crossAxisAlignment: CrossAxisAlignment.center,
-//                   children: <Widget>[
-//                     TextButton(
-//                       child: Text(
-//                         'Reschedule',
-//                         style:
-//                             TextStyle(color: Color.fromARGB(255, 76, 76, 76)),
-//                       ),
-//                       // style: Theme.of(context).buttonTheme,
-//                       onPressed: timeUp
-//                           ? null
-//                           : () {
-//                               Navigator.pushNamed(context, EditTTForm.routeName,
-//                                   arguments: widget.meeting);
-//                             },
-//                     ),
-//                     SizedBox(
-//                       width: 50,
-//                     ),
-//                     TextButton(
-//                       style: TextButton.styleFrom(
-//                         textStyle: TextStyle(
-//                           color: Color.fromARGB(255, 76, 76, 76),
-//                         ),
-//                       ),
-//                       child: Text('Attendance'),
-//                       onPressed: !timeClose
-//                           ? null
-//                           : () {
-//                               Navigator.pushNamed(
-//                                   context, StudentProvider.routeName,
-//                                   arguments: subClassNext);
-//                             },
-//                     ),
-//                   ],
-//                 )
