@@ -12,6 +12,23 @@ import '../models/subject.dart';
 import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
+  ///Get number of students registered with the subject
+  String getAttendanceIndicator(List<StudentRank> studList, SubjectClass cls) {
+    String clsId = cls.id;
+    int marked = 0;
+    int total = 0;
+    studList.forEach((stud) {
+      if (stud.subjects.contains(cls.subjectName)) {
+        total++;
+      }
+      if (stud.attendance['$clsId'] == 1 || stud.attendance['$clsId'] == 2) {
+        marked++;
+      }
+    });
+    String stat = '$marked / $total';
+    return stat;
+  }
+
   ///Get top three assingments for teachers assignment panel
   List<AMfromDB> getTopThreeAM(
     List<AMfromDB> allAm,
@@ -25,7 +42,12 @@ class TeacherService with ChangeNotifier {
       }
     });
     myAM.sort((a, b) => a.timeCreated.compareTo(b.timeCreated));
-    List<AMfromDB> topthree = myAM.sublist(0, 3);
+    List<AMfromDB> topthree;
+    if (myAM.length > 3) {
+      topthree = myAM.sublist(0, 3);
+    } else {
+      topthree = myAM;
+    }
     return topthree;
   }
 
@@ -52,7 +74,12 @@ class TeacherService with ChangeNotifier {
       }
     });
     myRA.sort((a, b) => a.startTime.compareTo(b.startTime));
-    List<RAfromDB> topthree = myRA.sublist(0, 3);
+    List<RAfromDB> topthree;
+    if (myRA.length > 3) {
+      topthree = myRA.sublist(0, 3);
+    } else {
+      topthree = myRA;
+    }
     return topthree;
   }
 
@@ -288,6 +315,7 @@ class TeacherService with ChangeNotifier {
         clsAfterNext = y;
       }
     }
+
     /// display classes are the next up and the rest (hopefully)
     myClasses.forEach((cls) {
       if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {

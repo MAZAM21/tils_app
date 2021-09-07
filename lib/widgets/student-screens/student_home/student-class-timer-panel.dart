@@ -113,7 +113,7 @@ class _StudentClassTimerPanelState extends State<StudentClassTimerPanel> {
                               builder: (BuildContext context) =>
                                   ChangeNotifierProvider.value(
                                 value: widget.studData,
-                                child: CalendarApp(),
+                                child: StudentCalendar(),
                               ),
                             ),
                           );

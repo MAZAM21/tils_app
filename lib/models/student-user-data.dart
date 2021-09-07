@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class StudentUser with ChangeNotifier {
-  final attendance;
+  final Map attendance;
   final assessments;
   final List subjects;
   final String year;

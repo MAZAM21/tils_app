@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/models/student-user-data.dart';
 
-class TeacherAvatarPanel extends StatelessWidget {
-  const TeacherAvatarPanel({
+class StudentAvatarPanel extends StatelessWidget {
+  const StudentAvatarPanel({
     Key key,
-    @required this.teacherData,
+    @required this.studData,
   }) : super(key: key);
 
-  final TeacherUser teacherData;
+  final StudentUser studData;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         CircleAvatar(
-          backgroundImage: AssetImage('lib/assets/p3.JPG'),
+          backgroundImage: studData.imageURL != null
+              ? NetworkImage(studData.imageURL)
+              : null,
           radius: 30,
         ),
         Padding(
@@ -27,7 +29,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     SizedBox(
-                      width: 8,
+                      width: 7,
                     ),
                     Text(
                       'Good morning,',
@@ -41,7 +43,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  '${teacherData.name}',
+                  '${studData.name}',
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Proxima Nova',

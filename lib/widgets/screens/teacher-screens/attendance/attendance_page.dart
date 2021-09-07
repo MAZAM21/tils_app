@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:tils_app/models/student_rank.dart';
 
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
@@ -18,11 +19,12 @@ class AttendancePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final classData = Provider.of<List<SubjectClass>>(context);
+    final studList = Provider.of<List<StudentRank>>(context);
     final teacherData = Provider.of<TeacherUser>(context);
     final myClasses = ts.getMyAttendance(classData, teacherData.subjects);
     bool isActive = false;
     bool classesAdded = false;
-    if (classData != null) {
+    if (classData != null && studList != null) {
       isActive = true;
     }
     if (myClasses != null) {
@@ -34,40 +36,59 @@ class AttendancePage extends StatelessWidget {
             body: ListView.builder(
               itemCount: myClasses.length,
               itemBuilder: (ctx, i) {
-                return  ListTile(
-                      leading: Text(
-                        '${myClasses[i].subjectName} ${myClasses[i].section}',
-                        style: TextStyle(
-                            
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.center,
-                      ),
-                      subtitle: Text(
-                        '${DateFormat('EEE, MMM d').format(myClasses[i].startTime)}',
-                        style: TextStyle(
-                          
-                          fontFamily: 'Proxima Nova',
-                          fontSize: 12,
+                String trail =
+                    ts.getAttendanceIndicator(studList, myClasses[i]);
+                return !classesAdded
+                    ? Text(
+                        'No Classes Scheduled',
+                        style: Theme.of(context).textTheme.headline4,
+                      )
+                    : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                          tileColor: Colors.white,
+                          title: myClasses[i].topic == ''
+                              ? Text(
+                                  '${myClasses[i].subjectName}',
+                                  style: TextStyle(
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff2b3443),
+                                  ),
+                                )
+                              : Text(
+                                  '${myClasses[i].subjectName} (${myClasses[i].topic})',
+                                  style: TextStyle(
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff2b3443),
+                                  ),
+                                ),
+                          subtitle: Text(
+                            '${DateFormat('hh:mm a - EEE, MMM d').format(myClasses[i].startTime)}',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 12,
+                            ),
+                          ),
+                          trailing: Text('$trail'),
+                          // title: Text(
+                          //   'Topic: ${myClasses[i].topic}',
+                          //   style: TextStyle(
+                          //     fontFamily: 'Proxima Nova',
+                          //     fontSize: 14,
+                          //   ),
+                          //   textAlign: TextAlign.center,
+                          // ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              StudentProvider.routeName,
+                              arguments: myClasses[i],
+                            );
+                          },
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      title: Text(
-                        'Topic: ${myClasses[i].topic}',
-                        style: TextStyle(
-                          
-                          fontFamily: 'Proxima Nova',
-                          fontSize: 14,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          StudentProvider.routeName,
-                          arguments: myClasses[i],
-                        );
-                      },
                     );
               },
             ),

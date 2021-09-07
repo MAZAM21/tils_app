@@ -52,7 +52,9 @@ class _HomePageState extends State<HomePage> {
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${notification.title}'),));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('${notification.title}'),
+        ));
         flutterLocalNotificationsPlugin.show(
             notification.hashCode,
             notification.title,
@@ -79,7 +81,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   getToken() async {
-   String token = await FirebaseMessaging.instance.getToken();
+    String token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -101,7 +103,6 @@ class _HomePageState extends State<HomePage> {
 //     });
 //   }
 // }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -170,10 +171,11 @@ class _HomePageState extends State<HomePage> {
                           ),
 
                           /// Classes Grid (Stored in student screens)
-                          Container(
-                            child: MyClassesGrid(myClasses: gridList),
-                            height: 140,
-                          ),
+                          if (gridList != null)
+                            Container(
+                              child: MyClassesGrid(myClasses: gridList),
+                              height: 140,
+                            ),
 
                           ///Schedule Class button
                           Row(
@@ -223,15 +225,17 @@ class _HomePageState extends State<HomePage> {
                           /// includes list of latest three assessments and buttons
                           TeacherAssessmentPanel(teacherData: teacherData),
 
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
 
                           ///teacher assignment panel
                           ///built on same format as assessment panel
                           TeacherAssignmentPanel(teacherData: teacherData),
-                          
-                          const SizedBox(height: 30,),
 
-                         
+                          const SizedBox(
+                            height: 30,
+                          ),
                         ],
                       ),
                     ),

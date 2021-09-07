@@ -6,11 +6,6 @@ import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_p
 import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
-
-
-
-
-
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
 
@@ -35,7 +30,6 @@ class AllTabs extends StatefulWidget {
 class _AllTabsState extends State<AllTabs> {
   @override
   Widget build(BuildContext context) {
-    
     return DefaultTabController(
       length: 3,
       initialIndex: 1,

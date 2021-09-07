@@ -21,6 +21,7 @@ class AttendanceMarkerBuilder extends StatefulWidget {
 class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
   final db = DatabaseService();
   Map tileColor = {};
+  Map<String, String> _attStat = {};
 
   Widget buildAttButton(
     String stud,
@@ -63,7 +64,10 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
             Expanded(
               child: Text(
                 stud,
-                style: TextStyle(color: Colors.black, fontSize: 16, fontFamily: 'Proxima Nova'),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontFamily: 'Proxima Nova'),
               ),
             ),
           ],
@@ -99,12 +103,6 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
     );
   }
 
-  Widget buildTestTile(Student stud) {
-    return ListTile(
-      title: Text(stud.name),
-    );
-  }
-
   Color statusColor(int status, BuildContext ctx) {
     switch (status) {
       case 1:
@@ -127,6 +125,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
     bool streamActive = false;
     final studentProvider = Provider.of<List<Student>>(context);
     final attendanceProvider = Provider.of<List<Attendance>>(context);
+
     if (attendanceProvider != null) {
       attendanceProvider.forEach((sheet) {
         if (widget.classId == sheet.id) {
@@ -157,16 +156,125 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
                     stat = v;
                   }
                 });
-                //tileColor is added so that color is not dependant upon a read of the db 
+                //tileColor is added so that color is not dependant upon a read of the db
                 tileColor.forEach((k, v) {
                   if (k == studentProvider[i].name) {
                     tc = v;
                   }
                 });
-                return buildAttTile(
-                    studentProvider[i].name, widget.classId, context, stat, tc);
+                return AttendanceMarkerTile(
+                  classId: widget.classId,
+                  name: studentProvider[i].name,
+                  status: tc,
+                );
               },
             ),
     );
   }
 }
+
+class AttendanceMarkerTile extends StatefulWidget {
+  const AttendanceMarkerTile({
+    Key key,
+    @required this.name,
+    @required this.status,
+    @required this.classId,
+  }) : super(key: key);
+  final String name;
+  final String classId;
+  final int status;
+
+  @override
+  _AttendanceMarkerTileState createState() => _AttendanceMarkerTileState();
+}
+
+class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
+  final db = DatabaseService();
+  Widget buildAttButton(
+    String stud,
+    String buttonText,
+    String id,
+    int status,
+    MaterialColor color,
+  ) {
+    return Flexible(
+      fit: FlexFit.loose,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: () {
+             db.addAttToCF(stud, status, id);
+            
+          },
+          child: Text(
+            buttonText,
+            style: TextStyle(color: Colors.black),
+          ),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(color),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color statusColor(int status, BuildContext ctx) {
+    switch (status) {
+      case 1:
+        return Colors.green[300];
+        break;
+      case 3:
+        return Colors.red[300];
+        break;
+      case 2:
+        return Colors.yellow[300];
+        break;
+      default:
+        return Colors.white;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5),
+      child: ListTile(
+        tileColor: statusColor(widget.status, context),
+        title: Text('${widget.name}', style: TextStyle(fontSize: 18, fontFamily: 'Proxima Nova', fontWeight: FontWeight.w600),),
+        trailing: Container(
+          width: 180,
+          child: Row(children: <Widget>[
+            buildAttButton(
+              widget.name,
+              'P',
+              widget.classId,
+              1,
+              Colors.green,
+            ),
+            buildAttButton(
+              widget.name,
+              'L',
+              widget.classId,
+              2,
+              Colors.yellow,
+            ),
+            buildAttButton(
+              widget.name,
+              'A',
+              widget.classId,
+              3,
+              Colors.red,
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+///TODO:
+///first, build the marker tile widget
+///then create the global map used to track all of the marked stats
+///key is id val is stat
+///save button
+///change db functions

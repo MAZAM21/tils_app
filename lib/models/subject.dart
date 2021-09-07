@@ -31,6 +31,8 @@ class SubjectClass with ChangeNotifier {
   final DateTime startTime;
   final String section;
   final String topic;
+
+  //not implemented
   Map<String, dynamic> attendanceStatus = {};
 
   SubjectClass({

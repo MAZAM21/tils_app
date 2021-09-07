@@ -1,4 +1,4 @@
-import 'dart:math';
+
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -6,6 +6,44 @@ import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject.dart';
 
 class StudentService {
+
+  ///Get attendance percentage
+  int attendancePercentage(StudentUser sd) {
+    Map att = sd.attendance;
+    double perc = 0;
+    int presents = 0;
+    int all = att.length;
+    att.forEach((key, value) {
+      if (value == 1 || value == 2) {
+        presents++;
+      }
+    });
+    perc = (presents / all) * 100;
+
+    return perc.toInt();
+  }
+
+  ///Gets top three classes for which attendance would have been marked
+  ///to display on homepage attendance panel of student
+  List<SubjectClass> getTopThreeAtt(
+      List<SubjectClass> classList, StudentUser stud) {
+    List<SubjectClass> req = [];
+    classList.forEach((cls) {
+      if (stud.subjects.contains(cls.subjectName) &&
+          cls.startTime.isBefore(DateTime.now())) {
+        req.add(cls);
+      }
+    });
+    req.sort((a, b) => b.startTime.compareTo(a.startTime));
+    List<SubjectClass> topthree;
+    if (req.length > 3) {
+      topthree = req.sublist(0, 3);
+    } else {
+      topthree = req;
+    }
+    return topthree;
+  }
+
   ///Get deadline status
   String getdeadlineStatus(RAfromDB ra) {
     if (ra.endTime.isAfter(DateTime.now())) {
@@ -29,7 +67,12 @@ class StudentService {
       }
     });
     myRA.sort((a, b) => a.startTime.compareTo(b.startTime));
-    List<RAfromDB> topthree = myRA.sublist(0, 3);
+    List<RAfromDB> topthree;
+    if (myRA.length > 3) {
+      topthree = myRA.sublist(0, 3);
+    } else {
+      topthree = myRA;
+    }
     return topthree;
   }
 
