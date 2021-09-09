@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:quiver/iterables.dart';
+
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/parent-user-data.dart';
@@ -65,9 +65,14 @@ class DatabaseService with ChangeNotifier {
 
   //gets data from student collection and checks uid and then makes data into studentuser
   Stream<StudentUser> streamStudentUser(String uid) {
-    CollectionReference ref = _db.collection('students');
-    return ref.snapshots().map((list) => StudentUser.fromFirestore(
-        list.docs.firstWhere((doc) => doc['uid'] == uid)));
+    try {
+      CollectionReference ref = _db.collection('students');
+      return ref.snapshots().map((list) => StudentUser.fromFirestore(
+          list.docs.firstWhere((doc) => doc['uid'] == uid)));
+    } catch (e) {
+      print('bloody error: $e');
+    }
+    return null;
   }
 
   //gets data from student collection and checks uid and then makes data into teacheruser
@@ -141,7 +146,6 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
     } catch (err) {
       print('error in stream ans from id db: $err');
-      // TODO
     }
     return null;
   }
@@ -155,7 +159,7 @@ class DatabaseService with ChangeNotifier {
   Future<List<Student>> getStudentsBySub(String subName) async {
     CollectionReference ref = _db.collection('students');
     try {
-      QuerySnapshot<Map<String,dynamic>> query =
+      QuerySnapshot<Map<String, dynamic>> query =
           await ref.where('registeredSubs.$subName', isEqualTo: true).get();
       return query.docs.map((doc) => Student.fromFirestore(doc)).toList();
     } catch (err) {
@@ -167,7 +171,8 @@ class DatabaseService with ChangeNotifier {
   ///get all student docs from student collection
   Future<List<Student>> getAllStudents() async {
     try {
-      QuerySnapshot<Map<String,dynamic>> ref = await _db.collection('students').get();
+      QuerySnapshot<Map<String, dynamic>> ref =
+          await _db.collection('students').get();
       return ref.docs.map((doc) => Student.fromFirestore(doc)).toList();
     } catch (err) {
       print('err in getallstudents $err');
@@ -179,13 +184,13 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('remote-assessment');
     List<String> allIds = [];
     try {
-      QuerySnapshot<Map<String,dynamic>> allDocs = await ref.get();
+      QuerySnapshot<Map<String, dynamic>> allDocs = await ref.get();
       allDocs.docs.forEach((doc) {
         allIds.add(doc.id);
       });
       return allIds;
     } catch (err) {
-      print('err in getallassessments: $err'); // TODO
+      print('err in getallassessments: $err');
     }
     return null;
   }
@@ -194,7 +199,7 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('assessment-result');
     List<String> titles = [];
     try {
-      QuerySnapshot<Map<String,dynamic>> qtitles =
+      QuerySnapshot<Map<String, dynamic>> qtitles =
           await ref.where('subject', isEqualTo: '$subject').get();
       //all titles and doc ids of the assessments of that subject
       qtitles.docs.forEach((doc) {
@@ -223,7 +228,7 @@ class DatabaseService with ChangeNotifier {
 
     try {
       //all assessments results of subject
-      QuerySnapshot<Map<String,dynamic>> qtitles =
+      QuerySnapshot<Map<String, dynamic>> qtitles =
           await ref.where('subject', isEqualTo: '$subject').get();
       //all titles and doc ids of the assessments of that subject
       qtitles.docs.forEach((doc) {
@@ -242,7 +247,7 @@ class DatabaseService with ChangeNotifier {
       // print(idL);
 
       //checks student collection for all registered students fro this sub
-      QuerySnapshot<Map<String,dynamic>> qs =
+      QuerySnapshot<Map<String, dynamic>> qs =
           await stu.where('registeredSubs.$subject', isEqualTo: true).get();
       return qs.docs.map((doc) {
         // print(doc['name']);
@@ -261,7 +266,7 @@ class DatabaseService with ChangeNotifier {
           .doc('$assid')
           .collection('student-IDs');
       Map<String, int> allStMarks = {};
-      QuerySnapshot<Map<String,dynamic>> q = await ref.get();
+      QuerySnapshot<Map<String, dynamic>> q = await ref.get();
       q.docs.forEach((doc) {
         final Map tqmarks = {...doc['TQMarks']};
         final name = doc['name'];
@@ -276,7 +281,7 @@ class DatabaseService with ChangeNotifier {
       });
       return allStMarks;
     } catch (e) {
-      print('error in getAllStudentMarks db: $e'); // TODO
+      print('error in getAllStudentMarks db: $e');
     }
     return null;
   }
@@ -286,7 +291,7 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('attendance');
     CollectionReference studentRef = _db.collection('students');
     try {
-      QuerySnapshot<Map<String,dynamic>> q =
+      QuerySnapshot<Map<String, dynamic>> q =
           await studentRef.where('name', isEqualTo: '$name').get();
       DocumentSnapshot stDoc = q.docs.firstWhere((doc) {
         return doc['name'] == '$name';
@@ -323,6 +328,17 @@ class DatabaseService with ChangeNotifier {
     DocumentSnapshot query = await ref.doc(uid).get();
     Role role = Role.fromFirestore(query);
     return role;
+  }
+
+  ///Add token to teacher doc
+  Future<void> addTokenToTeacher(String token, String tID) async {
+    DocumentReference ref = _db.collection('teachers').doc('$tID');
+    try {
+      return await ref.set({
+        'token-FCM': token,
+        'token-time-added': DateTime.now(),
+      }, SetOptions(merge: true));
+    } catch (e) {}
   }
 
   Future<void> addAnnouncementToCF(
@@ -407,7 +423,15 @@ class DatabaseService with ChangeNotifier {
   //adds remote assessment to cf. only for input
   Future<void> addAssessmentToCF(RemoteAssessment assessment) async {
     CollectionReference ref = _db.collection('remote-assessment');
-
+    DateTime start;
+    DateTime end;
+    if (assessment.deployTime != null && assessment.deadline != null) {
+      start = assessment.deployTime;
+      end = assessment.deadline;
+    } else {
+      start = null;
+      end = null;
+    }
     try {
       return await ref.add({
         'title': assessment.assessmentTitle,
@@ -416,8 +440,8 @@ class DatabaseService with ChangeNotifier {
         'MCQs': assessment.returnMcqs(),
         'TextQs': assessment.allTextQs,
         'teacherId': assessment.teacherId,
-        'startTime': null,
-        'endTime': null,
+        'startTime': start,
+        'endTime': end,
         'isText': assessment.allTextQs.isNotEmpty ? true : false,
       });
     } catch (err) {

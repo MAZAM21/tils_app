@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,6 +91,13 @@ class RoutesAndTheme extends StatelessWidget {
           primaryColor: Color(0xffC54134),
           canvasColor: Color(0xfff4f6f9),
           appBarTheme: AppBarTheme(
+              textTheme: TextTheme(
+                caption: TextStyle(
+                    color: Color(0xff161616),
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18),
+              ),
               elevation: 0,
               color: Color(0xfff4f6f9),
               iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))),
@@ -123,10 +129,10 @@ class RoutesAndTheme extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   fontSize: 14),
               headline3: TextStyle(
-                color: Color.fromARGB(255, 10, 50, 0),
+                color:Color(0xffC54134),
                 fontFamily: 'Proxima Nova',
-                fontSize: 15,
-                fontWeight: FontWeight.normal,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
               headline2: TextStyle(
                 color: Colors.white,
@@ -152,7 +158,7 @@ class RoutesAndTheme extends StatelessWidget {
           RemoteAssessmentInput.routeName: (context) => RemoteAssessmentInput(),
           AnswerChoiceInput.routeName: (context) => AnswerChoiceInput(),
           RASubject.routeName: (context) => RASubject(),
-          AllRAs.routeName: (context) => AllRAs(),
+          //AllRAs.routeName: (context) => AllRAs(),
           StudentRADisplay.routeName: (context) => StudentRADisplay(),
           CalendarApp.routeName: (context) => CalendarApp(),
           AddStudent.routeName: (context) => AddStudent(),

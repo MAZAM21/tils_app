@@ -22,6 +22,36 @@ class StudentService {
 
     return perc.toInt();
   }
+/// num present
+  int presents(Map att) {
+    int p = 0;
+    att.forEach((key, value) {
+      if (value == 1) {
+        p++;
+      }
+    });
+    return p;
+  }
+/// number of lates
+  int lates(Map att) {
+    int l = 0;
+    att.forEach((key, value) {
+      if (value == 2) {
+        l++;
+      }
+    });
+    return l;
+  }
+/// number of absents
+  int absents(Map att) {
+    int a = 0;
+    att.forEach((key, value) {
+      if (value == 3) {
+        a++;
+      }
+    });
+    return a;
+  }
 
   ///Gets top three classes for which attendance would have been marked
   ///to display on homepage attendance panel of student

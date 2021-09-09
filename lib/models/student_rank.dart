@@ -42,11 +42,11 @@ class StudentRank with ChangeNotifier {
   factory StudentRank.fromFirestore(QueryDocumentSnapshot doc) {
     try {
       Map data = doc.data();
-      Map att = {...data['attendance']} ?? {};
+      Map att = {...data['attendance'] ?? {}};
       Map tqm = {};
       Map mcqm = {};
-      final Map subs = {...data['registeredSubs']};
-      final completed = List<String>.from(data['completed-assessments']);
+      final Map subs = {...data['registeredSubs'] ?? {}};
+      final completed = List<String>.from(data['completed-assessments'] ?? []);
       List regSubs = [];
 
       //takse internal hash map and checks reg status
@@ -57,36 +57,35 @@ class StudentRank with ChangeNotifier {
       });
 
       if (data['Assessment-textqMarks'] != null) {
-        tqm = {...data['Assessment-textqMarks']} ?? {};
+        tqm = {...data['Assessment-textqMarks']?? {}} ;
       } else {
         tqm = {'none': 0};
       }
 
       if (data['Assessment-MCQMarks'] != null) {
-        mcqm = {...data['Assessment-MCQMarks']} ?? {};
+        mcqm = {...data['Assessment-MCQMarks']?? {}} ;
       } else {
         mcqm = {'none': 0};
       }
       if (data['attendance'] != null) {
-        att = {...data['attendance']} ?? {};
+        att = {...data['attendance']?? {}} ;
       } else {
         att = {'none': 0};
       }
 
       //print('${data['name']}');
       return StudentRank(
-        id: doc.id ?? '',
-        name: data['name'] ?? '',
-        year: data['year'] ?? '',
-        batch: data['batch'] ?? '',
-        section: data['section'] ?? '',
-        imageUrl: data['profile-pic-url'] ?? '',
-        attendance: att,
-        textMarks: tqm,
-        mcqMarks: mcqm,
-        completedAssessements: completed,
-        subjects: regSubs
-      );
+          id: doc.id ?? '',
+          name: data['name'] ?? '',
+          year: data['year'] ?? '',
+          batch: data['batch'] ?? '',
+          section: data['section'] ?? '',
+          imageUrl: data['profile-pic-url'] ?? '',
+          attendance: att,
+          textMarks: tqm,
+          mcqMarks: mcqm,
+          completedAssessements: completed,
+          subjects: regSubs);
     } catch (e) {
       print('error in StudentRank model: $e');
     }
@@ -98,3 +97,5 @@ class StudentRank with ChangeNotifier {
 
 
 /// This model is to have all StudentRank data so that it can be used for score, attendance, and assessment. 
+/// TODO: Instead of sorting through all of the maps in Ranking service, methods can be added here that serve up the required data
+/// like total and obtained marks per subject, Overall total score. Excellent Idea. Was missing this. 

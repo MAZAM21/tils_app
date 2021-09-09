@@ -7,12 +7,14 @@ class TeacherUser with ChangeNotifier{
   final List<String> subjects;
   final String uid;
   final bool isAdmin;
+  final String docId;
   TeacherUser({
     @required this.name,
     @required this.year,
     @required this.uid,
     @required this.isAdmin,
     @required this.subjects,
+    @required this.docId,
   });
 
   factory TeacherUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
@@ -23,6 +25,7 @@ class TeacherUser with ChangeNotifier{
       final uid = data['uid'];
       final isAdmin = data['isAdmin'];
       final Map subs = {...data['subjects']};
+      //print(doc.id);
       List<String> tsubs = [];
       subs.forEach((k, v) {
         if (v == true) {
@@ -35,6 +38,7 @@ class TeacherUser with ChangeNotifier{
         uid: uid,
         subjects: tsubs,
         isAdmin: isAdmin,
+        docId: doc.id,
       );
     } catch (err) {
       print('error in teacher user model: $err');

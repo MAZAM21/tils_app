@@ -14,6 +14,8 @@ import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-
 
 class AllRAs extends StatefulWidget {
   static const routeName = '/all-remote-assessments';
+  AllRAs({@required this.subject});
+  final String subject;
 
   @override
   _AllRAsState createState() => _AllRAsState();
@@ -21,184 +23,165 @@ class AllRAs extends StatefulWidget {
 
 class _AllRAsState extends State<AllRAs> {
   final db = DatabaseService();
-
   final ts = TeacherService();
-
-  Widget buildAssessmentListTile(List subList, Color col) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Container(
-        color: Color.fromARGB(50, 172, 216, 211),
-        height: 250,
-        child: subList.isEmpty
-            ? Text('No Assessments')
-            : ListView.builder(
-                itemCount: subList.length,
-                itemBuilder: (context, i) {
-                  return Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: GestureDetector(
-                        child: ListTile(
-                          tileColor: col,
-                          title: Text(
-                            '${subList[i].assessmentTitle}',
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                              'MCQ: ${subList[i].allMCQs.length} , Text Questions: ${subList[i].allTextQs.length}'),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditRA(subList[i]),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ),
-      ),
-    );
-  }
-
-  Widget buildAssessmentListView(
-    List<RAfromDB> raList,
-    String subName,
-    BuildContext context,
-    String uid,
-  ) {
-    return Container(
-      height: 320,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '$subName',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              color: Color.fromARGB(50, 172, 216, 211),
-              height: 250,
-              child: raList.isEmpty
-                  ? Text('No Assessments')
-                  : ListView.builder(
-                      itemCount: raList.length,
-                      itemBuilder: (context, i) {
-                        return Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: GestureDetector(
-                                child: ListTile(
-                                  tileColor: Colors.white,
-                                  title: Text(
-                                    '${raList[i].assessmentTitle}',
-                                    style:
-                                        TextStyle(fontFamily: 'Proxima Nova'),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  subtitle: raList[i].startTime == null
-                                      ? null
-                                      : Text(
-                                          '${DateFormat('d/M/yy, hh:mm a').format(raList[i].startTime)}'),
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditRA(raList[i]),
-                                    ),
-                                  );
-                                }),
-                          ),
-                        );
-                      },
-                    ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     //final screenWidth = MediaQuery.of(context).size.width;
-    return StreamProvider(
-      initialData: [],
-      create: (context) => db.streamRA(),
-      builder: (context, _) {
-        final allRa = Provider.of<List<RAfromDB>>(context);
-        final userData = Provider.of<TeacherUser>(context);
+    final allRa = Provider.of<List<RAfromDB>>(context);
+    final userData = Provider.of<TeacherUser>(context);
 
-        Map<String, List<RAfromDB>> myRa =
-            {}; //a map with subjects as keys and assessment associated with sub as values
-
-        bool isActive = false;
-        if (allRa != null && userData != null) {
-          // filtering allra for all of the subs registered.
-          isActive = true;
-          myRa = ts.getRAForTeacher(userData, allRa);
-        }
-        return !isActive
-            ? LoadingScreen()
-            : Scaffold(
-                appBar: AppBar(
-                  actions: <Widget>[
-                    TextButton(
-                      child: Text(
-                        'Add Assessment',
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ChangeNotifierProvider.value(
-                              value: userData,
-                              child: RASubject(),
+    ///a list of all ra's of the subject passed in constructor
+    List<RAfromDB> subRa = [];
+    int totalRa;
+    bool isActive = false;
+    if (allRa != null && userData != null) {
+      // filtering allra for all of the subs registered.
+      isActive = true;
+      subRa = ts.getRAfromSub(allRa, widget.subject);
+      totalRa = subRa.length;
+    }
+    return !isActive
+        ? LoadingScreen()
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(
+                'Assessments Main',
+                style: Theme.of(context).appBarTheme.textTheme.caption,
+              ),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Material(
+                    elevation: 5,
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Divider(),
+                          Container(
+                            height: 10,
+                            color: Theme.of(context).canvasColor,
+                          ),
+                          Container(
+                            color: Theme.of(context).canvasColor,
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Total: ',
+                                      style: TextStyle(
+                                        fontFamily: 'Proxima Nova',
+                                        fontSize: 25,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$totalRa',
+                                      style: TextStyle(
+                                        fontFamily: 'Proxima Nova',
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Spacer(),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ChangeNotifierProvider.value(
+                                          value: userData,
+                                          child: RASubject(),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Create Assessment',
+                                    style: TextStyle(
+                                      fontFamily: 'Proxima Nova',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xffc54134),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: subRa.length,
+                      itemBuilder: (context, i) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            title: Text(
+                              '${subRa[i].assessmentTitle}',
+                              style: TextStyle(
+                                fontFamily: 'Proxima Nova',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff2b3443),
+                              ),
+                            ),
+                            subtitle: Text(
+                              '${subRa[i].subject}',
+                              style: TextStyle(
+                                fontFamily: 'Proxima Nova',
+                                fontSize: 14,
+                                color: Color(0xff2b3443),
+                              ),
+                            ),
+                            trailing: subRa[i].isDeployed
+                                ? Text(
+                                    'In Progress',
+                                    style: TextStyle(
+                                      fontFamily: 'Proxima Nova',
+                                      fontSize: 16,
+                                      color: Colors.green[400],
+                                    ),
+                                  )
+                                : Text(
+                                    'Not Deployed',
+                                    style: TextStyle(
+                                      fontFamily: 'Proxima Nova',
+                                      fontSize: 16,
+                                      color: Colors.orange[400],
+                                    ),
+                                  ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ChangeNotifierProvider.value(
+                                          value: userData,
+                                          child: EditRA(subRa[i])),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
-                    )
-                  ],
-                ),
-                body: SingleChildScrollView(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                              height: 20,
-                            ),
-                            for (var x = 0; x < myRa.length; x++)
-                              buildAssessmentListView(
-                                myRa.values.toList()[x],
-                                myRa.keys.toList()[x],
-                                context,
-                                userData.uid,
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              );
-      },
-    );
+                ],
+              ),
+            ),
+          );
   }
 }

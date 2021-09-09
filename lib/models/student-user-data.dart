@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class StudentUser with ChangeNotifier {
-  final Map attendance;
+  final attendance;
   final assessments;
   final List subjects;
   final String year;
@@ -23,20 +23,21 @@ class StudentUser with ChangeNotifier {
     this.assessments,
     this.imageURL,
   ]);
-  factory StudentUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  factory StudentUser.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
-      final Map att = {...data['attendance']} ?? {};
-      final name = data['name'];
-      final year = data['year'];
+      final Map att = {...data['attendance']};
+      final name = data['name'] ?? '';
+      final year = data['year'] ?? '';
       final Map subs = {...data['registeredSubs']};
       List compAss;
-      final section = data['section'];
-      final batch = data['batch'];
-      final url = data['profile-pic-url'];
+      final section = data['section'] ?? '';
+      final batch = data['batch'] ?? '';
+      final url = data['profile-pic-url'] ?? '';
       List regSubs = [];
-      if (data['completed-assessments'] != null) {
-        compAss = [...data['completed-assessments']] ?? [];
+      if (data.containsKey('completed-assessments')) {
+        compAss = [...data['completed-assessments']];
       } else {
         compAss = [];
       }
@@ -47,6 +48,7 @@ class StudentUser with ChangeNotifier {
           regSubs.add(k);
         }
       });
+
       //print('Student user called');
       //print('$compAssessments');
       return StudentUser(

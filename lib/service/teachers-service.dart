@@ -73,13 +73,15 @@ class TeacherService with ChangeNotifier {
         myRA.add(ra);
       }
     });
-    myRA.sort((a, b) => a.startTime.compareTo(b.startTime));
+    myRA.sort((a, b) => b.startTime.compareTo(a.startTime));
     List<RAfromDB> topthree;
     if (myRA.length > 3) {
       topthree = myRA.sublist(0, 3);
+
     } else {
       topthree = myRA;
     }
+    topthree.sort((a, b) => b.endTime.compareTo(a.endTime));
     return topthree;
   }
 
@@ -287,7 +289,7 @@ class TeacherService with ChangeNotifier {
   }
 
   List<SubjectClass> getMyAttendance(List<SubjectClass> allClasses, List subs) {
-    ///TODO
+    ///done
     ///implement algo where:
     ///the class next up is shown but the classes after that are not shown
     ///the classes that are done are also shown.

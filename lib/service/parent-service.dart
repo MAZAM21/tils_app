@@ -1,6 +1,6 @@
-import 'package:flutter/rendering.dart';
+
 import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/models/remote_assessment.dart';
+
 import 'package:tils_app/models/subject.dart';
 
 class ParentService {
@@ -24,12 +24,15 @@ class ParentService {
 
   List<SubjectClass> getMarkedClasses(List<SubjectClass> allClasses, Map att) {
     List<SubjectClass> marked = [];
-    allClasses.forEach((element) {
-      if (att.containsKey(element.id)) {
-        marked.add(element);
-      }
-    });
-    marked.sort((a, b) => b.startTime.compareTo(a.startTime)); // easy sorting of dates. Use in attendance grid as well
+    if (att!=null) {
+  allClasses.forEach((element) {
+    if (att.containsKey(element.id) && element != null) {
+      marked.add(element);
+    }
+  });
+}
+    marked.sort((a, b) => b.startTime.compareTo(
+        a.startTime)); // easy sorting of dates. Use in attendance grid as well
     return marked;
   }
 
@@ -62,6 +65,4 @@ class ParentService {
     });
     return a;
   }
-
-  
 }

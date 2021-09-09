@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:tils_app/service/db.dart';
+
 
 class ARStudent {
   final String name;
@@ -49,7 +47,7 @@ class ARStudent {
 
       return ARStudent(name: name, titleMarks: titleMarks);
     } catch (e) {
-      print('error in arstudent constructor: $e'); // TODO
+      print('error in arstudent constructor: $e');
     }
     return null;
   }

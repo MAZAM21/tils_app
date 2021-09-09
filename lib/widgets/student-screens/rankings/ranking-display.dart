@@ -13,13 +13,18 @@ class RankingDisplay extends StatelessWidget {
   final rs = RankingService();
   @override
   Widget build(BuildContext context) {
-    final studsFromdb = Provider.of<List<StudentRank>>(context);
-    final assessments = Provider.of<List<RAfromDB>>(context);
-    List<StudentRank> students = [];
     bool isActive = false;
-    if (studsFromdb != null && assessments != null) {
-      isActive = true;
-      students = rs.getStudentScores(studsFromdb, assessments);
+    List<StudentRank> students = [];
+    try {
+      final studsFromdb = Provider.of<List<StudentRank>>(context);
+      final assessments = Provider.of<List<RAfromDB>>(context);
+
+      if (studsFromdb != null && assessments != null) {
+        isActive = true;
+        students = rs.getStudentScores(studsFromdb, assessments);
+      }
+    } on Exception catch (e) {
+      print('error in ranking display students: $e');
     }
     return isActive == true
         ? Scaffold(
@@ -50,4 +55,3 @@ class RankingDisplay extends StatelessWidget {
         : LoadingScreen();
   }
 }
-

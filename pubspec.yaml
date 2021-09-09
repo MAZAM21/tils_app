@@ -42,9 +42,9 @@ dependencies:
   flutter_local_notifications: ^8.1.1+1
 
 flutter_icons:
-  android: true
+  android: "launcher_icon"
   ios: true
-  image_path: "lib/assets/TilsLogored.png"
+  image_path: "lib/assets/Tilslogonew.png"
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -8,58 +8,44 @@ class ClassPositionPanel extends StatelessWidget {
   final String position;
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return ClipRRect(
       borderRadius: BorderRadius.circular(15),
-      elevation: 10,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Container(
-          child: Row(
-            children: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Class Position:',
-                    style: TextStyle(
-                      fontFamily: 'Proxima Nova',
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Color.fromARGB(255, 75, 63, 114),
-                    ),
-                  )),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '$position',
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Divider(
+              color: Color(0xff2A353F),
+              thickness: 0.2,
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Class Position:',
                   style: TextStyle(
                     fontFamily: 'Proxima Nova',
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Color.fromARGB(255, 75, 63, 114),
                   ),
                 ),
-              ),
-              Spacer(),
-            ],
-          ),
-          height: 70,
-          width: MediaQuery.of(context).size.width * 0.9,
-          decoration: BoxDecoration(
-            boxShadow: [
-              // BoxShadow(blurRadius: 10, color: Colors.grey, spreadRadius: 5),
-            ],
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(255, 118, 200, 147).withOpacity(0.3),
-                Color.fromARGB(255, 22, 138, 173).withOpacity(0.5),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    '$position',
+                    style: TextStyle(
+                      fontFamily: 'Proxima Nova',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Spacer(),
               ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: [0, 1],
             ),
-          ),
+          ],
         ),
+        width: MediaQuery.of(context).size.width * 0.915,
       ),
     );
   }

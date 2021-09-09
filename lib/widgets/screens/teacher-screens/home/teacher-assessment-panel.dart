@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 
 class TeacherAssessmentPanel extends StatelessWidget {
@@ -37,16 +39,32 @@ class TeacherAssessmentPanel extends StatelessWidget {
           children: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    settings: RouteSettings(name: '/all-ras'),
-                    builder: (BuildContext context) =>
-                        ChangeNotifierProvider.value(
-                      value: teacherData,
-                      child: AllRAs(),
+                if (teacherData.subjects.length > 1) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/select-subects-ra'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: SelectAssessmentSubject(
+                            subjects: teacherData.subjects, tc: teacherData),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (teacherData.subjects.length == 1) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/all-Ras'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: AllRAs(
+                          subject: teacherData.subjects[0],
+                        ),
+                      ),
+                    ),
+                  );
+                }
               },
               child: Text(
                 'Assessements',
@@ -118,6 +136,18 @@ class TeacherAssessmentPanel extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  onLongPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            ChangeNotifierProvider.value(
+                          value: teacherData,
+                          child: EditRA(topThree[i]),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -138,16 +168,35 @@ class TeacherAssessmentPanel extends StatelessWidget {
                         borderRadius: BorderRadius.circular(23)),
                   )),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    settings: RouteSettings(name: '/deploy-assessments'),
-                    builder: (BuildContext context) =>
-                        ChangeNotifierProvider.value(
-                      value: teacherData,
-                      child: AllRAs(),
+                ///if there are more than one subjects reg with teacher
+                ///subject selector will open
+                ///else it will go directly to the teacher's one subject assessment list
+                if (teacherData.subjects.length > 1) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/select-subects-ra'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: SelectAssessmentSubject(
+                            subjects: teacherData.subjects, tc: teacherData),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (teacherData.subjects.length == 1) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/all-Ras'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: AllRAs(
+                          subject: teacherData.subjects[0],
+                        ),
+                      ),
+                    ),
+                  );
+                }
               },
               child: Text(
                 'Deploy Assessments',
@@ -158,7 +207,9 @@ class TeacherAssessmentPanel extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             ElevatedButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Color(0xffffffff)),
@@ -171,11 +222,11 @@ class TeacherAssessmentPanel extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    settings: RouteSettings(name: '/deploy-assessments'),
+                    settings: RouteSettings(name: '/all-text-qs'),
                     builder: (BuildContext context) =>
                         ChangeNotifierProvider.value(
                       value: teacherData,
-                      child: AllRAs(),
+                      child: AllTextQs(),
                     ),
                   ),
                 );
@@ -187,7 +238,6 @@ class TeacherAssessmentPanel extends StatelessWidget {
                   fontFamily: 'Proxima Nova',
                   color: Color(0xff000000),
                   fontWeight: FontWeight.w600,
-
                 ),
               ),
             ),

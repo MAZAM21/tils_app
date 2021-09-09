@@ -7,6 +7,7 @@ import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/class-scheduler-buttons.dart';
@@ -34,6 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _token;
   final ts = TeacherService();
+  final db = DatabaseService();
   @override
   void initState() {
     super.initState();
@@ -71,20 +73,21 @@ class _HomePageState extends State<HomePage> {
     });
     if (teacherData != null) {
       for (var i = 0; i < teacherData.subjects.length; i++) {
-        print('${teacherData.subjects[i]}');
+        //print('${teacherData.subjects[i]}');
         FirebaseMessaging.instance
             .subscribeToTopic('${teacherData.subjects[i]}');
       }
+      getToken(teacherData.docId);
     }
-    getToken();
     // getTopics();
   }
 
-  getToken() async {
+  getToken(String tID) async {
     String token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
+    db.addTokenToTeacher(_token, tID);
     print(_token);
   }
 

@@ -4,6 +4,7 @@ import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/deploy-assessment.dart';
+
 ///this is the overview and deployment page
 
 class EditRA extends StatefulWidget {
@@ -23,10 +24,18 @@ class _EditRAState extends State<EditRA> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
+        width: double.infinity,
         color: Color.fromARGB(50, 172, 216, 211),
         height: 350,
         child: mcqList.isEmpty
-            ? Text('No MCQs')
+            ? Text(
+                'No MCQs',
+                style: TextStyle(
+                    fontFamily: 'Proxima Nova',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              )
             : ListView.builder(
                 itemCount: mcqList.length,
                 itemBuilder: (context, i) {
@@ -59,7 +68,7 @@ class _EditRAState extends State<EditRA> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
-                                      'Answer Choices:\n ${ts.mapToStrings(mcqList[i].answerChoices)}',
+                                      'Answer Choices:\n${ts.mapToStrings(mcqList[i].answerChoices)}',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Proxima Nova',
@@ -87,10 +96,18 @@ class _EditRAState extends State<EditRA> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: Container(
+        width: double.infinity,
         color: Color.fromARGB(50, 172, 216, 211),
         height: 350,
         child: textQList.isEmpty
-            ? Text('No questions')
+            ? Text(
+                'No questions',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontFamily: 'Proxima Nova',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500),
+              )
             : ListView.builder(
                 itemCount: textQList.length,
                 itemBuilder: (context, i) {
@@ -145,8 +162,32 @@ class _EditRAState extends State<EditRA> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              db.deleteAssessment(widget.ra.id);
-              Navigator.pop(context);
+              setState(() {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              db.deleteAssessment(widget.ra.id);
+                            },
+                            child: Text('Yes, Delete'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Exit'),
+                          )
+                        ],
+                        title: Text(
+                            'Are you sure you want to delete this assessment?'),
+                      );
+                    });
+              });
+
+              //Navigator.pop(context);
             },
           )
         ],
@@ -156,7 +197,7 @@ class _EditRAState extends State<EditRA> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: MediaQuery.of(context).size.width * 0.85,
+              width: MediaQuery.of(context).size.width * 0.915,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 //crossAxisAlignment: CrossAxisAlignment.center,
@@ -164,18 +205,34 @@ class _EditRAState extends State<EditRA> {
                   SizedBox(
                     height: 20,
                   ),
-                  Text(
-                    '${widget.ra.assessmentTitle}',
-                    style: Theme.of(context).textTheme.headline4,
+                  Row(
+                    children: [
+                      Text(
+                        '${widget.ra.assessmentTitle}',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   ElevatedButton(
-                    child: Text('Choose Deployment Time'),
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color(0xffc54134))),
+                    child: Text(
+                      'Choose Deployment Time',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                     onPressed: () {
                       showDeploySheet(widget.ra.id);
                     },
+                  ),
+                  SizedBox(
+                    height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,

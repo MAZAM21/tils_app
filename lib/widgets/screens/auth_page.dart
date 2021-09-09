@@ -53,17 +53,17 @@ class _AuthScreenState extends State<AuthScreen> {
         message = err.message;
       }
 
-      Scaffold.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(ctx).errorColor,
-        ),
-      );
       setState(() {
         _isLoading = false;
       });
     } catch (err) {
-      print(err);
+      print('error loging in : $err');
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          content: Text('Authentication Failed. Please try again'),
+          backgroundColor: Theme.of(ctx).errorColor,
+        ),
+      );
       setState(() {
         _isLoading = false;
       });
@@ -72,7 +72,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       body: AuthForm(

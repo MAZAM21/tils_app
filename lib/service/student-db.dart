@@ -1,22 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import 'package:quiver/iterables.dart';
-import 'package:tils_app/models/allTextQAs.dart';
-import 'package:tils_app/models/student-textAnswers.dart';
 
-import '../models/announcement.dart';
-import '../models/attendance.dart';
-import '../models/class-data.dart';
-import '../models/remote_assessment.dart';
-import '../models/role.dart';
-import '../models/student-user-data.dart';
+
 import '../models/student.dart';
-import '../models/teacher-user-data.dart';
-import '../models/meeting.dart';
-import '../models/subject.dart';
-import '../models/assessment-result.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class StudentDB with ChangeNotifier {

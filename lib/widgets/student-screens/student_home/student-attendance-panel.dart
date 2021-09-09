@@ -15,16 +15,22 @@ class StudentAttendancePanel extends StatelessWidget {
 
   final StudentUser studData;
   final ss = StudentService();
-//TODO
-  ///Get total classes to display with attendance text button
-  ///Create design for tile to display subject name date topic and status latest
+
   @override
   Widget build(BuildContext context) {
     final classList = Provider.of<List<SubjectClass>>(context);
     List<SubjectClass> topThree;
+    int perc;
+    int present;
+    int late;
+    int absent;
     bool isActive = false;
     if (classList != null) {
       topThree = ss.getTopThreeAtt(classList, studData);
+      perc = ss.attendancePercentage(studData);
+      present = ss.presents(studData.attendance);
+      late = ss.lates(studData.attendance);
+      absent = ss.absents(studData.attendance);
       isActive = true;
     }
     return !isActive
@@ -55,7 +61,7 @@ class StudentAttendancePanel extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '',
+                      '($perc%)',
                       style: TextStyle(
                         color: Color(0xff5f686f),
                         fontFamily: 'Proxima Nova',
@@ -63,6 +69,35 @@ class StudentAttendancePanel extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
+                    Spacer(),
+                    Text(
+                      '$present  ',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.green[600],
+                      ),
+                    ),
+                    Text(
+                      '$late  ',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.yellow[900],
+                      ),
+                    ),
+                    Text(
+                      '$absent',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red[800],
+                      ),
+                    ),
+                    SizedBox(width: 10,)
                   ],
                 ),
                 Container(

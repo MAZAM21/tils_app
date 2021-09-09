@@ -149,9 +149,12 @@ class _DeployAssessmentState extends State<DeployAssessment> {
           style: ButtonStyle(
             backgroundColor: _duration == duration
                 ? MaterialStateProperty.all(Colors.redAccent)
-                : MaterialStateProperty.all(Colors.deepPurpleAccent),
+                : MaterialStateProperty.all(Color(0xffDEE4ED)),
           ),
-          child: Text(duration),
+          child: Text(
+            duration,
+            style: Theme.of(context).textTheme.headline4,
+          ),
           onPressed: () {
             setState(() {
               setDuration(h, m, duration);
@@ -194,7 +197,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
                       ],
                     ),
                   ),
-                  Divider(),
+
                   //Time Display and Picker
                   Container(
                     width: 250,
@@ -208,6 +211,9 @@ class _DeployAssessmentState extends State<DeployAssessment> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 10),
                     width: 350,
@@ -219,34 +225,44 @@ class _DeployAssessmentState extends State<DeployAssessment> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
+                              buildDurationOption('48', 48, 0),
                               buildDurationOption('24', 24, 0),
-                              buildDurationOption('12', 12, 30),
+                              buildDurationOption('12', 12, 0),
                               buildDurationOption('6', 6, 0),
-                              buildDurationOption('2', 2, 30),
-                              buildDurationOption('1', 1, 0),
+                              buildDurationOption('2', 2, 0),
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Divider(),
+
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: <Widget>[
                       Container(
                         child: Text(
-                          '${DateFormat('EEE, MMM d, hh:mm a').format(_startTime)} to ${DateFormat('EEE, MMM d, hh:mm a').format(_endTime)}',
+                          '${DateFormat('EEE, MMM d, hh:mm a').format(_startTime)} \n to \n ${DateFormat('EEE, MMM d, hh:mm a').format(_endTime)}',
                           style: TextStyle(
                               fontFamily: 'Proxima Nova',
-                              color: Colors.brown,
+                              color: Colors.black,
                               fontSize: 16,
                               fontWeight: FontWeight.bold),
                           overflow: TextOverflow.fade,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).primaryColor)),
                     child: Text('Deploy'),
                     onPressed: () {
                       if (_startTime != _endTime) {
@@ -263,6 +279,9 @@ class _DeployAssessmentState extends State<DeployAssessment> {
                             });
                       }
                     },
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),

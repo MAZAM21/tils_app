@@ -25,6 +25,16 @@ class RemoteAssessment with ChangeNotifier {
     notifyListeners();
   }
 
+  bool validate() {
+    if (assessmentTitle != null &&
+        subject != null &&
+        (allMCQs.isNotEmpty || allTextQs.isNotEmpty)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // key is the question. the value map has a key of option category and value is the option.
   Map returnMcqs() {
     Map<String, Map<String, String>> mcqMap = {};
@@ -71,14 +81,15 @@ class RAfromDB {
     this.isDeployed,
   });
 
-  factory RAfromDB.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  factory RAfromDB.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final mcqs = Map<String, dynamic>.from(data['MCQs']);
       final textQs = List<String>.from(data['TextQs']);
       List<MCQ> converted = [];
       Timestamp startTime = data['startTime'] ?? Timestamp.now();
-      Timestamp endTime = data['endTime']?? Timestamp.now();
+      Timestamp endTime = data['endTime'] ?? Timestamp.now();
       Timestamp time = data['timeCreated'];
       DateTime d = DateTime.parse(time.toDate().toString());
       DateTime start;
@@ -102,20 +113,18 @@ class RAfromDB {
       //print(isDep);
       //print('constructor called for: ${data['title']}');
       return RAfromDB(
-        id: doc.id,
-        timeAdded: d,
-        subject: data['subject'],
-        teacherId: data['id'],
-        assessmentTitle: data['title'],
-        allMCQs: converted,
-        allTextQs: textQs,
-        startTime: start != null ? start : null,
-        endTime: end != null ? end : null,
-        isDeployed: isDep
-      );
+          id: doc.id,
+          timeAdded: d,
+          subject: data['subject'],
+          teacherId: data['id'],
+          assessmentTitle: data['title'],
+          allMCQs: converted,
+          allTextQs: textQs,
+          startTime: start != null ? start : null,
+          endTime: end != null ? end : null,
+          isDeployed: isDep);
     } catch (e) {
       print('err in rafromdb constructor: $e');
-      // TODO
     }
     return null;
   }

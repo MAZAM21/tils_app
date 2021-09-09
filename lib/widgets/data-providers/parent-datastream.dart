@@ -6,7 +6,6 @@ import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/parent-screens/parent-home.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
-
 class ParentDataStream extends StatelessWidget {
   final db = DatabaseService();
   @override
@@ -19,7 +18,10 @@ class ParentDataStream extends StatelessWidget {
     return !isActive
         ? LoadingScreen()
         : StreamProvider<ParentUser>(
-          initialData: null,
+            catchError: (BuildContext context, err) => ParentUser(
+                year: null, section: null, studId: null, studentName: null),
+            initialData: ParentUser(
+                year: null, section: null, studId: null, studentName: null),
             create: (context) => db.streamParentUser(uid),
             builder: (context, _) => ParentHome(),
           );

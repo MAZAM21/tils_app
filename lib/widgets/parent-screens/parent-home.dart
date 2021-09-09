@@ -10,12 +10,14 @@ import 'package:tils_app/widgets/parent-screens/ar-parent-panel.dart';
 import 'package:tils_app/widgets/parent-screens/parent-attendance-grid.dart';
 import 'package:tils_app/widgets/parent-screens/parent-attendance-panel.dart';
 import 'package:tils_app/widgets/parent-screens/parent-classposition-panel.dart';
+import 'package:tils_app/widgets/parent-screens/parent-home-avatar-panel.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import './parent-drawer.dart';
 
-///Unlike teacher homes, each widget here defines its width with the help of mediaquery. 
-/// It is yet to be determined which is the better approach. 
-
+///Unlike teacher homes, each widget here defines its width with the help of mediaquery.
+/// It is yet to be determined which is the better approach.
+//TODO
+/// add notifications
 class ParentHome extends StatefulWidget {
   const ParentHome({Key key}) : super(key: key);
 
@@ -38,68 +40,64 @@ class _ParentHomeState extends State<ParentHome> {
     StudentRank myStud;
 
     bool isActive = false;
-    if (parentData != null) {
-      if (allClasses != null) {
-        marked = ps.getMarkedClasses(allClasses, parentData.attendance);
-      }
-      if (allStudRanks != null && raList != null) {
-        sorted = rs.getStudentScores(allStudRanks, raList);
+
+    // If all lists are null, I need to
+    if (allStudRanks != null &&
+        raList != null &&
+        allClasses != null &&
+        parentData != null) {
+      marked = ps.getMarkedClasses(allClasses, parentData.attendance);
+      sorted = rs.getStudentScores(allStudRanks, raList);
+      if (sorted.isNotEmpty) {
         myStud = rs.getSingleStudentPos(sorted, parentData.studId);
-        compRaList = rs.completedAssessmentsParent(raList, parentData);
-        isActive = true;
+        if (myStud != null) {
+          isActive = true;
+        }
       }
+      compRaList = rs.completedAssessmentsParent(raList, parentData);
     }
+
     return !isActive
         ? LoadingScreen()
         : Scaffold(
+            backgroundColor: Colors.white,
             drawer: ParentDrawer(),
             appBar: AppBar(
+              iconTheme: IconThemeData(color: Colors.white),
               title: Text(
                 'TILS Parent\'s Portal',
-                style: Theme.of(context).textTheme.headline6,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Proxima Nova',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+              backgroundColor: Color(0xffc54134),
             ),
             body: SingleChildScrollView(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text(
-                        '${parentData.studentName}',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 76, 76, 76),
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Proxima Nova',
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Material(
-                        borderRadius: BorderRadius.circular(50),
-                        elevation: 10,
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(parentData.imageUrl),
-                        ),
-                      ),
+                      ParentHomeAvatarPanel(parentData: parentData),
                       SizedBox(
                         height: 10,
                       ),
                       ParentAttendancePanel(parentData),
                       SizedBox(
-                        height: 10,
+                        height: 30,
                       ),
-                      ParentAttendanceGrid(
+                     ParentAttendanceGrid(
                         myClasses: marked,
                         attMap: parentData.attendance,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
+                     
                       ClassPositionPanel(
                         position: '${myStud.position}',
                       ),

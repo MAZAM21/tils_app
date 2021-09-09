@@ -1,10 +1,11 @@
-
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/start-end-time.dart';
+
 ///This is the main RA creation page where you input questions
 class RemoteAssessmentInput extends StatefulWidget {
   static const routeName = '/remote-assessment-input';
@@ -16,12 +17,11 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
   final db = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
-  
+
   bool _isMCQ = true;
   String question;
 
   void initState() {
-  
     Provider.of<RemoteAssessment>(context, listen: false).allMCQs = [];
     Provider.of<RemoteAssessment>(context, listen: false).allTextQs = [];
     super.initState();
@@ -31,14 +31,41 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
     queController.dispose();
     super.dispose();
   }
- 
+
   void _saveAssessment() {
     _formKey.currentState.save();
-    bool isValid= _formKey.currentState.validate();
-    if(Provider.of<RemoteAssessment>(context, listen: false).assessmentTitle!=null || !isValid){
-      db.addAssessmentToCF(Provider.of<RemoteAssessment>(context, listen: false));
+    bool isValid = _formKey.currentState.validate();
+    if (Provider.of<RemoteAssessment>(context, listen: false).validate()) {
+      db.addAssessmentToCF(
+          Provider.of<RemoteAssessment>(context, listen: false));
+      Navigator.pop(context);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Some fields are missing, try again'),
+            );
+          });
     }
-    Navigator.pop(context);
+  }
+
+  void _addStartEndTime(
+    DateTime _start,
+    DateTime _end,
+  ) {
+    setState(() {
+      Provider.of<RemoteAssessment>(context, listen: false).deployTime = _start;
+      Provider.of<RemoteAssessment>(context, listen: false).deadline = _end;
+    });
+  }
+
+  void showDeploySheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return StartEndTime(_addStartEndTime);
+        });
   }
 
   @override
@@ -55,10 +82,13 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Remote Assessment'),
+        title: Text(
+          'Remote Assessment',
+          style: Theme.of(context).appBarTheme.textTheme.caption,
+        ),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Save'),
+          TextButton(
+            child: Text('Save', style: Theme.of(context).textTheme.headline3),
             onPressed: () {
               _saveAssessment();
             },
@@ -185,7 +215,54 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                       height: 10,
                     ),
                     Divider(),
-                    Text('Deploy time'),
+                    Column(
+                      children: <Widget>[
+                        TextButton(
+                          child: Text(
+                            'Add Deploy Time (Optional)',
+                            style: Theme.of(context).textTheme.headline3,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              showDeploySheet();
+                            });
+                          },
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Spacer(),
+                            Container(
+                              child: assessment.deployTime == null
+                                  ? Text(
+                                      'Not Deployed',
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                      textAlign: TextAlign.center,
+                                    )
+                                  : Text(
+                                      '${DateFormat('MMM d - hh:mm a').format(assessment.deployTime)} \n to \n ${DateFormat('MMM d - hh:mm a').format(assessment.deadline)}',
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                      textAlign: TextAlign.center,
+                                    ),
+                            ),
+                            Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    assessment.deployTime = null;
+                                    assessment.deadline = null;
+                                  });
+                                },
+                                icon: Icon(Icons.delete)),
+                            Spacer(),
+                          ],
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Divider(),
                     Container(
                       decoration: BoxDecoration(

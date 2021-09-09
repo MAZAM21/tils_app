@@ -24,31 +24,32 @@ class ParentUser with ChangeNotifier {
     this.completedAssessments,
   });
 
-  factory ParentUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  factory ParentUser.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final name = data['name'] ?? '';
       final year = data['year'] ?? '';
-      final section = data['section'] ?? '';
-      final Map att = {...data['attendance']} ?? {};
+      final section = data['section'];
+      final Map att = {...data['attendance'] ?? {}};
       final url = data['profile-pic-url'];
       Map tqm = {};
       Map mcqm = {};
       List compAss = [];
 
-      if (data['Assessment-textqMarks'] != null) {
-        tqm = {...data['Assessment-textqMarks']} ?? {};
+      if (data.containsKey('Assessment-textqMarks')) {
+        tqm = {...data['Assessment-textqMarks'] ?? {}};
       } else {
         tqm = {'none': 0};
       }
 
-      if (data['Assessment-MCQMarks'] != null) {
-        mcqm = {...data['Assessment-MCQMarks']} ?? {};
+      if (data.containsKey('Assessment-MCQMarks')) {
+        mcqm = {...data['Assessment-MCQMarks'] ?? {}};
       } else {
         mcqm = {'none': 0};
       }
-      if (data['completed-assessments'] != null) {
-        compAss = [...data['completed-assessments']] ?? [];
+      if (data.containsKey('completed-assessments')) {
+        compAss = [...data['completed-assessments'] ?? []];
       } else {
         compAss = [];
       }
