@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:tils_app/models/meeting.dart';
 
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
@@ -54,10 +55,11 @@ class _CalendarAppState extends State<CalendarApp> {
 
   bool myClass = true;
 
-  void calendarTapped(CalendarTapDetails calendarTapDetails) {
+  void calendarTapped(
+      CalendarTapDetails calendarTapDetails, List<StudentRank> students) {
     dynamic appointments = calendarTapDetails.appointments;
     if (appointments != null) {
-      showElementDetails(appointments[0]);
+      showElementDetails(appointments[0], students);
     }
     if (_controller.view == CalendarView.month &&
         calendarTapDetails.targetElement == CalendarElement.calendarCell) {
@@ -79,11 +81,13 @@ class _CalendarAppState extends State<CalendarApp> {
     Navigator.pushNamed(context, EditTTForm.routeName, arguments: tappedClass);
   }
 
-  void showElementDetails(Meeting selected) {
+  void showElementDetails(Meeting selected, List<StudentRank> students) {
     showModalBottomSheet(
       backgroundColor: selected.background,
       context: context,
       builder: (BuildContext context) {
+        List<StudentRank> ofSub =
+            ts.getStudentsOfSub(students, selected.eventName);
         return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +115,7 @@ class _CalendarAppState extends State<CalendarApp> {
                   backgroundColor: MaterialStateProperty.all(Colors.red),
                 ),
                 onPressed: () {
-                  db.deleteClass(selected.docId);
+                  db.deleteClass(selected.docId, ofSub);
                   Navigator.pop(context);
                 },
               )
@@ -126,6 +130,7 @@ class _CalendarAppState extends State<CalendarApp> {
   Widget build(BuildContext context) {
     final meetingsData = Provider.of<List<Meeting>>(context);
     final teacherData = Provider.of<TeacherUser>(context);
+    final students = Provider.of<List<StudentRank>>(context);
     final myClasses = ts.getMyClasses(meetingsData, teacherData.subjects);
     var source = myClasses;
     return Scaffold(
@@ -210,10 +215,10 @@ class _CalendarAppState extends State<CalendarApp> {
         onTap: (CalendarTapDetails details) {
           DateTime date = details.date;
           print(date.toString());
-          calendarTapped(details);
+          calendarTapped(details, students);
         },
         initialDisplayDate: _jumpToTime,
-        maxDate: DateTime.now().add(Duration(days: 7)),
+        //maxDate: DateTime.now().add(Duration(days: 7)),
         allowViewNavigation: false,
       ),
     );

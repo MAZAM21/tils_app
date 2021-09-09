@@ -7,7 +7,6 @@ class TimerText extends StatelessWidget {
   const TimerText({
     Key key,
     @required this.inSession,
-    
     @required this.dateString,
     @required this.timeUp,
     @required this.timeClose,
@@ -17,7 +16,7 @@ class TimerText extends StatelessWidget {
   }) : super(key: key);
 
   final bool inSession;
-  
+
   final String dateString;
   final bool timeUp;
   final bool timeClose;
@@ -49,10 +48,10 @@ class TimerText extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Proxima Nova',
                       fontWeight: FontWeight.w600,
-                      fontSize: 22,
+                      fontSize: 14,
                       letterSpacing: 1,
                       fontStyle: FontStyle.normal,
-                      color: Color.fromARGB(255, 76, 76, 76),
+                      color: Color(0xff5F686F),
                     ),
                   ),
                 if (meetingId != 'no class')
@@ -81,30 +80,33 @@ class TimerText extends StatelessWidget {
                         ),
               ],
             ),
-            inSession?Text(
-              '$toEndString',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontFamily: 'Proxima Nova',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                letterSpacing: 1,
-                fontStyle: FontStyle.normal,
-                color: Color(0xff2a353f),
-              ),
-            ) :
-            Text(
-              '$dateString',
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontFamily: 'Proxima Nova',
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                letterSpacing: 1,
-                fontStyle: FontStyle.normal,
-                color: Color(0xff2a353f),
-              ),
-            ),
+            inSession && meetingId != 'no class'
+                ? Text(
+                    '$toEndString',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontFamily: 'Proxima Nova',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      letterSpacing: 1,
+                      fontStyle: FontStyle.normal,
+                      color: Color(0xff2a353f),
+                    ),
+                  )
+                : !inSession && meetingId != 'no class'
+                    ? Text(
+                        '$dateString',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          letterSpacing: 1,
+                          fontStyle: FontStyle.normal,
+                          color: Color(0xff2a353f),
+                        ),
+                      )
+                    : Text(''),
           ],
         ),
       ),

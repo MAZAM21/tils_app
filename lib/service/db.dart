@@ -700,15 +700,30 @@ class DatabaseService with ChangeNotifier {
     return cd;
   }
 
-  Future<void> deleteClass(String id) async {
+  Future<void> deleteClass(String id, List<StudentRank> students) async {
     final classRef = _db.collection('classes');
     final attRef = _db.collection('attendance');
     try {
       attRef.doc(id).delete();
-      return await classRef.doc(id).delete();
+      return await classRef.doc(id).delete().then(
+            (value) => Future.forEach(
+              students,
+              (StudentRank stud) => deleteAttendanceRecordFromStud(stud.id, id),
+            ),
+          );
     } catch (err) {
       print('error in deleteClass: $err');
     }
+  }
+
+  Future<void> deleteAttendanceRecordFromStud(
+      String studID, String attendanceid) async {
+    final DocumentReference studRef = _db.collection('students').doc(studID);
+    try {
+      return await studRef.set({
+        'attendance': {'$attendanceid': FieldValue.delete()}
+      }, SetOptions(merge: true));
+    } catch (e) {}
   }
 
   Future<void> deleteAssessment(String id) async {
