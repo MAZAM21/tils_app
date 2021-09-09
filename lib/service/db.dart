@@ -286,19 +286,79 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  ///new attendance addition
+  Future<void> addAttendanceRecord(
+    AttendanceInput attInput,
+    List<StudentRank> students,
+    bool isEdit, [
+    String docId,
+  ]) async {
+    ///In this new approach, attendance stutas will be stored as a map.
+    ///If attendance has not been previously marked, new document will be created
+    ///else the old document will be updated
+    ///the is edit will be decided on the attendance page.
+
+    CollectionReference ref = _db.collection('attendance');
+    if (!isEdit) {
+      return await ref.add({
+        'attStat': attInput.attendanceStatus,
+        'classId': attInput.classID,
+        'subject': attInput.subject,
+        'timeCreated': DateTime.now(),
+      }).then(
+        (value) => Future.forEach(
+          students,
+          (StudentRank stud) => addAttToStudent(
+            stud,
+            attInput.classID,
+            attInput.attendanceStatus['${stud.id}'],
+          ),
+        ),
+      );
+    } else if (isEdit && docId != null) {
+      return await ref.doc(docId).set({
+        'attStat': attInput.attendanceStatus,
+        'timeUpdated': DateTime.now(),
+      }, SetOptions(merge: true)).then(
+        (value) => Future.forEach(
+          students,
+          (StudentRank stud) => addAttToStudent(
+            stud,
+            attInput.classID,
+            attInput.attendanceStatus['${stud.id}'],
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> addAttToStudent(
+      StudentRank student, String clsId, String stat) async {
+    CollectionReference studentRef = _db.collection('students');
+    return await studentRef.doc(student.id).set(
+      {
+        'attendance': {'$clsId': stat}
+      },
+      SetOptions(merge: true),
+    );
+  }
+
   //adds attendance status to database in attendance and individual student document
   Future<void> addAttToCF(String name, int status, String id) async {
     CollectionReference ref = _db.collection('attendance');
     CollectionReference studentRef = _db.collection('students');
     try {
+      //gets doc of student
       QuerySnapshot<Map<String, dynamic>> q =
           await studentRef.where('name', isEqualTo: '$name').get();
       DocumentSnapshot stDoc = q.docs.firstWhere((doc) {
         return doc['name'] == '$name';
       });
+
       studentRef.doc(stDoc.id).set({
         'attendance': {'$id': status}
       }, SetOptions(merge: true));
+
       return ref.doc(id).set({'$name': status}, SetOptions(merge: true));
     } catch (err) {
       print('error in addAtttoCF $err');
@@ -572,6 +632,7 @@ class DatabaseService with ChangeNotifier {
     final _classCollection = _db.collection('classes');
     String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
     String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
+    String notification = DateFormat("EEE, dd-MM hh:mm a").format(start);
 
     try {
       return await _classCollection.add({
@@ -580,6 +641,7 @@ class DatabaseService with ChangeNotifier {
         'endTime': endString,
         'topic': topic ?? '',
         'section': section,
+        'notification': notification,
       });
     } catch (err) {
       print('error in adding to database: $err');

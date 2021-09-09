@@ -7,6 +7,7 @@ import 'package:tils_app/models/subject.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
 
@@ -84,7 +85,7 @@ class AttendancePage extends StatelessWidget {
                           // ),
                           onTap: () {
                             Navigator.of(context).pushNamed(
-                              StudentProvider.routeName,
+                              AttendanceMarkerBuilder.routeName,
                               arguments: myClasses[i],
                             );
                           },

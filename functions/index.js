@@ -20,7 +20,7 @@ exports.myFunction = functions.firestore
            {
              title: "New Class Scheduled",
              body: snapshot.data().subjectName.concat(" at ")
-                 .concat(snapshot.data().startTime),
+                 .concat(snapshot.data().notification),
              clickAction: "FLUTTER_NOTIFICATION_CLICK",
            },
           });
