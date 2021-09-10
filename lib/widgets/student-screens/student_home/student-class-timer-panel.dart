@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';

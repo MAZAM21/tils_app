@@ -1,7 +1,7 @@
 
 import 'package:tils_app/models/parent-user-data.dart';
 
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 
 class ParentService {
   int attendancePercentage(ParentUser pd) {

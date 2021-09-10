@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class TeacherUser with ChangeNotifier{
+class TeacherUser with ChangeNotifier {
   final String name;
   final String year;
   final List<String> subjects;
   final String uid;
   final bool isAdmin;
   final String docId;
+  final Map markedTexQs;
   TeacherUser({
     @required this.name,
     @required this.year,
@@ -15,9 +16,11 @@ class TeacherUser with ChangeNotifier{
     @required this.isAdmin,
     @required this.subjects,
     @required this.docId,
+    this.markedTexQs,
   });
 
-  factory TeacherUser.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  factory TeacherUser.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
       final name = data['name'];
@@ -25,7 +28,12 @@ class TeacherUser with ChangeNotifier{
       final uid = data['uid'];
       final isAdmin = data['isAdmin'];
       final Map subs = {...data['subjects']};
+      Map mtq = {};
       //print(doc.id);
+
+      if (data.containsKey('marked-textQs')) {
+        mtq = {...data['marked-textQs']};
+      }
       List<String> tsubs = [];
       subs.forEach((k, v) {
         if (v == true) {
@@ -39,6 +47,7 @@ class TeacherUser with ChangeNotifier{
         subjects: tsubs,
         isAdmin: isAdmin,
         docId: doc.id,
+        markedTexQs: mtq,
       );
     } catch (err) {
       print('error in teacher user model: $err');

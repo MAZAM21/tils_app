@@ -29,16 +29,23 @@ class SubjectClass with ChangeNotifier {
   final String subjectName;
   final String id;
   final DateTime startTime;
+  final DateTime endTime;
   final String section;
   final String topic;
 
-  //not implemented
-  Map<String, dynamic> attendanceStatus = {};
+  /// Now Implemented
+  /// attendance status is a map of student ids as keys
+  /// and their attendance status as values
+  /// 1 for present
+  /// 2 for late
+  /// 3 for absent
+  Map attendanceStatus = {};
 
   SubjectClass({
     @required this.id,
     @required this.subjectName,
     @required this.startTime,
+    @required this.endTime,
     @required this.section,
     this.attendanceStatus,
     this.topic,
@@ -46,13 +53,22 @@ class SubjectClass with ChangeNotifier {
 
   factory SubjectClass.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data();
+    String name = data['subjectName'];
+    DateTime start = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']);
+    DateTime end = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']);
+    Map attStat ={};
+    if(data.containsKey('attStat')){
+      attStat= {...data['attStat']};
+    }
 
     return SubjectClass(
       id: doc.id,
-      subjectName: data['subjectName'],
-      startTime: DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
+      subjectName: name,
+      startTime: start,
+      endTime: end,
       section: data['section'],
       topic: data['topic'] ?? 'Not Added',
+      attendanceStatus: attStat,
     );
   }
 

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/service/parent-service.dart';
 import 'package:tils_app/service/ranking-service.dart';
 import 'package:tils_app/widgets/parent-screens/ar-parent-panel.dart';
@@ -47,7 +47,7 @@ class _ParentHomeState extends State<ParentHome> {
         allClasses != null &&
         parentData != null) {
       marked = ps.getMarkedClasses(allClasses, parentData.attendance);
-      sorted = rs.getStudentScores(allStudRanks, raList);
+      //sorted = rs.getStudentScores(allStudRanks, raList);
       if (sorted.isNotEmpty) {
         myStud = rs.getSingleStudentPos(sorted, parentData.studId);
         if (myStud != null) {

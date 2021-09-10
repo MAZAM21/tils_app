@@ -8,6 +8,7 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-student-scripts.dart';
 
+///Main mark textq screen
 class AllTextQs extends StatefulWidget {
   @override
   _AllTextQsState createState() => _AllTextQsState();
@@ -38,7 +39,7 @@ class _AllTextQsState extends State<AllTextQs> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.87,
+                  width: MediaQuery.of(context).size.width * 0.915,
                   child: Column(
                     children: <Widget>[
                       Text(
@@ -57,52 +58,45 @@ class _AllTextQsState extends State<AllTextQs> {
                         itemCount: textAs.length,
                         itemBuilder: (context, i) {
                           return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                height: 100,
-                                child: ListTile(
-                                  title: Text(
-                                    '${textAs[i].assTitle}',
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 250, 235, 215),
-                                        fontFamily: 'Proxima Nova',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  subtitle: Text(
-                                    '${textAs[i].subject}',
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 250, 235, 215),
-                                        fontFamily: 'Proxima Nova',
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  trailing: textAs[i].marked
-                                      ? Icon(
-                                          Icons.check,
-                                          color: Color.fromARGB(
-                                              255, 250, 235, 215),
-                                        )
-                                      : Icon(
-                                          Icons.pending_actions,
-                                          color: Color.fromARGB(
-                                              255, 250, 235, 215),
-                                        ),
-                                  tileColor: ts.getColor(textAs[i].subject),
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                StudentAnswerScripts(
-                                                    textAs[i].assId,
-                                                    textAs[i].assTitle)));
-                                  },
-                                ),
+                            padding: const EdgeInsets.symmetric(vertical: 3.5),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              title: Text(
+                                '${textAs[i].assTitle}',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 250, 235, 215),
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500),
                               ),
+                              subtitle: Text(
+                                '${textAs[i].subject}',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 250, 235, 215),
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              trailing: ts.getTextQCheckedStat(
+                                      tData, textAs[i].assId)
+                                  ? null
+                                  : Icon(
+                                      Icons.pending_actions,
+                                      color: Color.fromARGB(255, 250, 235, 215),
+                                    ),
+                              tileColor: ts.getColor(textAs[i].subject),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => StudentAnswerScripts(
+                                        textAs[i].assId,
+                                        textAs[i].assTitle,
+                                        textAs[i].subject,
+                                        tData),
+                                  ),
+                                );
+                              },
                             ),
                           );
                         },

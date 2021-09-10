@@ -6,19 +6,46 @@ import 'package:tils_app/models/student_rank.dart';
 import '../models/teacher-user-data.dart';
 import '../models/announcement.dart';
 import '../models/attendance-chart-values.dart';
-import '../models/attendance.dart';
+
 import '../models/meeting.dart';
-import '../models/subject.dart';
+import '../models/subject-class.dart';
 import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
+  bool getStudentScriptMarkedStat(
+      String studentId, String assid, TeacherUser tdata) {
+    Map mtq = tdata.markedTexQs;
+
+    if (mtq['$assid'] != null) {
+      if (mtq['$assid'].contains('$studentId')) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  /// for all tq icons. if checked a single student, return true,
+  /// else false
+  bool getTextQCheckedStat(TeacherUser tdata, String assid) {
+    Map mtq = tdata.markedTexQs;
+    if (mtq.containsKey('$assid')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   ///Get number of students registered with the subject
   String getAttendanceIndicator(List<StudentRank> studList, SubjectClass cls) {
     String clsId = cls.id;
     int marked = 0;
     int total = 0;
     studList.forEach((stud) {
-      if (stud.subjects.contains(cls.subjectName)) {
+      if (stud.subjects.contains(cls.subjectName) &&
+          stud.section == cls.section) {
         total++;
       }
       if (stud.attendance['$clsId'] == 1 || stud.attendance['$clsId'] == 2) {
@@ -77,7 +104,6 @@ class TeacherService with ChangeNotifier {
     List<RAfromDB> topthree;
     if (myRA.length > 3) {
       topthree = myRA.sublist(0, 3);
-
     } else {
       topthree = myRA;
     }
@@ -104,6 +130,18 @@ class TeacherService with ChangeNotifier {
     List<StudentRank> regStuds = [];
     students.forEach((stud) {
       if (stud.subjects.contains(subject)) {
+        regStuds.add(stud);
+      }
+    });
+    regStuds.sort((a, b) => a.name.compareTo(b.name));
+    return regStuds;
+  }
+
+  List<StudentRank> getStudentsOfSubandSection(
+      List<StudentRank> students, String subject, String section) {
+    List<StudentRank> regStuds = [];
+    students.forEach((stud) {
+      if (stud.subjects.contains(subject) && stud.section == section) {
         regStuds.add(stud);
       }
     });
@@ -151,6 +189,7 @@ class TeacherService with ChangeNotifier {
       orElse: () => SubjectClass(
         id: 'no class',
         subjectName: 'no class',
+        endTime: null,
         startTime: null,
         section: null,
       ),
@@ -184,23 +223,23 @@ class TeacherService with ChangeNotifier {
     return orderSubjectClass(myClasses);
   }
 
-  List<AttChartVals> getChartVals(
-    List<Meeting> meetings,
-    List<Attendance> att,
-  ) {
-    final now = DateTime.now();
-    List<AttChartVals> chartVals = [];
-    Attendance attSelected;
-    meetings.forEach((m) {
-      if (m.from.isBefore(now)) {
-        attSelected = att.firstWhere((a) {
-          return a.id == m.docId;
-        }, orElse: () => null);
-        chartVals.add(AttChartVals.fromMeetings(m, attSelected));
-      }
-    });
-    return chartVals;
-  }
+  // List<AttChartVals> getChartVals(
+  //   List<Meeting> meetings,
+  //   List<Attendance> att,
+  // ) {
+  //   final now = DateTime.now();
+  //   List<AttChartVals> chartVals = [];
+  //   Attendance attSelected;
+  //   meetings.forEach((m) {
+  //     if (m.from.isBefore(now)) {
+  //       attSelected = att.firstWhere((a) {
+  //         return a.id == m.docId;
+  //       }, orElse: () => null);
+  //       chartVals.add(AttChartVals.fromMeetings(m, attSelected));
+  //     }
+  //   });
+  //   return chartVals;
+  // }
 
   Map randomiseChoices(Map ansChoices) {
     List keys = ansChoices.keys.toList();
@@ -309,21 +348,25 @@ class TeacherService with ChangeNotifier {
     });
 
     /// the class id of the class after the next one is extracted
-    for (int i = 0; i < myClasses.length; i++) {
-      x = i + 1;
-      y = i - 1;
-      if (myClasses[i].startTime.isAfter(DateTime.now()) &&
-          myClasses[x].startTime.isBefore(DateTime.now())) {
-        clsAfterNext = y;
+    if (myClasses.length > 3) {
+      for (int i = 0; i < myClasses.length; i++) {
+        x = i + 1;
+        y = i - 1;
+        if (myClasses[i].startTime.isAfter(DateTime.now()) &&
+            myClasses[x].startTime.isBefore(DateTime.now())) {
+          clsAfterNext = y;
+        }
       }
-    }
 
-    /// display classes are the next up and the rest (hopefully)
-    myClasses.forEach((cls) {
-      if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
-        displayClasses.add(cls);
-      }
-    });
+      /// display classes are the next up and the rest (hopefully)
+      myClasses.forEach((cls) {
+        if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
+          displayClasses.add(cls);
+        }
+      });
+    } else {
+      displayClasses = allClasses;
+    }
 
     displayClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
     return displayClasses;

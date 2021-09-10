@@ -8,7 +8,7 @@ class MarkIndividualQA extends StatefulWidget {
   final question;
   final answer;
   final int mark;
-  final void Function(int m) aggMarks;
+  final void Function(String q, int m) aggMarks;
   MarkIndividualQA(
       this.stuId, this.assid, this.question, this.answer, this.mark, this.aggMarks);
   @override
@@ -96,7 +96,7 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
                       setState(() {
                         _isInit = false;
                       });
-                      widget.aggMarks(_initval.toInt());
+                      widget.aggMarks(widget.question, _initval.toInt());
                       db.addMarksToTextAns(
                         '${widget.question}',
                         _initval.toInt(),

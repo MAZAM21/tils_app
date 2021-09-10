@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tils_app/models/student_rank.dart';
 
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
@@ -50,7 +50,7 @@ class AttendancePage extends StatelessWidget {
                           tileColor: Colors.white,
                           title: myClasses[i].topic == ''
                               ? Text(
-                                  '${myClasses[i].subjectName}',
+                                  '${myClasses[i].subjectName} ${myClasses[i].section}',
                                   style: TextStyle(
                                     fontFamily: 'Proxima Nova',
                                     fontSize: 18,
@@ -59,7 +59,7 @@ class AttendancePage extends StatelessWidget {
                                   ),
                                 )
                               : Text(
-                                  '${myClasses[i].subjectName} (${myClasses[i].topic})',
+                                  '${myClasses[i].subjectName} ${myClasses[i].section} (${myClasses[i].topic})',
                                   style: TextStyle(
                                     fontFamily: 'Proxima Nova',
                                     fontSize: 18,

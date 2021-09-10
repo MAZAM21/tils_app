@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/assignment-marks.dart';
-import 'package:tils_app/models/attendance.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
@@ -13,6 +12,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcem
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
@@ -21,7 +21,6 @@ import 'package:tils_app/widgets/screens/teacher-screens/records/class_record_de
 import 'package:tils_app/widgets/screens/teacher-screens/records/class_records.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/records/student_records.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/rt-input.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
@@ -57,10 +56,6 @@ class RoutesAndTheme extends StatelessWidget {
         ),
         StreamProvider<List<SubjectClass>>(
           create: (ctx) => db.streamClasses(),
-          initialData: [],
-        ),
-        StreamProvider<List<Attendance>>(
-          create: (ctx) => db.streamAttendance(),
           initialData: [],
         ),
         StreamProvider<User>(
@@ -129,7 +124,7 @@ class RoutesAndTheme extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   fontSize: 14),
               headline3: TextStyle(
-                color:Color(0xffC54134),
+                color: Color(0xffC54134),
                 fontFamily: 'Proxima Nova',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -168,6 +163,7 @@ class RoutesAndTheme extends StatelessWidget {
           RankingDisplay.routeName: (context) => RankingDisplay(),
           AssignmentMain.routeName: (context) => AssignmentMain(),
           AddAssignment.routeName: (context) => AddAssignment(),
+          AttendanceMarkerBuilder.routeName: (context) => AttendanceMarkerBuilder(),
         },
       ),
     );

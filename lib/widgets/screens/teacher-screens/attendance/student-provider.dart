@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/student.dart';
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/service/db.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
@@ -20,7 +20,7 @@ class StudentProvider extends StatelessWidget {
       return FutureProvider<List<Student>>(
         initialData: [],
         create: (ctx) => db.getStudentsBySub(subName),
-        child: AttendanceMarkerBuilder(subId),
+        child: AttendanceMarkerBuilder(),
       );
     } on Exception catch (e) {
       print('error in studentprovider attendance: $e');

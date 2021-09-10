@@ -21,7 +21,7 @@ class RankingDisplay extends StatelessWidget {
 
       if (studsFromdb != null && assessments != null) {
         isActive = true;
-        students = rs.getStudentScores(studsFromdb, assessments);
+       // students = rs.getStudentScores(studsFromdb, assessments);
       }
     } on Exception catch (e) {
       print('error in ranking display students: $e');

@@ -18,7 +18,7 @@ import '../models/student-user-data.dart';
 import '../models/student.dart';
 import '../models/teacher-user-data.dart';
 import '../models/meeting.dart';
-import '../models/subject.dart';
+import '../models/subject-class.dart';
 import '../models/assessment-result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -286,54 +286,60 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  Future<void> addClassToCF(
+    SubjectName name,
+    DateTime start,
+    DateTime end,
+    String section, [
+    String topic,
+  ]) async {
+    final _classCollection = _db.collection('classes');
+    String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
+    String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
+    String notification = DateFormat("EEE, dd-MM hh:mm a").format(start);
+
+    try {
+      return await _classCollection.add({
+        'subjectName': enToString(name),
+        'startTime': startString,
+        'endTime': endString,
+        'topic': topic ?? '',
+        'section': section,
+        'notification': notification,
+      });
+    } catch (err) {
+      print('error in adding to database: $err');
+    }
+  }
+
   ///new attendance addition
   Future<void> addAttendanceRecord(
     AttendanceInput attInput,
     List<StudentRank> students,
-    bool isEdit, [
-    String docId,
-  ]) async {
-    ///In this new approach, attendance stutas will be stored as a map.
-    ///If attendance has not been previously marked, new document will be created
-    ///else the old document will be updated
-    ///the is edit will be decided on the attendance page.
+  ) async {
+    ///In this new approach, attendance stutas will be stored as a map in classes document
+    ///attendance collection has been killed
+    ///attendance status is now part of SubjectClass
 
-    CollectionReference ref = _db.collection('attendance');
-    if (!isEdit) {
-      return await ref.add({
-        'attStat': attInput.attendanceStatus,
-        'classId': attInput.classID,
-        'subject': attInput.subject,
-        'timeCreated': DateTime.now(),
-      }).then(
-        (value) => Future.forEach(
-          students,
-          (StudentRank stud) => addAttToStudent(
-            stud,
-            attInput.classID,
-            attInput.attendanceStatus['${stud.id}'],
-          ),
+    CollectionReference ref = _db.collection('classes');
+
+    return await ref.doc(attInput.classID).set({
+      'attStat': attInput.attendanceStatus,
+      'timeUpdated': DateTime.now(),
+    }, SetOptions(merge: true)).then(
+      (value) => Future.forEach(
+        students,
+        (StudentRank stud) => addAttToStudent(
+          stud,
+          attInput.classID,
+          attInput.attendanceStatus['${stud.id}'],
         ),
-      );
-    } else if (isEdit && docId != null) {
-      return await ref.doc(docId).set({
-        'attStat': attInput.attendanceStatus,
-        'timeUpdated': DateTime.now(),
-      }, SetOptions(merge: true)).then(
-        (value) => Future.forEach(
-          students,
-          (StudentRank stud) => addAttToStudent(
-            stud,
-            attInput.classID,
-            attInput.attendanceStatus['${stud.id}'],
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 
   Future<void> addAttToStudent(
-      StudentRank student, String clsId, String stat) async {
+      StudentRank student, String clsId, int stat) async {
     CollectionReference studentRef = _db.collection('students');
     return await studentRef.doc(student.id).set(
       {
@@ -537,7 +543,7 @@ class DatabaseService with ChangeNotifier {
     try {
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
-        'Assessment-MCQMarks': {
+        '$subject-MCQMarks': {
           assid: stat == 'correct'
               ? FieldValue.increment(1)
               : FieldValue.increment(0),
@@ -562,14 +568,27 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addTotalMarkToStudent(int mark, String uid, String assid) async {
+  ///adds marks to student and teacher
+  Future<void> addTotalMarkToStudent(int mark, String uid, String assid,
+      String subject, String teacherId) async {
     DocumentReference stuRef = _db.collection('students').doc('$uid');
+    DocumentReference teachRef = _db.collection('teachers').doc('$teacherId');
     await stuRef.set({
-      'Assessment-textqMarks': {'$assid': mark}
+      '$subject-textqMarks': {'$assid': mark}
     }, SetOptions(merge: true));
+    return await teachRef.set(
+        {
+          'marked-textQs': {
+            '$assid': FieldValue.arrayUnion(['$uid']),
+          }
+        },
+        SetOptions(
+          merge: true,
+        ));
   }
 
-  ///add the marks awarded by teacher to student's answer to db
+  ///add the marks awarded by teacher to student's answer to assessment-result under
+  ///student-id collection
   Future<void> addMarksToTextAns(
       String q, int mark, String assid, String uid) async {
     DocumentReference ref = _db
@@ -622,31 +641,6 @@ class DatabaseService with ChangeNotifier {
   }
 
   //adds class data from edit tt to cf
-  Future<void> addClassToCF(
-    SubjectName name,
-    DateTime start,
-    DateTime end,
-    String section, [
-    String topic,
-  ]) async {
-    final _classCollection = _db.collection('classes');
-    String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
-    String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
-    String notification = DateFormat("EEE, dd-MM hh:mm a").format(start);
-
-    try {
-      return await _classCollection.add({
-        'subjectName': enToString(name),
-        'startTime': startString,
-        'endTime': endString,
-        'topic': topic ?? '',
-        'section': section,
-        'notification': notification,
-      });
-    } catch (err) {
-      print('error in adding to database: $err');
-    }
-  }
 
   Future<void> saveStudent(
     String email,

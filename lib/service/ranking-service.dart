@@ -15,27 +15,27 @@ class RankingService {
   ///this function should branch into to others
   ///one for text qs and the other for mcqs
   ///each function should return an integer which is the score. make that a double.
-  List<StudentRank> getStudentScores(
-    List<StudentRank> studlist,
-    List<RAfromDB> ralist,
-  ) {
-    try {
-      List<StudentRank> sortedStuds = [];
-      studlist.forEach((stud) {
-        double tqscore = _studentTQScore(stud, ralist) ?? 0;
-        double mcqscore = _mcqScore(stud) ?? 0;
-        stud.score = tqscore + mcqscore;
-      });
-      studlist.sort((a, b) => a.score.compareTo(b.score));
-      sortedStuds = studlist.reversed.toList();
-      List<StudentRank> postionsAdded = _studPositions(sortedStuds);
+  // List<StudentRank> getStudentScores(
+  //   List<StudentRank> studlist,
+  //   List<RAfromDB> ralist,
+  // ) {
+  //   try {
+  //     List<StudentRank> sortedStuds = [];
+  //     studlist.forEach((stud) {
+  //       double tqscore = _studentTQScore(stud, ralist) ?? 0;
+  //       double mcqscore = _mcqScore(stud) ?? 0;
+  //       stud.score = tqscore + mcqscore;
+  //     });
+  //     studlist.sort((a, b) => a.score.compareTo(b.score));
+  //     sortedStuds = studlist.reversed.toList();
+  //     List<StudentRank> postionsAdded = _studPositions(sortedStuds);
 
-      return postionsAdded;
-    } on Exception catch (e) {
-      print('error in getStudentScore ranking service: $e');
-    }
-    return null;
-  }
+  //     return postionsAdded;
+  //   } on Exception catch (e) {
+  //     print('error in getStudentScore ranking service: $e');
+  //   }
+  //   return null;
+  // }
 
   List<AssessmentResult> completedAssessmentsParent(
     List<RAfromDB> raList,
@@ -110,31 +110,31 @@ class RankingService {
   /// if two students have the same score, they will be given the lowest position of the two e.g:
   /// if 4th and 5th have same score, both will be 5th
   /// the function recieves an already sorted list
-  List<StudentRank> _studPositions(List<StudentRank> studList) {
-    try {
-      for (var i = 0; i < studList.length; i++) {
-        //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
+  // List<StudentRank> _studPositions(List<StudentRank> studList) {
+  //   try {
+  //     for (var i = 0; i < studList.length; i++) {
+  //       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
-        studList[i].position = i + 1;
-        double s = studList[i].score;
+  //       studList[i].position = i + 1;
+  //       double s = studList[i].score;
 
-        //to account for same scores we will iterate through the studlist to see where are the other same scores
-        //we will only go bellow the current positon as all studs are already sorted
-        //once we find same score we just set it to x+1
+  //       //to account for same scores we will iterate through the studlist to see where are the other same scores
+  //       //we will only go bellow the current positon as all studs are already sorted
+  //       //once we find same score we just set it to x+1
 
-        for (var x = i + 1; x < studList.length; x++) {
-          if (studList[x].score == s) {
-            studList[i].position = x + 1;
-          }
-        }
-      }
+  //       for (var x = i + 1; x < studList.length; x++) {
+  //         if (studList[x].score == s) {
+  //           studList[i].position = x + 1;
+  //         }
+  //       }
+  //     }
 
-      return studList;
-    } on Exception catch (e) {
-      print('error in _studpositn ranking service: $e');
-    }
-    return null;
-  }
+  //     return studList;
+  //   } on Exception catch (e) {
+  //     print('error in _studpositn ranking service: $e');
+  //   }
+  //   return null;
+  // }
 
   //goes through the list of all completed assessments.
   //for each assement checks number of text qs and calculates percentage attained per assessment and adds to tqscore

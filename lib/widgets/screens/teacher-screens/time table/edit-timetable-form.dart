@@ -4,7 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 // import 'package:provider/provider.dart';
 import 'package:tils_app/models/meeting.dart';
 
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/service/db.dart';
 // import './time_table.dart';
 

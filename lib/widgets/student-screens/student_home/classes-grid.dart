@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 
 class MyClassesGrid extends StatelessWidget {
   const MyClassesGrid({

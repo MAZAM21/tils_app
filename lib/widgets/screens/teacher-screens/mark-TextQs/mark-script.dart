@@ -9,22 +9,31 @@ import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-indivi
 class MarkScript extends StatefulWidget {
   final StudentTextAns ans;
   final String assid;
-  MarkScript(this.ans, this.assid);
+  final String subject;
+  final String teacherId;
+  MarkScript(
+    this.ans,
+    this.assid,
+    this.subject,
+    this.teacherId,
+  );
   @override
   _MarkScriptState createState() => _MarkScriptState();
 }
 
 class _MarkScriptState extends State<MarkScript> {
   double initval = 0;
-  int aggMarks = 0;
+  Map<String, int> aggMarks = {};
   final ts = TeacherService();
   final db = DatabaseService();
-
+  int totalMarks = 0;
   void aggregateAllMarks(
+    String q,
     int mark,
   ) {
-    aggMarks += mark;
-    print(aggMarks);
+    aggMarks.addAll({q: mark});
+    totalMarks = aggMarks.values.fold(0, (t, a) => t + a);
+    print(totalMarks);
   }
 
   Widget buildQA(
@@ -106,9 +115,11 @@ class _MarkScriptState extends State<MarkScript> {
     print(markList);
     return Scaffold(
       appBar: AppBar(),
-      floatingActionButton: FloatingActionButton(child: Icon(Icons.save_outlined),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.save_outlined),
         onPressed: () {
-          db.addTotalMarkToStudent(aggMarks, sta.studentId, widget.assid);
+          db.addTotalMarkToStudent(
+              totalMarks, sta.studentId, widget.assid, widget.subject, widget.teacherId);
           Navigator.pop(context);
         },
       ),

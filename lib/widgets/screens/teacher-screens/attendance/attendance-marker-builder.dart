@@ -4,15 +4,17 @@ import 'package:tils_app/models/attendance.dart';
 import 'package:provider/provider.dart';
 
 import 'package:tils_app/models/student.dart';
+import 'package:tils_app/models/student_rank.dart';
+import 'package:tils_app/models/subject-class.dart';
 
 import 'package:tils_app/service/db.dart';
+import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 class AttendanceMarkerBuilder extends StatefulWidget {
   static const routeName = '/marker-builder';
   // final List<Student> allStuds;
-  final String classId;
-  AttendanceMarkerBuilder(this.classId);
+
   @override
   _AttendanceMarkerBuilderState createState() =>
       _AttendanceMarkerBuilderState();
@@ -20,11 +22,130 @@ class AttendanceMarkerBuilder extends StatefulWidget {
 
 class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
   final db = DatabaseService();
-  Map tileColor = {};
-  Map<String, String> _attStat = {};
+  final ts = TeacherService();
+  var attInput = AttendanceInput();
+  @override
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  void didChangeDependencies() {
+    var subClass = ModalRoute.of(context).settings.arguments as SubjectClass;
+
+    if (subClass.attStat.isNotEmpty) {
+      attInput.attendanceStatus = {...subClass.attStat};
+    } else {
+      attInput.attendanceStatus = {};
+    }
+    super.didChangeDependencies();
+  }
+
+  void addAttStat(String studId, int stat) {
+    attInput.attendanceStatus.addAll({studId: stat});
+  }
+
+  Color statusColor(int status) {
+    switch (status) {
+      case 1:
+        return Colors.green[300];
+        break;
+      case 3:
+        return Colors.red[300];
+        break;
+      case 2:
+        return Colors.yellow[300];
+        break;
+      default:
+        return Colors.white;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final students = Provider.of<List<StudentRank>>(context);
+
+    final subClass = ModalRoute.of(context).settings.arguments as SubjectClass;
+
+    attInput.classID = subClass.id;
+
+    ///Students registered for this subject and section
+    List<StudentRank> clsStuds = [];
+
+    bool streamActive = false;
+    if (students != null) {
+      clsStuds = ts.getStudentsOfSubandSection(
+          students, subClass.subjectName, subClass.section);
+
+      streamActive = true;
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          //save button
+          TextButton(
+              onPressed: () {
+                db.addAttendanceRecord(attInput, clsStuds);
+                Navigator.pop(context);
+              },
+              child: Text(
+                'Save',
+                style: Theme.of(context).appBarTheme.textTheme.caption,
+              ))
+        ],
+      ),
+      body: !streamActive
+          ? LoadingScreen()
+          : ListView.builder(
+              itemCount: clsStuds.length,
+              itemBuilder: (ctx, i) {
+                return AttendanceMarkerTile(
+                    name: clsStuds[i].name,
+                    status:
+                        attInput.attendanceStatus['${clsStuds[i].id}'] == null
+                            ? 0
+                            : attInput.attendanceStatus['${clsStuds[i].id}'],
+                    studId: clsStuds[i].id,
+                    addStat: addAttStat,
+                    col: statusColor(
+                        attInput.attendanceStatus['${clsStuds[i].id}']));
+              },
+            ),
+    );
+  }
+}
+
+class AttendanceMarkerTile extends StatefulWidget {
+  const AttendanceMarkerTile({
+    Key key,
+    @required this.name,
+    @required this.status,
+    @required this.studId,
+    @required this.addStat,
+    @required this.col,
+  }) : super(key: key);
+  final String name;
+  final String studId;
+  final int status;
+  final Function addStat;
+  final Color col;
+
+  @override
+  _AttendanceMarkerTileState createState() => _AttendanceMarkerTileState();
+}
+
+class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
+  int colr;
+  @override
+  void initState() {
+    colr = widget.status;
+    super.initState();
+  }
+
+  final db = DatabaseService();
   Widget buildAttButton(
-    String stud,
+    String studName,
     String buttonText,
     String id,
     int status,
@@ -36,9 +157,9 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () {
-            db.addAttToCF(stud, status, id);
             setState(() {
-              tileColor['$stud'] = status;
+              widget.addStat(id, status);
+              colr = status;
             });
           },
           child: Text(
@@ -53,172 +174,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
     );
   }
 
-  Widget buildAttTile(String stud, String classId, BuildContext ctx,
-      [int status, int tc]) {
-    return ListTile(
-      leading: Container(
-        width: 150,
-        child: Flex(
-          direction: Axis.horizontal,
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                stud,
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontFamily: 'Proxima Nova'),
-              ),
-            ),
-          ],
-        ),
-      ),
-      trailing: Container(
-        width: 180,
-        child: Row(children: <Widget>[
-          buildAttButton(
-            stud,
-            'P',
-            classId,
-            1,
-            Colors.green,
-          ),
-          buildAttButton(
-            stud,
-            'L',
-            classId,
-            2,
-            Colors.yellow,
-          ),
-          buildAttButton(
-            stud,
-            'A',
-            classId,
-            3,
-            Colors.red,
-          ),
-        ]),
-      ),
-      tileColor: statusColor(tc, ctx),
-    );
-  }
-
-  Color statusColor(int status, BuildContext ctx) {
-    switch (status) {
-      case 1:
-        return Colors.green;
-        break;
-      case 3:
-        return Colors.red;
-        break;
-      case 2:
-        return Colors.yellow;
-        break;
-      default:
-        return Theme.of(ctx).canvasColor;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Map att = {};
-    bool streamActive = false;
-    final studentProvider = Provider.of<List<Student>>(context);
-    final attendanceProvider = Provider.of<List<Attendance>>(context);
-
-    if (attendanceProvider != null) {
-      attendanceProvider.forEach((sheet) {
-        if (widget.classId == sheet.id) {
-          att = sheet.attStat;
-          tileColor = sheet.attStat;
-        }
-      });
-    } else {
-      att = {};
-      tileColor = {};
-    }
-    if (studentProvider != null) {
-      streamActive = true;
-    }
-
-    return Scaffold(
-      appBar: AppBar(),
-      body: !streamActive
-          ? LoadingScreen()
-          : ListView.builder(
-              itemCount: studentProvider.length,
-              itemBuilder: (ctx, i) {
-                int stat = 0;
-                int tc = 0;
-                //att is a map <student name, status>
-                att.forEach((k, v) {
-                  if (k == studentProvider[i].name) {
-                    stat = v;
-                  }
-                });
-                //tileColor is added so that color is not dependant upon a read of the db
-                tileColor.forEach((k, v) {
-                  if (k == studentProvider[i].name) {
-                    tc = v;
-                  }
-                });
-                return AttendanceMarkerTile(
-                  classId: widget.classId,
-                  name: studentProvider[i].name,
-                  status: tc,
-                );
-              },
-            ),
-    );
-  }
-}
-
-class AttendanceMarkerTile extends StatefulWidget {
-  const AttendanceMarkerTile({
-    Key key,
-    @required this.name,
-    @required this.status,
-    @required this.classId,
-  }) : super(key: key);
-  final String name;
-  final String classId;
-  final int status;
-
-  @override
-  _AttendanceMarkerTileState createState() => _AttendanceMarkerTileState();
-}
-
-class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
-  final db = DatabaseService();
-  Widget buildAttButton(
-    String stud,
-    String buttonText,
-    String id,
-    int status,
-    MaterialColor color,
-  ) {
-    return Flexible(
-      fit: FlexFit.loose,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-             db.addAttToCF(stud, status, id);
-            
-          },
-          child: Text(
-            buttonText,
-            style: TextStyle(color: Colors.black),
-          ),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(color),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Color statusColor(int status, BuildContext ctx) {
+  Color statusColor(int status) {
     switch (status) {
       case 1:
         return Colors.green[300];
@@ -239,29 +195,35 @@ class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5),
       child: ListTile(
-        tileColor: statusColor(widget.status, context),
-        title: Text('${widget.name}', style: TextStyle(fontSize: 18, fontFamily: 'Proxima Nova', fontWeight: FontWeight.w600),),
+        tileColor: statusColor(colr),
+        title: Text(
+          '${widget.name}',
+          style: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Proxima Nova',
+              fontWeight: FontWeight.w600),
+        ),
         trailing: Container(
           width: 180,
           child: Row(children: <Widget>[
             buildAttButton(
               widget.name,
               'P',
-              widget.classId,
+              widget.studId,
               1,
               Colors.green,
             ),
             buildAttButton(
               widget.name,
               'L',
-              widget.classId,
+              widget.studId,
               2,
               Colors.yellow,
             ),
             buildAttButton(
               widget.name,
               'A',
-              widget.classId,
+              widget.studId,
               3,
               Colors.red,
             ),

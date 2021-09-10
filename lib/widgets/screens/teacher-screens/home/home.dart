@@ -5,7 +5,7 @@ import 'package:tils_app/main.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/subject.dart';
+import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';

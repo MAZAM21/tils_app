@@ -18,10 +18,17 @@ class StudentRank with ChangeNotifier {
   Map attendance = {};
   Map textMarks = {};
   Map mcqMarks = {};
+  Map assignmentMarks;
   List completedAssessements;
-  double score;
   int position;
   List subjects;
+
+  ///raScore is a map with subject names as keys and total ra score as value
+  Map<String, double> raScore;
+
+  /// attendance percentage basically
+  double attendanceScore;
+  double assignmentScore;
 
   StudentRank({
     @required this.id,
@@ -34,7 +41,7 @@ class StudentRank with ChangeNotifier {
     this.textMarks,
     this.mcqMarks,
     this.completedAssessements,
-    this.score,
+    this.raScore,
     this.position,
     this.subjects,
   });
@@ -45,6 +52,7 @@ class StudentRank with ChangeNotifier {
       Map att = {...data['attendance'] ?? {}};
       Map tqm = {};
       Map mcqm = {};
+     
       final Map subs = {...data['registeredSubs'] ?? {}};
       final completed = List<String>.from(data['completed-assessments'] ?? []);
       List regSubs = [];
@@ -85,7 +93,8 @@ class StudentRank with ChangeNotifier {
           textMarks: tqm,
           mcqMarks: mcqm,
           completedAssessements: completed,
-          subjects: regSubs);
+          subjects: regSubs,
+          );
     } catch (e) {
       print('error in StudentRank model: $e');
     }

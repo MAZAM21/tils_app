@@ -32,9 +32,9 @@ class Attendance {
 }
 
 class AttendanceInput {
-  final Map attendanceStatus;
-  final String classID;
-  final String subject;
+  Map attendanceStatus;
+  String classID;
+  String subject;
   AttendanceInput({
     this.attendanceStatus,
     this.subject,
