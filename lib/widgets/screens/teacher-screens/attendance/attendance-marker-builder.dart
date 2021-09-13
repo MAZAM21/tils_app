@@ -82,6 +82,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           //save button
           TextButton(

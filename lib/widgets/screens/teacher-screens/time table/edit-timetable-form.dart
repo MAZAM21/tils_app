@@ -215,7 +215,7 @@ class _EditTTFormState extends State<EditTTForm> {
       },
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(0),
-        minimumSize: MaterialStateProperty.all(Size(107, 25)),
+        minimumSize: MaterialStateProperty.all(Size(40, 25)),
         fixedSize: MaterialStateProperty.all(Size(114, 38)),
         backgroundColor: _subName == checkSubject(subName)
             ? MaterialStateProperty.all(Color(0xffc54134))
@@ -380,6 +380,7 @@ class _EditTTFormState extends State<EditTTForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool startPicked = false;
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       appBar: AppBar(
@@ -512,6 +513,7 @@ class _EditTTFormState extends State<EditTTForm> {
                         ///Subject Buttons Subject Buttons Subject Buttons Subject Buttons
                         ///Subject Buttons Subject Buttons Subject Buttons Subject Buttons
                         Container(
+                          width: MediaQuery.of(context).size.width,
                           child: Column(
                             children: <Widget>[
                               Row(
@@ -530,38 +532,42 @@ class _EditTTFormState extends State<EditTTForm> {
                               SizedBox(
                                 height: 12,
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Column(
-                                    children: <Widget>[
-                                      buildSubjectButton('Jurisprudence'),
-                                      buildSubjectButton('Trust'),
-                                      buildSubjectButton('Conflict'),
-                                      buildSubjectButton('Islamic'),
-                                      buildSubjectButton('Company'),
-                                    ],
-                                  ),
-                                  SizedBox(width: 7),
-                                  Column(
-                                    children: <Widget>[
-                                      buildSubjectButton('Tort'),
-                                      buildSubjectButton('Property'),
-                                      buildSubjectButton('EU'),
-                                      buildSubjectButton('HR'),
-                                    ],
-                                  ),
-                                  SizedBox(width: 7),
-                                  Column(
-                                    children: <Widget>[
-                                      buildSubjectButton('Criminal'),
-                                      buildSubjectButton('Contract'),
-                                      buildSubjectButton('LSM'),
-                                      buildSubjectButton('Public'),
-                                    ],
-                                  ),
-                                ],
+                              SingleChildScrollView(
+                                physics: NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        buildSubjectButton('Jurisprudence'),
+                                        buildSubjectButton('Trust'),
+                                        buildSubjectButton('Conflict'),
+                                        buildSubjectButton('Islamic'),
+                                        buildSubjectButton('Company'),
+                                      ],
+                                    ),
+                                    SizedBox(width: 7),
+                                    Column(
+                                      children: <Widget>[
+                                        buildSubjectButton('Tort'),
+                                        buildSubjectButton('Property'),
+                                        buildSubjectButton('EU'),
+                                        buildSubjectButton('HR'),
+                                      ],
+                                    ),
+                                    SizedBox(width: 7),
+                                    Column(
+                                      children: <Widget>[
+                                        buildSubjectButton('Criminal'),
+                                        buildSubjectButton('Contract'),
+                                        buildSubjectButton('LSM'),
+                                        buildSubjectButton('Public'),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -618,6 +624,7 @@ class _EditTTFormState extends State<EditTTForm> {
                                   ],
                                 ),
                                 onTap: () {
+                                  _duration = 'Not Set';
                                   pickDate();
                                 },
                               ),

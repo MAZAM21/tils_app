@@ -27,10 +27,22 @@ class _MarkScriptState extends State<MarkScript> {
   final ts = TeacherService();
   final db = DatabaseService();
   int totalMarks = 0;
+  bool savedToRAResult = false;
+
+  @override
+  void didChangeDependencies() {
+    StudentTextAns sta = widget.ans;
+    int l = sta.qaMap.length;
+    List<int> markList = ts.getMarksList(sta.qMarks, l);
+    int totalE = markList.fold(0, (p, n) => p + n);
+    super.didChangeDependencies();
+  }
+
   void aggregateAllMarks(
     String q,
     int mark,
   ) {
+    savedToRAResult = true;
     aggMarks.addAll({q: mark});
     totalMarks = aggMarks.values.fold(0, (t, a) => t + a);
     print(totalMarks);
@@ -118,8 +130,18 @@ class _MarkScriptState extends State<MarkScript> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save_outlined),
         onPressed: () {
-          db.addTotalMarkToStudent(
-              totalMarks, sta.studentId, widget.assid, widget.subject, widget.teacherId);
+          if (totalMarks == 0 && savedToRAResult) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                        'You have not properly added marks, please press the save button beneath the answer first'),
+                  );
+                });
+          } else if (totalMarks == 0 && markList.isNotEmpty)
+            db.addTotalMarkToStudent(totalMarks, sta.studentId, widget.assid,
+                widget.subject, widget.teacherId);
           Navigator.pop(context);
         },
       ),

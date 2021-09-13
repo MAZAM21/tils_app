@@ -4,6 +4,7 @@ import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/service/student-service.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 
 class AssessmentHomePanel extends StatelessWidget {
@@ -71,7 +72,7 @@ class AssessmentHomePanel extends StatelessWidget {
                   itemCount: topThree.length,
                   shrinkWrap: true,
                   itemBuilder: (ctx, i) {
-                    String dStat = ss.getdeadlineStatus(topThree[i]);
+                    String dStat = ss.getdeadlineStatus(topThree[i], studData);
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 3.5),
                       child: ListTile(
@@ -99,6 +100,50 @@ class AssessmentHomePanel extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        onTap: !studData.completedAssessments.contains(topThree[i].id) &&
+                                        topThree[i].isDeployed
+                                    ? () {
+                                        Navigator.popAndPushNamed(
+                                            context, AssessmentPage.routeName,
+                                            arguments: {
+                                              'ra': topThree[i],
+                                              'uid': studData.uid,
+                                              'name': studData.name,
+                                            });
+                                      }
+                                    : studData.completedAssessments.contains(topThree[i].id)
+                                        ? () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                content: Text(
+                                                  'This assessment has been submitted \n \n No taksies backsies!',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Raleway',
+                                                      color: Colors.red),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        : !topThree[i].isDeployed
+                                            ? () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      AlertDialog(
+                                                    content: Text(
+                                                      'This assessment has not been deployed',
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontFamily: 'Raleway',
+                                                          color:
+                                                              Colors.red),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            : {},
                       ),
                     );
                   },

@@ -1,12 +1,9 @@
-
-
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject-class.dart';
 
 class StudentService {
-
   ///Get attendance percentage
   int attendancePercentage(StudentUser sd) {
     Map att = sd.attendance;
@@ -18,11 +15,19 @@ class StudentService {
         presents++;
       }
     });
-    perc = (presents / all) * 100;
 
-    return perc.toInt();
+    perc = (presents / all) * 100;
+    if (perc.isNaN) {
+      return 0;
+    }
+
+    print('perc: $perc');
+    int pint = perc.toInt();
+    print('pint: $pint');
+    return pint;
   }
-/// num present
+
+  /// num present
   int presents(Map att) {
     int p = 0;
     att.forEach((key, value) {
@@ -32,7 +37,8 @@ class StudentService {
     });
     return p;
   }
-/// number of lates
+
+  /// number of lates
   int lates(Map att) {
     int l = 0;
     att.forEach((key, value) {
@@ -42,7 +48,8 @@ class StudentService {
     });
     return l;
   }
-/// number of absents
+
+  /// number of absents
   int absents(Map att) {
     int a = 0;
     att.forEach((key, value) {
@@ -60,7 +67,8 @@ class StudentService {
     List<SubjectClass> req = [];
     classList.forEach((cls) {
       if (stud.subjects.contains(cls.subjectName) &&
-          cls.startTime.isBefore(DateTime.now())) {
+          cls.startTime.isBefore(DateTime.now()) &&
+          stud.section == cls.section) {
         req.add(cls);
       }
     });
@@ -75,11 +83,15 @@ class StudentService {
   }
 
   ///Get deadline status
-  String getdeadlineStatus(RAfromDB ra) {
-    if (ra.endTime.isAfter(DateTime.now())) {
+  String getdeadlineStatus(RAfromDB ra, StudentUser studData) {
+    if (ra.endTime.isAfter(DateTime.now()) &&
+        !studData.completedAssessments.contains(ra.id)) {
       return 'Pending';
+    } else if (ra.endTime.isAfter(DateTime.now()) &&
+        studData.completedAssessments.contains(ra.id)) {
+      return 'Submitted';
     } else if (ra.endTime.isBefore(DateTime.now())) {
-      return 'Finished';
+      return 'Closed';
     }
     return null;
   }

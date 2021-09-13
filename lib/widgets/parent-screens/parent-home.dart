@@ -99,7 +99,7 @@ class _ParentHomeState extends State<ParentHome> {
                       ),
                      
                       ClassPositionPanel(
-                        position: '${myStud.position}',
+                        position: '',
                       ),
                       SizedBox(
                         height: 20,

@@ -144,7 +144,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
 
     //when student attempts an assessment the id is logged in his doc in cf.
     //this list of attempted assessment id is stored in completed.
-    List completed = userData.assessments;
+    List completed = userData.completedAssessments;
 
     Map<String, List<RAfromDB>> myRa =
         {}; //a map with subjects as keys and assessment associated with sub as values

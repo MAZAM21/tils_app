@@ -54,7 +54,7 @@ class TopStudentTile extends StatelessWidget {
                           Text(''),
                       SizedBox(width: 60),
                       Text(
-                        '${topStud.position}',
+                        '',
                         style: TextStyle(
                             fontFamily: 'Proxima Nova',
                             fontSize: 21,

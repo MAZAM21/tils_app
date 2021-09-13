@@ -5,7 +5,6 @@ import 'package:tils_app/models/student_rank.dart';
 
 import '../models/teacher-user-data.dart';
 import '../models/announcement.dart';
-import '../models/attendance-chart-values.dart';
 
 import '../models/meeting.dart';
 import '../models/subject-class.dart';
@@ -44,6 +43,7 @@ class TeacherService with ChangeNotifier {
     int marked = 0;
     int total = 0;
     studList.forEach((stud) {
+  
       if (stud.subjects.contains(cls.subjectName) &&
           stud.section == cls.section) {
         total++;

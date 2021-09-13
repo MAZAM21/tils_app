@@ -540,9 +540,16 @@ class DatabaseService with ChangeNotifier {
 
     ///for student collection, the assessment-mcqmarks map has been modified
     ///the key is now the assid and the value will a number indicating correct answers
+    ///marks are added to an Assessment map which is all assessments in one place
+    ///and one subject map which is only for the individual subject
     try {
       stud.set({
         'completed-assessments': FieldValue.arrayUnion([assid]),
+        'Assessment-MCQMarks': {
+          assid: stat == 'correct'
+              ? FieldValue.increment(1)
+              : FieldValue.increment(0),
+        },
         '$subject-MCQMarks': {
           assid: stat == 'correct'
               ? FieldValue.increment(1)
@@ -574,10 +581,12 @@ class DatabaseService with ChangeNotifier {
     DocumentReference stuRef = _db.collection('students').doc('$uid');
     DocumentReference teachRef = _db.collection('teachers').doc('$teacherId');
     await stuRef.set({
+      'Assessment-textqMarks': {'$assid': mark},
       '$subject-textqMarks': {'$assid': mark}
     }, SetOptions(merge: true));
     return await teachRef.set(
         {
+          
           'marked-textQs': {
             '$assid': FieldValue.arrayUnion(['$uid']),
           }
@@ -692,7 +701,7 @@ class DatabaseService with ChangeNotifier {
         'batch': batch,
         'section': section,
       });
-      await userRef.doc(cred.user.uid).set({
+      return await userRef.doc(cred.user.uid).set({
         'role': 'student',
         'email': email,
         'password': password,
@@ -795,6 +804,30 @@ class DatabaseService with ChangeNotifier {
     final ref = _db.collection('announcements');
     try {
       return await ref.doc(id).delete();
+    } catch (err) {
+      print('err in delete Announcement: $err');
+    }
+  }
+
+  Future<void> deleteAssignment(
+    String studId,
+    String asgId,
+    String studName,
+    String subName,
+  ) async {
+    final ref = _db.collection('assignment-marks');
+    final studRef = _db.collection('students').doc(studId);
+    try {
+      await studRef.set({
+        'assignment-marks': {'$asgId': FieldValue.delete()},
+        '$subName-assginment': {'$asgId': FieldValue.delete()},
+      }, SetOptions(merge: true));
+      return await ref.doc(asgId).set({
+        'student-marks': {'$studName': FieldValue.delete()},
+        'uid-marks': {
+          '$studId': FieldValue.delete(),
+        }
+      }, SetOptions(merge: true));
     } catch (err) {
       print('err in delete Announcement: $err');
     }

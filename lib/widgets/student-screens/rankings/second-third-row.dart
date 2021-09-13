@@ -42,7 +42,7 @@ class SecondThirdStudRow extends StatelessWidget {
                               color: Color.fromARGB(255, 7, 0, 77)),
                         ),
                         Text(
-                          '${students[1].position}',
+                          '',
                           style: TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontSize: 18,
@@ -86,7 +86,7 @@ class SecondThirdStudRow extends StatelessWidget {
                               color: Color.fromARGB(255, 7, 0, 77)),
                         ),
                         Text(
-                          '${students[2].position}',
+                          '',
                           style: TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontSize: 18,

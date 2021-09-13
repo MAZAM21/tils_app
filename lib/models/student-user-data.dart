@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class StudentUser with ChangeNotifier {
   final attendance;
-  final assessments;
+  final List completedAssessments;
   final List subjects;
   final String year;
   final String name;
@@ -20,7 +20,7 @@ class StudentUser with ChangeNotifier {
     this.uid,
     this.section,
     this.batch, [
-    this.assessments,
+    this.completedAssessments,
     this.imageURL,
   ]);
   factory StudentUser.fromFirestore(

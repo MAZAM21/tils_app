@@ -13,16 +13,22 @@ class StudentAvatarPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        CircleAvatar(
-          backgroundImage: studData.imageURL != null
-              ? NetworkImage(studData.imageURL)
-              : null,
-          radius: 30,
-        ),
+        if (studData.imageURL != '')
+          CircleAvatar(
+            backgroundImage: studData.imageURL != null
+                ? NetworkImage(studData.imageURL)
+                : null,
+            radius: 30,
+          ),
+        if (studData.imageURL == '')
+          Icon(
+            Icons.person,
+            size: 60,
+          ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Container(
-            width: 90,
+            
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -42,15 +48,19 @@ class StudentAvatarPanel extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  '${studData.name}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Proxima Nova',
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xff2A353F),
-                  ),
-                  textAlign: TextAlign.left,
+                Row(
+                  children: [
+                    Text(
+                      '${studData.name}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Proxima Nova',
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xff2A353F),
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ],
                 ),
               ],
             ),

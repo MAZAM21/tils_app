@@ -15,27 +15,13 @@ class RankingService {
   ///this function should branch into to others
   ///one for text qs and the other for mcqs
   ///each function should return an integer which is the score. make that a double.
-  // List<StudentRank> getStudentScores(
-  //   List<StudentRank> studlist,
-  //   List<RAfromDB> ralist,
-  // ) {
-  //   try {
-  //     List<StudentRank> sortedStuds = [];
-  //     studlist.forEach((stud) {
-  //       double tqscore = _studentTQScore(stud, ralist) ?? 0;
-  //       double mcqscore = _mcqScore(stud) ?? 0;
-  //       stud.score = tqscore + mcqscore;
-  //     });
-  //     studlist.sort((a, b) => a.score.compareTo(b.score));
-  //     sortedStuds = studlist.reversed.toList();
-  //     List<StudentRank> postionsAdded = _studPositions(sortedStuds);
-
-  //     return postionsAdded;
-  //   } on Exception catch (e) {
-  //     print('error in getStudentScore ranking service: $e');
-  //   }
-  //   return null;
-  // }
+  List<StudentRank> getStudentYearScore(
+    String year,
+    List<StudentRank> studlist,
+    List<RAfromDB> ralist,
+  ) {
+    return null;
+  }
 
   List<AssessmentResult> completedAssessmentsParent(
     List<RAfromDB> raList,

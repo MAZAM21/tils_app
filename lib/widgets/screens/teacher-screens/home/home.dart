@@ -5,6 +5,7 @@ import 'package:tils_app/main.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
@@ -88,7 +89,7 @@ class _HomePageState extends State<HomePage> {
       _token = token;
     });
     db.addTokenToTeacher(_token, tID);
-    print(_token);
+    //print(_token);
   }
 
 //   getTopics() async {
@@ -114,6 +115,9 @@ class _HomePageState extends State<HomePage> {
     final subClassList = Provider.of<List<SubjectClass>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
 
+    ///testing student rank
+    final stdRank = Provider.of<List<StudentRank>>(context);
+    //print(stdRank.length);
     int estimateTs = 0;
     int endTime = 0;
     int deployedRA = 0;
@@ -174,11 +178,8 @@ class _HomePageState extends State<HomePage> {
                           ),
 
                           /// Classes Grid (Stored in student screens)
-                          if (gridList != null)
-                            Container(
-                              child: MyClassesGrid(myClasses: gridList),
-                              height: 140,
-                            ),
+
+                          MyClassesGrid(myClasses: gridList),
 
                           ///Schedule Class button
                           Row(

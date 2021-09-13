@@ -50,7 +50,7 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
     if (!isEditing) {
       assignmentMarks = Provider.of<AssignmentMarks>(context);
       title = assignmentMarks.title;
-      if (assignmentMarks.totalMarks!=null) {
+      if (assignmentMarks.totalMarks != null) {
         totalMark = assignmentMarks.totalMarks.toDouble() ?? 100;
       }
     } else {
@@ -137,6 +137,9 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
                 uid: widget.students[i].id,
                 url: widget.students[i].imageUrl,
                 totalMark: totalMark,
+                isEditing: isEditing,
+                subName: isEditing ? widget.editAM.subject : '',
+                asgId: isEditing ? widget.editAM.docId : '',
                 initVal: isEditing &&
                         widget.editAM.uidMarks['${widget.students[i].id}'] !=
                             null
@@ -153,25 +156,33 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
 
 class AssignmentSlider extends StatefulWidget {
   const AssignmentSlider({
+    @required this.isEditing,
     @required this.studName,
     @required this.getMarks,
     @required this.uid,
     this.url,
     this.totalMark,
     this.initVal,
+    this.asgId,
+    this.subName,
   });
   final String studName;
   final String url;
   final double totalMark;
   final String uid;
   final double initVal;
+  final bool isEditing;
   final void Function(String name, double mark, String uid) getMarks;
+  final String asgId;
+  final String subName;
 
   @override
   _AssignmentSliderState createState() => _AssignmentSliderState();
 }
 
 class _AssignmentSliderState extends State<AssignmentSlider> {
+  final db = DatabaseService();
+
   /// individual slider element
   double _sliderVal;
   @override
@@ -241,6 +252,21 @@ class _AssignmentSliderState extends State<AssignmentSlider> {
                 },
               ),
             ),
+            if (widget.isEditing)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                      onPressed: () {
+                        db.deleteAssignment(widget.uid, widget.asgId,
+                            widget.studName, widget.subName);
+                            setState(() {
+                              _sliderVal = 0;
+                            });
+                      },
+                      icon: Icon(Icons.delete_forever, color: Colors.red[900],)),
+                ],
+              ),
           ],
         ),
       ),

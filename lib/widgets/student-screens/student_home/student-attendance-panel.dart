@@ -97,7 +97,9 @@ class StudentAttendancePanel extends StatelessWidget {
                         color: Colors.red[800],
                       ),
                     ),
-                    SizedBox(width: 10,)
+                    SizedBox(
+                      width: 10,
+                    )
                   ],
                 ),
                 Container(
@@ -133,15 +135,18 @@ class StudentAttendancePanel extends StatelessWidget {
                                         color: Colors.yellow[900],
                                       ),
                                     )
-                                  : Text(
-                                      'Absent',
-                                      style: TextStyle(
-                                        fontFamily: 'Proxima Nova',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red[800],
-                                      ),
-                                    ),
+                                  : studData.attendance['${topThree[i].id}'] ==
+                                          3
+                                      ? Text(
+                                          'Absent',
+                                          style: TextStyle(
+                                            fontFamily: 'Proxima Nova',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red[800],
+                                          ),
+                                        )
+                                      : null,
                           title: topThree[i].topic == ''
                               ? Text(
                                   '${topThree[i].subjectName}',
