@@ -18,7 +18,7 @@ class MarkStudentAssignments extends StatefulWidget {
   final List<StudentRank> students;
   final String subject;
   final String title;
-  AMfromDB editAM;
+  final AMfromDB editAM;
 
   @override
   _MarkStudentAssignmentsState createState() => _MarkStudentAssignmentsState();
@@ -30,6 +30,17 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
   final db = DatabaseService();
   Map<String, int> stMark = {};
   Map<String, int> idMark = {};
+
+  @override
+  void didChangeDependencies() {
+    if (widget.editAM.nameMarks.isNotEmpty ||
+        widget.editAM.uidMarks.isNotEmpty) {
+      stMark = widget.editAM.nameMarks;
+      idMark = widget.editAM.uidMarks;
+    }
+    super.didChangeDependencies();
+  }
+
   void marksFromSliders(String name, double mark, String uid) {
     stMark.addAll({name: mark.toInt()});
     idMark.addAll({uid: mark.toInt()});
@@ -83,10 +94,10 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
                   db.addAssignmentToCF(
                       null,
                       AMfromDB(
-                        docId: widget.editAM.docId,
-                        nameMarks: stMark,
-                        uidMarks: idMark,
-                      ));
+                          docId: widget.editAM.docId,
+                          nameMarks: stMark,
+                          uidMarks: idMark,
+                          subject: widget.editAM.subject));
                 }
                 Navigator.popUntil(
                     context, (ModalRoute.withName('/assignment-main')));
@@ -260,11 +271,14 @@ class _AssignmentSliderState extends State<AssignmentSlider> {
                       onPressed: () {
                         db.deleteAssignment(widget.uid, widget.asgId,
                             widget.studName, widget.subName);
-                            setState(() {
-                              _sliderVal = 0;
-                            });
+                        setState(() {
+                          _sliderVal = 0;
+                        });
                       },
-                      icon: Icon(Icons.delete_forever, color: Colors.red[900],)),
+                      icon: Icon(
+                        Icons.delete_forever,
+                        color: Colors.red[900],
+                      )),
                 ],
               ),
           ],

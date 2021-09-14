@@ -4,6 +4,7 @@ import 'package:tils_app/widgets/drawer.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/teacher-rankings/teacher-ranking-display.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
@@ -51,7 +52,7 @@ class _AllTabsState extends State<AllTabs> {
                   isScrollable: false,
                   tabs: <Widget>[
                     Tab(
-                      text: 'Add Class',
+                      text: 'Rankings',
                     ),
                     Tab(
                       text: 'Home',
@@ -62,7 +63,7 @@ class _AllTabsState extends State<AllTabs> {
           ),
         ),
         body: TabBarView(children: <Widget>[
-          EditTTForm(),
+          TeacherRankingDisplay(),
           HomePage(),
           AttendancePage(),
         ]),

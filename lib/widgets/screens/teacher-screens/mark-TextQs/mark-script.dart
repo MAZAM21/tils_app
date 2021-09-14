@@ -34,7 +34,12 @@ class _MarkScriptState extends State<MarkScript> {
     StudentTextAns sta = widget.ans;
     int l = sta.qaMap.length;
     List<int> markList = ts.getMarksList(sta.qMarks, l);
-    int totalE = markList.fold(0, (p, n) => p + n);
+    var totalE = markList.fold(0, (p, n) => p + n);
+    if(totalE>0) {
+      totalMarks = totalE;
+      print(totalMarks);
+      print('workd');
+    }
     super.didChangeDependencies();
   }
 
@@ -139,7 +144,8 @@ class _MarkScriptState extends State<MarkScript> {
                         'You have not properly added marks, please press the save button beneath the answer first'),
                   );
                 });
-          } else if (totalMarks == 0 && markList.isNotEmpty)
+          } else if (totalMarks == 0 && markList.isNotEmpty){}
+          print('adding to db: $totalMarks');
             db.addTotalMarkToStudent(totalMarks, sta.studentId, widget.assid,
                 widget.subject, widget.teacherId);
           Navigator.pop(context);

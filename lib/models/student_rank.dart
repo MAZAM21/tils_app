@@ -35,14 +35,22 @@ class StudentRank with ChangeNotifier {
   ///raScore is a map with subject names as keys and total ra score as value
   Map raSubScore;
 
+  Map subPosition;
+
   /// attendance percentage basically
   double attendanceScore;
+
+  int attendancePosition;
 
   // assignment score.
   double assignmentScore;
 
+  int assignmentPosition;
+
   /// Year score. gotten from adding all subjects in the year you're in
   double yearScore;
+
+  int yearPosition;
 
   StudentRank({
     @required this.id,
@@ -61,6 +69,10 @@ class StudentRank with ChangeNotifier {
     this.attendanceScore,
     this.assignmentScore,
     this.yearScore,
+    this.assignmentPosition,
+    this.attendancePosition,
+    this.yearPosition,
+    this.subPosition,
   });
 
   factory StudentRank.fromFirestore(QueryDocumentSnapshot doc) {
@@ -114,25 +126,22 @@ class StudentRank with ChangeNotifier {
         regSubs.forEach((sub) {
           //adds text q  marks to rasub value
           if (data.containsKey('$sub-textqMarks') &&
-              data['$sub-textqMarks'].values.length > 1) {
-
+              data['$sub-textqMarks'].values.length > 0) {
             //folds all data into one totalvalue for that particular sub
             int total = data['$sub-textqMarks'].values.fold(0, (a, b) => a + b);
 
-            //print('total of $sub $total');
-
-            ras.addAll({'$sub': total});
+            if (ras.containsKey('$sub')) {
+              ras['$sub'] += total;
+            } else {
+              ras.addAll({'$sub': total});
+            }
 
             //else if added because .fold method does not work on a single value
-          } else if (data.containsKey('$sub-textqMarks') &&
-              data['$sub-textqMarks'].values.length <= 1) {
-            var mark = data['$sub-textqMarks'].values.first;
-            ras.addAll({'$sub': mark});
           }
 
           // adds mcqmars to ra sub value
           if (data.containsKey('$sub-MCQMarks') &&
-              data['$sub-MCQMarks'].values.length > 1) {
+              data['$sub-MCQMarks'].values.length > 0) {
             int mcqtotal =
                 data['$sub-MCQMarks'].values.fold(0, (a, b) => a + b);
             mcqtotal = 70 * mcqtotal;
@@ -142,15 +151,24 @@ class StudentRank with ChangeNotifier {
             } else {
               ras.addAll({'$sub': mcqtotal});
             }
-          } else if (data.containsKey('$sub-MCQMarks') &&
-              data['$sub-MCQMarks'].values.length <= 1) {
-            var mark = data['$sub-MCQMarks'].values.first;
-            if (ras.containsKey('$sub')) {
-              ras['$sub'] += mark;
-            } else {
-              ras.addAll({'$sub': mark});
-            }
           }
+
+          //adds assignment subject marks
+          if (data.containsKey('$sub-asgMarks') &&
+              data['$sub-asgMarks'].values.length > 0) {
+            //folds all data into one totalvalue for that particular sub
+            int asgtotal =
+                data['$sub-asgMarks'].values.fold(0, (a, b) => a + b);
+            if (ras.containsKey('$sub')) {
+              ras['$sub'] += asgtotal;
+            } else {
+              ras.addAll({'$sub': asgtotal});
+            }
+            //print('$sub $asgtotal');
+
+            //else if added because .fold method does not work on a single value
+          }
+
           //print('$sub = ${ras[sub]}');
         });
 
@@ -209,7 +227,8 @@ class StudentRank with ChangeNotifier {
         att = {'none': 0};
       }
 
-      print('${data['name']}, asgSore: $asgScore,  yearScore: $yearScore, attScore: $attScore , ras: $ras' );
+      print(
+          '${data['name']}, asgSore: $asgScore,  yearScore: $yearScore, attScore: $attScore , ras: $ras');
       return StudentRank(
         id: doc.id ?? '',
         name: data['name'] ?? '',

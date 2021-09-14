@@ -441,13 +441,17 @@ class DatabaseService with ChangeNotifier {
           },
 
           ///after which each student doc is individually updated
-        ).then((value) => Future.forEach(
+        ).then(
+          (value) => Future.forEach(
             am.uidMarks.entries,
             (MapEntry element) => addAssignmentMarksToStudent(
-                  element.value,
-                  element.key,
-                  value.id,
-                )));
+              element.value,
+              element.key,
+              value.id,
+              am.subject,
+            ),
+          ),
+        );
 
         ///if editAm is there, then only student marks and uid marks are updated and indivual student
         ///docs as well
@@ -460,13 +464,17 @@ class DatabaseService with ChangeNotifier {
             'uid-marks': editAm.uidMarks,
           },
           SetOptions(merge: true),
-        ).then((value) => Future.forEach(
+        ).then(
+          (value) => Future.forEach(
             editAm.uidMarks.entries,
             (MapEntry element) => addAssignmentMarksToStudent(
-                  element.value,
-                  element.key,
-                  editAm.docId,
-                )));
+              element.value,
+              element.key,
+              editAm.docId,
+              editAm.subject,
+            ),
+          ),
+        );
       }
     } catch (err) {
       print('error in addAssignmentToCF: $err');
@@ -474,11 +482,12 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> addAssignmentMarksToStudent(
-      int m, String id, String docId) async {
+      int m, String id, String docId, String subject) async {
     try {
       DocumentReference ref = _db.collection('students').doc(id);
 
       ref.set({
+        '$subject-asgMarks': {'$docId': m},
         'assignment-marks': {'$docId': m}
       }, SetOptions(merge: true));
     } catch (err) {
@@ -586,7 +595,6 @@ class DatabaseService with ChangeNotifier {
     }, SetOptions(merge: true));
     return await teachRef.set(
         {
-          
           'marked-textQs': {
             '$assid': FieldValue.arrayUnion(['$uid']),
           }
@@ -820,7 +828,7 @@ class DatabaseService with ChangeNotifier {
     try {
       await studRef.set({
         'assignment-marks': {'$asgId': FieldValue.delete()},
-        '$subName-assginment': {'$asgId': FieldValue.delete()},
+        '$subName-asgMarks': {'$asgId': FieldValue.delete()},
       }, SetOptions(merge: true));
       return await ref.doc(asgId).set({
         'student-marks': {'$studName': FieldValue.delete()},

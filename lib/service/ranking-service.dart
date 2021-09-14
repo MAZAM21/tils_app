@@ -15,12 +15,89 @@ class RankingService {
   ///this function should branch into to others
   ///one for text qs and the other for mcqs
   ///each function should return an integer which is the score. make that a double.
+  ///
+  List<StudentRank> getStudentBySub(String sub, List<StudentRank> studList) {
+    List<StudentRank> studSubs = [];
+    studList.forEach((stud) {
+      if (stud.subjects.contains(sub) && stud.raSubScore.containsKey('$sub')) {
+        studSubs.add(stud);
+      }
+    });
+    studSubs
+        .sort((a, b) => b.raSubScore['$sub'].compareTo(a.raSubScore['$sub']));
+
+    for (var i = 0; i < studSubs.length; i++) {
+      //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
+
+      studSubs[i].attendancePosition = i + 1;
+      int s = studSubs[i].raSubScore['$sub'];
+
+      //to account for same scores we will iterate through the studlist to see where are the other same scores
+      //we will only go bellow the current positon as all studs are already sorted
+      //once we find same score we just set it to x+1
+
+      for (var x = i + 1; x < studSubs.length; x++) {
+        if (studSubs[x].raSubScore['$sub'] == s) {
+          studSubs[i].attendancePosition = x + 1;
+        }
+      }
+    }
+    return studSubs;
+  }
+
   List<StudentRank> getStudentYearScore(
     String year,
     List<StudentRank> studlist,
-    List<RAfromDB> ralist,
   ) {
-    return null;
+    List<StudentRank> yearList = [];
+    studlist.forEach((stud) {
+      if (stud.year == year) {
+        yearList.add(stud);
+      }
+    });
+
+    yearList.sort((a, b) => b.yearScore.compareTo(a.yearScore));
+
+    for (var i = 0; i < yearList.length; i++) {
+      //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
+
+      yearList[i].attendancePosition = i + 1;
+      double s = yearList[i].yearScore;
+
+      //to account for same scores we will iterate through the studlist to see where are the other same scores
+      //we will only go bellow the current positon as all studs are already sorted
+      //once we find same score we just set it to x+1
+
+      for (var x = i + 1; x < yearList.length; x++) {
+        if (yearList[x].yearScore == s) {
+          yearList[i].attendancePosition = x + 1;
+        }
+      }
+    }
+    return yearList;
+  }
+
+  List<StudentRank> getStudentAttendanceScore(List<StudentRank> studlist) {
+    List<StudentRank> attList = studlist;
+    for (var i = 0; i < attList.length; i++) {
+      //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
+
+      attList[i].attendancePosition = i + 1;
+      double s = attList[i].attendanceScore;
+
+      //to account for same scores we will iterate through the studlist to see where are the other same scores
+      //we will only go bellow the current positon as all studs are already sorted
+      //once we find same score we just set it to x+1
+
+      for (var x = i + 1; x < attList.length; x++) {
+        if (attList[x].attendanceScore == s) {
+          attList[i].attendancePosition = x + 1;
+        }
+      }
+    }
+
+    attList.sort((a, b) => b.attendanceScore.compareTo(a.attendanceScore));
+    return attList;
   }
 
   List<AssessmentResult> completedAssessmentsParent(
@@ -92,10 +169,10 @@ class RankingService {
     return stud;
   }
 
-  /// studPositions adds the students postion to the studentrank object
-  /// if two students have the same score, they will be given the lowest position of the two e.g:
-  /// if 4th and 5th have same score, both will be 5th
-  /// the function recieves an already sorted list
+  // / studPositions adds the students postion to the studentrank object
+  // / if two students have the same score, they will be given the lowest position of the two e.g:
+  // / if 4th and 5th have same score, both will be 5th
+  // / the function recieves an already sorted list
   // List<StudentRank> _studPositions(List<StudentRank> studList) {
   //   try {
   //     for (var i = 0; i < studList.length; i++) {
