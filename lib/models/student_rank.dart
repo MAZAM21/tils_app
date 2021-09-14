@@ -35,22 +35,18 @@ class StudentRank with ChangeNotifier {
   ///raScore is a map with subject names as keys and total ra score as value
   Map raSubScore;
 
-  Map subPosition;
+ 
 
   /// attendance percentage basically
   double attendanceScore;
 
-  int attendancePosition;
-
   // assignment score.
   double assignmentScore;
-
-  int assignmentPosition;
 
   /// Year score. gotten from adding all subjects in the year you're in
   double yearScore;
 
-  int yearPosition;
+  int position;
 
   StudentRank({
     @required this.id,
@@ -69,10 +65,7 @@ class StudentRank with ChangeNotifier {
     this.attendanceScore,
     this.assignmentScore,
     this.yearScore,
-    this.assignmentPosition,
-    this.attendancePosition,
-    this.yearPosition,
-    this.subPosition,
+    this.position,
   });
 
   factory StudentRank.fromFirestore(QueryDocumentSnapshot doc) {

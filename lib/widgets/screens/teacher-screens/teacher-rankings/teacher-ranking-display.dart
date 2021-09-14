@@ -29,21 +29,29 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
   @override
   void didChangeDependencies() {
     final teacherData = Provider.of<TeacherUser>(context);
+    _filter = 'Year';
     _yearFilter = teacherData.year;
     _subYearFilter = teacherData.year;
-    _subjectFilter = teacherData.subjects.first;
+    _subjectFilter = teacherData.subjects.last;
     super.didChangeDependencies();
   }
 
-  TextButton _filterButtonFirst({String text, String filterText}) {
-    return TextButton(
+  ElevatedButton _filterButtonFirst({String text, String filterText}) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: _filter == text
+              ? MaterialStateProperty.all(Color(0xffC54134))
+              : MaterialStateProperty.all(Color(0xffDEE4ED)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+          )),
       child: Text(
         text,
         style: TextStyle(
           fontFamily: 'Proxima Nova',
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: _filter == text ? Colors.red[700] : Colors.black,
+          color: _filter == text ? Colors.white : Colors.black,
         ),
       ),
       onPressed: () {
@@ -54,15 +62,22 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     );
   }
 
-  TextButton _filterButtonYear({String text, String filterText}) {
-    return TextButton(
+  ElevatedButton _filterButtonYear({String text, String filterText}) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: _yearFilter == text
+              ? MaterialStateProperty.all(Color(0xffC54134))
+              : MaterialStateProperty.all(Color(0xffDEE4ED)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+          )),
       child: Text(
         text,
         style: TextStyle(
           fontFamily: 'Proxima Nova',
           fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: _yearFilter == text ? Colors.red[700] : Colors.black,
+          fontWeight: FontWeight.w600,
+          color: _yearFilter == text ? Colors.white : Colors.black,
         ),
       ),
       onPressed: () {
@@ -73,18 +88,25 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     );
   }
 
-  TextButton _filterButtonSubYear({
+  ElevatedButton _filterButtonSubYear({
     String text,
     String filterText,
   }) {
-    return TextButton(
+    return ElevatedButton(
+      style: ButtonStyle(
+          backgroundColor: _subYearFilter == text
+              ? MaterialStateProperty.all(Color(0xffC54134))
+              : MaterialStateProperty.all(Color(0xffDEE4ED)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+          )),
       child: Text(
         text,
         style: TextStyle(
           fontFamily: 'Proxima Nova',
           fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: _subYearFilter == text ? Colors.red[700] : Colors.black,
+          fontWeight: FontWeight.w600,
+          color: _subYearFilter == text ? Colors.white : Colors.black,
         ),
       ),
       onPressed: () {
@@ -95,25 +117,35 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     );
   }
 
-  TextButton _filterButtonSubject({
+  Widget _filterButtonSubject({
     String text,
     String filterText,
   }) {
-    return TextButton(
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: 'Proxima Nova',
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: _subjectFilter == text ? Colors.red[700] : Colors.black,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: _subjectFilter == text
+                ? MaterialStateProperty.all(Color(0xffC54134))
+                : MaterialStateProperty.all(Color(0xffDEE4ED)),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+            )),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'Proxima Nova',
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: _subjectFilter == text ? Colors.white : Colors.black,
+          ),
         ),
+        onPressed: () {
+          setState(() {
+            _subjectFilter = '$filterText';
+          });
+        },
       ),
-      onPressed: () {
-        setState(() {
-          _subjectFilter = '$filterText';
-        });
-      },
     );
   }
 
@@ -143,8 +175,11 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
             studsFromdb,
           );
           break;
+        case 'Assignments':
+          students = rs.getStudentAssignmentScore(studsFromdb);
+          break;
         default:
-          students = rs.getStudentYearScore('3', studsFromdb);
+          students = rs.getStudentYearScore(_yearFilter, studsFromdb);
       }
     }
 
@@ -155,6 +190,9 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                 children: <Widget>[
                   Container(
                     child: Column(children: [
+                      SizedBox(
+                        height: 15,
+                      ),
                       Container(
                         color: Theme.of(context).canvasColor,
                         child: Row(
@@ -203,18 +241,19 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  for (var x = 0;
-                                      x < yearSub['$_subYearFilter'].length;
-                                      x++)
-                                    _filterButtonSubject(
-                                        text: yearSub['$_subYearFilter'][x],
-                                        filterText: yearSub['$_subYearFilter']
-                                            [x]),
-                                ],
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: <Widget>[
+                                    for (var x = 0;
+                                        x < yearSub['$_subYearFilter'].length;
+                                        x++)
+                                      _filterButtonSubject(
+                                          text: yearSub['$_subYearFilter'][x],
+                                          filterText: yearSub['$_subYearFilter']
+                                              [x]),
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -246,32 +285,65 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                     ]),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+                    height: _filter == 'Assignments' || _filter == 'Attendance'
+                        ? MediaQuery.of(context).size.height * 0.70
+                        : MediaQuery.of(context).size.height * 0.62,
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: students.length,
                       itemBuilder: (ctx, i) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            child: Row(
-                              children: <Widget>[
-                                if (students[i].imageUrl != '')
-                                  CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(students[i].imageUrl),
-                                    radius: 25,
-                                  )
-                                else
-                                  Icon(
-                                    Icons.person,
-                                    size: 50,
-                                  ),
-                                SizedBox(width: 5),
-                                Text('${students[i].name}'),
-                              ],
+                          child: Material(
+                            elevation: 5,
+                            borderRadius: BorderRadius.circular(10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                color: Colors.white,
+                                height: 60,
+                                child: Row(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Text(
+                                      '${students[i].position}',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 20,
+                                        fontFamily: 'Proxima Nova',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 22,
+                                    ),
+                                    if (students[i].imageUrl != '')
+                                      CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage(students[i].imageUrl),
+                                        radius: 25,
+                                      )
+                                    else
+                                      Icon(
+                                        Icons.person,
+                                        size: 50,
+                                      ),
+                                    SizedBox(width: 11),
+                                    Text(
+                                      '${students[i].name}',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: 'Proxima Nova',
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                //trailing: Text('${students[i].attendancePosition}'),
+                              ),
                             ),
-                            //trailing: Text('${students[i].attendancePosition}'),
                           ),
                         );
                       },

@@ -16,6 +16,25 @@ class RankingService {
   ///one for text qs and the other for mcqs
   ///each function should return an integer which is the score. make that a double.
   ///
+
+  List<StudentRank> getStudentAssignmentScore(List<StudentRank> studlist) {
+    studlist.sort((a, b) => b.assignmentScore.compareTo(a.assignmentScore));
+    for (var i = 0; i < studlist.length; i++) {
+      //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
+
+      studlist[i].position = i + 1;
+      double s = studlist[i].assignmentScore;
+
+      for (var x = i + 1; x < studlist.length; x++) {
+        if (studlist[x].assignmentScore == s) {
+          studlist[i].position = x + 1;
+        }
+      }
+    }
+
+    return studlist;
+  }
+
   List<StudentRank> getStudentBySub(String sub, List<StudentRank> studList) {
     List<StudentRank> studSubs = [];
     studList.forEach((stud) {
@@ -29,7 +48,7 @@ class RankingService {
     for (var i = 0; i < studSubs.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
-      studSubs[i].attendancePosition = i + 1;
+      studSubs[i].position = i + 1;
       int s = studSubs[i].raSubScore['$sub'];
 
       //to account for same scores we will iterate through the studlist to see where are the other same scores
@@ -38,7 +57,7 @@ class RankingService {
 
       for (var x = i + 1; x < studSubs.length; x++) {
         if (studSubs[x].raSubScore['$sub'] == s) {
-          studSubs[i].attendancePosition = x + 1;
+          studSubs[i].position = x + 1;
         }
       }
     }
@@ -61,7 +80,7 @@ class RankingService {
     for (var i = 0; i < yearList.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
-      yearList[i].attendancePosition = i + 1;
+      yearList[i].position = i + 1;
       double s = yearList[i].yearScore;
 
       //to account for same scores we will iterate through the studlist to see where are the other same scores
@@ -70,7 +89,7 @@ class RankingService {
 
       for (var x = i + 1; x < yearList.length; x++) {
         if (yearList[x].yearScore == s) {
-          yearList[i].attendancePosition = x + 1;
+          yearList[i].position = x + 1;
         }
       }
     }
@@ -79,10 +98,12 @@ class RankingService {
 
   List<StudentRank> getStudentAttendanceScore(List<StudentRank> studlist) {
     List<StudentRank> attList = studlist;
+    attList.sort((a, b) => b.attendanceScore.compareTo(a.attendanceScore));
+
     for (var i = 0; i < attList.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
-      attList[i].attendancePosition = i + 1;
+      attList[i].position = i + 1;
       double s = attList[i].attendanceScore;
 
       //to account for same scores we will iterate through the studlist to see where are the other same scores
@@ -91,12 +112,11 @@ class RankingService {
 
       for (var x = i + 1; x < attList.length; x++) {
         if (attList[x].attendanceScore == s) {
-          attList[i].attendancePosition = x + 1;
+          attList[i].position = x + 1;
         }
       }
     }
 
-    attList.sort((a, b) => b.attendanceScore.compareTo(a.attendanceScore));
     return attList;
   }
 
