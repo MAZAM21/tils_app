@@ -36,29 +36,32 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     super.didChangeDependencies();
   }
 
-  ElevatedButton _filterButtonFirst({String text, String filterText}) {
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: _filter == text
-              ? MaterialStateProperty.all(Color(0xffC54134))
-              : MaterialStateProperty.all(Color(0xffDEE4ED)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-          )),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: 'Proxima Nova',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: _filter == text ? Colors.white : Colors.black,
+  Widget _filterButtonFirst({String text, String filterText}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2.5),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: _filter == text
+                ? MaterialStateProperty.all(Color(0xffC54134))
+                : MaterialStateProperty.all(Color(0xffDEE4ED)),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+            )),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'Proxima Nova',
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: _filter == text ? Colors.white : Colors.black,
+          ),
         ),
+        onPressed: () {
+          setState(() {
+            _filter = '$filterText';
+          });
+        },
       ),
-      onPressed: () {
-        setState(() {
-          _filter = '$filterText';
-        });
-      },
     );
   }
 
@@ -195,26 +198,28 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                       ),
                       Container(
                         color: Theme.of(context).canvasColor,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _filterButtonFirst(
-                              filterText: 'Year',
-                              text: 'Year',
-                            ),
-                            _filterButtonFirst(
-                              filterText: 'Attendance',
-                              text: 'Attendance',
-                            ),
-                            _filterButtonFirst(
-                              filterText: 'Assignments',
-                              text: 'Assignments',
-                            ),
-                            _filterButtonFirst(
-                              filterText: 'Subject',
-                              text: 'Subject',
-                            ),
-                          ],
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: <Widget>[
+                              _filterButtonFirst(
+                                filterText: 'Year',
+                                text: 'Year',
+                              ),
+                              _filterButtonFirst(
+                                filterText: 'Attendance',
+                                text: 'Attendance',
+                              ),
+                              _filterButtonFirst(
+                                filterText: 'Assignments',
+                                text: 'Assignments',
+                              ),
+                              _filterButtonFirst(
+                                filterText: 'Subject',
+                                text: 'Subject',
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       if (_filter == 'Subject')

@@ -26,7 +26,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 import 'package:tils_app/widgets/student-screens/edit-student-profile.dart';
-import 'package:tils_app/widgets/student-screens/rankings/ranking-display.dart';
+import 'package:tils_app/widgets/student-screens/rankings/student-ranking-display.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student_home.dart';

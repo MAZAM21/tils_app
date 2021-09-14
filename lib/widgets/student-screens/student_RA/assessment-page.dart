@@ -43,7 +43,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        child: _question != null ? Icon(Icons.save) : Icon(Icons.exit_to_app),
+        child: _question != null ? 
+        Icon(Icons.save) :
+        Icon(Icons.exit_to_app),
         onPressed: _question != null
             ? () {
                 //if ans not equal to null, will execute mcq submission else will execute text q submission
@@ -130,7 +132,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
             itemExtent: 150,
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-               
                 return _answers != null
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -103,7 +103,7 @@ class AssessmentHomePanel extends StatelessWidget {
                         onTap: !studData.completedAssessments.contains(topThree[i].id) &&
                                         topThree[i].isDeployed
                                     ? () {
-                                        Navigator.popAndPushNamed(
+                                        Navigator.pushNamed(
                                             context, AssessmentPage.routeName,
                                             arguments: {
                                               'ra': topThree[i],
