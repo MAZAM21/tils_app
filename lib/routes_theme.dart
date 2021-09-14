@@ -15,7 +15,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-home.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/records/choose_records_screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/records/class_record_detail.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/records/class_records.dart';

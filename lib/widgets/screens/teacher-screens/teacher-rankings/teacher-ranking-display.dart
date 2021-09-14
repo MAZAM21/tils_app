@@ -306,7 +306,11 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                               borderRadius: BorderRadius.circular(10),
                               child: Container(
                                 color: Colors.white,
-                                height: 60,
+                                height: i == 0
+                                    ? 130
+                                    : i == 1 || i == 2
+                                        ? 80
+                                        : 60,
                                 child: Row(
                                   children: <Widget>[
                                     SizedBox(
@@ -316,9 +320,13 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                       '${students[i].position}',
                                       style: TextStyle(
                                         color: Theme.of(context).primaryColor,
-                                        fontSize: 20,
+                                        fontSize: i == 0 || i == 1 || i == 2
+                                            ? 26
+                                            : 20,
                                         fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w700,
+                                        fontWeight: i == 0 || i == 1 || i == 2
+                                            ? FontWeight.w700
+                                            : FontWeight.w600,
                                       ),
                                     ),
                                     SizedBox(
@@ -328,12 +336,16 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                       CircleAvatar(
                                         backgroundImage:
                                             NetworkImage(students[i].imageUrl),
-                                        radius: 25,
+                                        radius: i == 0 || i == 1 || i == 2
+                                            ? 25
+                                            : 15,
                                       )
                                     else
                                       Icon(
                                         Icons.person,
-                                        size: 50,
+                                        size: i == 0 || i == 1 || i == 2
+                                            ? 50
+                                            : 30,
                                       ),
                                     SizedBox(width: 11),
                                     Text(

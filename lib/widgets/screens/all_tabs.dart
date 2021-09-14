@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/drawer.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/home.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-home.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/teacher-rankings/teacher-ranking-display.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 

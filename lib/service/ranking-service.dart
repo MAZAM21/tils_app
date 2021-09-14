@@ -224,55 +224,13 @@ class RankingService {
   /// first takes l which is length of the list of textqs i.e. the number of text qs
   /// then adds to tqscore the existing score from previous iteration and the textmarks obtained on this divided by l*100
 
-  double _studentTQScore(
-    StudentRank stud,
-    List<RAfromDB> ralist,
-  ) {
-    try {
-      double tqscore = 0;
-      if (stud.completedAssessements.isNotEmpty) {
-        stud.completedAssessements.forEach((assid) {
-          if (stud.textMarks.isNotEmpty) {
-            int l =
-                ralist.firstWhere((a) => a.id == assid).allTextQs.length ?? 0;
-            //print('${stud.name}');
-            if (stud.textMarks['$assid'] != null) {
-              tqscore =
-                  tqscore + ((stud.textMarks['$assid'] / (l * 100)) * 100) ?? 0;
-            }
-          }
-          //print('assessment id: $assid');
-          //print('tqscore: $tqscore');
-        });
-      }
-      return tqscore;
-    } on Exception catch (e) {
-      print('error in studentTQscore:$e');
-    }
-    return null;
-  }
-
+ 
   /// uses the studrank mcq map to check correctly answered mcqs
   /// each correct answer earns 70 points.
   /// note = correct answer is signified by 1 as value.
   /// there may be an error if the the db function is called again on another attempt of the same assessment
 
-  double _mcqScore(StudentRank stud) {
-    try {
-      double mcqscore = 0;
-      if (stud.mcqMarks.isNotEmpty) {
-        stud.mcqMarks.forEach((key, value) {
-          if (value > 1) {
-            mcqscore = mcqscore + (70 * value);
-          }
-        });
-      }
-      return mcqscore;
-    } on Exception catch (e) {
-      print('error in _mcqScore ranking service: $e');
-    }
-    return null;
-  }
+ 
 
   //main body
 }

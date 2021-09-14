@@ -28,7 +28,6 @@ class _AuthFormState extends State<AuthForm> {
   var _userName = '';
   var _userPassword = '';
 
-  
   void _trySubmit() {
     //IsValid stores bool on whether the text inputs are validated
     final isValid = _formKey.currentState.validate();
@@ -46,7 +45,7 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
+      child: Container(
         margin: EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Padding(
@@ -56,55 +55,112 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  TextFormField(
-                    key: ValueKey('email'),
-                    validator: (value) {
-                      if (value.isEmpty || !value.contains('@')) {
-                        return 'Please enter a valid email address.';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: 'Email address',
-                    ),
-                    onSaved: (value) {
-                      _userEmail = value;
-                    },
+                  Image(
+                    image: AssetImage('lib/assets/Tilslogonew.png'),
+                    height: 150,
                   ),
-                  if (!_isLogin)
-                    TextFormField(
-                      key: ValueKey('username'),
-                      validator: (value) {
-                        if (value.isEmpty || value.length < 4) {
-                          return 'Please enter at least 4 characters';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(labelText: 'Username'),
-                      onSaved: (value) {
-                        _userName = value;
-                      },
+                  SizedBox(
+                    height: 70,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Email Address',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Proxima Nova',
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      color: Colors.white38,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          cursorColor: Colors.white,
+                          key: ValueKey('email'),
+                          validator: (value) {
+                            if (value.isEmpty || !value.contains('@')) {
+                              return 'Please enter a valid email address.';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          onSaved: (value) {
+                            _userEmail = value;
+                          },
+                        ),
+                      ),
                     ),
-                  TextFormField(
-                    key: ValueKey('password'),
-                    validator: (value) {
-                      if (value.isEmpty || value.length < 7) {
-                        return 'Password must be at least 7 characters long.';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                    onSaved: (value) {
-                      _userPassword = value;
-                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Password',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      color: Colors.white38,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          cursorColor: Colors.white,
+                          
+                          key: ValueKey('password'),
+                          validator: (value) {
+                            if (value.isEmpty || value.length < 7) {
+                              return 'Password must be at least 7 characters long.';
+                            }
+                            return null;
+                          },
+                          obscureText: true,
+                          onSaved: (value) {
+                            _userPassword = value;
+                          },
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(height: 12),
                   if (widget.isLoading) CircularProgressIndicator(),
                   if (!widget.isLoading)
-                    RaisedButton(
-                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(Size(200, 40)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                      ),
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Proxima Nova',
+                            color: Colors.black),
+                      ),
                       onPressed: _trySubmit,
                     ),
                   if (!widget.isLoading)

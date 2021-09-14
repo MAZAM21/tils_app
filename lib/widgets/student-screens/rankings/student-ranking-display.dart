@@ -297,12 +297,16 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                       CircleAvatar(
                                         backgroundImage:
                                             NetworkImage(students[i].imageUrl),
-                                        radius: 25,
+                                        radius: i == 0 || i == 1 || i == 2
+                                            ? 25
+                                            : 15,
                                       )
                                     else
                                       Icon(
                                         Icons.person,
-                                        size: 50,
+                                        size: i == 0 || i == 1 || i == 2
+                                            ? 50
+                                            : 30,
                                       ),
                                     SizedBox(width: 11),
                                     Text(
