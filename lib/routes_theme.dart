@@ -160,7 +160,7 @@ class RoutesAndTheme extends StatelessWidget {
           StudentHome.routeName: (context) => StudentHome(),
           AssessmentPage.routeName: (context) => AssessmentPage(),
           EditStudentProfile.routeName: (context) => EditStudentProfile(),
-          RankingDisplay.routeName: (context) => RankingDisplay(),
+          StudentRankingDisplay.routeName: (context) => StudentRankingDisplay(),
           AssignmentMain.routeName: (context) => AssignmentMain(),
           AddAssignment.routeName: (context) => AddAssignment(),
           AttendanceMarkerBuilder.routeName: (context) => AttendanceMarkerBuilder(),

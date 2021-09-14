@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/student-screens/rankings/student-ranking-display.dart';
 
+
 import 'package:tils_app/widgets/student-screens/student-drawer.dart';
 
 import './student_home/student_home.dart';
@@ -65,7 +66,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
         ),
         body: TabBarView(children: <Widget>[
           StudentHome(),
-          RankingDisplay(),
+          StudentRankingDisplay(),
         ]),
       ),
     );
