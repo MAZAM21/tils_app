@@ -197,7 +197,7 @@ class _EditTTFormState extends State<EditTTForm> {
   Widget buildSubjectButton(String subName) {
     return ElevatedButton(
       child: Text(
-        subName,
+        subName == 'Jurisprudence' ? 'Juris' : subName,
         style: TextStyle(
           fontSize: 12.5,
           fontFamily: 'Proxima Nova',
@@ -216,7 +216,7 @@ class _EditTTFormState extends State<EditTTForm> {
       style: ButtonStyle(
         elevation: MaterialStateProperty.all(0),
         minimumSize: MaterialStateProperty.all(Size(40, 25)),
-        fixedSize: MaterialStateProperty.all(Size(114, 38)),
+        fixedSize: MaterialStateProperty.all(Size(107, 38)),
         backgroundColor: _subName == checkSubject(subName)
             ? MaterialStateProperty.all(Color(0xffc54134))
             : MaterialStateProperty.all(Color(0xfff4f6f9)),

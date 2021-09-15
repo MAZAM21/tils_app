@@ -8,6 +8,7 @@ import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
+import 'package:tils_app/service/upload-service.dart';
 
 import '../models/announcement.dart';
 import '../models/attendance.dart';
@@ -660,64 +661,83 @@ class DatabaseService with ChangeNotifier {
   //adds class data from edit tt to cf
 
   Future<void> saveStudent(
-    String email,
-    String password,
-    String name,
-    List<String> subjects,
-    String year,
-    String batch,
-    String section,
+    List<UploadStudent> uploadStudents,
   ) async {
     CollectionReference studRef = _db.collection('students');
     CollectionReference userRef = _db.collection('users');
 
-    Map<String, bool> subs = {
-      'Conflict': false,
-      'Jurisprudence': false,
-      'Islamic': false,
-      'Trust': false,
-      'Company': false,
-      'Tort': false,
-      'Property': false,
-      'EU': false,
-      'HR': false,
-      'Contract': false,
-      'Criminal': false,
-      'Public': false,
-      'LSM': false,
-    };
-    subs.forEach((k, v) {
-      if (subjects.contains('$k')) {
-        subs[k] = true;
-      }
-    });
+    uploadStudents.forEach(
+      (stud) {
+        Map<String, bool> subs = {
+          'Conflict': false,
+          'Jurisprudence': false,
+          'Islamic': false,
+          'Trust': false,
+          'Company': false,
+          'Tort': false,
+          'Property': false,
+          'EU': false,
+          'HR': false,
+          'Contract': false,
+          'Criminal': false,
+          'Public': false,
+          'LSM': false,
+        };
 
-    try {
-      UserCredential cred = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      await studRef.add({
-        'name': name,
-        'email': email,
-        'password': password,
-        'registeredSubs': subs,
-        'uid': cred.user.uid,
-        'attendance': {},
-        'year': year,
-        'completed-assessments': [],
-        'batch': batch,
-        'section': section,
-      });
-      return await userRef.doc(cred.user.uid).set({
-        'role': 'student',
-        'email': email,
-        'password': password,
-        'name': name,
-      }, SetOptions(merge: true));
-    } catch (err) {
-      print('err in save student: $err');
-    }
+        subs.forEach(
+          (k, v) {
+            if (stud.subjects.contains('$k')) {
+              subs[k] = true;
+            }
+          },
+        );
+      },
+    );
+
+    Future.forEach(
+      uploadStudents,
+      (UploadStudent stud) => auth
+          .createUserWithEmailAndPassword(
+            email: stud.email,
+            password: stud.password,
+          )
+          .then((UserCredential cred) => stud.uid = cred.user.uid),
+    )
+        .then(
+          (value) => Future.forEach(
+            uploadStudents,
+            (UploadStudent student) => studRef.add(
+              {
+                'name': student.name,
+                'email': student.email,
+                'password': student.password,
+                'registeredSubs': student.subjects,
+                'uid': student.uid,
+                'attendance': {},
+                'year': student.year,
+                'completed-assessments': [],
+                'batch': student.batch,
+                'section': student.section,
+                'parent-uid': '',
+                'profile-pic-url': '',
+              },
+            ),
+          ),
+        )
+        .then(
+          (value) => Future.forEach(
+            uploadStudents,
+            (UploadStudent student) => userRef.doc(student.uid).set(
+              {
+                'role': 'student',
+                'email': student.email,
+                'password': student.password,
+                'name': student.name,
+              },
+              SetOptions(merge: true),
+            ),
+          ),
+        );
   }
 
   //adds edited class to cf

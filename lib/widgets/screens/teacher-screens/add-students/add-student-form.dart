@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:excel/excel.dart';
+import 'package:tils_app/service/upload-service.dart';
 
 class AddStudent extends StatefulWidget {
   static const routeName = '/add-students';
@@ -12,6 +13,7 @@ class AddStudent extends StatefulWidget {
 }
 
 class _AddStudentState extends State<AddStudent> {
+  final us= UploadService();
   final _formKey = GlobalKey<FormState>();
   var _userEmail = '';
   var _userName = '';
@@ -63,15 +65,7 @@ class _AddStudentState extends State<AddStudent> {
                   _year != '' &&
                   _section.isNotEmpty) {
                 _formKey.currentState.save();
-                db.saveStudent(
-                  _userEmail,
-                  _userPassword,
-                  _userName,
-                  _selectedSubs,
-                  _year,
-                  _batch,
-                  _section,
-                );
+               
                 _formKey.currentState.reset();
                 setState(() {
                   _selectedSubs.clear();
@@ -284,29 +278,7 @@ class _AddStudentState extends State<AddStudent> {
                           var file = result.paths.first;
                           var bytes = File(file).readAsBytesSync();
                           var excel = Excel.decodeBytes(bytes);
-
-                          for (var table in excel.tables.keys) {
-                            print(table); //sheet Name
-                            print(excel.tables[table].maxCols);
-                            print(excel.tables[table].maxRows);
-                            for (var row in excel.tables[table].rows) {
-                              print("$row");
-                              print('${row[3]}');
-                              if (row[0].toString() != 'Name') {
-                                List<String> subs = row[3].toString().split(', ');
-                                print(row[1]);
-                                db.saveStudent(
-                                  '${row[1]}',
-                                  '${row[2]}',
-                                  '${row[0]}',
-                                  subs,
-                                  "${row[4]}",
-                                  '${row[5]}',
-                                  '${row[6]}',
-                                );
-                              }
-                            }
-                          }
+                          us.uploadStudentToDB(excel);
                         }
                       },
                     )

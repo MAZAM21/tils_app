@@ -30,7 +30,7 @@ class Student with ChangeNotifier {
   });
 
   factory Student.fromFirestore(
-      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+      QueryDocumentSnapshot doc) {
     try {
       Map data = doc.data();
       
