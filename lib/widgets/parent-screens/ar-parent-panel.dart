@@ -1,23 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/parent-user-data.dart';
+import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/ranking-service.dart';
+import 'package:provider/provider.dart';
 
-class ARParentPanel extends StatelessWidget {
+class ARParentPanel extends StatefulWidget {
   const ARParentPanel({
-    Key key,
-    @required this.compRaList,
-  }) : super(key: key);
-
-  final List<AssessmentResult> compRaList;
+    @required this.parentData,
+  });
+  final ParentUser parentData;
 
   @override
+  _ARParentPanelState createState() => _ARParentPanelState();
+}
+
+class _ARParentPanelState extends State<ARParentPanel> {
+  final rs = RankingService();
+  @override
   Widget build(BuildContext context) {
+    List<AssessmentResult> compRaList = [];
+    final raList = Provider.of<List<RAfromDB>>(context);
+    if (raList != null) {
+      compRaList = rs.completedAssessmentsParent(raList, widget.parentData);
+    }
+
     return Container(
-      
       height: 300,
       width: MediaQuery.of(context).size.width * 0.915,
       child: Column(
         children: <Widget>[
-          Divider(thickness: 0.2, color: Color(0xff2A353F),),
+          Divider(
+            thickness: 0.2,
+            color: Color(0xff2A353F),
+          ),
           SizedBox(
             height: 5,
           ),

@@ -12,7 +12,7 @@ import '../models/remote_assessment.dart';
 /// If a remote assessment file is deleted from the database, it must also be deleted from student
 
 class RankingService {
-   int attendancePercentage(StudentRank stud) {
+  int attendancePercentage(StudentRank stud) {
     Map att = stud.attendance;
     double perc = 0;
     int presents = 0;
@@ -35,7 +35,7 @@ class RankingService {
   }
 
   /// number of presents
-   int presents(Map att) {
+  int presents(Map att) {
     int p = 0;
     att.forEach((key, value) {
       if (value == 1) {
@@ -177,8 +177,17 @@ class RankingService {
     try {
       List<RAfromDB> compList = [];
       List<AssessmentResult> arList = [];
-      
-     
+      Map assidPercMap = _individualPercentages(parentData, raList);
+      compList = raList
+          .where((ra) => parentData.completedAssessments.contains(ra.id))
+          .toList();
+      compList.forEach((ra) {
+        arList.add(AssessmentResult(
+          subject: ra.subject,
+          title: ra.assessmentTitle,
+          percentage: assidPercMap['${ra.id}'],
+        ));
+      });
       return arList;
     } on Exception catch (e) {
       print('error in completet assessment parent ranking service: $e');
@@ -265,13 +274,10 @@ class RankingService {
   /// first takes l which is length of the list of textqs i.e. the number of text qs
   /// then adds to tqscore the existing score from previous iteration and the textmarks obtained on this divided by l*100
 
- 
   /// uses the studrank mcq map to check correctly answered mcqs
   /// each correct answer earns 70 points.
   /// note = correct answer is signified by 1 as value.
   /// there may be an error if the the db function is called again on another attempt of the same assessment
-
- 
 
   //main body
 }

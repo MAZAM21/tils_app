@@ -6,6 +6,7 @@ import 'package:tils_app/service/student-service.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
+import 'package:tils_app/widgets/student-screens/student_RA/student-ra-subject.dart';
 
 class AssessmentHomePanel extends StatelessWidget {
   const AssessmentHomePanel({
@@ -41,11 +42,11 @@ class AssessmentHomePanel extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          settings: RouteSettings(name: '/all-ras'),
+                          settings: RouteSettings(name: '/studentra-subject-selection'),
                           builder: (BuildContext context) =>
                               ChangeNotifierProvider.value(
                             value: studData,
-                            child: StudentRADisplay(),
+                            child: StudentRASubject(),
                           ),
                         ),
                       );

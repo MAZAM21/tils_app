@@ -43,7 +43,6 @@ class TeacherService with ChangeNotifier {
     int marked = 0;
     int total = 0;
     studList.forEach((stud) {
-  
       if (stud.subjects.contains(cls.subjectName) &&
           stud.section == cls.section) {
         total++;
@@ -359,11 +358,13 @@ class TeacherService with ChangeNotifier {
       }
 
       /// display classes are the next up and the rest (hopefully)
-      myClasses.forEach((cls) {
-        if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
-          displayClasses.add(cls);
-        }
-      });
+      if (clsAfterNext > 0) {
+        myClasses.forEach((cls) {
+          if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
+            displayClasses.add(cls);
+          }
+        });
+      }
     } else {
       displayClasses = allClasses;
     }

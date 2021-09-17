@@ -35,12 +35,8 @@ class _ParentHomeState extends State<ParentHome> {
   final db = DatabaseService();
   String _token;
   bool _tokenAdded = false;
-  
-  
 
   @override
- 
-
   @override
   Widget build(BuildContext context) {
     final parentData = Provider.of<ParentUser>(context);
@@ -49,7 +45,7 @@ class _ParentHomeState extends State<ParentHome> {
     final raList = Provider.of<List<RAfromDB>>(context);
     List<SubjectClass> marked = [];
     List<StudentRank> sorted = [];
-    List<AssessmentResult> compRaList = [];
+
     StudentRank myStud;
 
     bool isActive = false;
@@ -106,14 +102,15 @@ class _ParentHomeState extends State<ParentHome> {
                       SizedBox(
                         height: 20,
                       ),
-
                       ClassPositionPanel(
-                        position: '',
+                        pData: parentData,
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      //ARParentPanel(compRaList: compRaList),
+                      ARParentPanel(
+                        parentData: parentData,
+                      ),
                       SizedBox(
                         height: 30,
                       ),

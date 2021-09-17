@@ -259,6 +259,10 @@ class StudentRank with ChangeNotifier {
 
     return null;
   }
+
+  int getPostion(){
+    return position;
+  }
 }
 
 /// This model is to have all StudentRank data so that it can be used for score, attendance, and assessment.
