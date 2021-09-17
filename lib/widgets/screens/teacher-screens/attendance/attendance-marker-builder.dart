@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tils_app/models/attendance.dart';
 
 import 'package:provider/provider.dart';
@@ -67,7 +68,11 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
 
     final subClass = ModalRoute.of(context).settings.arguments as SubjectClass;
 
+    String notification =
+        DateFormat("EEE, dd-MM hh:mm a").format(DateTime.now());
     attInput.classID = subClass.id;
+    attInput.subject = subClass.subjectName;
+    attInput.date = notification;
 
     ///Students registered for this subject and section
     List<StudentRank> clsStuds = [];

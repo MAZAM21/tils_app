@@ -35,9 +35,11 @@ class AttendanceInput {
   Map attendanceStatus;
   String classID;
   String subject;
+  String date;
   AttendanceInput({
     this.attendanceStatus,
     this.subject,
     this.classID,
+    this.date,
   });
 }

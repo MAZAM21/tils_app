@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-
+import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/service/upload-service.dart';
-
+import 'package:cloud_functions/cloud_functions.dart';
 import '../models/announcement.dart';
 import '../models/attendance.dart';
 import '../models/class-data.dart';
@@ -331,23 +331,37 @@ class DatabaseService with ChangeNotifier {
       (value) => Future.forEach(
         students,
         (StudentRank stud) => addAttToStudent(
-          stud,
-          attInput.classID,
-          attInput.attendanceStatus['${stud.id}'],
-        ),
+            stud,
+            attInput.classID,
+            attInput.attendanceStatus['${stud.id}'],
+            attInput.subject,
+            attInput.date),
       ),
     );
   }
 
-  Future<void> addAttToStudent(
-      StudentRank student, String clsId, int stat) async {
+  Future<void> addAttToStudent(StudentRank student, String clsId, int stat,
+      String subName, String notifdate) async {
     CollectionReference studentRef = _db.collection('students');
+    if (stat == 3) {
+      studentAbsentNotification(student, subName, notifdate);
+    }
     return await studentRef.doc(student.id).set(
       {
         'attendance': {'$clsId': stat}
       },
       SetOptions(merge: true),
     );
+  }
+
+  Future<void> studentAbsentNotification(
+      StudentRank stud, String clsName, String date) async {
+    FirebaseFunctions.instance.httpsCallable('studentAbsentNotif').call({
+      'className': clsName,
+      'studentName': stud.name,
+      'parentToken': stud.parentToken,
+      'date': date,
+    });
   }
 
   //adds attendance status to database in attendance and individual student document
@@ -405,7 +419,33 @@ class DatabaseService with ChangeNotifier {
         'token-FCM': token,
         'token-time-added': DateTime.now(),
       }, SetOptions(merge: true));
-    } catch (e) {}
+    } catch (e) {
+      print('error in addTokenToTeacher: $e');
+    }
+  }
+
+  Future<void> addTokenToStudent(String token, String studID) async {
+    DocumentReference ref = _db.collection('students').doc('$studID');
+    try {
+      return await ref.set({
+        'student-token': token,
+        'token-time-added': DateTime.now(),
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print('error in addTokenToStudent: $e');
+    }
+  }
+
+  Future<void> addParentTokenToStudent(String token, String studID) async {
+    DocumentReference ref = _db.collection('students').doc('$studID');
+    try {
+      return await ref.set({
+        'parent-token': token,
+        'parent-token-time-added': DateTime.now(),
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print('error in addTokenToStudent: $e');
+    }
   }
 
   Future<void> addAnnouncementToCF(
@@ -666,34 +706,6 @@ class DatabaseService with ChangeNotifier {
     CollectionReference studRef = _db.collection('students');
     CollectionReference userRef = _db.collection('users');
 
-    uploadStudents.forEach(
-      (stud) {
-        Map<String, bool> subs = {
-          'Conflict': false,
-          'Jurisprudence': false,
-          'Islamic': false,
-          'Trust': false,
-          'Company': false,
-          'Tort': false,
-          'Property': false,
-          'EU': false,
-          'HR': false,
-          'Contract': false,
-          'Criminal': false,
-          'Public': false,
-          'LSM': false,
-        };
-
-        subs.forEach(
-          (k, v) {
-            if (stud.subjects.contains('$k')) {
-              subs[k] = true;
-            }
-          },
-        );
-      },
-    );
-
     Future.forEach(
       uploadStudents,
       (UploadStudent stud) => auth
@@ -711,7 +723,7 @@ class DatabaseService with ChangeNotifier {
                 'name': student.name,
                 'email': student.email,
                 'password': student.password,
-                'registeredSubs': student.subjects,
+                'registeredSubs': student.subMap,
                 'uid': student.uid,
                 'attendance': {},
                 'year': student.year,
@@ -737,7 +749,10 @@ class DatabaseService with ChangeNotifier {
               SetOptions(merge: true),
             ),
           ),
-        );
+          //TODO: Add parent portal user creation
+        )
+        .then((value) =>
+            Future.forEach(uploadStudents, (UploadStudent student) => null));
   }
 
   //adds edited class to cf

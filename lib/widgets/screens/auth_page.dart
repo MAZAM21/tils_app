@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+
 import '../authform.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -46,16 +46,6 @@ class _AuthScreenState extends State<AuthScreen> {
           'email': email,
         });
       }
-    } on PlatformException catch (err) {
-      var message = 'An error occurred, pelase check your credentials!';
-
-      if (err.message != null) {
-        message = err.message;
-      }
-
-      setState(() {
-        _isLoading = false;
-      });
     } catch (err) {
       print('error loging in : $err');
       ScaffoldMessenger.of(ctx).showSnackBar(

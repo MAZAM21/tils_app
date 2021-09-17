@@ -18,10 +18,7 @@ class ParentDataStream extends StatelessWidget {
     return !isActive
         ? LoadingScreen()
         : StreamProvider<ParentUser>(
-            catchError: (BuildContext context, err) => ParentUser(
-                year: null, section: null, studId: null, studentName: null),
-            initialData: ParentUser(
-                year: null, section: null, studId: null, studentName: null),
+            initialData: null,
             create: (context) => db.streamParentUser(uid),
             builder: (context, _) => ParentHome(),
           );

@@ -128,7 +128,6 @@ class _AuthFormState extends State<AuthForm> {
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           cursorColor: Colors.white,
-                          
                           key: ValueKey('password'),
                           validator: (value) {
                             if (value.isEmpty || value.length < 7) {
@@ -163,18 +162,6 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                       onPressed: _trySubmit,
                     ),
-                  if (!widget.isLoading)
-                    FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'I already have an account'),
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                    )
                 ],
               ),
             ),

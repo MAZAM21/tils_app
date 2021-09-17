@@ -12,10 +12,60 @@ import '../models/remote_assessment.dart';
 /// If a remote assessment file is deleted from the database, it must also be deleted from student
 
 class RankingService {
-  ///this function should branch into to others
-  ///one for text qs and the other for mcqs
-  ///each function should return an integer which is the score. make that a double.
-  ///
+   int attendancePercentage(StudentRank stud) {
+    Map att = stud.attendance;
+    double perc = 0;
+    int presents = 0;
+    int all = att.length;
+    att.forEach((key, value) {
+      if (value == 1 || value == 2) {
+        presents++;
+      }
+    });
+
+    perc = (presents / all) * 100;
+    if (perc.isNaN) {
+      return 0;
+    }
+
+    print('perc: $perc');
+    int pint = perc.toInt();
+    print('pint: $pint');
+    return pint;
+  }
+
+  /// number of presents
+   int presents(Map att) {
+    int p = 0;
+    att.forEach((key, value) {
+      if (value == 1) {
+        p++;
+      }
+    });
+    return p;
+  }
+
+  /// number of lates
+  int lates(Map att) {
+    int l = 0;
+    att.forEach((key, value) {
+      if (value == 2) {
+        l++;
+      }
+    });
+    return l;
+  }
+
+  /// number of absents
+  int absents(Map att) {
+    int a = 0;
+    att.forEach((key, value) {
+      if (value == 3) {
+        a++;
+      }
+    });
+    return a;
+  }
 
   List<StudentRank> getStudentAssignmentScore(List<StudentRank> studlist) {
     studlist.sort((a, b) => b.assignmentScore.compareTo(a.assignmentScore));
@@ -127,17 +177,8 @@ class RankingService {
     try {
       List<RAfromDB> compList = [];
       List<AssessmentResult> arList = [];
-      Map assidPercMap = _individualPercentages(parentData, raList);
-      compList = raList
-          .where((ra) => parentData.completedAssessments.contains(ra.id))
-          .toList();
-      compList.forEach((ra) {
-        arList.add(AssessmentResult(
-          subject: ra.subject,
-          title: ra.assessmentTitle,
-          percentage: assidPercMap['${ra.id}'],
-        ));
-      });
+      
+     
       return arList;
     } on Exception catch (e) {
       print('error in completet assessment parent ranking service: $e');

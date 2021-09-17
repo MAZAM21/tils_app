@@ -72,17 +72,18 @@ class _StudentHomeState extends State<StudentHome> {
         FirebaseMessaging.instance
             .subscribeToTopic('${studDatainit.subjects[i]}');
       }
+      getToken(studDatainit.uid);
     }
-    getToken();
     // getTopics();
   }
 
-  getToken() async {
+  getToken(studID) async {
     String token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
     print(token);
+    db.addTokenToStudent(token, studID);
   }
 
   @override

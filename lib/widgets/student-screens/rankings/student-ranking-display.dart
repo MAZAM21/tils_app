@@ -265,61 +265,64 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                             borderRadius: BorderRadius.circular(10),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                color: Colors.white,
-                                height: i == 0
-                                    ? 130
-                                    : i == 1 || i == 2
-                                        ? 80
-                                        : 60,
-                                child: Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    Text(
-                                      '${students[i].position}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontSize: i == 0 || i == 1 || i == 2
-                                            ? 26
-                                            : 20,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: i == 0 || i == 1 || i == 2
-                                            ? FontWeight.w700
-                                            : FontWeight.w600,
+                              child: InkWell(
+                                onTap: (){},
+                                child: Container(
+                                  color: Colors.white,
+                                  height: i == 0
+                                      ? 130
+                                      : i == 1 || i == 2
+                                          ? 80
+                                          : 60,
+                                  child: Row(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 20,
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 22,
-                                    ),
-                                    if (students[i].imageUrl != '')
-                                      CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage(students[i].imageUrl),
-                                        radius: i == 0 || i == 1 || i == 2
-                                            ? 25
-                                            : 15,
-                                      )
-                                    else
-                                      Icon(
-                                        Icons.person,
-                                        size: i == 0 || i == 1 || i == 2
-                                            ? 50
-                                            : 30,
+                                      Text(
+                                        '${students[i].position}',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                          fontSize: i == 0 || i == 1 || i == 2
+                                              ? 26
+                                              : 20,
+                                          fontFamily: 'Proxima Nova',
+                                          fontWeight: i == 0 || i == 1 || i == 2
+                                              ? FontWeight.w700
+                                              : FontWeight.w600,
+                                        ),
                                       ),
-                                    SizedBox(width: 11),
-                                    Text(
-                                      '${students[i].name}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w700,
+                                      SizedBox(
+                                        width: 22,
                                       ),
-                                    ),
-                                  ],
+                                      if (students[i].imageUrl != '')
+                                        CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(students[i].imageUrl),
+                                          radius: i == 0 || i == 1 || i == 2
+                                              ? 25
+                                              : 15,
+                                        )
+                                      else
+                                        Icon(
+                                          Icons.person,
+                                          size: i == 0 || i == 1 || i == 2
+                                              ? 50
+                                              : 30,
+                                        ),
+                                      SizedBox(width: 11),
+                                      Text(
+                                        '${students[i].name}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: 'Proxima Nova',
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  //trailing: Text('${students[i].attendancePosition}'),
                                 ),
-                                //trailing: Text('${students[i].attendancePosition}'),
                               ),
                             ),
                           ),

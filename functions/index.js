@@ -25,3 +25,21 @@ exports.myFunction = functions.firestore
            },
           });
     });
+
+exports.studentAbsentNotif = functions.https.onCall((data, context) => {
+  console.log(data.studentName);
+  const className = data.className;
+  const studName = data.studentName;
+  const parentToken = data.parentToken;
+  const date = data.date;
+  return admin.messaging().sendToDevice(parentToken,
+      {
+        notification:
+      {
+        title: studName.concat(" is absent from class"),
+        body: studName.concat(" missed ").concat(className).concat(" at ")
+            .concat(date),
+        clickAction: "FLUTTER_NOTIFICATION_CLICK",
+      },
+      });
+});

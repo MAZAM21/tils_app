@@ -5,6 +5,10 @@ import 'package:tils_app/models/subject-class.dart';
 
 class StudentService {
   ///Get attendance percentage
+  ///The idea here is that we only need to consider marked attendance. 
+  ///We need not take into account all classes of the student because
+  ///if the stud is absent then he will be marked absent by teacher and the
+  ///attendance map will show it
   int attendancePercentage(StudentUser sd) {
     Map att = sd.attendance;
     double perc = 0;

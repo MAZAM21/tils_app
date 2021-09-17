@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/data-providers/parent-datastream.dart';
 import 'package:tils_app/widgets/data-providers/student-datastream.dart';
 import 'package:tils_app/widgets/data-providers/teacher-datastream.dart';
-import 'package:tils_app/widgets/screens/all_tabs.dart';
+
 import 'package:tils_app/widgets/screens/auth_page.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 

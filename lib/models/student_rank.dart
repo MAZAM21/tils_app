@@ -35,7 +35,8 @@ class StudentRank with ChangeNotifier {
   ///raScore is a map with subject names as keys and total ra score as value
   Map raSubScore;
 
- 
+  /// Parent token
+  String parentToken;
 
   /// attendance percentage basically
   double attendanceScore;
@@ -43,7 +44,8 @@ class StudentRank with ChangeNotifier {
   // assignment score.
   double assignmentScore;
 
-  /// Year score. gotten from adding all subjects in the year you're in
+  /// Year score. gotten from adding RA and assignment marks of the subjects defined
+  /// for the particular year student is registered.
   double yearScore;
 
   int position;
@@ -66,6 +68,7 @@ class StudentRank with ChangeNotifier {
     this.assignmentScore,
     this.yearScore,
     this.position,
+    this.parentToken,
   });
 
   factory StudentRank.fromFirestore(QueryDocumentSnapshot doc) {
@@ -83,6 +86,7 @@ class StudentRank with ChangeNotifier {
       double attScore = 0;
       double asgScore = 0;
       double yearScore = 0;
+      String pToken;
 
       String getYearofSub(String sub) {
         if (sub == 'Jurisprudence' ||
@@ -106,13 +110,19 @@ class StudentRank with ChangeNotifier {
         }
       }
 
-      //takse internal hash map and checks reg status
+      if (data.containsKey('parent-token')) {
+        pToken = data['parent-token'];
+      }
+
+      /// Registered Subjects
+      /// takes internal hash map and checks reg status
       subs.forEach((k, v) {
         if (v == true) {
           regSubs.add(k);
         }
       });
 
+      ///Remote Assessment Marks
       /// For each subject gets total score
       /// db has subname-textqmarks and subname-mcqmarks field
       if (regSubs.isNotEmpty) {
@@ -174,6 +184,7 @@ class StudentRank with ChangeNotifier {
         //print('${data['name']} $yearScore');
       }
 
+      /// Assessment text question marks all
       /// All assessment text question marks in one map
       if (data.containsKey('Assessment-textqMarks')) {
         tqm = {...data['Assessment-textqMarks'] ?? {}};
@@ -220,8 +231,9 @@ class StudentRank with ChangeNotifier {
         att = {'none': 0};
       }
 
-      print(
-          '${data['name']}, asgSore: $asgScore,  yearScore: $yearScore, attScore: $attScore , ras: $ras');
+      //print(pToken);
+      // print(
+      //   '${data['name']}, asgSore: $asgScore,  yearScore: $yearScore, attScore: $attScore , ras: $ras');
       return StudentRank(
         id: doc.id ?? '',
         name: data['name'] ?? '',
@@ -239,6 +251,7 @@ class StudentRank with ChangeNotifier {
         assignmentMarks: asgMap,
         assignmentScore: asgScore,
         yearScore: yearScore,
+        parentToken: pToken,
       );
     } catch (e) {
       print('error in StudentRank model: $e');

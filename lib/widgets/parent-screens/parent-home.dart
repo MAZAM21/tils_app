@@ -4,6 +4,7 @@ import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
+import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/parent-service.dart';
 import 'package:tils_app/service/ranking-service.dart';
 import 'package:tils_app/widgets/parent-screens/ar-parent-panel.dart';
@@ -13,6 +14,9 @@ import 'package:tils_app/widgets/parent-screens/parent-classposition-panel.dart'
 import 'package:tils_app/widgets/parent-screens/parent-home-avatar-panel.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import './parent-drawer.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:tils_app/main.dart';
 
 ///Unlike teacher homes, each widget here defines its width with the help of mediaquery.
 /// It is yet to be determined which is the better approach.
@@ -28,6 +32,15 @@ class ParentHome extends StatefulWidget {
 class _ParentHomeState extends State<ParentHome> {
   final ps = ParentService();
   final rs = RankingService();
+  final db = DatabaseService();
+  String _token;
+  bool _tokenAdded = false;
+  
+  
+
+  @override
+ 
+
   @override
   Widget build(BuildContext context) {
     final parentData = Provider.of<ParentUser>(context);
@@ -46,15 +59,12 @@ class _ParentHomeState extends State<ParentHome> {
         raList != null &&
         allClasses != null &&
         parentData != null) {
-      marked = ps.getMarkedClasses(allClasses, parentData.attendance);
+      //marked = ps.getMarkedClasses(allClasses, parentData.attendance);
       //sorted = rs.getStudentScores(allStudRanks, raList);
-      if (sorted.isNotEmpty) {
-        myStud = rs.getSingleStudentPos(sorted, parentData.studId);
-        if (myStud != null) {
-          isActive = true;
-        }
-      }
-      compRaList = rs.completedAssessmentsParent(raList, parentData);
+
+      isActive = true;
+
+      // compRaList = rs.completedAssessmentsParent(raList, parentData);
     }
 
     return !isActive
@@ -90,21 +100,20 @@ class _ParentHomeState extends State<ParentHome> {
                       SizedBox(
                         height: 30,
                       ),
-                     ParentAttendanceGrid(
-                        myClasses: marked,
-                        attMap: parentData.attendance,
+                      ParentAttendanceGrid(
+                        pData: parentData,
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                     
+
                       ClassPositionPanel(
                         position: '',
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      ARParentPanel(compRaList: compRaList),
+                      //ARParentPanel(compRaList: compRaList),
                       SizedBox(
                         height: 30,
                       ),
