@@ -35,7 +35,7 @@ class StudentUser with ChangeNotifier {
       final section = data['section'] ?? '';
       final batch = data['batch'] ?? '';
       final url = data['profile-pic-url'] ?? '';
-      List regSubs = [];
+      List<String> regSubs = [];
       if (data.containsKey('completed-assessments')) {
         compAss = [...data['completed-assessments']];
       } else {

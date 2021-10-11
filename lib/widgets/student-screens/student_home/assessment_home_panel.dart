@@ -5,9 +5,10 @@ import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/service/student-service.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
-import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
+
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-subject.dart';
 
+//Students Assessment Panel
 class AssessmentHomePanel extends StatelessWidget {
   const AssessmentHomePanel({
     Key key,
@@ -42,11 +43,15 @@ class AssessmentHomePanel extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          settings: RouteSettings(name: '/studentra-subject-selection'),
+                          settings: RouteSettings(
+                              name: '/studentra-subject-selection'),
                           builder: (BuildContext context) =>
                               ChangeNotifierProvider.value(
                             value: studData,
-                            child: StudentRASubject(),
+                            child: StudentRASubject(
+                              studentUser: studData,
+                              subjects: studData.subjects,
+                            ),
                           ),
                         ),
                       );
@@ -101,50 +106,50 @@ class AssessmentHomePanel extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        onTap: !studData.completedAssessments.contains(topThree[i].id) &&
-                                        topThree[i].isDeployed
+                        onTap: !studData.completedAssessments
+                                    .contains(topThree[i].id) &&
+                                topThree[i].isDeployed
+                            ? () {
+                                Navigator.pushNamed(
+                                    context, AssessmentPage.routeName,
+                                    arguments: {
+                                      'ra': topThree[i],
+                                      'uid': studData.uid,
+                                      'name': studData.name,
+                                    });
+                              }
+                            : studData.completedAssessments
+                                    .contains(topThree[i].id)
+                                ? () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: Text(
+                                          'This assessment has been submitted \n \n No taksies backsies!',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontFamily: 'Raleway',
+                                              color: Colors.red),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                : !topThree[i].isDeployed
                                     ? () {
-                                        Navigator.pushNamed(
-                                            context, AssessmentPage.routeName,
-                                            arguments: {
-                                              'ra': topThree[i],
-                                              'uid': studData.uid,
-                                              'name': studData.name,
-                                            });
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            content: Text(
+                                              'This assessment has not been deployed',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Raleway',
+                                                  color: Colors.red),
+                                            ),
+                                          ),
+                                        );
                                       }
-                                    : studData.completedAssessments.contains(topThree[i].id)
-                                        ? () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                content: Text(
-                                                  'This assessment has been submitted \n \n No taksies backsies!',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Raleway',
-                                                      color: Colors.red),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        : !topThree[i].isDeployed
-                                            ? () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                    content: Text(
-                                                      'This assessment has not been deployed',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'Raleway',
-                                                          color:
-                                                              Colors.red),
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            : {},
+                                    : {},
                       ),
                     );
                   },

@@ -280,7 +280,7 @@ class StudentService {
     return orderSubjectClass(myClasses);
   }
 
-  String getPendingAssessmentNum(List comp, List<RAfromDB> all) {
+  String getPendingAssessmentNum(List comp, List<RAfromDB> all, String subject) {
     int a = 0;
     all.forEach((ra) {
       if (!comp.contains(ra.id)) {

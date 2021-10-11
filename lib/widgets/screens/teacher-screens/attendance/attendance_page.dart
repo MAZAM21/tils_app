@@ -9,7 +9,6 @@ import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/attendance/student-provider.dart';
 
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';

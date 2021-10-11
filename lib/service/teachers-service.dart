@@ -346,28 +346,29 @@ class TeacherService with ChangeNotifier {
       }
     });
 
-    /// the class id of the class after the next one is extracted
-    if (myClasses.length > 3) {
-      for (int i = 0; i < myClasses.length; i++) {
-        x = i + 1;
-        y = i - 1;
-        if (myClasses[i].startTime.isAfter(DateTime.now()) &&
-            myClasses[x].startTime.isBefore(DateTime.now())) {
-          clsAfterNext = y;
-        }
-      }
+    // /// the class id of the class after the next one is extracted
+    // if (myClasses.length > 3) {
+    //   for (int i = 0; i < myClasses.length; i++) {
+    //     x = i + 1;
+    //     y = i - 1;
+    //     if (myClasses[i].startTime.isAfter(DateTime.now()) &&
+    //         myClasses[x].startTime.isBefore(DateTime.now())) {
+    //       clsAfterNext = y;
+    //     }
+    //   }
 
-      /// display classes are the next up and the rest (hopefully)
-      if (clsAfterNext > 0) {
-        myClasses.forEach((cls) {
-          if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
-            displayClasses.add(cls);
-          }
-        });
-      }
-    } else {
-      displayClasses = allClasses;
-    }
+    //   /// display classes are the next up and the rest (hopefully)
+    //   if (clsAfterNext >= 0) {
+    //     myClasses.forEach((cls) {
+    //       if (cls.startTime.isBefore(myClasses[clsAfterNext].startTime)) {
+    //         displayClasses.add(cls);
+    //       }
+    //     });
+    //   }
+    // } else {
+    //   displayClasses = allClasses;
+    // }
+    displayClasses = allClasses;
 
     displayClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
     return displayClasses;

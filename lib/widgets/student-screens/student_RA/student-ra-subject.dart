@@ -1,77 +1,88 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/student-user-data.dart';
 
 
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
 
 
 
 class StudentRASubject extends StatelessWidget {
+  const StudentRASubject({
+    Key key,
+    @required this.subjects,
+    @required this.studentUser,
+  }) : super(key: key);
+  final List<String> subjects;
+  final StudentUser studentUser;
 
-  Widget _buttonBuilder(
-    String buttName,
+ Widget _buttonBuilder(
     String sub,
-    String id,
-    DateTime time,
+    StudentUser teacherUser,
     BuildContext context,
   ) {
-    return Flexible(
-      fit: FlexFit.loose,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          onPressed: () {
-           
-          },
-          style: ButtonStyle(
-            minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
-            backgroundColor:
-                MaterialStateProperty.all(Theme.of(context).primaryColor),
-            textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
-          ),
-          child: Text(buttName),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              settings: RouteSettings(name: '/deploy-assessments'),
+              builder: (BuildContext context) => ChangeNotifierProvider.value(
+                value: studentUser,
+                child: StudentRADisplay(
+                  subject: sub,
+                ),
+              ),
+            ),
+          );
+        },
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).primaryColor),
+          textStyle:
+              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
         ),
+        child: Text(sub),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    bool _idRecieved = false;
-    final id = Provider.of<User>(context).uid;
-    final td = Provider.of<StudentUser>(context);
-    List<String> subs = [];
-    if (id != null && td != null) {
-      _idRecieved = true;
-      subs = td.subjects;
-    }
-    final time = DateTime.now();
     return Scaffold(
-      appBar: AppBar(),
-      body: !_idRecieved
-          ? LoadingScreen()
-          : Row(
+      appBar: AppBar(
+        title: Text(
+          'Select Subject',
+          style: Theme.of(context).appBarTheme.textTheme.caption,
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Container(
-                    width: 400,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        //Subject Notifier
-                        for (var x = 0; x < subs.length; x++)
-                          _buttonBuilder(subs[x], subs[x], id, time, context),
-                      ],
-                    ),
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.915,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      //Subject Notifier
+                      for (var x = 0; x < subjects.length; x++)
+                        _buttonBuilder(subjects[x], studentUser, context),
+                    ],
                   ),
                 ),
               ],
             ),
+          ],
+        ),
+      ),
     );
   }
 }

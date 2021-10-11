@@ -8,8 +8,11 @@ import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
+import 'package:tils_app/widgets/student-screens/student_RA/student-ra-subject.dart';
 
 class StudentRADisplay extends StatefulWidget {
+  StudentRADisplay({@required this.subject});
+  final String subject;
   static const routeName = '/student-ra-display';
 
   @override
@@ -23,166 +26,141 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
 
   final ts = TeacherService();
 
-  Widget buildAssessmentListView(
-      List<RAfromDB> raList,
-      Color col,
-      String subName,
-      BuildContext context,
-      String uid,
-      List completed,
-      String name) {
-    if (subName == 'Trust') {
-      //print(raList.length);
-    }
-    return Container(
-      height: 286,
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: 300,
-            color: Theme.of(context).canvasColor,
-            child: Text(
-              '$subName',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 250),
-              color: Color.fromARGB(50, 172, 216, 211),
-              height: 250,
-              child: raList.isEmpty
-                  ? Text('No Assessments')
-                  : Container(
-                    height: 250,
-                    child: ListView.builder(
-                      cacheExtent: 0.0,
-                        itemCount: raList.length,
-                        itemBuilder: (context, i) {
-                          return Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: GestureDetector(
-                                child: ListTile(
-                                  tileColor: completed.contains(raList[i].id)
-                                      ? Colors.green[100]
-                                      : !raList[i].isDeployed
-                                          ? Colors.grey[300]
-                                          : col,
-                                  title: Text(
-                                    '${raList[i].assessmentTitle} ',
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  subtitle: raList[i].startTime == null
-                                      ? null
-                                      : Text(
-                                          'Deadline: (${DateFormat('EEE, hh:mm a').format(raList[i].endTime)})'),
-                                ),
-                                onTap: !completed.contains(raList[i].id) &&
-                                        raList[i].isDeployed
-                                    ? () {
-                                        Navigator.popAndPushNamed(
-                                            context, AssessmentPage.routeName,
-                                            arguments: {
-                                              'ra': raList[i],
-                                              'uid': uid,
-                                              'name': name,
-                                            });
-                                      }
-                                    : completed.contains(raList[i].id)
-                                        ? () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                content: Text(
-                                                  'This assessment has been submitted \n \n No taksies backsies!',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Raleway',
-                                                      color: Colors.pinkAccent),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        : !raList[i].isDeployed
-                                            ? () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                    content: Text(
-                                                      'This assessment has not been deployed',
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'Raleway',
-                                                          color:
-                                                              Colors.pinkAccent),
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                            : {},
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    //final screenWidth = MediaQuery.of(context).size.width;
     final allRa = Provider.of<List<RAfromDB>>(context);
     final userData = Provider.of<StudentUser>(context);
 
-    //when student attempts an assessment the id is logged in his doc in cf.
-    //this list of attempted assessment id is stored in completed.
-    List completed = userData.completedAssessments;
-
-    Map<String, List<RAfromDB>> myRa =
-        {}; //a map with subjects as keys and assessment associated with sub as values
-
+    ///a list of all ra's of the subject passed in constructor
+    List<RAfromDB> subRa = [];
+    int totalRa;
     bool isActive = false;
+    String uid;
+    String name;
     if (allRa != null && userData != null) {
+      name = userData.name;
+      uid = userData.uid;
       // filtering allra for all of the subs registered.
       isActive = true;
-      myRa = ss.getRAForStud(userData, allRa);
+      subRa = ts.getRAfromSub(allRa, widget.subject);
+      totalRa = subRa.length;
     }
-
     return !isActive
         ? LoadingScreen()
         : Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: Text(
+                'Assessments Main',
+                style: Theme.of(context).appBarTheme.textTheme.caption,
+              ),
+            ),
             body: SingleChildScrollView(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: <Widget>[
-                  Container(
-                    width: 300,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (var x = 0; x < myRa.length; x++)
-                          buildAssessmentListView(
-                            myRa.values.toList()[x],
-                            Colors.white,
-                            myRa.keys.toList()[x], //list of ras per sub
-                            context,
-                            userData.uid,
-                            completed,
-                            userData.name,
+                  Material(
+                    elevation: 5,
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Divider(),
+                          Container(
+                            height: 10,
+                            color: Theme.of(context).canvasColor,
                           ),
-                      ],
+                          Container(
+                            color: Theme.of(context).canvasColor,
+                            child: Row(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Total: ',
+                                      style: TextStyle(
+                                        fontFamily: 'Proxima Nova',
+                                        fontSize: 25,
+                                      ),
+                                    ),
+                                    Text(
+                                      '$totalRa',
+                                      style: TextStyle(
+                                        fontFamily: 'Proxima Nova',
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: subRa.length,
+                      itemBuilder: (context, i) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            title: Text(
+                              '${subRa[i].assessmentTitle}',
+                              style: TextStyle(
+                                fontFamily: 'Proxima Nova',
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xff2b3443),
+                              ),
+                            ),
+                            subtitle: Text(
+                              '${subRa[i].subject}',
+                              style: TextStyle(
+                                fontFamily: 'Proxima Nova',
+                                fontSize: 14,
+                                color: Color(0xff2b3443),
+                              ),
+                            ),
+                            trailing: subRa[i].isDeployed
+                                ? Text(
+                                    'In Progress',
+                                    style: TextStyle(
+                                      fontFamily: 'Proxima Nova',
+                                      fontSize: 16,
+                                      color: Colors.green[400],
+                                    ),
+                                  )
+                                : Text(
+                                    'Not Deployed',
+                                    style: TextStyle(
+                                      fontFamily: 'Proxima Nova',
+                                      fontSize: 16,
+                                      color: Colors.orange[400],
+                                    ),
+                                  ),
+                            onTap: subRa[i].isDeployed
+                                ? () {
+                                    Navigator.popAndPushNamed(
+                                        context, AssessmentPage.routeName,
+                                        arguments: {
+                                          'ra': subRa[i],
+                                          'uid': uid,
+                                          'name': name,
+                                        });
+                                  }
+                                : () {},
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
