@@ -49,7 +49,7 @@ flutter_app_name:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "lib/assets/TilsLogo.png"
+  image_path: "lib/assets/blackstone_logo.png"
 
 
   # The following adds the Cupertino Icons font to your application.

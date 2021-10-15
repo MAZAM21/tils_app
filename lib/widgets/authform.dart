@@ -56,7 +56,7 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image(
-                    image: AssetImage('lib/assets/Tilslogonew.png'),
+                    image: AssetImage('lib/assets/blackstone_logo.png'),
                     height: 150,
                   ),
                   SizedBox(
