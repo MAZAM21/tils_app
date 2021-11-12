@@ -71,7 +71,7 @@ class _ParentHomeState extends State<ParentHome> {
             appBar: AppBar(
               iconTheme: IconThemeData(color: Colors.white),
               title: Text(
-                'TILS Parent\'s Portal',
+                'Themis Parent\'s Portal',
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: 'Proxima Nova',

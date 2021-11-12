@@ -56,7 +56,7 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image(
-                    image: AssetImage('lib/assets/Tilslogonew.png'),
+                    image: AssetImage('lib/assets/themisLogo.png'),
                     height: 150,
                   ),
                   SizedBox(
@@ -67,7 +67,7 @@ class _AuthFormState extends State<AuthForm> {
                       Text(
                         'Email Address',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Color(0xffb12425),
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Proxima Nova',
                           fontSize: 18,
@@ -81,10 +81,18 @@ class _AuthFormState extends State<AuthForm> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
-                      color: Colors.white38,
+                      color: Colors.grey[300],
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                          ),
                           cursorColor: Colors.white,
                           key: ValueKey('email'),
                           validator: (value) {
@@ -109,7 +117,7 @@ class _AuthFormState extends State<AuthForm> {
                       Text(
                         'Password',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Color(0xffb12425),
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
@@ -123,10 +131,18 @@ class _AuthFormState extends State<AuthForm> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
-                      color: Colors.white38,
+                      color: Colors.grey[300],
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          decoration: InputDecoration(
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[300]),
+                            ),
+                          ),
                           cursorColor: Colors.white,
                           key: ValueKey('password'),
                           validator: (value) {
@@ -143,14 +159,14 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 25),
                   if (widget.isLoading) CircularProgressIndicator(),
                   if (!widget.isLoading)
                     ElevatedButton(
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(Size(200, 40)),
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
+                            MaterialStateProperty.all(Color(0xffb12425)),
                       ),
                       child: Text(
                         'Login',
@@ -158,7 +174,7 @@ class _AuthFormState extends State<AuthForm> {
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Proxima Nova',
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                       onPressed: _trySubmit,
                     ),

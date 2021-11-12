@@ -40,7 +40,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
         drawer: StudentDrawer(),
         appBar: AppBar(
           title: Text(
-            'TILS Student\'s Portal',
+            'Themis Student\'s Portal',
             style: Theme.of(context).textTheme.headline6,
             textAlign: TextAlign.justify,
           ),

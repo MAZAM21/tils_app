@@ -38,7 +38,7 @@ class _AllTabsState extends State<AllTabs> {
         drawer: AppDrawer(),
         appBar: AppBar(
           title: Text(
-            'TILS Teacher\'s Portal',
+            'Themis Teacher\'s Portal',
             style: Theme.of(context).textTheme.headline6,
             textAlign: TextAlign.justify,
           ),
