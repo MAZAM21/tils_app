@@ -3,6 +3,7 @@ import 'package:tils_app/service/db.dart';
 
 class UploadService {
   final db = DatabaseService();
+
   void uploadStudentToDB(Excel excelSheet) {
     List<UploadStudent> upStud = [];
 
@@ -69,6 +70,7 @@ class UploadService {
     );
     db.saveStudent(upStud);
   }
+   
 }
 
 class UploadStudent {

@@ -12,7 +12,7 @@ class MarkStudentAssignments extends StatefulWidget {
     @required this.students,
     @required this.subject,
     @required this.title,
-    final this.editAM,
+    this.editAM,
   });
 
   final List<StudentRank> students;
@@ -33,10 +33,12 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
 
   @override
   void didChangeDependencies() {
-    if (widget.editAM.nameMarks.isNotEmpty ||
-        widget.editAM.uidMarks.isNotEmpty) {
-      stMark = widget.editAM.nameMarks;
-      idMark = widget.editAM.uidMarks;
+    if (widget.editAM != null) {
+      if (widget.editAM.nameMarks.isNotEmpty &&
+          widget.editAM.uidMarks.isNotEmpty) {
+        stMark = widget.editAM.nameMarks;
+        idMark = widget.editAM.uidMarks;
+      }
     }
     super.didChangeDependencies();
   }
