@@ -552,6 +552,52 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
+                                      Spacer(),
+                                      if (_filter == 'Year')
+                                        Text(
+                                          '${students[i].yearScore.toInt()}',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'Proxima Nova',
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xffD6200F)
+                                              //Color(0xffCC2010),
+                                              //Color(0xff96190E),
+                                              ),
+                                        ),
+                                      if (_filter == 'Assignments')
+                                        Text(
+                                          '${students[i].assignmentScore.toInt()}',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: 'Proxima Nova',
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xffD6200F),
+                                          ),
+                                        ),
+                                      if (_filter == 'Subject')
+                                        Text(
+                                          '${students[i].raSubScore['$_subjectFilter'].toInt()}',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: 'Proxima Nova',
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xffD6200F),
+                                          ),
+                                        ),
+                                      if (_filter == 'Attendance')
+                                        Text(
+                                          '${students[i].attendanceScore.toInt()}',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: 'Proxima Nova',
+                                            fontWeight: FontWeight.w700,
+                                            color: Color(0xffD6200F),
+                                          ),
+                                        ),
+                                      SizedBox(
+                                        width: 23,
+                                      ),
                                     ],
                                   ),
                                   //trailing: Text('${students[i].attendancePosition}'),

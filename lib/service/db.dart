@@ -755,6 +755,55 @@ class DatabaseService with ChangeNotifier {
             Future.forEach(uploadStudents, (UploadStudent student) => null));
   }
 
+  Future<void> saveTeacher(
+    List<UploadTeacher> uploadTeachers,
+  ) async {
+    CollectionReference tRef = _db.collection('teachers');
+    CollectionReference userRef = _db.collection('users');
+
+    Future.forEach(
+      uploadTeachers,
+      (UploadTeacher teach) => auth
+          .createUserWithEmailAndPassword(
+            email: teach.email,
+            password: teach.password,
+          )
+          .then((UserCredential cred) => teach.uid = cred.user.uid),
+    )
+        .then(
+          (value) => Future.forEach(
+            uploadTeachers,
+            (UploadTeacher teacher) => tRef.add(
+              {
+                'name': teacher.name,
+                'email': teacher.email,
+                'password': teacher.password,
+                'registeredSubs': teacher.subMap,
+                'uid': teacher.uid,
+                'isAdmin': false,
+                'Assessment-textqMarks': null,
+                'marked-textQs': {},
+                'profile-pic-url': '',
+              },
+            ),
+          ),
+        )
+        .then(
+          (value) => Future.forEach(
+            uploadTeachers,
+            (UploadTeacher teacher) => userRef.doc(teacher.uid).set(
+              {
+                'role': 'teacher',
+                'email': teacher.email,
+                'password': teacher.password,
+                'name': teacher.name,
+              },
+              SetOptions(merge: true),
+            ),
+          ),
+        );
+  }
+
   //adds edited class to cf
   Future<void> editClassInCF(
     String id,
