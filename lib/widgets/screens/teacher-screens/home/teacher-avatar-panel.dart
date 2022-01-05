@@ -11,6 +11,7 @@ class TeacherAvatarPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var now = DateTime.now().toUtc();
     return Row(
       children: <Widget>[
         CircleAvatar(
@@ -20,7 +21,7 @@ class TeacherAvatarPanel extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Container(
-            width: 90,
+            width: 110,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -29,15 +30,68 @@ class TeacherAvatarPanel extends StatelessWidget {
                     SizedBox(
                       width: 8,
                     ),
-                    Text(
-                      'Good morning,',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Proxima Nova',
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff5F686F),
+                    if (now.isBefore(
+                      DateTime.utc(
+                        now.year,
+                        now.month,
+                        now.day,
+                        13,
                       ),
-                    ),
+                    ))
+                      Text(
+                        'Good morning,',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff5F686F),
+                        ),
+                      ),
+                    if (now.isBefore(
+                          DateTime.utc(
+                            now.year,
+                            now.month,
+                            now.day,
+                            17,
+                          ),
+                        ) &&
+                        now.isAfter(DateTime.utc(
+                          now.year,
+                          now.month,
+                          now.day,
+                          13,
+                        )))
+                      Text(
+                        'Good afternoon,',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff5F686F),
+                        ),
+                      ),
+                    if (now.isBefore(
+                      DateTime.utc(
+                        now.year,
+                        now.month,
+                        now.day,
+                        23,
+                      ),
+                    ) && now.isAfter(DateTime.utc(
+                          now.year,
+                          now.month,
+                          now.day,
+                          17,
+                        )))
+                      Text(
+                        'Good evening,',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff5F686F),
+                        ),
+                      ),
                   ],
                 ),
                 Text(

@@ -10,6 +10,8 @@ const admin = require("firebase-admin");
 // });
 admin.initializeApp();
 
+
+
 exports.myFunction = functions.firestore
     .document("classes/{docId}")
     .onCreate((snapshot, context) => {
@@ -42,4 +44,27 @@ exports.studentAbsentNotif = functions.https.onCall((data, context) => {
         clickAction: "FLUTTER_NOTIFICATION_CLICK",
       },
       });
+});
+exports.assignmentMetric = functions.pubsub
+ .schedule('0 0 * * *')
+ .onRun(async (context) => {
+  studentRef = admin
+   .firestore()
+   .collection('students');
+   const thirdYearStuds = await studentRef.where('year', '==', "3").get();
+   let studMarkMap = {};
+   thirdYearStuds.forEach(doc => {
+    const markList = doc.data()['assignment-marks'];
+    const marks = Object.values(markList);
+    let total = 0;
+    marks.forEach(mark => {
+      total = total + mark;
+    });
+    // console.log(doc.data()['name']);
+    // console.log(total);
+    studMarkMap[doc.data()['name']] = total;
+  });
+  var date = new Date(admin.firestore.Timestamp.now());
+  const entry = new Map();
+  return await admin.firestore().collection('metrics').doc('assignment-marks').set({[Date.now()]: studMarkMap}, {merge: true});
 });
