@@ -28,9 +28,9 @@ class RankingService {
       return 0;
     }
 
-    print('perc: $perc');
+    //print('perc: $perc');
     int pint = perc.toInt();
-    print('pint: $pint');
+    //print('pint: $pint');
     return pint;
   }
 
@@ -213,7 +213,7 @@ class RankingService {
         /// obtained marks will only be taken from mcqs
         if (textQ['${ra.id}'] == null && mcqRes['${ra.id}'] != null) {
           obtained = (mcqRes['${ra.id}'] * 100) ?? 0;
-          print('obtained: $obtained');
+          //print('obtained: $obtained');
         } else if (mcqRes['${ra.id}'] == null && textQ['${ra.id}'] != null) {
           obtained = textQ['${ra.id}'];
         } else if (textQ['${ra.id}'] != null && mcqRes['${ra.id}'] != null) {

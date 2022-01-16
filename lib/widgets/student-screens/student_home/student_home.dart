@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/meeting.dart';
+import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/service/db.dart';
@@ -9,6 +10,7 @@ import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 import 'package:tils_app/widgets/student-screens/student_home/assessment_home_panel.dart';
+import 'package:tils_app/widgets/student-screens/student_home/metric_panel.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student-attendance-panel.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student-avatar-panel.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student-class-timer-panel.dart';
@@ -91,11 +93,13 @@ class _StudentHomeState extends State<StudentHome> {
     final studData = Provider.of<StudentUser>(context, listen: true);
     final allClasses = Provider.of<List<SubjectClass>>(context);
     final meetingsList = Provider.of<List<Meeting>>(context);
+    final metrics = Provider.of<List<StudentMetrics>>(context);
 
     int estimateTs = 0;
     int endTime = 0;
     Meeting nextClass;
     bool isActive = false;
+    bool mActive = false;
     List<SubjectClass> myClasses = [];
 
     if (studData != null && allClasses != null && meetingsList != null) {
@@ -110,6 +114,10 @@ class _StudentHomeState extends State<StudentHome> {
       }
       isActive = true;
     }
+    if (metrics != null) {
+      mActive = true;
+    }
+
     return !isActive
         ? LoadingScreen()
         : Scaffold(
@@ -129,6 +137,11 @@ class _StudentHomeState extends State<StudentHome> {
                           height: 10,
                         ),
                         StudentAvatarPanel(studData: studData),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        if (mActive && isActive)
+                          MetricDisplay(metrics: metrics, studData: studData),
                         SizedBox(
                           height: 25,
                         ),

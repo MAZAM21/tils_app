@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
@@ -73,7 +74,11 @@ class RoutesAndTheme extends StatelessWidget {
         StreamProvider<List<AMfromDB>>(
           create: (ctx) => db.streamAM(),
           initialData: [],
-        )
+        ),
+        StreamProvider<List<StudentMetrics>>(
+          create: (ctx) => db.streamMetrics(),
+          initialData: [],
+        ),
       ],
       child: MaterialApp(
         initialRoute: '/',
@@ -163,7 +168,8 @@ class RoutesAndTheme extends StatelessWidget {
           StudentRankingDisplay.routeName: (context) => StudentRankingDisplay(),
           AssignmentMain.routeName: (context) => AssignmentMain(),
           AddAssignment.routeName: (context) => AddAssignment(),
-          AttendanceMarkerBuilder.routeName: (context) => AttendanceMarkerBuilder(),
+          AttendanceMarkerBuilder.routeName: (context) =>
+              AttendanceMarkerBuilder(),
         },
       ),
     );

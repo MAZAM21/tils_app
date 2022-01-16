@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
@@ -147,6 +148,18 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
     } catch (err) {
       print('error in stream ans from id db: $err');
+    }
+    return null;
+  }
+
+  ///get metrics stream as a collection
+  Stream<List<StudentMetrics>> streamMetrics() {
+    CollectionReference ref = _db.collection('metrics');
+    try {
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => StudentMetrics.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('error in metrics strea: $err');
     }
     return null;
   }

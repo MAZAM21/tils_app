@@ -62,7 +62,7 @@ exports.assignmentMetric = functions.pubsub
     });
     // console.log(doc.data()['name']);
     // console.log(total);
-    studMarkMap[doc.data()['name']] = total;
+    studMarkMap[doc.id] = total;
   });
   var date = new Date(admin.firestore.Timestamp.now());
   const entry = new Map();
