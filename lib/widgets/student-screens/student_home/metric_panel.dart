@@ -18,24 +18,53 @@ class MetricDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ms = MetricService();
-    
-    String display = ms.getAssignmentMetric(metrics, studData.uid);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        color: Colors.white,
-        height: 65,
-        width: MediaQuery.of(context).size.width * 0.915,
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(display),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+    bool isActive = false;
+    MetricAchievement display;
+    if (ms != null) {
+      display = ms.getAssignmentMetric(metrics, studData.uid);
+      if (display.achievement != null) {
+        isActive = true;
+      }
+    }
+
+    return !isActive
+        ? SizedBox()
+        : ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              color: Color(0xffFFDCA4),
+              height: 75,
+              width: MediaQuery.of(context).size.width * 0.915,
+              child: Column(
+                children: <Widget>[
+                  Spacer(),
+                  Row(
+                    children: <Widget>[
+                      Spacer(),
+                      Text(
+                        display.achievement + display.emoji,
+                        style: TextStyle(
+                            color: Color(0xff030453),
+                            fontFamily: 'Proxima Nova',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                  SizedBox(height: 7,),
+                  Text(
+                    display.duration,
+                    style: TextStyle(
+                        color: Color(0xff0077B6),
+                        fontFamily: 'Proxima Nova',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12),
+                  ),
+                  Spacer(),
+                ],
+              ),
+            ),
+          );
   }
 }

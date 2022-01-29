@@ -15,7 +15,6 @@ class AllAnnouncements extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Announcements'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.add),
@@ -37,18 +36,10 @@ class AllAnnouncements extends StatelessWidget {
 
             if (announcementSnap.hasData) {
               List ordered = ts.orderAnnouncement(announcementSnap.data);
-              return GridView.builder(
+              return ListView.builder(
                 itemCount: ordered.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemBuilder: (ctx, i) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AnnouncementTile(ordered[i]),
-                ),
+                itemBuilder: (ctx, i) => AnnouncementTile(ordered[i]),
+                shrinkWrap: true,
               );
             }
             return Text('No data');

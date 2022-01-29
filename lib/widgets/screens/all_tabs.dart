@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-home.dart';
@@ -38,7 +39,7 @@ class _AllTabsState extends State<AllTabs> {
         drawer: AppDrawer(),
         appBar: AppBar(
           title: Text(
-            'TILS Teacher\'s Portal',
+            'BLS Teacher\'s Portal',
             style: Theme.of(context).textTheme.headline6,
             textAlign: TextAlign.justify,
           ),
@@ -57,7 +58,7 @@ class _AllTabsState extends State<AllTabs> {
                     Tab(
                       text: 'Home',
                     ),
-                    Tab(text: 'Attendance'),
+                    Tab(text: 'NewsFeed'),
                   ]),
             ),
           ),
@@ -65,7 +66,7 @@ class _AllTabsState extends State<AllTabs> {
         body: TabBarView(children: <Widget>[
           TeacherRankingDisplay(),
           HomePage(),
-          AttendancePage(),
+          AllAnnouncements(),
         ]),
       ),
     );

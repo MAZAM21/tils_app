@@ -142,9 +142,6 @@ class _StudentHomeState extends State<StudentHome> {
                         ),
                         if (mActive && isActive)
                           MetricDisplay(metrics: metrics, studData: studData),
-                        SizedBox(
-                          height: 25,
-                        ),
 
                         ///Class timer panel widget is same as for teachers
                         ///stored in teachers HP
@@ -159,10 +156,7 @@ class _StudentHomeState extends State<StudentHome> {
                           height: 14,
                         ),
                         if (myClasses != null)
-                          Container(
-                            height: 140,
-                            child: MyClassesGrid(myClasses: myClasses),
-                          ),
+                          MyClassesGrid(myClasses: myClasses),
                         SizedBox(
                           height: 15,
                         ),

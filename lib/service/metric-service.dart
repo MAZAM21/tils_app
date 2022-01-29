@@ -4,9 +4,10 @@ import 'package:emojis/emojis.dart';
 import 'package:tils_app/models/metrics.dart';
 
 class MetricService {
-  String getAssignmentMetric(List<StudentMetrics> metrics, String id) {
+  MetricAchievement getAssignmentMetric(
+      List<StudentMetrics> metrics, String id) {
     LinkedHashMap timePos = new LinkedHashMap();
-    String reString = '';
+    var metAchievment = MetricAchievement();
 
     metrics.forEach((m) {
       if (m.name == 'assignment-marks') {
@@ -30,26 +31,70 @@ class MetricService {
         if (timePos.values.last == 0 ||
             timePos.values.last == 1 ||
             timePos.values.last == 2) {
-          
           pos = timePos.values.last;
-          
+
           firstTime =
               timePos.keys.firstWhere((element) => timePos[element] == pos);
           parsedFT = int.parse(firstTime);
           print('initial time: $parsedFT');
           parsedLT = int.parse(timePos.keys.last);
           print('final time: $parsedLT');
-          duration = parsedLT-parsedFT;
+          duration = parsedLT - parsedFT;
           print(duration);
           Duration posDuration = Duration(milliseconds: duration);
-          
-          print( 'duration: ${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays*24} hours ${Emojis.fire}');
-          reString ='duration: ${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays*24} hours ${Emojis.fire}';
+
+          print(
+              'duration: ${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays * 24} hours ${Emojis.fire}');
+
+          ///if statements below create MetricAchievement object based on position
+          //first position
+          if (pos == 0) {
+            metAchievment.achievement = 'You are at the top in assignments! ';
+            if (posDuration > Duration(days: 1)) {
+              metAchievment.emoji = '${Emojis.crown} ${Emojis.fire}';
+            }
+            metAchievment.duration =
+                '${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays * 24} hours';
+          }
+
+          //second position
+          if (pos == 1) {
+            metAchievment.achievement = 'You are second in assignments! ';
+            if (posDuration > Duration(days: 1)) {
+              metAchievment.emoji = '${Emojis.fire}';
+            }
+            metAchievment.duration =
+                '${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays * 24} hours';
+          }
+
+          //third position
+          if (pos == 2) {
+            metAchievment.achievement = 'You are third in assignments! ';
+            if (posDuration > Duration(days: 1)) {
+              metAchievment.emoji = '${Emojis.redApple}';
+            }
+            metAchievment.duration =
+                '${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays * 24} hours';
+          }
         }
       }
     });
-    return reString;
+    return metAchievment;
   }
+}
+
+class MetricAchievement {
+  ///this object is meant to be used to pass information to metrics panel so the different information may be
+  ///displayed in different styles
+  ///
+  String achievement;
+  String duration;
+  String emoji;
+  MetricAchievement({
+    this.achievement,
+    this.duration,
+    this.emoji,
+  });
 }
 
 /// the StudentMetrics assignment mark map where each key is the timestamp and each value is a map with

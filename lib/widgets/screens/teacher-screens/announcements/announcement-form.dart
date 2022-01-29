@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
@@ -22,6 +21,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
   String id;
   bool _isInit = true;
   bool _isEdit = false;
+  String category;
 
   @override
   void didChangeDependencies() {
@@ -32,25 +32,23 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
         vals['title'] = routeArgs.title;
         vals['body'] = routeArgs.body;
         id = routeArgs.id;
+        category = routeArgs.category;
         _isEdit = true;
       }
       _isInit = false;
     }
-    // TODO: implement didChangeDependencies
+
     super.didChangeDependencies();
   }
 
-  void _saveState(String title, String body, String uid) {
+  void _saveState(String title, String body, String uid, String cat) {
     bool isValid = _formKey.currentState.validate();
     if (isValid) {
       if (!_isEdit) {
-        db.addAnnouncementToCF(
-          title,
-          body,
-          uid,
-          DateTime.now(),
-        );
+        db.addAnnouncementToCF(title, body, uid, DateTime.now(), cat);
         _formKey.currentState.reset();
+        category = null;
+        Navigator.pop(context);
       }
       if (_isEdit) {
         db.editAnnouncement(
@@ -58,9 +56,10 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
           title,
           body,
           uid,
-          DateTime.now(),
+          category,
         );
-        Navigator.popAndPushNamed(context, AllAnnouncements.routeName);
+
+        Navigator.pop(context);
       }
     }
   }
@@ -80,11 +79,24 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
               child: Icon(Icons.save),
               onPressed: () {
                 _formKey.currentState.save();
-                _saveState(vals['title'], vals['body'], id);
+                if (category != null) {
+                  _saveState(vals['title'], vals['body'], id, category);
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext ctx) {
+                        return AlertDialog(
+                          title: Text('Please Select Category'),
+                        );
+                      });
+                }
               },
             ),
             appBar: AppBar(
-              title: Text('Input Announcement'),
+              title: Text(
+                'Input Announcement',
+                style: Theme.of(context).textTheme.headline6,
+              ),
             ),
             body: SingleChildScrollView(
               child: Form(
@@ -93,7 +105,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 300,
+                      width: MediaQuery.of(context).size.width * 0.9,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -146,6 +158,40 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                             maxLines: 12,
                             minLines: 10,
                           ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: category == 'uol'
+                                          ? MaterialStateProperty.all(
+                                              Colors.blue)
+                                          : MaterialStateProperty.all(
+                                              Color.fromARGB(255, 76, 76, 76))),
+                                  onPressed: () {
+                                    setState(() {
+                                      category = 'uol';
+                                    });
+                                  },
+                                  child: Text('UoL')),
+                              ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor: category == 'bls'
+                                          ? MaterialStateProperty.all(
+                                              Colors.blue)
+                                          : MaterialStateProperty.all(
+                                              Color.fromARGB(255, 76, 76, 76))),
+                                  onPressed: () {
+                                    setState(() {
+                                      category = 'bls';
+                                    });
+                                  },
+                                  child: Text('BLS'))
+                            ],
+                          )
                         ],
                       ),
                     ),

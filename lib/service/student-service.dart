@@ -5,7 +5,7 @@ import 'package:tils_app/models/subject-class.dart';
 
 class StudentService {
   ///Get attendance percentage
-  ///The idea here is that we only need to consider marked attendance. 
+  ///The idea here is that we only need to consider marked attendance.
   ///We need not take into account all classes of the student because
   ///if the stud is absent then he will be marked absent by teacher and the
   ///attendance map will show it
@@ -100,6 +100,14 @@ class StudentService {
     return null;
   }
 
+  bool submitted(String raId, StudentUser stud) {
+    bool stat = false;
+    if (stud.completedAssessments.contains(raId)) {
+      stat = true;
+    }
+    return stat;
+  }
+
   ///Gets top three assessments for students assessment panel
   List<RAfromDB> getTopThree(
     List<RAfromDB> allRa,
@@ -112,7 +120,7 @@ class StudentService {
         myRA.add(ra);
       }
     });
-    myRA.sort((a, b) => a.startTime.compareTo(b.startTime));
+    myRA.sort((a, b) => b.endTime.compareTo(a.endTime));
     List<RAfromDB> topthree;
     if (myRA.length > 3) {
       topthree = myRA.sublist(0, 3);
@@ -280,7 +288,8 @@ class StudentService {
     return orderSubjectClass(myClasses);
   }
 
-  String getPendingAssessmentNum(List comp, List<RAfromDB> all, String subject) {
+  String getPendingAssessmentNum(
+      List comp, List<RAfromDB> all, String subject) {
     int a = 0;
     all.forEach((ra) {
       if (!comp.contains(ra.id)) {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
 
-
 class AnnouncementTile extends StatelessWidget {
   final Announcement announcement;
 
@@ -13,45 +12,91 @@ class AnnouncementTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridTile(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Flexible(
-            fit: FlexFit.tight,
-            flex: 1,
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${announcement.title}',
-                  style: Theme.of(context).textTheme.headline6,
-                  overflow: TextOverflow.ellipsis,
+    String imagePath;
+    if (announcement.category == 'uol') {
+      imagePath = 'lib/assets/uol-logo.png';
+    } else if (announcement.category == 'bls') {
+      imagePath = 'lib/assets/BLS-header.png';
+    } else {
+      imagePath = null;
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => AnnouncementDetail(),
+              settings: RouteSettings(name: '/main-ann', arguments: announcement),
+            ),
+          );
+        },
+        child: Column(
+          children: <Widget>[
+            if (imagePath != null)
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Image(
+                  fit: BoxFit.fitWidth,
+                  image: AssetImage(imagePath),
                 ),
               ),
-              color: Theme.of(context).primaryColor,
+            Container(
+              height: 135,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 13,
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Text(
+                          '${announcement.title}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xff4c4c4c)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 73,
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(
+                          width: 13,
+                        ),
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Text(
+                            '${announcement.body}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 5,
+                            style: TextStyle(
+                                fontSize: 16, fontFamily: 'Proxima Nova'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          Flexible(
-            fit: FlexFit.tight,
-            flex: 5,
-            child: InkWell(
-              child: Card(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${announcement.body}',
-                  style: Theme.of(context).textTheme.headline5,
-                  overflow: TextOverflow.fade,
-                ),
-              )),
-              onTap: () {
-                Navigator.pushNamed(context, AnnouncementDetail.routeName,
-                    arguments: announcement);
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

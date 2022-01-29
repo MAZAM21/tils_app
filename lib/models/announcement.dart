@@ -4,12 +4,16 @@ class Announcement {
   final String title;
   final String body;
   final String id;
+  final String category;
   final DateTime time;
-  Announcement(this.title, this.body, this.time, this.id);
+  Announcement([this.title, this.body, this.time, this.id, this.category]);
   factory Announcement.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data();
     Timestamp time = data['dateTime'];
+    String title = data['title'];
+    String body = data['body'];
+    String category = data['category'];
     DateTime d = DateTime.parse(time.toDate().toString());
-    return Announcement(data['title'], data['body'], d, doc.id);
+    return Announcement(title, body, d, doc.id, category);
   }
 }

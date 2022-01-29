@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/service/db.dart';
@@ -14,41 +12,100 @@ class AnnouncementDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     final announcement =
         ModalRoute.of(context).settings.arguments as Announcement;
+
+    String imagePath;
+    if (announcement.category == 'uol') {
+      imagePath = 'lib/assets/uol-logo.png';
+    } else if (announcement.category == 'bls') {
+      imagePath = 'lib/assets/BLS-header.png';
+    } else {
+      imagePath = null;
+    }
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('${announcement.title}'),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Delete'),
+          TextButton(
+            child: Text(
+              'Edit',
+              style: TextStyle(
+                color: Color(0xff4c4c4c),
+                fontFamily: 'Proxima Nova',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
             onPressed: () {
-              db.deleteAnnouncement(announcement.id);
-              Navigator.pop(context);
-            },
-          ),
-          FlatButton(
-            child: Text('Edit'),
-            onPressed: () {
-              Navigator.pushNamed(
+              Navigator.popAndPushNamed(
                 context,
                 AnnouncementForm.routeName,
                 arguments: announcement,
               );
             },
           ),
+          TextButton(
+            child: Text(
+              'Delete',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontFamily: 'Proxima Nova',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            onPressed: () {
+              db.deleteAnnouncement(announcement.id);
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
       body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            if (imagePath != null)
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Image(
+                  fit: BoxFit.fitWidth,
+                  image: AssetImage(imagePath),
+                ),
+              ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              color: Colors.white,
               child: Text(
-                '${announcement.body}',
-                style: Theme.of(context).textTheme.headline5,
+                '${announcement.title}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Proxima Nova',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff4c4c4c),
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  '${announcement.body}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontFamily: 'Proxima Nova',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff4c4c4c)),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

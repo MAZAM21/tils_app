@@ -128,7 +128,8 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                 color: Color(0xff2b3443),
                               ),
                             ),
-                            trailing: subRa[i].isDeployed
+                            trailing: subRa[i].isDeployed &&
+                                    !ss.submitted(subRa[i].id, userData)
                                 ? Text(
                                     'In Progress',
                                     style: TextStyle(
@@ -137,15 +138,26 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                       color: Colors.green[400],
                                     ),
                                   )
-                                : Text(
-                                    'Not Deployed',
-                                    style: TextStyle(
-                                      fontFamily: 'Proxima Nova',
-                                      fontSize: 16,
-                                      color: Colors.orange[400],
-                                    ),
-                                  ),
-                            onTap: subRa[i].isDeployed
+                                : !subRa[i].isDeployed &&
+                                        !ss.submitted(subRa[i].id, userData)
+                                    ? Text(
+                                        'Not Deployed',
+                                        style: TextStyle(
+                                          fontFamily: 'Proxima Nova',
+                                          fontSize: 16,
+                                          color: Colors.orange[400],
+                                        ),
+                                      )
+                                    : Text(
+                                        'Completed',
+                                        style: TextStyle(
+                                          fontFamily: 'Proxima Nova',
+                                          fontSize: 16,
+                                          color: Colors.blue[400],
+                                        ),
+                                      ),
+                            onTap: subRa[i].isDeployed &&
+                                    !ss.submitted(subRa[i].id, userData)
                                 ? () {
                                     Navigator.popAndPushNamed(
                                         context, AssessmentPage.routeName,

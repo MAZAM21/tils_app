@@ -50,7 +50,7 @@ class _EditRAState extends State<EditRA> {
                               Container(
                                 width: double.infinity,
                                 child: Card(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Color(0xff27415f),
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
@@ -64,7 +64,7 @@ class _EditRAState extends State<EditRA> {
                               Container(
                                 width: double.infinity,
                                 child: Card(
-                                  color: Color.fromARGB(255, 255, 202, 177),
+                                  color: Colors.white,
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
@@ -209,7 +209,12 @@ class _EditRAState extends State<EditRA> {
                     children: [
                       Text(
                         '${widget.ra.assessmentTitle}',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -217,7 +222,9 @@ class _EditRAState extends State<EditRA> {
                     height: 30,
                   ),
                   ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Color(0xffc54134))),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Color(0xffc54134))),
                     child: Text(
                       'Choose Deployment Time',
                       style: TextStyle(
@@ -240,7 +247,12 @@ class _EditRAState extends State<EditRA> {
                       Text(
                         'MCQs:',
                         textAlign: TextAlign.right,
-                        style: Theme.of(context).textTheme.headline3,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),

@@ -11,6 +11,7 @@ import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/class-scheduler-buttons.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
@@ -222,6 +223,44 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
+                              Spacer(),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color(0xffffffff)),
+                                    minimumSize: MaterialStateProperty.all(
+                                        Size(107, 25)),
+                                    fixedSize: MaterialStateProperty.all(
+                                        Size(117, 27)),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(23)),
+                                    )),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      settings: RouteSettings(
+                                          name: '/attpage'),
+                                      builder: (BuildContext context) =>
+                                          ChangeNotifierProvider.value(
+                                        value: teacherData,
+                                        child: AttendancePage(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Attendance',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: 'Proxima Nova',
+                                    color: Color(0xff000000),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 5,)
                             ],
                           ),
 

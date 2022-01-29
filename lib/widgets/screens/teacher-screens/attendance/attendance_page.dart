@@ -33,6 +33,7 @@ class AttendancePage extends StatelessWidget {
     return !isActive
         ? LoadingScreen()
         : Scaffold(
+          appBar: AppBar(),
             body: ListView.builder(
               itemCount: myClasses.length,
               itemBuilder: (ctx, i) {

@@ -462,10 +462,16 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> addAnnouncementToCF(
-      String title, String body, String uid, DateTime now) async {
+    String title,
+    String body,
+    String uid,
+    DateTime now,
+    String category,
+  ) async {
     CollectionReference ref = _db.collection('announcements');
     try {
       return await ref.add({
+        'category': category,
         'addedBy': uid,
         'title': title,
         'body': body,
@@ -847,7 +853,7 @@ class DatabaseService with ChangeNotifier {
     String title,
     String body,
     String uid,
-    DateTime time,
+    String category
   ) async {
     CollectionReference ref = _db.collection('announcements');
     try {
@@ -855,7 +861,7 @@ class DatabaseService with ChangeNotifier {
         'title': title,
         'body': body,
         'addedBy': uid,
-        'dateTime': time,
+        'category': category,
       }, SetOptions(merge: true));
     } catch (err) {
       print('error in edit announcement: $err');
