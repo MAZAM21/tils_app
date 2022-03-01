@@ -137,7 +137,7 @@ class RoutesAndTheme extends StatelessWidget {
               headline2: TextStyle(
                 color: Colors.white,
                 fontFamily: 'Proxima Nova',
-                fontSize: 15,
+                fontSize: 18,
                 fontWeight: FontWeight.normal,
               )),
         ),

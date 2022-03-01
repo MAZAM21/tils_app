@@ -72,7 +72,7 @@ class _EditRAState extends State<EditRA> {
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Proxima Nova',
-                                        fontSize: 15,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
@@ -122,7 +122,7 @@ class _EditRAState extends State<EditRA> {
                               Container(
                                 width: double.infinity,
                                 child: Card(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Color(0xff27415f),
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
@@ -206,7 +206,7 @@ class _EditRAState extends State<EditRA> {
                     height: 20,
                   ),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Text(
                         '${widget.ra.assessmentTitle}',
                         style: TextStyle(
@@ -216,31 +216,31 @@ class _EditRAState extends State<EditRA> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      Spacer(),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Color(0xffc54134)),
+                        ),
+                        child: Text(
+                          'Deploy',
+                          style: TextStyle(
+                            fontFamily: 'Proxima Nova',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: () {
+                          showDeploySheet(widget.ra.id);
+                        },
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xffc54134))),
-                    child: Text(
-                      'Choose Deployment Time',
-                      style: TextStyle(
-                        fontFamily: 'Proxima Nova',
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      showDeploySheet(widget.ra.id);
-                    },
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
+                 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
@@ -266,7 +266,12 @@ class _EditRAState extends State<EditRA> {
                       Text(
                         'Text Questions:',
                         textAlign: TextAlign.right,
-                        style: Theme.of(context).textTheme.headline3,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
