@@ -7,6 +7,7 @@ import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/parent-user-data.dart';
+import 'package:tils_app/models/student-answers.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/service/upload-service.dart';
@@ -133,6 +134,20 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => TextQAs.fromFirestore(doc)).toList());
     } catch (err) {
       print('error in stream textqas: $err');
+    }
+    return null;
+  }
+
+   Stream<List<StudentAnswers>> streamResFromID(String assid) {
+    try {
+      CollectionReference ref = _db
+          .collection('assessment-result')
+          .doc('$assid')
+          .collection('student-IDs');
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => StudentAnswers.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('error in stream ans from id db: $err');
     }
     return null;
   }

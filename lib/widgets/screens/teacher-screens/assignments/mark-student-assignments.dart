@@ -33,8 +33,7 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
 
   @override
   void didChangeDependencies() {
-    if (widget.editAM.nameMarks.isNotEmpty ||
-        widget.editAM.uidMarks.isNotEmpty) {
+    if (widget.editAM != null) {
       stMark = widget.editAM.nameMarks;
       idMark = widget.editAM.uidMarks;
     }

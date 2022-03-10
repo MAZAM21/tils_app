@@ -404,6 +404,16 @@ class TeacherService with ChangeNotifier {
     return textAs;
   }
 
+  List<TextQAs> getResults(List<TextQAs> ques, TeacherUser tData) {
+    List<TextQAs> textAs = [];
+    ques.forEach((q) {
+      if (tData.subjects.contains(q.subject)) {
+        textAs.add(q);
+      }
+    });
+    return textAs;
+  }
+
   ///Number of Remote assessments deployed.
   int getDeployedRA(List<RAfromDB> raList, TeacherUser tData) {
     int num = 0;

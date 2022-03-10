@@ -171,6 +171,7 @@ class _EditRAState extends State<EditRA> {
                           TextButton(
                             onPressed: () {
                               db.deleteAssessment(widget.ra.id);
+                              Navigator.pop(context);
                             },
                             child: Text('Yes, Delete'),
                           ),

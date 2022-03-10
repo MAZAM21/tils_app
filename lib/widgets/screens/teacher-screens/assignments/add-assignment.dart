@@ -149,52 +149,50 @@ class _AddAssignmentState extends State<AddAssignment> {
                     SizedBox(
                       height: 15,
                     ),
-                    Text(
-                      'Total Marks',
-                      style: TextStyle(
-                        fontFamily: 'Proxima Nova',
-                        fontSize: 19,
-                        fontWeight: FontWeight.w600,
-                        color: Color.fromARGB(255, 76, 76, 76),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        ElevatedButton(
-                          child: Text(
-                            'Add Marks',
-                            textAlign: TextAlign.center,
+                        ClipRRect(
+                            child: Container(
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                'Total Marks',
+                                style: TextStyle(
+                                  fontFamily: 'Proxima Nova',
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color.fromARGB(255, 76, 76, 76),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              NumberPicker(
+                                itemHeight: 30,
+                                textStyle: TextStyle(
+                                    color: Color(0xff161616),
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Proxima Nova'),
+                                selectedTextStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: Color(0xffC54134),
+                                    fontWeight: FontWeight.w800,
+                                    fontFamily: 'Proxima Nova'),
+                                minValue: 0,
+                                maxValue: 100,
+                                value: assignmentMarks.totalMarks,
+                                onChanged: (int val) {
+                                  setState(() {
+                                    assignmentMarks.totalMarks = val;
+                                  });
+                                },
+                              ),
+                            ],
                           ),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return NumberPicker(
-                                  value: 10,
-                                  minValue: 10,
-                                  maxValue: 100,
-                                  onChanged: (v) {
-                                    setState(() {
-                                      assignmentMarks.totalMarks = v;
-                                    });
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        Text(
-                          '${assignmentMarks.totalMarks.toString()}',
-                          style: TextStyle(
-                              fontFamily: 'Proxima Nova',
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        )
+                        ))
                       ],
                     ),
                     SizedBox(

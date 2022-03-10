@@ -10,6 +10,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/results/result-main.dart';
 
 class TeacherAssessmentPanel extends StatelessWidget {
   final ts = TeacherService();
@@ -156,92 +157,132 @@ class TeacherAssessmentPanel extends StatelessWidget {
         const SizedBox(
           height: 19,
         ),
-        Row(
-          children: <Widget>[
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
-                  minimumSize: MaterialStateProperty.all(Size(107, 25)),
-                  fixedSize: MaterialStateProperty.all(Size(145, 27)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(23)),
-                  )),
-              onPressed: () {
-                ///if there are more than one subjects reg with teacher
-                ///subject selector will open
-                ///else it will go directly to the teacher's one subject assessment list
-                if (teacherData.subjects.length > 1) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      settings: RouteSettings(name: '/select-subects-ra'),
-                      builder: (BuildContext context) =>
-                          ChangeNotifierProvider.value(
-                        value: teacherData,
-                        child: SelectAssessmentSubject(
-                            subjects: teacherData.subjects, tc: teacherData),
-                      ),
-                    ),
-                  );
-                } else if (teacherData.subjects.length == 1) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      settings: RouteSettings(name: '/all-Ras'),
-                      builder: (BuildContext context) =>
-                          ChangeNotifierProvider.value(
-                        value: teacherData,
-                        child: AllRAs(
-                          subject: teacherData.subjects[0],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: <Widget>[
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xffC54134)),
+                    minimumSize: MaterialStateProperty.all(Size(107, 25)),
+                    fixedSize: MaterialStateProperty.all(Size(145, 27)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(23)),
+                    )),
+                onPressed: () {
+                  ///if there are more than one subjects reg with teacher
+                  ///subject selector will open
+                  ///else it will go directly to the teacher's one subject assessment list
+                  if (teacherData.subjects.length > 1) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        settings: RouteSettings(name: '/select-subects-ra'),
+                        builder: (BuildContext context) =>
+                            ChangeNotifierProvider.value(
+                          value: teacherData,
+                          child: SelectAssessmentSubject(
+                              subjects: teacherData.subjects, tc: teacherData),
                         ),
                       ),
+                    );
+                  } else if (teacherData.subjects.length == 1) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        settings: RouteSettings(name: '/all-Ras'),
+                        builder: (BuildContext context) =>
+                            ChangeNotifierProvider.value(
+                          value: teacherData,
+                          child: AllRAs(
+                            subject: teacherData.subjects[0],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: Text(
+                  'Deploy Assessments',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xffffffff)),
+                    minimumSize: MaterialStateProperty.all(Size(107, 25)),
+                    fixedSize: MaterialStateProperty.all(Size(130, 27)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(23)),
+                    )),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/all-text-qs'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: AllTextQs(),
+                      ),
                     ),
                   );
-                }
-              },
-              child: Text(
-                'Deploy Assessments',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'Proxima Nova',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Color(0xffffffff)),
-                  minimumSize: MaterialStateProperty.all(Size(107, 25)),
-                  fixedSize: MaterialStateProperty.all(Size(140, 27)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(23)),
-                  )),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    settings: RouteSettings(name: '/all-text-qs'),
-                    builder: (BuildContext context) =>
-                        ChangeNotifierProvider.value(
-                      value: teacherData,
-                      child: AllTextQs(),
-                    ),
+                },
+                child: Text(
+                  'Mark Assessment',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Proxima Nova',
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.w600,
                   ),
-                );
-              },
-              child: Text(
-                'Mark Assessment',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'Proxima Nova',
-                  color: Color(0xff000000),
-                  fontWeight: FontWeight.w600,
                 ),
               ),
-            ),
-          ],
+              SizedBox(
+                width: 10,
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xffffffff)),
+                    minimumSize: MaterialStateProperty.all(Size(60, 25)),
+                    fixedSize: MaterialStateProperty.all(Size(80, 27)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(23)),
+                    )),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/all-results'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: ResultMain(),
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Results',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Proxima Nova',
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

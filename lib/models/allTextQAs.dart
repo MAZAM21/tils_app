@@ -25,7 +25,7 @@ class TextQAs {
         isText = false;
       }
 
-      print(isText);
+      //print(isText);
 
       return TextQAs(sub, doc.id, title, false, isText);
     } catch (e) {
