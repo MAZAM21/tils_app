@@ -183,7 +183,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                                     fontFamily: 'Proxima Nova'),
                                 minValue: 0,
                                 maxValue: 100,
-                                value: assignmentMarks.totalMarks,
+                                value: assignmentMarks.totalMarks ?? 0,
                                 onChanged: (int val) {
                                   setState(() {
                                     assignmentMarks.totalMarks = val;

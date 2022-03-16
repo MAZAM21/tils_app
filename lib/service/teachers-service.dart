@@ -280,6 +280,12 @@ class TeacherService with ChangeNotifier {
     allRAs.forEach((ra) {
       if (sub == ra.subject) {
         subRAs.add(ra);
+        if (ra.startTime.isBefore(DateTime.now()) &&
+            ra.endTime.isAfter(DateTime.now())) {
+          ra.isDeployed = true;
+        } else {
+          ra.isDeployed = false;
+        }
       }
     });
     return subRAs;

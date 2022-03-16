@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 class StudentAnswers {
   //Map of MCQ as key and answer as value
-  Map<String, String> mcqAnsMap;
+  Map<String, dynamic> mcqAnsMap;
 
   // a map of questions as keys and answers as values
   Map<String, String> tqaMap;
@@ -16,6 +16,9 @@ class StudentAnswers {
 
   //Total correct mcqs
   int mcqMarks;
+
+  //total text q marks
+  int totalQMarks;
 
   //student firebase collection id
   final String studentId;
@@ -31,32 +34,55 @@ class StudentAnswers {
     this.mcqMarks,
     this.qMarks,
     this.tqaMap,
+    this.totalQMarks,
   });
 
   factory StudentAnswers.fromFirestore(
       QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
       final data = doc.data();
-
-      final Map mcqAns = Map<String, dynamic>.from(data['MCQAns']) ?? {};
       final id = doc.id;
-      final String name = data['name'] ?? {};
-      final int marks = data['MCQmarks'] ?? {};
-      final Map dbMap = {...data['TQAs']} ?? {};
-      Map TQmarks = {...data['TQMarks']} ?? {};
+      String name = data['name'] ?? '';
 
-      Map<String, int> qMarks = {};
+      Map<String, dynamic> mcqAnsMap = {};
       Map<String, String> qas = {};
+      Map<String, int> qMarks = {};
+      int marks = 0;
+      int tqMarks =0;
 
-      if (dbMap.isNotEmpty) {
-        dbMap.forEach((q, a) {
-          qas['$q'] = a;
-        });
+      if (data.containsKey('TQMarks')) {
+        Map tQmarks = {...data['TQMarks']} ?? {};
+        if (tQmarks != null) {
+          tQmarks.forEach((q, m) {
+            qMarks['$q'] = m.toInt() ?? 0;
+          });
+          tqMarks = tQmarks.values.fold(0, (a, b) => a + b);
+        }
+
       }
-      if (TQmarks.isNotEmpty) {
-        TQmarks.forEach((q, m) {
-          qMarks['$q'] = m.toInt();
-        });
+
+      if (doc.data().containsKey('MCQAns')) {
+        Map mcqAns = {...data['MCQAns']} ?? {};
+        if (mcqAns.isNotEmpty) {
+          mcqAns.forEach((mcq, ans) {
+            // print(mcq);
+            // print(ans);
+            mcqAnsMap['$mcq'] = ans;
+          });
+        }
+      }
+
+      if (data.containsKey('MCQmarks')) {
+        marks = data['MCQmarks'] ?? 0;
+      }
+
+      if (data.containsKey('TQAs')) {
+        Map dbMap = {...data['TQAs']} ?? {};
+        if (dbMap != null) {
+          dbMap.forEach((q, a) {
+            qas['$q'] = a;
+          });
+        }
       }
 
       bool isMCQ = false;
@@ -64,18 +90,19 @@ class StudentAnswers {
       ///check whether there are mcq and then
       ///make isMcq true. if its true, the result
       ///will be displayed
-      if (mcqAns.isNotEmpty) {
+      if (mcqAnsMap.isNotEmpty) {
         isMCQ = true;
       }
 
       return StudentAnswers(
         isMcq: isMCQ,
-        mcqAnsMap: mcqAns,
+        mcqAnsMap: mcqAnsMap,
         mcqMarks: marks,
         name: name,
         studentId: id,
         qMarks: qMarks,
         tqaMap: qas,
+        totalQMarks: tqMarks,
       );
     } on Exception catch (e) {
       print('error in student-answers model: $e');

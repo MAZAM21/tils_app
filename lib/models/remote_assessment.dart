@@ -20,7 +20,8 @@ class RemoteAssessment with ChangeNotifier {
     this.assessmentTitle,
   });
   void addMCQ(MCQ mcq) {
-    allMCQs.add(mcq);
+    MCQ rMcq = randomizeMCQ(mcq);
+    allMCQs.add(rMcq);
     print('${allMCQs.length}');
     notifyListeners();
   }
@@ -105,6 +106,11 @@ class RAfromDB {
         converted.add(MCQ(question: q, answerChoices: a));
       });
 
+      List<MCQ> randomizedMCQs = [];
+      converted.forEach((mcq) {
+        randomizedMCQs.add(randomizeMCQ(mcq));
+      });
+
       if (start.isBefore(DateTime.now()) && end.isAfter(DateTime.now())) {
         isDep = true;
       } else {
@@ -118,7 +124,7 @@ class RAfromDB {
           subject: data['subject'],
           teacherId: data['id'],
           assessmentTitle: data['title'],
-          allMCQs: converted,
+          allMCQs: randomizedMCQs,
           allTextQs: textQs,
           startTime: start != null ? start : null,
           endTime: end != null ? end : null,
@@ -128,4 +134,23 @@ class RAfromDB {
     }
     return null;
   }
+}
+
+MCQ randomizeMCQ(MCQ mcq) {
+  List ansList = mcq.answerChoices.keys.toList();
+  Map<String, String> temp = {};
+
+  // create temp map of mcq answer choices
+  mcq.answerChoices.forEach((key, value) {
+    temp[key] = value;
+  });
+
+  //shuffle extracted choices
+  ansList.shuffle();
+  mcq.answerChoices.clear();
+
+  ansList.forEach((ansChoice) {
+    mcq.answerChoices[ansChoice] = temp[ansChoice];
+  });
+  return mcq;
 }

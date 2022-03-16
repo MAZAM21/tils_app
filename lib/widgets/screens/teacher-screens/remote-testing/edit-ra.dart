@@ -217,31 +217,29 @@ class _EditRAState extends State<EditRA> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Spacer(),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Color(0xffc54134)),
-                        ),
-                        child: Text(
-                          'Deploy',
-                          style: TextStyle(
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          showDeploySheet(widget.ra.id);
-                        },
-                      ),
                     ],
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                 
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Color(0xffc54134)),
+                    ),
+                    child: Text(
+                      'Deploy',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      showDeploySheet(widget.ra.id);
+                    },
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[

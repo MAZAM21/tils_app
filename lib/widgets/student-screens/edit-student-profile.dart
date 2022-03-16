@@ -21,7 +21,7 @@ class _EditStudentProfileState extends State<EditStudentProfile> {
   final studentDB = StudentDB();
 
   void _pickImage(String uid) async {
-    final pickedImage = await _picker.getImage(
+    final pickedImage = await _picker.pickImage(
         source: ImageSource.gallery, imageQuality: 50, maxWidth: 120);
     final File fImage = File(pickedImage.path);
     setState(() {

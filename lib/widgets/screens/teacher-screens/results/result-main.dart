@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/allTextQAs.dart';
+import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/results/result-display.dart';
 
 class ResultMain extends StatefulWidget {
   const ResultMain({Key key}) : super(key: key);
@@ -19,12 +21,13 @@ class _ResultMainState extends State<ResultMain> {
   @override
   Widget build(BuildContext context) {
     final tData = Provider.of<TeacherUser>(context);
+    final studData = Provider.of<List<StudentRank>>(context);
 
     return StreamBuilder<List<TextQAs>>(
         stream: db.streamTextQAs(),
         builder: (context, snap) {
           if (snap.hasError) {
-            return Text('error in stream text QA streambuilder');
+            return Text('error in Result main streambuilder');
           }
           if (snap.connectionState == ConnectionState.waiting) {
             return LoadingScreen();
@@ -43,7 +46,6 @@ class _ResultMainState extends State<ResultMain> {
                 ),
               ),
               body: ListView.builder(
-
                 shrinkWrap: true,
                 itemCount: resList.length,
                 itemBuilder: (context, i) {
@@ -68,7 +70,18 @@ class _ResultMainState extends State<ResultMain> {
                           color: Color(0xff2b3443),
                         ),
                       ),
-                      onTap: (){},
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ResultsDisplay(
+                              assid: resList[i].assId,
+                              title: resList[i].assTitle,
+                              subject: resList[i].subject,
+                              studList: studData,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   );
                 },

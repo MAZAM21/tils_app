@@ -138,7 +138,7 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-   Stream<List<StudentAnswers>> streamResFromID(String assid) {
+  Stream<List<StudentAnswers>> streamResFromID(String assid) {
     try {
       CollectionReference ref = _db
           .collection('assessment-result')
@@ -618,6 +618,7 @@ class DatabaseService with ChangeNotifier {
     String uid,
     String title,
     String subject,
+    String name,
   ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     DocumentReference stud = _db.collection('students').doc(uid);
@@ -646,6 +647,7 @@ class DatabaseService with ChangeNotifier {
       }, SetOptions(merge: true));
       return await ref.collection('student-IDs').doc(uid).set(
           {
+            'name': name,
             'MCQAns': {'$question': stat},
             'MCQmarks': stat == 'correct'
                 ? FieldValue.increment(1)
@@ -864,12 +866,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> editAnnouncement(
-    String id,
-    String title,
-    String body,
-    String uid,
-    String category
-  ) async {
+      String id, String title, String body, String uid, String category) async {
     CollectionReference ref = _db.collection('announcements');
     try {
       return await ref.doc(id).set({
@@ -919,6 +916,7 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> deleteAssessment(String id) async {
     final ref = _db.collection('remote-assessment');
+    
     try {
       return await ref.doc(id).delete();
     } catch (err) {

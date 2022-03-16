@@ -43,9 +43,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        child: _question != null ? 
-        Icon(Icons.save) :
-        Icon(Icons.exit_to_app),
+        child: _question != null ? Icon(Icons.save) : Icon(Icons.exit_to_app),
         onPressed: _question != null
             ? () {
                 //if ans not equal to null, will execute mcq submission else will execute text q submission
@@ -59,6 +57,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                       uid,
                       ra.assessmentTitle,
                       ra.subject,
+                      name,
                     );
                     setState(() {
                       _qIndex++;

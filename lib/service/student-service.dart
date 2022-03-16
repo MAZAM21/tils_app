@@ -247,6 +247,7 @@ class StudentService {
     //tl is total length of assessment q maps
     int tl = ra.allMCQs.length + ra.allTextQs.length;
     if (index < ra.allMCQs.length) {
+      
       return ra.allMCQs[index].answerChoices;
     }
     if (index >= tl) {
