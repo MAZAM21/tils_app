@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -530,8 +531,8 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                       ),
                                       if (students[i].imageUrl != '')
                                         CircleAvatar(
-                                          backgroundImage: NetworkImage(
-                                              students[i].imageUrl),
+                                          backgroundImage: CachedNetworkImageProvider(
+                                              students[i].imageUrl,),
                                           radius: i == 0 || i == 1 || i == 2
                                               ? 25
                                               : 15,

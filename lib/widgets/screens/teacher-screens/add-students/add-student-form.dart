@@ -278,7 +278,7 @@ class _AddStudentState extends State<AddStudent> {
                           var file = result.paths.first;
                           var bytes = File(file).readAsBytesSync();
                           var excel = Excel.decodeBytes(bytes);
-                          us.uploadStudentToDB(excel);
+                          us.uploadTeacherToDB(excel);
                         }
                       },
                     )

@@ -32,7 +32,7 @@ class StudentMetrics with ChangeNotifier {
           SplayTreeMap sortedValue = SplayTreeMap<String, int>.from(
               studMarks, (a, b) => studMarks[b].compareTo(studMarks[a]));
           sorted[key] = sortedValue;
-          //print(sortedValue);
+          print(sortedValue);
         });
         allSorted = sorted;
       }
@@ -42,7 +42,7 @@ class StudentMetrics with ChangeNotifier {
       );
     } on Exception catch (e) {
       print('error in metrics constructor: $e');
-      // TODO
+      
     }
     return null;
   }

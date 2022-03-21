@@ -70,6 +70,14 @@ class UploadService {
   }
 
   void uploadTeacherToDB(Excel excelSheet) {
+
+    ///Error note:
+    /// While uploading teachers for bls, two things went wrong
+    /// 1. Year was not added
+    /// 2. The registered subjects field name was previously set to 'subjects' in model. 
+    /// but in db upload function it is 'RegisteredSubs' 
+    /// This caused me some grief. Fix or take note
+    
     List<UploadTeacher> upTeacher = [];
     //Excel sheets can have multiple tables hence the first for loop checks for the first table
     for (var table in excelSheet.tables.keys) {

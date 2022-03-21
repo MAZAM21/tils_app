@@ -17,6 +17,7 @@ class MetricService {
         m.assignmentMarks.forEach((time, idMarks) {
           if (idMarks.keys.contains(id)) {
             timePos[time] = idMarks.keys.toList().indexOf(id);
+           
           }
         });
 
@@ -28,10 +29,12 @@ class MetricService {
         int parsedFT;
         int parsedLT;
         int duration;
+        print(timePos.values.first);
         if (timePos.values.last == 0 ||
             timePos.values.last == 1 ||
             timePos.values.last == 2) {
           pos = timePos.values.last;
+          
 
           firstTime =
               timePos.keys.firstWhere((element) => timePos[element] == pos);
@@ -50,8 +53,9 @@ class MetricService {
           //first position
           if (pos == 0) {
             metAchievment.achievement = 'You are at the top in assignments! ';
-            if (posDuration > Duration(days: 1)) {
+            if (posDuration > Duration(minutes: 1)) {
               metAchievment.emoji = '${Emojis.crown} ${Emojis.fire}';
+              
             }
             metAchievment.duration =
                 '${posDuration.inDays} days ${posDuration.inHours - posDuration.inDays * 24} hours';
@@ -59,8 +63,9 @@ class MetricService {
 
           //second position
           if (pos == 1) {
+            
             metAchievment.achievement = 'You are second in assignments! ';
-            if (posDuration > Duration(days: 1)) {
+            if (posDuration > Duration(minutes: 1)) {
               metAchievment.emoji = '${Emojis.fire}';
             }
             metAchievment.duration =
@@ -70,7 +75,7 @@ class MetricService {
           //third position
           if (pos == 2) {
             metAchievment.achievement = 'You are third in assignments! ';
-            if (posDuration > Duration(days: 1)) {
+            if (posDuration > Duration(minutes: 1)) {
               metAchievment.emoji = '${Emojis.redApple}';
             }
             metAchievment.duration =

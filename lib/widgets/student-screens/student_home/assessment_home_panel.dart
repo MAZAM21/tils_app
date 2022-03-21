@@ -33,7 +33,7 @@ class AssessmentHomePanel extends StatelessWidget {
     }
 
     return !idActive
-        ? CircularProgressIndicator()
+        ? SizedBox()
         : Column(
             children: <Widget>[
               SizedBox(height: 20),

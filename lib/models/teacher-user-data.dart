@@ -27,12 +27,12 @@ class TeacherUser with ChangeNotifier {
       final year = data['year'];
       final uid = data['uid'];
       final isAdmin = data['isAdmin'];
-      final Map subs = {...data['subjects']};
+      final Map subs = {...data['registeredSubs']};
       Map mtq = {};
       //print(doc.id);
 
       if (data.containsKey('marked-textQs')) {
-        mtq = {...data['marked-textQs']};
+        mtq = {...data['marked-textQs']} ?? {};
       }
       List<String> tsubs = [];
       subs.forEach((k, v) {

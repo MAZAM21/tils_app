@@ -84,7 +84,7 @@ class _StudentHomeState extends State<StudentHome> {
     setState(() {
       _token = token;
     });
-    print(token);
+    //print(token);
     db.addTokenToStudent(token, studID);
   }
 
@@ -117,6 +117,7 @@ class _StudentHomeState extends State<StudentHome> {
     if (metrics != null) {
       mActive = true;
     }
+    
 
     return !isActive
         ? LoadingScreen()

@@ -14,9 +14,9 @@ class TeacherAvatarPanel extends StatelessWidget {
     var now = DateTime.now().toUtc();
     return Row(
       children: <Widget>[
-        CircleAvatar(
-          backgroundImage: AssetImage('lib/assets/p3.JPG'),
-          radius: 30,
+        Icon(
+          Icons.person,
+          size: 50,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -71,13 +71,14 @@ class TeacherAvatarPanel extends StatelessWidget {
                         ),
                       ),
                     if (now.isBefore(
-                      DateTime.utc(
-                        now.year,
-                        now.month,
-                        now.day,
-                        23,
-                      ),
-                    ) && now.isAfter(DateTime.utc(
+                          DateTime.utc(
+                            now.year,
+                            now.month,
+                            now.day,
+                            23,
+                          ),
+                        ) &&
+                        now.isAfter(DateTime.utc(
                           now.year,
                           now.month,
                           now.day,

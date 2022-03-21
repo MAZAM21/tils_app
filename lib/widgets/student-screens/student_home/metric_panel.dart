@@ -21,6 +21,7 @@ class MetricDisplay extends StatelessWidget {
     bool isActive = false;
     MetricAchievement display;
     if (ms != null) {
+        print('working');
       display = ms.getAssignmentMetric(metrics, studData.uid);
       if (display.achievement != null) {
         isActive = true;

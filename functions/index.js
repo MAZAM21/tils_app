@@ -51,7 +51,7 @@ exports.assignmentMetric = functions.pubsub
   studentRef = admin
    .firestore()
    .collection('students');
-   const thirdYearStuds = await studentRef.where('year', '==', "3").get();
+   const thirdYearStuds = await studentRef.where('assignment-marks', '!=', null).get();
    let studMarkMap = {};
    thirdYearStuds.forEach(doc => {
     const markList = doc.data()['assignment-marks'];

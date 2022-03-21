@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -66,60 +67,60 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
     );
   }
 
-  ElevatedButton _filterButtonYear({String text, String filterText}) {
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: _yearFilter == text
-              ? MaterialStateProperty.all(Color(0xffC54134))
-              : MaterialStateProperty.all(Color(0xffDEE4ED)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-          )),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: 'Proxima Nova',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: _yearFilter == text ? Colors.white : Colors.black,
-        ),
-      ),
-      onPressed: () {
-        setState(() {
-          _yearFilter = '$filterText';
-        });
-      },
-    );
-  }
+  // ElevatedButton _filterButtonYear({String text, String filterText}) {
+  //   return ElevatedButton(
+  //     style: ButtonStyle(
+  //         backgroundColor: _yearFilter == text
+  //             ? MaterialStateProperty.all(Color(0xffC54134))
+  //             : MaterialStateProperty.all(Color(0xffDEE4ED)),
+  //         shape: MaterialStateProperty.all(
+  //           RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+  //         )),
+  //     child: Text(
+  //       text,
+  //       style: TextStyle(
+  //         fontFamily: 'Proxima Nova',
+  //         fontSize: 16,
+  //         fontWeight: FontWeight.w600,
+  //         color: _yearFilter == text ? Colors.white : Colors.black,
+  //       ),
+  //     ),
+  //     onPressed: () {
+  //       setState(() {
+  //         _yearFilter = '$filterText';
+  //       });
+  //     },
+  //   );
+  // }
 
-  ElevatedButton _filterButtonSubYear({
-    String text,
-    String filterText,
-  }) {
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: _subYearFilter == text
-              ? MaterialStateProperty.all(Color(0xffC54134))
-              : MaterialStateProperty.all(Color(0xffDEE4ED)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-          )),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: 'Proxima Nova',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: _subYearFilter == text ? Colors.white : Colors.black,
-        ),
-      ),
-      onPressed: () {
-        setState(() {
-          _subYearFilter = '$filterText';
-        });
-      },
-    );
-  }
+  // ElevatedButton _filterButtonSubYear({
+  //   String text,
+  //   String filterText,
+  // }) {
+  //   return ElevatedButton(
+  //     style: ButtonStyle(
+  //         backgroundColor: _subYearFilter == text
+  //             ? MaterialStateProperty.all(Color(0xffC54134))
+  //             : MaterialStateProperty.all(Color(0xffDEE4ED)),
+  //         shape: MaterialStateProperty.all(
+  //           RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+  //         )),
+  //     child: Text(
+  //       text,
+  //       style: TextStyle(
+  //         fontFamily: 'Proxima Nova',
+  //         fontSize: 16,
+  //         fontWeight: FontWeight.w600,
+  //         color: _subYearFilter == text ? Colors.white : Colors.black,
+  //       ),
+  //     ),
+  //     onPressed: () {
+  //       setState(() {
+  //         _subYearFilter = '$filterText';
+  //       });
+  //     },
+  //   );
+  // }
 
   Widget _filterButtonSubject({
     String text,
@@ -157,7 +158,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
   Widget build(BuildContext context) {
     bool isActive = false;
     List<StudentRank> students = [];
-
+    final studentUser = Provider.of<StudentUser>(context);
     final studsFromdb = Provider.of<List<StudentRank>>(context);
     final assessments = Provider.of<List<RAfromDB>>(context);
 
@@ -266,7 +267,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
-                                onTap: (){},
+                                onTap: () {},
                                 child: Container(
                                   color: Colors.white,
                                   height: i == 0
@@ -298,7 +299,8 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                       if (students[i].imageUrl != '')
                                         CircleAvatar(
                                           backgroundImage:
-                                              NetworkImage(students[i].imageUrl),
+                                              CachedNetworkImageProvider(
+                                                  students[i].imageUrl),
                                           radius: i == 0 || i == 1 || i == 2
                                               ? 25
                                               : 15,
@@ -319,9 +321,52 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
+                                      Spacer(),
+                                      if (students[i].id == studentUser.uid &&
+                                          _filter == 'Year')
+                                        Text(
+                                          '${students[i].yearScore.toInt()}',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'Proxima Nova',
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xffD6200F)),
+                                        ),
+                                      if (students[i].id == studentUser.uid &&
+                                          _filter == 'Attendance')
+                                        Text(
+                                          '${students[i].attendanceScore.toInt()}',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'Proxima Nova',
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xffD6200F)),
+                                        ),
+                                       if (students[i].id == studentUser.uid &&
+                                          _filter == 'Assignments')
+                                        Text(
+                                          '${students[i].assignmentScore.toInt()}',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'Proxima Nova',
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xffD6200F)),
+                                        ),
+                                      if (students[i].id == studentUser.uid &&
+                                          _filter == 'Subject')
+                                        Text(
+                                          '${students[i].raSubScore['$_subjectFilter'].toInt()}',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: 'Proxima Nova',
+                                              fontWeight: FontWeight.w700,
+                                              color: Color(0xffD6200F)),
+                                        ),
+                                      SizedBox(
+                                        width: 23,
+                                      ),
                                     ],
                                   ),
-                                  //trailing: Text('${students[i].attendancePosition}'),
                                 ),
                               ),
                             ),

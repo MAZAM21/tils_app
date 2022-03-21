@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/student-answers.dart';
 import 'package:tils_app/models/student_rank.dart';
@@ -39,24 +40,60 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
           if (snap.connectionState == ConnectionState.waiting) {
             return LoadingScreen();
           }
-          if (snap.hasData) {
+          if (widget.studList.isEmpty) {
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Text('No Students')],
+              ),
+            );
+          }
+          if (snap.hasData && widget.studList != null) {
             List<StudentAnswers> studAns = snap.data;
 
             return Scaffold(
-              appBar: AppBar(),
+              appBar: AppBar(
+                title: Text(
+                  '${widget.title}',
+                  style: TextStyle(
+                      fontFamily: 'Proxima Nova',
+                      fontSize: 22,
+                      color: Color(0xff2b3443)),
+                ),
+              ),
               body: ListView.builder(
                   itemCount: snap.data.length,
                   itemBuilder: (context, i) {
-                    String imageURL = widget.studList
-                            .firstWhere(
-                                (element) => studAns[i].studentId == element.id)
-                            .imageUrl;
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(imageURL),
+                    String imageURL='';
+                    StudentRank stud = widget.studList.firstWhere(
+                        (element) =>
+                            studAns[i].studentId == element.id &&
+                            element.imageUrl.isNotEmpty, orElse: () {
+                      return null;
+                    });
+                    if (stud != null) {
+                      imageURL = stud.imageUrl;
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ListTile(
+                        tileColor: Colors.white,
+                        leading: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(imageURL),
+                        ),
+                        title: Text(
+                          "${studAns[i].name}",
+                          style: TextStyle(
+                            fontFamily: 'Proxima Nova',
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff2b3443),
+                          ),
+                        ),
+                        trailing: Text(
+                            'MCQ: ${studAns[i].mcqMarks} Text Question: ${studAns[i].totalQMarks}'),
                       ),
-                      title: Text("${studAns[i].name}"),
-                      trailing: Text('MCQ: ${studAns[i].mcqMarks} Text Question: ${studAns[i].totalQMarks}'),
                     );
                   }),
             );

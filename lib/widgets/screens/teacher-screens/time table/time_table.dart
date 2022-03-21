@@ -92,18 +92,48 @@ class _CalendarAppState extends State<CalendarApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Subject: ${selected.eventName}'),
+              Text(
+                'Subject: ${selected.eventName}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 250, 235, 215),
+                  fontFamily: 'Proxima Nova',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               Divider(),
               Text(
-                  'Starts at: ${DateFormat('d MMM hh mm a').format(selected.from)}'),
+                'Starts at: ${DateFormat('d MMM hh mm a').format(selected.from)}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 250, 235, 215),
+                  fontFamily: 'Proxima Nova',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               Divider(),
               Text(
-                  'Ends at: ${DateFormat('d MMM hh mm a').format(selected.to)}'),
+                'Ends at: ${DateFormat('d MMM hh mm a').format(selected.to)}',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 250, 235, 215),
+                  fontFamily: 'Proxima Nova',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               SizedBox(
                 height: 20,
               ),
-              FlatButton(
-                child: Text('Edit Class'),
+              TextButton(
+                child: Text(
+                  'Edit Class',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 250, 235, 215),
+                    fontFamily: 'Proxima Nova',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                   onTapCalendar(selected);
