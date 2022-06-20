@@ -44,6 +44,7 @@ dependencies:
   flutter_app_name: ^0.1.0
   emojis: ^0.9.9
   cached_network_image: ^3.2.0
+  flutter_echarts: ^2.3.0
 
 flutter_app_name:
   name: "BLS"

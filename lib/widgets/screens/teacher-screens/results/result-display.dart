@@ -64,7 +64,7 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
               body: ListView.builder(
                   itemCount: snap.data.length,
                   itemBuilder: (context, i) {
-                    String imageURL='';
+                    String imageURL = '';
                     StudentRank stud = widget.studList.firstWhere(
                         (element) =>
                             studAns[i].studentId == element.id &&
@@ -78,10 +78,19 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
+                        onTap: () {
+                          resultDetail(context, studAns[i]);
+                        },
                         tileColor: Colors.white,
-                        leading: CircleAvatar(
-                          backgroundImage: CachedNetworkImageProvider(imageURL),
-                        ),
+                        leading: imageURL != ''
+                            ? CircleAvatar(
+                                backgroundImage:
+                                    CachedNetworkImageProvider(imageURL),
+                              )
+                            : Icon(
+                                Icons.person,
+                                size: 36,
+                              ),
                         title: Text(
                           "${studAns[i].name}",
                           style: TextStyle(
@@ -92,7 +101,13 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                           ),
                         ),
                         trailing: Text(
-                            'MCQ: ${studAns[i].mcqMarks} Text Question: ${studAns[i].totalQMarks}'),
+                          'MCQ: ${studAns[i].mcqMarks} Text Question: ${studAns[i].totalQMarks}',
+                          style: TextStyle(
+                            fontFamily: 'Proxima Nova',
+                            fontSize: 18,
+                            color: Color(0xff2b3443),
+                          ),
+                        ),
                       ),
                     );
                   }),
@@ -100,5 +115,76 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
           }
           return null;
         });
+  }
+
+  Future<dynamic> resultDetail(BuildContext context, StudentAnswers ans) {
+    return showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(34),
+            topLeft: Radius.circular(34),
+          ),
+        ),
+        builder: (BuildContext ctx) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 30,
+                  ),
+                  if (ans.mcqAnsMap.isNotEmpty)
+                    for (var i = 0; i < ans.mcqAnsMap.length; i++)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6,
+                              child: Text(
+                                '${ans.mcqAnsMap.keys.toList()[i]}',
+                                style: TextStyle(
+                                  fontFamily: 'Proxima Nova',
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                                overflow: TextOverflow.visible,
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              '${mcqStatus(ans.mcqAnsMap.values.toList()[i])}',
+                              style: TextStyle(
+                                fontFamily: 'Proxima Nova',
+                                color: ans.mcqAnsMap.values.toList()[i] ==
+                                        'correct'
+                                    ? Colors.green[800]
+                                    : Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  String mcqStatus(String stat) {
+    switch (stat) {
+      case 'correct':
+        return 'Correct';
+      default:
+        return 'Incorrect';
+    }
   }
 }

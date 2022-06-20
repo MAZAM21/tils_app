@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "tilsapp",
+    "default": "tils-portal",
     "main": "tils-portal"
   },
   "targets": {}

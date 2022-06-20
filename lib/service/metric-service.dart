@@ -10,7 +10,7 @@ class MetricService {
     var metAchievment = MetricAchievement();
 
     metrics.forEach((m) {
-      if (m.name == 'assignment-marks') {
+      if (m.name == 'assignment-marks' && !m.allZero) {
         /// iterating through the assignment-marks map, we extract the postion from
         /// an already sorted id and marks map. We then store the time and position in a LHM.
         /// LHM is used because it retains the order in which the values were added
@@ -84,6 +84,7 @@ class MetricService {
         }
       }
     });
+    print(metAchievment.achievement);
     return metAchievment;
   }
 }

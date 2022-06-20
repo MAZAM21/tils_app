@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
+import 'package:tils_app/models/admin-user-data.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/metrics.dart';
@@ -89,6 +90,12 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('students');
     return ref.snapshots().map((list) => ParentUser.fromFirestore(
         list.docs.firstWhere((doc) => doc['parent-uid'] == puid)));
+  }
+
+  Stream<AdminUser> streamAdminUser(String uid) {
+    CollectionReference ref = _db.collection('admins');
+    return ref.snapshots().map((list) => AdminUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['uid'] == uid)));
   }
 
   Stream<List<Announcement>> streamAnnouncement() {

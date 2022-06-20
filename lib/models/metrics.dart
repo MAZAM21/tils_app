@@ -4,14 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class StudentMetrics with ChangeNotifier {
+  bool allZero;
   Map<String, Map> assignmentMarks;
   String name;
   StudentMetrics({
+    this.allZero,
     this.assignmentMarks,
     this.name,
   });
   factory StudentMetrics.fromFirestore(QueryDocumentSnapshot doc) {
     try {
+      bool allZero = true;
       Map asMarks = {};
       Map allSorted = {};
       if (doc.id == 'assignment-marks') {
@@ -24,25 +27,36 @@ class StudentMetrics with ChangeNotifier {
         /// the first key is the earliest milliseconds from epoch value
         SplayTreeMap<String, Map> sorted =
             SplayTreeMap.from(asMarks, (a, b) => a.compareTo(b));
+        print('Sorted: $sorted');
 
         /// then we sort each of the assignment marks map <student id, mark>
         /// according to mark with the highest first
         sorted.forEach((key, value) {
           Map studMarks = {...value};
-          SplayTreeMap sortedValue = SplayTreeMap<String, int>.from(
-              studMarks, (a, b) => studMarks[b].compareTo(studMarks[a]));
-          sorted[key] = sortedValue;
-          print(sortedValue);
+          
+          studMarks.forEach((key, value) {
+            if (value != 0) {
+              allZero = false;
+            }
+          });
+
+          if (!allZero) {
+            SplayTreeMap sortedValue = SplayTreeMap<String, int>.from(
+                studMarks, (a, b) => studMarks[b].compareTo(studMarks[a]));
+            sorted[key] = sortedValue;
+          }else {
+            sorted[key] = value;
+          }
         });
         allSorted = sorted;
       }
       return StudentMetrics(
         assignmentMarks: allSorted,
         name: doc.id,
+        allZero: allZero,
       );
     } on Exception catch (e) {
       print('error in metrics constructor: $e');
-      
     }
     return null;
   }
