@@ -45,7 +45,7 @@ class _ClassRecordsState extends State<ClassRecords> {
         : Scaffold(
             appBar: AppBar(
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text('Back'),
                   onPressed: () {
                     Navigator.pop(context);

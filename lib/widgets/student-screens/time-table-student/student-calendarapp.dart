@@ -222,7 +222,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
                 inactiveTrackColor: Colors.cyanAccent,
                 activeColor: Colors.lightGreen,
               ),
-              FlatButton(
+              TextButton(
                 child: Text('Back'),
                 onPressed: () {
                   Navigator.pop(context);

@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                channel.description,
+               
                 icon: android?.smallIcon,
               ),
             ));

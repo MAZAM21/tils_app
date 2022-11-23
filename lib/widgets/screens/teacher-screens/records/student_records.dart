@@ -24,7 +24,7 @@ class StudentRecords extends StatelessWidget {
                         title: Text('Student records'),
                         backgroundColor: Theme.of(context).primaryColor,
                         actions: <Widget>[
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Navigator.pop(context);
                             },

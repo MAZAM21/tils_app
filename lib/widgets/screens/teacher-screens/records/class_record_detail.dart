@@ -15,7 +15,7 @@ class ClassRecordDetail extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: Text('Back'),
             onPressed: () {
               Navigator.pop(context);

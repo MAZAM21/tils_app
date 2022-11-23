@@ -62,7 +62,7 @@ class _StudentHomeState extends State<StudentHome> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                channel.description,
+                
                 icon: android?.smallIcon,
               ),
             ));
