@@ -63,12 +63,12 @@ class _HomePageState extends State<HomePage> {
             notification.hashCode,
             notification.title,
             notification.body,
+            
             NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-               
-                icon: android?.smallIcon,
+                icon: 'LCI_icon',
               ),
             ));
       }

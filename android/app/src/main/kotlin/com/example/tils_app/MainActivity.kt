@@ -1,4 +1,4 @@
-package com.fluentsolutions.tils_app
+package com.fluency.lords
 
 import io.flutter.embedding.android.FlutterActivity
 

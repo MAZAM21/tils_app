@@ -56,7 +56,7 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image(
-                    image: AssetImage('lib/assets/BLSlogo.png'),
+                    image: AssetImage('lib/assets/LCI_icon.png'),
                     height: 150,
                   ),
                   SizedBox(
@@ -67,7 +67,7 @@ class _AuthFormState extends State<AuthForm> {
                       Text(
                         'Email Address',
                         style: TextStyle(
-                          color: Colors.blueGrey[800],
+                          color: Color(0xffF9CB6E),
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Proxima Nova',
                           fontSize: 18,
@@ -109,7 +109,7 @@ class _AuthFormState extends State<AuthForm> {
                       Text(
                         'Password',
                         style: TextStyle(
-                          color: Colors.blueGrey[800],
+                          color: Color(0xffF9CB6E),
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
@@ -150,7 +150,7 @@ class _AuthFormState extends State<AuthForm> {
                       style: ButtonStyle(
                         fixedSize: MaterialStateProperty.all(Size(200, 40)),
                         backgroundColor:
-                            MaterialStateProperty.all(Color(0xff27415F)),
+                            MaterialStateProperty.all(Color(0xffF9CB6E)),
                       ),
                       child: Text(
                         'Login',
@@ -158,7 +158,7 @@ class _AuthFormState extends State<AuthForm> {
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Proxima Nova',
-                            color: Colors.white),
+                            color: Colors.black),
                       ),
                       onPressed: _trySubmit,
                     ),
