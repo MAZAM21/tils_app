@@ -69,7 +69,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
             ///add navigator to add assessments
             IconButton(
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (BuildContext context) =>
                         ChangeNotifierProvider.value(
@@ -114,24 +114,24 @@ class TeacherAssignmentPanel extends StatelessWidget {
             },
           ),
         ),
-        ElevatedButton(
-          onPressed: () {},
-          child: Text(
-            'Manage Students',
-            style: TextStyle(
-              fontSize: 12,
-              fontFamily: 'Proxima Nova',
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
-              minimumSize: MaterialStateProperty.all(Size(107, 25)),
-              fixedSize: MaterialStateProperty.all(Size(145, 27)),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-              )),
-        )
+        // ElevatedButton(
+        //   onPressed: () {},
+        //   child: Text(
+        //     'Manage Students',
+        //     style: TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: 'Proxima Nova',
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //   ),
+        //   style: ButtonStyle(
+        //       backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
+        //       minimumSize: MaterialStateProperty.all(Size(107, 25)),
+        //       fixedSize: MaterialStateProperty.all(Size(145, 27)),
+        //       shape: MaterialStateProperty.all(
+        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+        //       )),
+        // )
       ],
     );
   }

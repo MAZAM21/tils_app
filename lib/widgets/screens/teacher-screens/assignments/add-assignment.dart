@@ -241,7 +241,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                             regStuds != null &&
                             assignmentMarks.title.isNotEmpty &&
                             assignmentMarks.totalMarks != null) {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (BuildContext context) =>
