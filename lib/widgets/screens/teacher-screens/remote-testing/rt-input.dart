@@ -108,7 +108,17 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(height: 30),
-                    Text('Assessment Title'),
+                    Text(
+                      'Assessment Title',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     //Title input text field
                     TextFormField(
                       key: ValueKey('assessment-title'),
@@ -136,7 +146,17 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                     SizedBox(
                       height: 20,
                     ),
-                    Text('Enter Question'),
+                    Text(
+                      'Enter Question',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     //Question input text field
                     TextFormField(
                       controller: queController,
