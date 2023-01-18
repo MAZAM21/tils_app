@@ -10,7 +10,12 @@ class ParentAttendancePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final percentage = ps.attendancePercentage(pData);
+    int percentage = 0;
+    if (ps.attendancePercentage(pData) > 0) {
+      percentage = ps.attendancePercentage(pData);
+    } else {
+      percentage = 0;
+    }
     final int presents = ps.presents(pData.attendance);
     final int lates = ps.lates(pData.attendance);
     final int absents = ps.absents(pData.attendance);
@@ -120,7 +125,6 @@ class ParentAttendancePanel extends StatelessWidget {
                   ),
                 ],
               ),
-             
             ],
           )
         ],

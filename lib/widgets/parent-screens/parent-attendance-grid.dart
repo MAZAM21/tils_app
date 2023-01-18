@@ -24,7 +24,9 @@ class _ParentAttendanceGridState extends State<ParentAttendanceGrid> {
     bool isActive = false;
     if (allClasses != null && widget.pData != null) {
       myClasses = ps.getMarkedClasses(allClasses, widget.pData.attendance);
-      isActive = true;
+      if (myClasses.length > 0) {
+        isActive = true;
+      }
     }
 
     return !isActive

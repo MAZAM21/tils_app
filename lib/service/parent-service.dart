@@ -1,4 +1,3 @@
-
 import 'package:tils_app/models/parent-user-data.dart';
 
 import 'package:tils_app/models/subject-class.dart';
@@ -16,6 +15,9 @@ class ParentService {
     });
     perc = (presents / all) * 100;
 
+    if (perc.isInfinite || perc.isNaN) {
+      return 0;
+    }
     return perc.toInt();
   }
 
@@ -24,13 +26,13 @@ class ParentService {
 
   List<SubjectClass> getMarkedClasses(List<SubjectClass> allClasses, Map att) {
     List<SubjectClass> marked = [];
-    if (att!=null) {
-  allClasses.forEach((element) {
-    if (att.containsKey(element.id) && element != null) {
-      marked.add(element);
+    if (att != null) {
+      allClasses.forEach((element) {
+        if (att.containsKey(element.id) && element != null) {
+          marked.add(element);
+        }
+      });
     }
-  });
-}
     marked.sort((a, b) => b.startTime.compareTo(
         a.startTime)); // easy sorting of dates. Use in attendance grid as well
     return marked;
