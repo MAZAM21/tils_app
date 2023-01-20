@@ -1,4 +1,4 @@
-package com.fluency.lords
+package com.fluency.sil
 
 import io.flutter.embedding.android.FlutterActivity
 
