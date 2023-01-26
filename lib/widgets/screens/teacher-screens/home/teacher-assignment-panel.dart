@@ -7,6 +7,7 @@ import 'package:tils_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 
 class TeacherAssignmentPanel extends StatelessWidget {
@@ -114,24 +115,33 @@ class TeacherAssignmentPanel extends StatelessWidget {
             },
           ),
         ),
-        // ElevatedButton(
-        //   onPressed: () {},
-        //   child: Text(
-        //     'Manage Students',
-        //     style: TextStyle(
-        //       fontSize: 12,
-        //       fontFamily: 'Proxima Nova',
-        //       fontWeight: FontWeight.w600,
-        //     ),
-        //   ),
-        //   style: ButtonStyle(
-        //       backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
-        //       minimumSize: MaterialStateProperty.all(Size(107, 25)),
-        //       fixedSize: MaterialStateProperty.all(Size(145, 27)),
-        //       shape: MaterialStateProperty.all(
-        //         RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-        //       )),
-        // )
+        ElevatedButton(
+          onPressed: () { Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/manage-studs'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: ManageStudents(),
+                      ),
+                    ),
+                  );},
+          child: Text(
+            'Manage Students',
+            style: TextStyle(
+              fontSize: 12,
+              fontFamily: 'Proxima Nova',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
+              minimumSize: MaterialStateProperty.all(Size(107, 25)),
+              fixedSize: MaterialStateProperty.all(Size(145, 27)),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+              )),
+        )
       ],
     );
   }
