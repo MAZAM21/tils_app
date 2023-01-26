@@ -39,7 +39,7 @@ class _AllTabsState extends State<AllTabs> {
         drawer: AppDrawer(),
         appBar: AppBar(
           title: Text(
-            'Lords College Teacher\'s Portal',
+            'SIL Teacher\'s Portal',
             style:TextStyle(
                 color: Color.fromARGB(255, 76, 76, 76),
                 fontFamily: 'Proxima Nova',
