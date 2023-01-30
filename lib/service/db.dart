@@ -911,6 +911,22 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> deleteStudent(String studID) async {
+    final studRef = _db.collection('students');
+    final binRef = _db.collection('bin');
+    try {
+      //copy student data into bin, sets the same doc ID as in students collection
+      studRef
+          .doc(studID)
+          .get()
+          .then((value) => binRef.doc(value.id).set(value.data()));
+
+      return await studRef.doc(studID).delete();
+    } catch (err) {
+      print('error in deleteStudent db: $err');
+    }
+  }
+
   Future<void> deleteAttendanceRecordFromStud(
       String studID, String attendanceid) async {
     final DocumentReference studRef = _db.collection('students').doc(studID);
@@ -923,7 +939,7 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> deleteAssessment(String id) async {
     final ref = _db.collection('remote-assessment');
-    
+
     try {
       return await ref.doc(id).delete();
     } catch (err) {

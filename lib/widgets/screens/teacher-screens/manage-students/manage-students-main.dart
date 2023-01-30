@@ -8,6 +8,7 @@ import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/ranking-service.dart';
 import 'package:tils_app/service/student-management-service.dart';
 import 'package:tils_app/service/student-service.dart';
@@ -24,6 +25,7 @@ class ManageStudents extends StatefulWidget {
 
 class _ManageStudentsState extends State<ManageStudents> {
   final ms = ManagementService();
+  final db = DatabaseService();
 
   String _yearFilter;
   String _filter;
@@ -167,6 +169,129 @@ class _ManageStudentsState extends State<ManageStudents> {
     );
   }
 
+  Future<dynamic> showOptions(StudentRank stud) {
+    return showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (BuildContext ctx, StateSetter setStateModal) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.35,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(children: <Widget>[
+                    Text(
+                      '${stud.name}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Proxima Nova',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 45,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.people_outline_outlined,
+                          color: Colors.indigo[800],
+                          size: 30,
+                        ),
+                        SizedBox(width: 25,),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Activate Parent Portal',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.note_add_rounded,
+                          size: 30,
+                          color: Colors.green[700],
+                        ),
+                        SizedBox(width: 25,),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            'Change subjects or year',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 30,
+                        ),
+                        SizedBox(width: 25,),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                                context: ctx,
+                                barrierDismissible: true,
+                                builder: (BuildContext dialogCtx) {
+                                  return AlertDialog(
+                                    actions: <Widget>[
+                                      Text(
+                                          'Are you sure you want to permanently delete this student?'),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          ElevatedButton(
+                                              onPressed: () {},
+                                              child: Text('Yes, Delete')),
+                                          ElevatedButton(
+                                              onPressed: () {}, child: Text('No'))
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                });
+                          },
+                          child: Text(
+                            'Delete Student',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Theme.of(context).primaryColor,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]),
+                ),
+              ),
+            );
+          });
+        });
+  }
+
   Widget build(BuildContext context) {
     List<StudentRank> students = [];
     final studsFromdb = Provider.of<List<StudentRank>>(context);
@@ -192,28 +317,36 @@ class _ManageStudentsState extends State<ManageStudents> {
 
     return isActive
         ? Scaffold(
+            appBar: AppBar(
+                title: Text(
+              'Manage Students',
+              style: TextStyle(
+                color: Color(0xff4c4c4c),
+                fontFamily: 'Proxima Nova',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            )),
             body: SingleChildScrollView(
                 child: Column(
               children: [
-                SizedBox(
-                  height: 45,
-                ),
+                // SizedBox(
+                //   height: 45,
+                // ),
                 Container(
                   color: Theme.of(context).canvasColor,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        _filterButtonFirst(
-                          filterText: 'Year',
-                          text: 'Year',
-                        ),
-                        _filterButtonFirst(
-                          filterText: 'Subject',
-                          text: 'Subject',
-                        ),
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      _filterButtonFirst(
+                        filterText: 'Year',
+                        text: 'Year',
+                      ),
+                      _filterButtonFirst(
+                        filterText: 'Subject',
+                        text: 'Subject',
+                      ),
+                    ],
                   ),
                 ),
                 if (_filter == 'Subject')
@@ -279,6 +412,8 @@ class _ManageStudentsState extends State<ManageStudents> {
                 Container(
                   height: MediaQuery.of(context).size.height,
                   child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       itemCount: students.length,
                       itemBuilder: (ctx, i) {
                         return Padding(
@@ -288,43 +423,52 @@ class _ManageStudentsState extends State<ManageStudents> {
                             borderRadius: BorderRadius.circular(10),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                color: Colors.white,
-                                height: 60,
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    if (students[i].imageUrl != '')
-                                      CircleAvatar(
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(
-                                          students[i].imageUrl,
+                              child: InkWell(
+                                onTap: () {
+                                  return showOptions(students[i]);
+                                },
+                                child: Container(
+                                  color: Colors.white,
+                                  height: 60,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      if (students[i].imageUrl != '')
+                                        CircleAvatar(
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                            students[i].imageUrl,
+                                          ),
+                                          radius: 20,
+                                        )
+                                      else
+                                        Icon(
+                                          Icons.person,
+                                          size: 30,
                                         ),
-                                        radius: 20,
-                                      )
-                                    else
-                                      Icon(
-                                        Icons.person,
-                                        size: 30,
+                                      SizedBox(width: 11),
+                                      Text(
+                                        students[i].name,
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontFamily: 'Proxima Nova',
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    SizedBox(width: 11),
-                                    Text(
-                                      students[i].name,
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         );
                       }),
+                ),
+                Container(
+                  height: 40,
+                  color: Theme.of(context).canvasColor,
                 )
               ],
             )),
