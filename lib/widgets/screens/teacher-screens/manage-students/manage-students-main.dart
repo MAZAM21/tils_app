@@ -172,8 +172,8 @@ class _ManageStudentsState extends State<ManageStudents> {
   Future<dynamic> showOptions(StudentRank stud) {
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24), topRight: Radius.circular(24))),
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
@@ -199,19 +199,21 @@ class _ManageStudentsState extends State<ManageStudents> {
                       children: <Widget>[
                         Icon(
                           Icons.people_outline_outlined,
-                          color: Colors.indigo[800],
+                          color: Colors.blueGrey,
                           size: 30,
                         ),
-                        SizedBox(width: 25,),
+                        SizedBox(
+                          width: 25,
+                        ),
                         TextButton(
                           onPressed: () {},
                           child: Text(
                             'Activate Parent Portal',
                             style: TextStyle(
                               fontSize: 18,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.blueGrey[800],
                               fontFamily: 'Proxima Nova',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),
@@ -222,18 +224,20 @@ class _ManageStudentsState extends State<ManageStudents> {
                         Icon(
                           Icons.note_add_rounded,
                           size: 30,
-                          color: Colors.green[700],
+                          color: Colors.blueGrey,
                         ),
-                        SizedBox(width: 25,),
+                        SizedBox(
+                          width: 25,
+                        ),
                         TextButton(
                           onPressed: () {},
                           child: Text(
                             'Change subjects or year',
                             style: TextStyle(
                               fontSize: 18,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.blueGrey[800],
                               fontFamily: 'Proxima Nova',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),
@@ -243,10 +247,12 @@ class _ManageStudentsState extends State<ManageStudents> {
                       children: <Widget>[
                         Icon(
                           Icons.delete,
-                          color: Colors.red,
+                          color: Colors.blueGrey,
                           size: 30,
                         ),
-                        SizedBox(width: 25,),
+                        SizedBox(
+                          width: 25,
+                        ),
                         TextButton(
                           onPressed: () {
                             showDialog(
@@ -262,10 +268,16 @@ class _ManageStudentsState extends State<ManageStudents> {
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                db.deleteStudent(stud.id);
+                                                Navigator.pop(context);
+                                              },
                                               child: Text('Yes, Delete')),
                                           ElevatedButton(
-                                              onPressed: () {}, child: Text('No'))
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text('No'))
                                         ],
                                       )
                                     ],
@@ -276,9 +288,9 @@ class _ManageStudentsState extends State<ManageStudents> {
                             'Delete Student',
                             style: TextStyle(
                               fontSize: 18,
-                              color: Theme.of(context).primaryColor,
+                              color: Colors.blueGrey[800],
                               fontFamily: 'Proxima Nova',
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),

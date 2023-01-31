@@ -798,6 +798,8 @@ class DatabaseService with ChangeNotifier {
             Future.forEach(uploadStudents, (UploadStudent student) => null));
   }
 
+  Future<void> saveParent() async {}
+
   Future<void> saveTeacher(
     List<UploadTeacher> uploadTeachers,
   ) async {
@@ -915,6 +917,28 @@ class DatabaseService with ChangeNotifier {
     final studRef = _db.collection('students');
     final binRef = _db.collection('bin');
     try {
+      // Get a reference to the assessment-result collection
+      final CollectionReference assessmentResultCollection =
+          _db.collection('assessment-result');
+
+      // Get all documents inside the assessment-result collection
+      final QuerySnapshot querySnapshot =
+          await assessmentResultCollection.get();
+
+      // Loop through each document
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Get references to the stud id sub-collections
+        final CollectionReference studIDColl =
+            documentSnapshot.reference.collection('student-IDs');
+       
+
+        // Delete the student document from the studid sub-collection
+        await studIDColl.doc(studID).delete();
+
+       
+        
+      }
+
       //copy student data into bin, sets the same doc ID as in students collection
       studRef
           .doc(studID)
