@@ -911,6 +911,45 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> deleteStudent(String studID) async {
+    final studRef = _db.collection('students');
+    final binRef = _db.collection('bin');
+    try {
+      // Get a reference to the assessment-result collection
+      final CollectionReference assessmentResultCollection =
+          _db.collection('assessment-result');
+
+      // Get all documents inside the assessment-result collection
+      final QuerySnapshot querySnapshot =
+          await assessmentResultCollection.get();
+
+      // Loop through each document
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Get references to the stud id sub-collections
+        final CollectionReference studIDColl =
+            documentSnapshot.reference.collection('student-IDs');
+       
+
+        // Delete the student document from the studid sub-collection
+        await studIDColl.doc(studID).delete();
+
+       
+        
+      }
+
+      //copy student data into bin, sets the same doc ID as in students collection
+      studRef
+          .doc(studID)
+          .get()
+          .then((value) => binRef.doc(value.id).set(value.data()));
+
+      return await studRef.doc(studID).delete();
+    } catch (err) {
+      print('error in deleteStudent db: $err');
+    }
+  }
+
+
   Future<void> deleteAttendanceRecordFromStud(
       String studID, String attendanceid) async {
     final DocumentReference studRef = _db.collection('students').doc(studID);
