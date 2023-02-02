@@ -5,6 +5,7 @@ import 'package:tils_app/models/teacher-user-data.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tils_app/service/teachers-service.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/lectures/upload-lecture.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
@@ -83,8 +84,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
             ),
             Spacer(),
 
-            ///TODO
-            ///add navigator to add assessments
+           
             IconButton(
               onPressed: () {
                 Navigator.of(context).push(
@@ -273,6 +273,38 @@ class TeacherAssessmentPanel extends StatelessWidget {
                 },
                 child: Text(
                   'Results',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Proxima Nova',
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xffffffff)),
+                    minimumSize: MaterialStateProperty.all(Size(60, 25)),
+                    fixedSize: MaterialStateProperty.all(Size(80, 27)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(23)),
+                    )),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/all-results'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: VideoUploadScreen(),
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Upload Lecture',
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'Proxima Nova',
