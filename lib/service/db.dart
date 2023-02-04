@@ -849,6 +849,57 @@ class DatabaseService with ChangeNotifier {
         );
   }
 
+  Future<void> editStudentYear(String newYear, StudentRank stud) async {
+    DocumentReference studRef = _db.collection('students').doc(stud.id);
+    try {
+      await studRef.set(
+        {'year': newYear},
+        SetOptions(merge: true),
+      );
+    } catch (e) {
+      print('error in editStudentYear db function: $e');
+    }
+  }
+
+  Future<void> editStudentSubs(
+    List<String> newSubs,
+    StudentRank stud,
+  ) async {
+    Map<String, bool> subs = {
+      'Conflict': false,
+      'Jurisprudence': false,
+      'Islamic': false,
+      'Trust': false,
+      'Company': false,
+      'Tort': false,
+      'Property': false,
+      'EU': false,
+      'HR': false,
+      'Contract': false,
+      'Criminal': false,
+      'Public': false,
+      'LSM': false,
+    };
+
+    subs.forEach((sub, value) {
+      if (newSubs.contains(sub)) {
+        subs['$sub'] = true;
+      } else {
+        subs['$sub'] = false;
+      }
+    });
+
+    DocumentReference studRef = _db.collection('students').doc(stud.id);
+    try {
+      await studRef.set(
+        {'registeredSubs': subs},
+        SetOptions(merge: true),
+      );
+    } on Exception catch (e) {
+      print('error in editStudentsSubs db function: $e');
+    }
+  }
+
   //adds edited class to cf
   Future<void> editClassInCF(
     String id,
@@ -930,13 +981,9 @@ class DatabaseService with ChangeNotifier {
         // Get references to the stud id sub-collections
         final CollectionReference studIDColl =
             documentSnapshot.reference.collection('student-IDs');
-       
 
         // Delete the student document from the studid sub-collection
         await studIDColl.doc(studID).delete();
-
-       
-        
       }
 
       //copy student data into bin, sets the same doc ID as in students collection

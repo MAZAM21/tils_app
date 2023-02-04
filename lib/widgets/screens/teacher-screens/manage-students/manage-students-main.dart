@@ -13,6 +13,8 @@ import 'package:tils_app/service/ranking-service.dart';
 import 'package:tils_app/service/student-management-service.dart';
 import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:provider/provider.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/manage-students/edit-student-subs.dart';
 
 class ManageStudents extends StatefulWidget {
   const ManageStudents({Key key}) : super(key: key);
@@ -230,7 +232,12 @@ class _ManageStudentsState extends State<ManageStudents> {
                           width: 25,
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (ctx) => EditStudSubs(stud)));
+                          },
                           child: Text(
                             'Change subjects or year',
                             style: TextStyle(
