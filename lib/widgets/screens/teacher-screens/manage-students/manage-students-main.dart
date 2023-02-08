@@ -14,6 +14,7 @@ import 'package:tils_app/service/student-management-service.dart';
 import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/manage-students/activate-parent-portal.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/edit-student-subs.dart';
 
 class ManageStudents extends StatefulWidget {
@@ -208,7 +209,13 @@ class _ManageStudentsState extends State<ManageStudents> {
                           width: 25,
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => ActivateParentPortal(stud)),
+                            );
+                          },
                           child: Text(
                             'Activate Parent Portal',
                             style: TextStyle(
@@ -268,25 +275,64 @@ class _ManageStudentsState extends State<ManageStudents> {
                                 builder: (BuildContext dialogCtx) {
                                   return AlertDialog(
                                     actions: <Widget>[
+                                      SizedBox(
+                                        height: 20,
+                                      ),
                                       Text(
-                                          'Are you sure you want to permanently delete this student?'),
+                                        'Are you sure you want to permanently delete this student?',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: 'Proxima Nova',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           ElevatedButton(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Color(0xffC54134)),
+                                              ),
                                               onPressed: () {
                                                 db.deleteStudent(stud.id);
                                                 Navigator.pop(context);
                                               },
-                                              child: Text('Yes, Delete')),
+                                              child: Text(
+                                                'Yes, Delete',
+                                                style: TextStyle(
+                                                  fontFamily: 'Proxima Nova',
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )),
                                           ElevatedButton(
+                                              style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Color(0xffffffff)),
+                                              ),
                                               onPressed: () {
                                                 Navigator.pop(context);
                                               },
-                                              child: Text('No'))
+                                              child: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  fontFamily: 'Proxima Nova',
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ))
                                         ],
-                                      )
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
                                     ],
                                   );
                                 });

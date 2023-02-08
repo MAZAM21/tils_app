@@ -798,7 +798,33 @@ class DatabaseService with ChangeNotifier {
             Future.forEach(uploadStudents, (UploadStudent student) => null));
   }
 
-  Future<void> saveParent() async {}
+  Future<void> saveParent(
+      String email, String password, StudentRank stud) async {
+        
+    /// 1. create new user for parent by calling auth
+    /// 2. first then(): create doc in user collection for parent with the role parent
+    /// 3. second then(): add the parent uid to students doc. 
+         
+    CollectionReference userRef = _db.collection('users');
+    DocumentReference studRef = _db.collection('students').doc(stud.id);
+    try {
+      auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((UserCredential credential) {
+        userRef.doc(credential.user.uid).set({
+          'role': 'parent',
+          'email': email,
+          'password': password,
+          'child_name': stud.name,
+        }, SetOptions(merge: true)).then(
+          (value) => studRef.set(
+            {'parent-uid': credential.user.uid},
+            SetOptions(merge: true),
+          ),
+        );
+      });
+    } catch (e) {}
+  }
 
   Future<void> saveTeacher(
     List<UploadTeacher> uploadTeachers,

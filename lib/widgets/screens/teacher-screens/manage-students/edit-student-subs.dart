@@ -227,13 +227,13 @@ class _EditStudProfileState extends State<EditStudSubs> {
               ),
             ),
             style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(23)),
-                ),
-                minimumSize: MaterialStateProperty.all(Size(107, 25)),
-                fixedSize: MaterialStateProperty.all(Size(150, 45)),
-                backgroundColor: MaterialStateProperty.all(Color(0xffC54134))),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+              ),
+              minimumSize: MaterialStateProperty.all(Size(107, 25)),
+              fixedSize: MaterialStateProperty.all(Size(150, 45)),
+              backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
+            ),
           ),
         ],
       )),
