@@ -1,3 +1,4 @@
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -16,7 +17,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_p
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
-
+import 'package:flutter/foundation.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
@@ -45,42 +46,44 @@ class _HomePageState extends State<HomePage> {
 
     ///this is for foreground notifications supposedly
 
-    var initialzationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettings =
-        InitializationSettings(android: initialzationSettingsAndroid);
-
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (notification != null && android != null) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('${notification.title}'),
-        ));
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                icon: 'LCI_icon',
-              ),
-            ));
-      }
-    });
-    if (teacherData != null) {
-      for (var i = 0; i < teacherData.subjects.length; i++) {
-        //print('${teacherData.subjects[i]}');
-        FirebaseMessaging.instance
-            .subscribeToTopic('${teacherData.subjects[i]}');
-      }
-      getToken(teacherData.docId);
+    if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
+  var initialzationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettings =
+      InitializationSettings(android: initialzationSettingsAndroid, );
+  
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification notification = message.notification;
+    AndroidNotification android = message.notification?.android;
+    if (notification != null && android != null) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('${notification.title}'),
+      ));
+      flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              icon: 'LCI_icon',
+            ),
+          ));
     }
+  });
+  if (teacherData != null) {
+    for (var i = 0; i < teacherData.subjects.length; i++) {
+      //print('${teacherData.subjects[i]}');
+      FirebaseMessaging.instance
+          .subscribeToTopic('${teacherData.subjects[i]}');
+    }
+    getToken(teacherData.docId);
+  }
+}
     // getTopics();
   }
 
