@@ -98,8 +98,7 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
                           uidMarks: idMark,
                           subject: widget.editAM.subject));
                 }
-                Navigator.popUntil(
-                    context, (ModalRoute.withName('/assignment-main')));
+                Navigator.pop(context);
               },
               icon: Icon(
                 Icons.save,

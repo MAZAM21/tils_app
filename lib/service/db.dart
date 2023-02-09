@@ -798,6 +798,34 @@ class DatabaseService with ChangeNotifier {
             Future.forEach(uploadStudents, (UploadStudent student) => null));
   }
 
+  Future<void> saveParent(
+      String email, String password, StudentRank stud) async {
+        
+    /// 1. create new user for parent by calling auth
+    /// 2. first then(): create doc in user collection for parent with the role parent
+    /// 3. second then(): add the parent uid to students doc. 
+         
+    CollectionReference userRef = _db.collection('users');
+    DocumentReference studRef = _db.collection('students').doc(stud.id);
+    try {
+      auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((UserCredential credential) {
+        userRef.doc(credential.user.uid).set({
+          'role': 'parent',
+          'email': email,
+          'password': password,
+          'child_name': stud.name,
+        }, SetOptions(merge: true)).then(
+          (value) => studRef.set(
+            {'parent-uid': credential.user.uid},
+            SetOptions(merge: true),
+          ),
+        );
+      });
+    } catch (e) {}
+  }
+
   Future<void> saveTeacher(
     List<UploadTeacher> uploadTeachers,
   ) async {
@@ -845,6 +873,57 @@ class DatabaseService with ChangeNotifier {
             ),
           ),
         );
+  }
+
+  Future<void> editStudentYear(String newYear, StudentRank stud) async {
+    DocumentReference studRef = _db.collection('students').doc(stud.id);
+    try {
+      await studRef.set(
+        {'year': newYear},
+        SetOptions(merge: true),
+      );
+    } catch (e) {
+      print('error in editStudentYear db function: $e');
+    }
+  }
+
+  Future<void> editStudentSubs(
+    List<String> newSubs,
+    StudentRank stud,
+  ) async {
+    Map<String, bool> subs = {
+      'Conflict': false,
+      'Jurisprudence': false,
+      'Islamic': false,
+      'Trust': false,
+      'Company': false,
+      'Tort': false,
+      'Property': false,
+      'EU': false,
+      'HR': false,
+      'Contract': false,
+      'Criminal': false,
+      'Public': false,
+      'LSM': false,
+    };
+
+    subs.forEach((sub, value) {
+      if (newSubs.contains(sub)) {
+        subs['$sub'] = true;
+      } else {
+        subs['$sub'] = false;
+      }
+    });
+
+    DocumentReference studRef = _db.collection('students').doc(stud.id);
+    try {
+      await studRef.set(
+        {'registeredSubs': subs},
+        SetOptions(merge: true),
+      );
+    } on Exception catch (e) {
+      print('error in editStudentsSubs db function: $e');
+    }
   }
 
   //adds edited class to cf
@@ -911,6 +990,40 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> deleteStudent(String studID) async {
+    final studRef = _db.collection('students');
+    final binRef = _db.collection('bin');
+    try {
+      // Get a reference to the assessment-result collection
+      final CollectionReference assessmentResultCollection =
+          _db.collection('assessment-result');
+
+      // Get all documents inside the assessment-result collection
+      final QuerySnapshot querySnapshot =
+          await assessmentResultCollection.get();
+
+      // Loop through each document
+      for (DocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Get references to the stud id sub-collections
+        final CollectionReference studIDColl =
+            documentSnapshot.reference.collection('student-IDs');
+
+        // Delete the student document from the studid sub-collection
+        await studIDColl.doc(studID).delete();
+      }
+
+      //copy student data into bin, sets the same doc ID as in students collection
+      studRef
+          .doc(studID)
+          .get()
+          .then((value) => binRef.doc(value.id).set(value.data()));
+
+      return await studRef.doc(studID).delete();
+    } catch (err) {
+      print('error in deleteStudent db: $err');
+    }
+  }
+
   Future<void> deleteAttendanceRecordFromStud(
       String studID, String attendanceid) async {
     final DocumentReference studRef = _db.collection('students').doc(studID);
@@ -923,7 +1036,7 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> deleteAssessment(String id) async {
     final ref = _db.collection('remote-assessment');
-    
+
     try {
       return await ref.doc(id).delete();
     } catch (err) {

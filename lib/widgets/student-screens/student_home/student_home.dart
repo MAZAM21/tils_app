@@ -142,7 +142,7 @@ class _StudentHomeState extends State<StudentHome> {
                           height: 25,
                         ),
                         if (mActive && isActive)
-                        MetricDisplay(metrics: metrics, studData: studData),
+                        //MetricDisplay(metrics: metrics, studData: studData),
 
                         ///Class timer panel widget is same as for teachers
                         ///stored in teachers HP

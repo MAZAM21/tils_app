@@ -104,12 +104,15 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
                     ),
                   ],
                 ),
-                CircleAvatar(
-                  radius: 35,
-                  backgroundImage: widget.parentData.imageUrl != null
-                      ? NetworkImage(widget.parentData.imageUrl)
-                      : null,
-                ),
+                if (widget.parentData.imageUrl.isNotEmpty)
+                  CircleAvatar(
+                    backgroundImage: widget.parentData.imageUrl != null
+                        ? NetworkImage(widget.parentData.imageUrl)
+                        : null,
+                    radius: 30,
+                  ),
+                
+                
               ],
             ),
           ),

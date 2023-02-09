@@ -32,10 +32,14 @@ class ParentUser with ChangeNotifier {
       final year = data['year'] ?? '';
       final section = data['section'];
       final Map att = {...data['attendance'] ?? {}};
-      final url = data['profile-pic-url'];
+      String url = data['profile-pic-url'];
       Map tqm = {};
       Map mcqm = {};
       List compAss = [];
+
+      if(url.isEmpty){
+        url = '';
+      }
 
       if (data.containsKey('Assessment-textqMarks')) {
         tqm = {...data['Assessment-textqMarks'] ?? {}};
