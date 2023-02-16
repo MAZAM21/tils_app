@@ -30,8 +30,8 @@ class TimerText extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         color: Colors.white,
-        height: 65,
-        width: MediaQuery.of(context).size.width * 0.915,
+        height: 165,
+        width: 400,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -48,7 +48,7 @@ class TimerText extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Proxima Nova',
                       fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                      fontSize:20,
                       letterSpacing: 1,
                       fontStyle: FontStyle.normal,
                       color: Color(0xff5F686F),
@@ -62,7 +62,7 @@ class TimerText extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 20,
                             fontStyle: FontStyle.normal,
                             color: Color(0xff5F686F),
                           ),
@@ -73,7 +73,7 @@ class TimerText extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
+                            fontSize: 20,
                             fontStyle: FontStyle.normal,
                             color: Color(0xff5F686F),
                           ),

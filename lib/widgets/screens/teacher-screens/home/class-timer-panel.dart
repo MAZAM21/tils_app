@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -91,56 +92,110 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
                   remaining <= Duration.zero && toEnd > Duration.zero;
 
               //print(dateString)${remaining.inHours}:;
-              return Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Classes',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Proxima Nova',
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xff21353f),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              settings: RouteSettings(name: '/assignment-main'),
-                              builder: (BuildContext context) =>
-                                  ChangeNotifierProvider.value(
-                                value: widget.teacherData,
-                                child: CalendarApp(),
+              return defaultTargetPlatform == TargetPlatform.android ||
+                      defaultTargetPlatform == TargetPlatform.iOS
+                  ? Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Classes',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Proxima Nova',
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xff21353f),
                               ),
                             ),
-                          );
-                        },
-                        child: Text(
-                          'Time-table',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff21353f),
-                          ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    settings:
+                                        RouteSettings(name: '/assignment-main'),
+                                    builder: (BuildContext context) =>
+                                        ChangeNotifierProvider.value(
+                                      value: widget.teacherData,
+                                      child: CalendarApp(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Time-table',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xff21353f),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  TimerText(
-                    inSession: inSession,
-                    dateString: dateString,
-                    timeUp: timeUp,
-                    timeClose: timeClose,
-                    subClassNext: subClassNext,
-                    meetingId: meetingID,
-                    toEndString: toEndString,
-                  ),
-                ],
-              );
+                        TimerText(
+                          inSession: inSession,
+                          dateString: dateString,
+                          timeUp: timeUp,
+                          timeClose: timeClose,
+                          subClassNext: subClassNext,
+                          meetingId: meetingID,
+                          toEndString: toEndString,
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            // Text(
+                            //   'Classes',
+                            //   style: TextStyle(
+                            //     fontSize: 18,
+                            //     fontFamily: 'Proxima Nova',
+                            //     fontWeight: FontWeight.w700,
+                            //     color: Color(0xff21353f),
+                            //   ),
+                            // ),
+                            // TextButton(
+                            //   onPressed: () {
+                            //     Navigator.of(context).push(
+                            //       MaterialPageRoute(
+                            //         settings:
+                            //             RouteSettings(name: '/assignment-main'),
+                            //         builder: (BuildContext context) =>
+                            //             ChangeNotifierProvider.value(
+                            //           value: widget.teacherData,
+                            //           child: CalendarApp(),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            //   child: Text(
+                            //     'Time-table',
+                            //     style: TextStyle(
+                            //       fontSize: 12,
+                            //       fontFamily: 'Proxima Nova',
+                            //       fontWeight: FontWeight.w600,
+                            //       color: Color(0xff21353f),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                        TimerText(
+                          inSession: inSession,
+                          dateString: dateString,
+                          timeUp: timeUp,
+                          timeClose: timeClose,
+                          subClassNext: subClassNext,
+                          meetingId: meetingID,
+                          toEndString: toEndString,
+                        ),
+                      ],
+                    );
             });
   }
 }

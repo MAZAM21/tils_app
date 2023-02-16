@@ -21,7 +21,7 @@ class TeacherAvatarPanel extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Container(
-            width: 110,
+            width: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -41,7 +41,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good morning,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 20,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -64,7 +64,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good afternoon,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 20,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -87,7 +87,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good evening,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 20,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -98,7 +98,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                 Text(
                   '${teacherData.name}',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 22,
                     fontFamily: 'Proxima Nova',
                     fontWeight: FontWeight.w700,
                     color: Color(0xff2A353F),

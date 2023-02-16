@@ -1,4 +1,3 @@
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,13 +12,20 @@ import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/button-row-webmain.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/results/result-main.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 
 import 'package:tils_app/widgets/student-screens/student_home/classes-grid.dart';
 
@@ -46,44 +52,45 @@ class _HomePageState extends State<HomePage> {
 
     ///this is for foreground notifications supposedly
 
-    if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
-  var initialzationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettings =
-      InitializationSettings(android: initialzationSettingsAndroid, );
-  
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification notification = message.notification;
-    AndroidNotification android = message.notification?.android;
-    if (notification != null && android != null) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${notification.title}'),
-      ));
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              icon: 'LCI_icon',
-            ),
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android) {
+      var initialzationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+      var initializationSettings = InitializationSettings(
+        android: initialzationSettingsAndroid,
+      );
+
+      flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        RemoteNotification notification = message.notification;
+        AndroidNotification android = message.notification?.android;
+        if (notification != null && android != null) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('${notification.title}'),
           ));
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  icon: 'LCI_icon',
+                ),
+              ));
+        }
+      });
+      if (teacherData != null) {
+        for (var i = 0; i < teacherData.subjects.length; i++) {
+          //print('${teacherData.subjects[i]}');
+          FirebaseMessaging.instance
+              .subscribeToTopic('${teacherData.subjects[i]}');
+        }
+        getToken(teacherData.docId);
+      }
     }
-  });
-  if (teacherData != null) {
-    for (var i = 0; i < teacherData.subjects.length; i++) {
-      //print('${teacherData.subjects[i]}');
-      FirebaseMessaging.instance
-          .subscribeToTopic('${teacherData.subjects[i]}');
-    }
-    getToken(teacherData.docId);
-  }
-}
     // getTopics();
   }
 
@@ -146,152 +153,255 @@ class _HomePageState extends State<HomePage> {
     }
     return !isActive
         ? LoadingScreen()
-        : SafeArea(
-            child: Scaffold(
-              drawer: AppDrawer(),
-              body: SingleChildScrollView(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.915,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          ///Name and avatar panel
-                          TeacherAvatarPanel(teacherData: teacherData),
-
-                          SizedBox(
-                            height: 25,
-                          ),
-
-                          /// Class countdown
-                          ClassTimerPanel(
-                            estimateTs,
-                            nextClass,
-                            endTime,
-                            teacherData,
-                          ),
-
-                          SizedBox(
-                            height: 14,
-                          ),
-
-                          /// Classes Grid (Stored in student screens)
-
-                          MyClassesGrid(myClasses: gridList),
-
-                          ///Schedule Class button
-                          Row(
+        : defaultTargetPlatform == TargetPlatform.iOS ||
+                defaultTargetPlatform == TargetPlatform.android
+            ? SafeArea(
+                child: Scaffold(
+                  drawer: AppDrawer(),
+                  body: SingleChildScrollView(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.915,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               SizedBox(
-                                width: 5,
+                                height: 10,
                               ),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xffC54134)),
-                                    minimumSize: MaterialStateProperty.all(
-                                        Size(107, 25)),
-                                    fixedSize: MaterialStateProperty.all(
-                                        Size(117, 27)),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(23)),
-                                    )),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      settings: RouteSettings(
-                                          name: '/edit-time-table'),
-                                      builder: (BuildContext context) =>
-                                          ChangeNotifierProvider.value(
-                                        value: teacherData,
-                                        child: EditTTForm(),
+
+                              ///Name and avatar panel
+                              TeacherAvatarPanel(teacherData: teacherData),
+
+                              SizedBox(
+                                height: 25,
+                              ),
+
+                              /// Class countdown
+                              ClassTimerPanel(
+                                estimateTs,
+                                nextClass,
+                                endTime,
+                                teacherData,
+                              ),
+
+                              SizedBox(
+                                height: 14,
+                              ),
+
+                              /// Classes Grid (Stored in student screens)
+
+                              MyClassesGrid(myClasses: gridList),
+
+                              ///Schedule Class button
+                              Row(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xffC54134)),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size(107, 25)),
+                                        fixedSize: MaterialStateProperty.all(
+                                            Size(117, 27)),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(23)),
+                                        )),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          settings: RouteSettings(
+                                              name: '/edit-time-table'),
+                                          builder: (BuildContext context) =>
+                                              ChangeNotifierProvider.value(
+                                            value: teacherData,
+                                            child: EditTTForm(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Schedule Class',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Proxima Nova',
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  'Schedule Class',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Proxima Nova',
-                                    fontWeight: FontWeight.w600,
                                   ),
-                                ),
-                              ),
-                              Spacer(),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xffffffff)),
-                                    minimumSize: MaterialStateProperty.all(
-                                        Size(107, 25)),
-                                    fixedSize: MaterialStateProperty.all(
-                                        Size(117, 27)),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(23)),
-                                    )),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      settings: RouteSettings(
-                                          name: '/attpage'),
-                                      builder: (BuildContext context) =>
-                                          ChangeNotifierProvider.value(
-                                        value: teacherData,
-                                        child: AttendancePage(),
+                                  Spacer(),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Color(0xffffffff)),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size(107, 25)),
+                                        fixedSize: MaterialStateProperty.all(
+                                            Size(117, 27)),
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(23)),
+                                        )),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          settings:
+                                              RouteSettings(name: '/attpage'),
+                                          builder: (BuildContext context) =>
+                                              ChangeNotifierProvider.value(
+                                            value: teacherData,
+                                            child: AttendancePage(),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Attendance',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontFamily: 'Proxima Nova',
+                                        color: Color(0xff000000),
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  'Attendance',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Proxima Nova',
-                                    color: Color(0xff000000),
-                                    fontWeight: FontWeight.w600,
                                   ),
-                                ),
+                                  SizedBox(
+                                    width: 5,
+                                  )
+                                ],
                               ),
-                              SizedBox(width: 5,)
+
+                              /// Teacher Assessment Panel
+                              /// includes list of latest three assessments and buttons
+                              TeacherAssessmentPanel(teacherData: teacherData),
+
+                              const SizedBox(
+                                height: 20,
+                              ),
+
+                              ///teacher assignment panel
+                              ///built on same format as assessment panel
+                              TeacherAssignmentPanel(teacherData: teacherData),
+
+                              const SizedBox(
+                                height: 30,
+                              ),
                             ],
                           ),
-
-                          /// Teacher Assessment Panel
-                          /// includes list of latest three assessments and buttons
-                          TeacherAssessmentPanel(teacherData: teacherData),
-
-                          const SizedBox(
-                            height: 20,
-                          ),
-
-                          ///teacher assignment panel
-                          ///built on same format as assessment panel
-                          TeacherAssignmentPanel(teacherData: teacherData),
-
-                          const SizedBox(
-                            height: 30,
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
+              )
+
+            //Web Home
+
+            : SafeArea(
+                child: Scaffold(
+                  drawer: AppDrawer(),
+                  body: SingleChildScrollView(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.915,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 50,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  TeacherAvatarPanel(teacherData: teacherData),
+
+                                  SizedBox(
+                                    height: 25,
+                                  ),
+
+                                  /// Class countdown
+                                ],
+                              ),
+                              SizedBox(
+                                height: 50,
+                              ),
+                              ClassTimerPanel(
+                                estimateTs,
+                                nextClass,
+                                endTime,
+                                teacherData,
+                              ),
+
+                              ///Name and avatar panel
+
+                              SizedBox(
+                                height: 30,
+                              ),
+
+                              /// Classes Grid (Stored in student screens)
+
+                              MyClassesGrid(myClasses: gridList),
+                              SizedBox(
+                                height: 30,
+                              ),
+
+                              ///Schedule Class button
+                              ButtonRowMain(teacherData: teacherData),
+
+                              /// Teacher Assessment Panel
+                              /// includes list of latest three assessments and buttons
+                              SizedBox(
+                                height: 30,
+                              ),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TeacherAssessmentPanel(
+                                        teacherData: teacherData),
+                                    SizedBox(
+                                      width: 100,
+                                    ),
+                                    TeacherAssignmentPanel(
+                                        teacherData: teacherData),
+                                  ],
+                                ),
+                              ),
+
+                              const SizedBox(
+                                height: 20,
+                              ),
+
+                              ///teacher assignment panel
+                              ///built on same format as assessment panel
+
+                              const SizedBox(
+                                height: 30,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
   }
 }
+
 
 
 

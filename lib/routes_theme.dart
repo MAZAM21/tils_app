@@ -82,7 +82,7 @@ class RoutesAndTheme extends StatelessWidget {
       ],
       child: MaterialApp(
         initialRoute: '/',
-        theme: ThemeData(
+        theme: ThemeData(        
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
