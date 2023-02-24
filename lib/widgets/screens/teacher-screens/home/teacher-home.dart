@@ -18,6 +18,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
 
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
@@ -266,6 +267,8 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(width: 5,)
                             ],
                           ),
+
+                          TeacherResourcesPanel(teacherData: teacherData),
 
                           /// Teacher Assessment Panel
                           /// includes list of latest three assessments and buttons
