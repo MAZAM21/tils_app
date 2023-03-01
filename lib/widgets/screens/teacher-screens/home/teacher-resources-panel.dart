@@ -72,7 +72,7 @@ class TeacherResourcesPanel extends StatelessWidget {
             ///add navigator to add assessments
             IconButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) =>
                         ChangeNotifierProvider.value(
@@ -94,26 +94,26 @@ class TeacherResourcesPanel extends StatelessWidget {
         //     itemCount: topThree.length,
         //     shrinkWrap: true,
         //     itemBuilder: (ctx, i) {
-        //       return Padding(
-        //         padding: const EdgeInsets.symmetric(vertical: 3.5),
-        //         child: ListTile(
-        //           shape: RoundedRectangleBorder(
-        //               borderRadius: BorderRadius.circular(8)),
-        //           tileColor: Colors.white,
-        //           title: Text(
-        //             '${topThree[i].title}',
-        //             style: Theme.of(context).textTheme.headline4,
-        //           ),
-        //           subtitle: Text(
-        //             '${topThree[i].subject}',
-        //             style: TextStyle(
-        //               fontSize: 12,
-        //               fontFamily: 'Proxima Nova',
-        //               color: Color(0xff5F686F),
-        //             ),
-        //           ),
-        //         ),
-        //       );
+              // return Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 3.5),
+              //   child: ListTile(
+              //     shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(8)),
+              //     tileColor: Colors.white,
+              //     title: Text(
+              //       '${topThree[i].title}',
+              //       style: Theme.of(context).textTheme.headline4,
+              //     ),
+              //     subtitle: Text(
+              //       '${topThree[i].subject}',
+              //       style: TextStyle(
+              //         fontSize: 12,
+              //         fontFamily: 'Proxima Nova',
+              //         color: Color(0xff5F686F),
+              //       ),
+              //     ),
+              //   ),
+              // );
         //     },
         //   ),
         // ),

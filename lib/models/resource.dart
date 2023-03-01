@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 
 /// the purpose of this class is to cross refrence with subject and class and
@@ -11,21 +12,19 @@ enum ResourceType {
   Document,
 }
 
-class ResourceUpload with ChangeNotifier {
-  String date;
-  String classId;
-  String storageLink;
+class ResourceUploadObj with ChangeNotifier {
+  DateTime date;
+
   String topic;
   String subject;
   String uploadTeacher;
-  File resource;
+  List<PlatformFile> resourceFiles;
 
-  ResourceUpload(
-    this.date,
-    this.classId,
-    this.storageLink,
-    this.topic,
-    this.subject,
+  ResourceUploadObj({
+    @required this.date,
+    @required this.topic,
+    @required this.subject,
+    @required this.resourceFiles,
     this.uploadTeacher,
-  );
+  });
 }

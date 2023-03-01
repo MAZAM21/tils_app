@@ -8,6 +8,7 @@ import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/parent-user-data.dart';
+import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/student-answers.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
@@ -347,6 +348,9 @@ class DatabaseService with ChangeNotifier {
       print('error in adding to database: $err');
     }
   }
+
+  /// add resource to db
+  Future<void> addResource(ResourceUploadObj resource) async {}
 
   ///new attendance addition
   Future<void> addAttendanceRecord(
@@ -800,11 +804,10 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> saveParent(
       String email, String password, StudentRank stud) async {
-        
     /// 1. create new user for parent by calling auth
     /// 2. first then(): create doc in user collection for parent with the role parent
-    /// 3. second then(): add the parent uid to students doc. 
-         
+    /// 3. second then(): add the parent uid to students doc.
+
     CollectionReference userRef = _db.collection('users');
     DocumentReference studRef = _db.collection('students').doc(stud.id);
     try {
