@@ -55,11 +55,20 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
    
     final subLength = teacherData.subjects.length;
 
+    // This list will have a row of button widgets
     List<Widget> rows = [];
+
+    /// The main for loop iterates for every three subjects added
+    /// when the value of i exceeds the subjects, it terminates
     for (int i = 0; i < subLength; i += 3) {
       List<Widget> children = [];
 
+      /// the inner for loop condition iterates to three and checks whether
+      /// the subject length has been reached by adding the main for loop i with 
+      /// the inner for loop j and seeing if they are less than subLength
+     
       for (int j = 0; j < 3 && i + j < subLength; j++) {
+        
         if (resUp.subject != null &&
             '${teacherData.subjects[i + j]}' == resUp.subject) {
           children.add(RedButtonMobile(
@@ -78,12 +87,16 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                 });
               }));
         }
+
+      //end of inner for loop  
       }
 
       rows.add(Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: children,
       ));
+
+    //end of outer for loop
     }
 
     return Scaffold(
