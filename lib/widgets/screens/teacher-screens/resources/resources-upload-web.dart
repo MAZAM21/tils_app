@@ -53,7 +53,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
   @override
   Widget build(BuildContext context) {
     final teacherData = Provider.of<TeacherUser>(context);
-   
+
     final subLength = teacherData.subjects.length;
 
     // This list will have a row of button widgets
@@ -65,11 +65,10 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
       List<Widget> children = [];
 
       /// the inner for loop condition iterates to three and checks whether
-      /// the subject length has been reached by adding the main for loop i with 
+      /// the subject length has been reached by adding the main for loop i with
       /// the inner for loop j and seeing if they are less than subLength
-     
+
       for (int j = 0; j < 3 && i + j < subLength; j++) {
-        
         if (resUp.subject != null &&
             '${teacherData.subjects[i + j]}' == resUp.subject) {
           children.add(RedButtonMain(
@@ -89,15 +88,18 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
               }));
         }
 
-      //end of inner for loop  
+        //end of inner for loop
       }
 
-      rows.add(Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: children,
+      rows.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: children,
+        ),
       ));
 
-    //end of outer for loop
+      //end of outer for loop
     }
 
     return Scaffold(
@@ -110,40 +112,79 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                 pickFiles();
               });
             },
-            child: DottedBorder(
-              radius: Radius.circular(12),
-              dashPattern: [10, 8],
-              strokeWidth: 1,
-              padding: EdgeInsets.all(6),
-              borderPadding: EdgeInsets.all(4),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              child: Container(
+                height: 200,
+                width: 600,
+                color: Theme.of(context).primaryColor,
+                child: DottedBorder(
+                  color: Colors.white,
+                  borderType: BorderType.RRect,
+                  radius: Radius.circular(12),
+                  dashPattern: [4, 4],
+                  strokeWidth: 1,
+                  padding: EdgeInsets.all(6),
+                  borderPadding: EdgeInsets.all(4),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.cloud),
-                        Text('Upload file'),
+                        Icon(
+                          Icons.cloud,
+                          color: Colors.white,
+                          size: 50,
+                        ),
+                        Text(
+                          'Upload file',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Proxima Nova',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  height: 100,
-                  width: 300,
-                  color: Color(0xffBFCAD0),
                 ),
               ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: TextFormField(
-            controller: topicController,
-            key: ValueKey('res-topic'),
-            onSaved: (value) {
-              resUp.topic = value;
-            },
+        SizedBox(
+          height: 30,
+        ),
+        Text(
+          'Topic:',
+          style: TextStyle(
+            
+            fontSize: 18,
+            fontFamily: 'Proxima Nova',
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: 30,),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            width: 300,
+            color: Colors.white,
+            child: TextFormField(
+              decoration: InputDecoration(
+                      labelText: 'Topic',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+              controller: topicController,
+              key: ValueKey('res-topic'),
+              onSaved: (value) {
+                resUp.topic = value;
+              },
+            ),
           ),
         ),
         SizedBox(

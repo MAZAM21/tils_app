@@ -103,7 +103,36 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
               icon: Icon(
                 Icons.save,
                 color: Colors.red,
-              ))
+              )),
+          IconButton(
+              onPressed: widget.editAM!=null? () {
+                setState(() {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                db.deleteEntireAssignment(widget.editAM.docId);
+                                Navigator.pop(context);
+                              },
+                              child: Text('Yes, Delete'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Exit'),
+                            )
+                          ],
+                          title: Text(
+                              'Are you sure you want to delete this assignment?'),
+                        );
+                      });
+                });
+              }:() {Navigator.pop(context);},
+              icon: Icon(Icons.delete_forever)),
         ],
         title: Text(
           'Mark Students',

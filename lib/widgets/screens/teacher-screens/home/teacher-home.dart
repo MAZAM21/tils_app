@@ -18,6 +18,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
@@ -372,9 +373,10 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     TeacherAssessmentPanel(
                                         teacherData: teacherData),
-                                    SizedBox(
-                                      width: 100,
-                                    ),
+                                    SizedBox(width: 30),
+                                    TeacherResourcesPanel(
+                                        teacherData: teacherData),
+                                    SizedBox(width: 30),
                                     TeacherAssignmentPanel(
                                         teacherData: teacherData),
                                   ],

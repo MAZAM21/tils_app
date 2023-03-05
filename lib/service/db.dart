@@ -1053,6 +1053,18 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> deleteEntireAssignment(String asgId) async {
+    final asgRef = _db.collection('assignment-marks');
+    try {
+      await asgRef.doc(asgId).delete();
+      
+    } catch (err) {
+      print('err in delete assignment whole: $err');
+    }
+
+  }
+
+
   Future<void> deleteAssignment(
     String studId,
     String asgId,
