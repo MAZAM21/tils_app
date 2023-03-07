@@ -188,7 +188,7 @@ class _AuthFormState extends State<AuthForm> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Image(
-                          image: AssetImage('lib/assets/LCI_icon.png'),
+                          image: AssetImage('lib/assets/SIL_innerlogo.png'),
                           height: 150,
                         ),
                         SizedBox(
