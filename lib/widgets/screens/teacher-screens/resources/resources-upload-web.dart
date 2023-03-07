@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:tils_app/service/db.dart';
 
 import 'package:tils_app/widgets/button-styles.dart';
 
@@ -17,6 +18,8 @@ class ResourcesUpload extends StatefulWidget {
 class _ResourcesUploadState extends State<ResourcesUpload> {
   final topicController = TextEditingController();
   ResourceUploadObj resUp;
+  bool uploadPressed = false;
+  final db = DatabaseService();
 
   @override
   void initState() {
@@ -105,13 +108,56 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
     return Scaffold(
       appBar: AppBar(),
       body: Column(children: [
-        Center(
-          child: InkWell(
-            onTap: () {
-              setState(() {
-                pickFiles();
-              });
-            },
+        if (!uploadPressed)
+          Center(
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  pickFiles();
+                });
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                child: Container(
+                  height: 200,
+                  width: 600,
+                  color: Theme.of(context).primaryColor,
+                  child: DottedBorder(
+                    color: Colors.white,
+                    borderType: BorderType.RRect,
+                    radius: Radius.circular(12),
+                    dashPattern: [4, 4],
+                    strokeWidth: 1,
+                    padding: EdgeInsets.all(6),
+                    borderPadding: EdgeInsets.all(4),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.cloud,
+                            color: Colors.white,
+                            size: 50,
+                          ),
+                          Text(
+                            'Upload file',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (uploadPressed)
+          Center(
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(12)),
               child: Container(
@@ -129,12 +175,25 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.cloud,
-                          color: Colors.white,
-                          size: 50,
-                        ),
+                      children: <Widget>[
+                        StreamBuilder(
+                            stream: db.uploadResource(resUp),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                final progress = snapshot.data;
+                                return Text(
+                                  '${(progress * 100).toStringAsFixed(2)}%',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                );
+                              } else {
+                                return Text('');
+                              }
+                            }),
                         Text(
                           'Upload file',
                           style: TextStyle(
@@ -151,20 +210,20 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
               ),
             ),
           ),
-        ),
         SizedBox(
           height: 30,
         ),
         Text(
           'Topic:',
           style: TextStyle(
-            
             fontSize: 18,
             fontFamily: 'Proxima Nova',
             fontWeight: FontWeight.w600,
           ),
         ),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Container(
@@ -172,13 +231,12 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
             color: Colors.white,
             child: TextFormField(
               decoration: InputDecoration(
-                      labelText: 'Topic',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            BorderSide(color: Theme.of(context).primaryColor),
-                      ),
-                    ),
+                labelText: 'Topic',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                ),
+              ),
               controller: topicController,
               key: ValueKey('res-topic'),
               onSaved: (value) {
@@ -224,7 +282,16 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
               },
               itemCount: resUp.resourceFiles.length,
             ),
-          )
+          ),
+        if (resUp.resourceFiles.isNotEmpty)
+          RedButtonMain(
+              child: 'Upload',
+              onPressed: () {
+                setState(() {
+                  db.uploadResource(resUp);
+                  uploadPressed = true;
+                });
+              })
       ]),
     );
   }
