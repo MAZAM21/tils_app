@@ -44,44 +44,44 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBbXwAdGsYxVHpUouq1KkjwVrOp5xJapZE',
-    appId: '1:23860424065:web:199a8967afe09bc1de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    authDomain: 'tils-app.firebaseapp.com',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
-    measurementId: 'G-MVHGL6XJK8',
+    apiKey: 'AIzaSyB-KqeV5zW2FkLTkTO9RgCrLId62hGY-g0',
+    appId: '1:231869960195:web:05aa070eacf40b5c213e36',
+    messagingSenderId: '231869960195',
+    projectId: 'sil-app-c5b47',
+    authDomain: 'sil-app-c5b47.firebaseapp.com',
+    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
+    storageBucket: 'sil-app-c5b47.appspot.com',
+    measurementId: 'G-9N840Z5XS6',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDV5n2T2-sKbKA5H7tLhPHJujvsSxKMwho',
-    appId: '1:23860424065:android:c571411a71dfdce4de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
+    apiKey: 'AIzaSyDZMKfa3MjO5DdU9Sd2XILYdwpzdEoHU5o',
+    appId: '1:231869960195:android:0fb0f4913d76040d213e36',
+    messagingSenderId: '231869960195',
+    projectId: 'sil-app-c5b47',
+    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
+    storageBucket: 'sil-app-c5b47.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDLJSMPVB9X3-HgNcoN86X8FeIvWOccTkY',
-    appId: '1:23860424065:ios:a8a527ea7fd5d397de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
-    iosClientId: '23860424065-aa1s62tcim0arn4gtqpnr18clkb0m2ri.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD7ohmwvWHtaNx36KGkVz1_0xsxnEiKxcI',
+    appId: '1:231869960195:ios:38533cdfd9c2af19213e36',
+    messagingSenderId: '231869960195',
+    projectId: 'sil-app-c5b47',
+    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
+    storageBucket: 'sil-app-c5b47.appspot.com',
+    iosClientId: '231869960195-578ihnp7eqch3d23dc8gtfvu26kfqu59.apps.googleusercontent.com',
     iosBundleId: 'com.example.tilsApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDLJSMPVB9X3-HgNcoN86X8FeIvWOccTkY',
-    appId: '1:23860424065:ios:257ee5309b815958de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
-    iosClientId: '23860424065-chgs3mfopn555558u77ikslts87sbh37.apps.googleusercontent.com',
+    apiKey: 'AIzaSyD7ohmwvWHtaNx36KGkVz1_0xsxnEiKxcI',
+    appId: '1:231869960195:ios:184c5f22c6edf9a4213e36',
+    messagingSenderId: '231869960195',
+    projectId: 'sil-app-c5b47',
+    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
+    storageBucket: 'sil-app-c5b47.appspot.com',
+    iosClientId: '231869960195-a6kuf6hhkrl7s09226i39iu18akva6og.apps.googleusercontent.com',
     iosBundleId: 'com.fluency.tilsApp',
   );
 }
