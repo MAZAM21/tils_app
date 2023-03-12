@@ -1,4 +1,4 @@
-import 'dart:io';
+
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -19,12 +19,14 @@ class ResourceUploadObj with ChangeNotifier {
   String subject;
   String uploadTeacher;
   List<PlatformFile> resourceFiles;
+  Map<String,String> urlMap;
 
   ResourceUploadObj({
     @required this.date,
     @required this.topic,
     @required this.subject,
     @required this.resourceFiles,
+    @required this.urlMap,
     this.uploadTeacher,
   });
 }

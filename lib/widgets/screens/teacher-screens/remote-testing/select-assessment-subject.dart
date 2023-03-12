@@ -51,7 +51,7 @@ class SelectAssessmentSubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.textTheme.caption,
+          style: Theme.of(context).appBarTheme.toolbarTextStyle,
         ),
       ),
       body: SingleChildScrollView(

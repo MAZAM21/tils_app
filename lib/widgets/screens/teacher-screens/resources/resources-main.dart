@@ -15,3 +15,7 @@ class _ResourcesMainState extends State<ResourcesMain> {
     return Container();
   }
 }
+
+/// need to take subjects
+/// need to display all resources
+/// need to stream video

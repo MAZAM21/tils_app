@@ -324,111 +324,144 @@ class DatabaseService with ChangeNotifier {
     }
     return null;
   }
- 
- 
-Stream<double> uploadResource(ResourceUploadObj resourceUploadObj) async* {
-  // Get a reference to the Firebase Storage bucket
-  final FirebaseStorage storage =
-      FirebaseStorage.instance;
-  final Reference storageRef = storage.ref();
 
-  // Upload each file in the resourceFiles list to Firebase Storage
-  List<Future<String>> downloadUrlFutures = [];
-  List<UploadTask> uploadTasks = [];
-  for (final file in resourceUploadObj.resourceFiles) {
-    // Get a reference to the file in Firebase Storage
-    final Reference fileRef = storageRef.child(
-        'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
+  Stream<double> uploadResource(ResourceUploadObj resourceUploadObj) async* {
+    print(
+        'resourceuploadobj: ${resourceUploadObj.date} ,  ${resourceUploadObj.resourceFiles.length}, ${resourceUploadObj.topic}');
 
-    // Upload the file to Firebase Storage
-    final UploadTask uploadTask =
-        fileRef.putData(file.bytes);
-    uploadTasks.add(uploadTask);
+    // Get a reference to the Firebase Storage bucket
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    final Reference storageRef = storage.ref();
 
-    // Get a future for the download URL for the uploaded file
-    final Future<String> downloadUrlFuture = fileRef.getDownloadURL();
-    downloadUrlFutures.add(downloadUrlFuture);
-  }
+    // Upload each file in the resourceFiles list to Firebase Storage
+    final List<Future<Map<String, String>>> downloadUrlFutures = [];
+    final List<UploadTask> uploadTasks = [];
+    for (final file in resourceUploadObj.resourceFiles) {
+      // Get a reference to the file in Firebase Storage
+      final Reference fileRef = storageRef.child(
+          'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
 
-  // Create a document in Cloud Firestore with the relevant information
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final DocumentReference docRef = firestore.collection('resources').doc();
+      print('refrecence added storage');
 
-  // Return a stream that emits the upload progress as a percentage
-  double totalBytes = 0;
-  double bytesUploaded = 0;
-  for (final uploadTask in uploadTasks) {
-    totalBytes += uploadTask.snapshot.totalBytes;
-  }
+      // Upload the file to Firebase Storage
+      final UploadTask uploadTask = fileRef.putData(file.bytes);
+      uploadTasks.add(uploadTask);
 
-  for (final uploadTask in uploadTasks) {
-    await for (final event in uploadTask.snapshotEvents) {
-      bytesUploaded += event.bytesTransferred;
-      final double progress = bytesUploaded / totalBytes;
-      yield progress;
+      print('Upload the file to Firebase Storage');
+
+      // Get a future for the download URL for the uploaded file
+      final Future<TaskSnapshot> uploadTaskSnapshot =
+          uploadTask.whenComplete(() {});
+      final Future<String> downloadUrlFuture =
+          uploadTaskSnapshot.then((snapshot) => snapshot.ref.getDownloadURL());
+      downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
+        return {file.name: downloadUrl};
+      }));
+      // final Future<String> downloadUrlFuture = fileRef.getDownloadURL();
+      // downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
+      //   return {file.name: downloadUrl};
+      // }));
+
+      print('Get a future for the download URL for the uploaded file');
+    }
+    final List<Map<String, String>> downloadUrls =
+        await Future.wait(downloadUrlFutures);
+
+    // Create a document in Cloud Firestore with the relevant information
+
+    final DocumentReference docRef = _db.collection('resources').doc();
+    print('doc created');
+    docRef.set({
+      'date': resourceUploadObj.date,
+      'topic': resourceUploadObj.topic,
+      'subject': resourceUploadObj.subject,
+      'uploadTeacher': resourceUploadObj.uploadTeacher,
+      'downloadUrls': Map<String, String>.fromIterable(
+        downloadUrls.expand((map) => map.entries),
+        key: (entry) => entry.key,
+        value: (entry) => entry.value,
+      ),
+    });
+
+    // Return a stream that emits the upload progress as a percentage
+    double totalBytes = 0;
+    double bytesUploaded = 0;
+    for (final uploadTask in uploadTasks) {
+      totalBytes += uploadTask.snapshot.totalBytes;
+      print('total bytes: $totalBytes');
+    }
+
+    for (final uploadTask in uploadTasks) {
+      await for (final event in uploadTask.snapshotEvents) {
+        bytesUploaded += event.bytesTransferred;
+        print('bytesUploaded: $bytesUploaded');
+
+        final double progress = bytesUploaded / totalBytes;
+        print('progress = ${bytesUploaded / totalBytes * 100}');
+        yield progress;
+      }
     }
   }
 
-  // Wait for all uploads to complete and get download URLs
-  final List<String> downloadUrls = await Future.wait(downloadUrlFutures);
+  Stream<double> uplsoadResource(ResourceUploadObj resourceUploadObj) async* {
+    print(
+        'resourceuploadobj: ${resourceUploadObj.date} ,  ${resourceUploadObj.resourceFiles.length} ');
+    // Get a reference to the Firebase Storage bucket
+    final FirebaseStorage storage = FirebaseStorage.instance;
+    final Reference storageRef = storage.ref();
 
-  // Set the document in Cloud Firestore with the relevant information
-  docRef.set({
-    'date': resourceUploadObj.date,
-    'topic': resourceUploadObj.topic,
-    'subject': resourceUploadObj.subject,
-    'uploadTeacher': resourceUploadObj.uploadTeacher,
-    'downloadUrls': downloadUrls,
-  });
-}
+    // Upload each file in the resourceFiles list to Firebase Storage
+    List<Future<String>> downloadUrlFutures = [];
+    List<UploadTask> uploadTasks = [];
+    for (final file in resourceUploadObj.resourceFiles) {
+      // Get a reference to the file in Firebase Storage
+      final Reference fileRef = storageRef.child(
+          'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
 
-  Future<void> uploadResource2(ResourceUploadObj resourceUploadObj) async {
-  // Get a reference to the Firebase Storage bucket
-  final FirebaseStorage storage = FirebaseStorage.instance;
-  final Reference storageRef = storage.ref();
+      // Upload the file to Firebase Storage
 
-  // Upload each file in the resourceFiles list to Firebase Storage
-  List<String> downloadUrls = [];
-  for (final file in resourceUploadObj.resourceFiles) {
-    // Get a reference to the file in Firebase Storage
-    final Reference fileRef = storageRef.child(
-        'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
+      final UploadTask uploadTask = fileRef.putData(file.bytes);
+      uploadTasks.add(uploadTask);
 
-    // Upload the file to Firebase Storage
-    final UploadTask uploadTask = fileRef.putData(await file.bytes);
-    final TaskSnapshot uploadSnapshot = await uploadTask.whenComplete(() => null);
+      // Get a future for the download URL for the uploaded file
+      final Future<String> downloadUrlFuture = fileRef.getDownloadURL();
+      downloadUrlFutures.add(downloadUrlFuture);
+    }
+    final List<String> downloadUrls = await Future.wait(downloadUrlFutures);
 
-    // Get the download URL for the uploaded file
-    final String downloadUrl = await fileRef.getDownloadURL();
-    downloadUrls.add(downloadUrl);
-  }
+    // Create a document in Cloud Firestore with the relevant information
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final DocumentReference docRef = firestore.collection('resources').doc();
+    docRef.set({
+      'date': resourceUploadObj.date,
+      'topic': resourceUploadObj.topic,
+      'subject': resourceUploadObj.subject,
+      'uploadTeacher': resourceUploadObj.uploadTeacher,
+      'downloadUrls': downloadUrls,
+    });
 
-  // Create a document in Cloud Firestore with the relevant information
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final DocumentReference docRef = firestore.collection('resources').doc();
+    // Return a stream that emits the upload progress as a percentage
+    double totalBytes = 0;
+    double bytesUploaded = 0;
+    for (final uploadTask in uploadTasks) {
+      totalBytes += uploadTask.snapshot.totalBytes;
+      print('total bytes: $totalBytes');
+    }
 
-  await docRef.set({
-    'date': resourceUploadObj.date,
-    'topic': resourceUploadObj.topic,
-    'subject': resourceUploadObj.subject,
-    'uploadTeacher': resourceUploadObj.uploadTeacher,
-    'downloadUrls': downloadUrls,
-  });
-}
+    for (final uploadTask in uploadTasks) {
+      await for (final event in uploadTask.snapshotEvents) {
+        bytesUploaded += event.bytesTransferred;
+        print('bytesUploaded: $bytesUploaded');
 
-  Future<void> addResource(ResourceUploadObj res) async {
-    final resRef = _db.collection('resources');
-    final storageRef = FirebaseStorage.instance.ref().child('resources');
+        final double progress = bytesUploaded / totalBytes;
+        print('progress = ${bytesUploaded / totalBytes * 100}');
+        yield progress;
+      }
+    }
 
-    try {
-      resRef.doc('${res.topic}').set({
-        'subject': res.subject,
-        'file-names': [],
-        'date': res.date,
-        'uploadTeacher': res.uploadTeacher,
-        'file-addresses': {},
-      }, SetOptions(merge: true));
-    } catch (err) {}
+    // Wait for all uploads to complete and get download URLs
+
+    // Set the document in Cloud Firestore with the relevant information
   }
 
   Future<void> addClassToCF(

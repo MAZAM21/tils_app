@@ -70,7 +70,7 @@ class _AuthFormState extends State<AuthForm> {
                             Text(
                               'Email Address',
                               style: TextStyle(
-                                color: Color(0xffF9CB6E),
+                                color: Colors.indigo[900],
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Proxima Nova',
                                 fontSize: 18,
@@ -112,7 +112,7 @@ class _AuthFormState extends State<AuthForm> {
                             Text(
                               'Password',
                               style: TextStyle(
-                                color: Color(0xffF9CB6E),
+                                color: Colors.indigo[900],
                                 fontFamily: 'Proxima Nova',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,
@@ -154,7 +154,7 @@ class _AuthFormState extends State<AuthForm> {
                               fixedSize:
                                   MaterialStateProperty.all(Size(200, 40)),
                               backgroundColor:
-                                  MaterialStateProperty.all(Color(0xffF9CB6E)),
+                                  MaterialStateProperty.all(Colors.indigo[900]),
                             ),
                             child: Text(
                               'Login',
@@ -162,7 +162,7 @@ class _AuthFormState extends State<AuthForm> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Proxima Nova',
-                                  color: Colors.black),
+                                  color: Colors.white),
                             ),
                             onPressed: _trySubmit,
                           ),
@@ -189,7 +189,7 @@ class _AuthFormState extends State<AuthForm> {
                       children: <Widget>[
                         Image(
                           image: AssetImage('lib/assets/SIL_innerlogo.png'),
-                          height: 150,
+                          height: 230,
                         ),
                         SizedBox(
                           height: 70,
@@ -201,7 +201,7 @@ class _AuthFormState extends State<AuthForm> {
                               Text(
                                 'Email Address',
                                 style: TextStyle(
-                                  color: Color(0xffF9CB6E),
+                                  color:Colors.indigo[900],
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Proxima Nova',
                                   fontSize: 18,
@@ -249,7 +249,7 @@ class _AuthFormState extends State<AuthForm> {
                               Text(
                                 'Password',
                                 style: TextStyle(
-                                  color: Color(0xffF9CB6E),
+                                  color:Colors.indigo[900],
                                   fontFamily: 'Proxima Nova',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 18,
@@ -295,7 +295,7 @@ class _AuthFormState extends State<AuthForm> {
                               fixedSize:
                                   MaterialStateProperty.all(Size(200, 40)),
                               backgroundColor:
-                                  MaterialStateProperty.all(Color(0xffF9CB6E)),
+                                  MaterialStateProperty.all(Colors.indigo[900]),
                             ),
                             child: Text(
                               'Login',
@@ -303,7 +303,7 @@ class _AuthFormState extends State<AuthForm> {
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Proxima Nova',
-                                  color: Colors.black),
+                                  color: Colors.white),
                             ),
                             onPressed: _trySubmit,
                           ),
