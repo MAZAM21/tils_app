@@ -403,67 +403,6 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Stream<double> uplsoadResource(ResourceUploadObj resourceUploadObj) async* {
-    print(
-        'resourceuploadobj: ${resourceUploadObj.date} ,  ${resourceUploadObj.resourceFiles.length} ');
-    // Get a reference to the Firebase Storage bucket
-    final FirebaseStorage storage = FirebaseStorage.instance;
-    final Reference storageRef = storage.ref();
-
-    // Upload each file in the resourceFiles list to Firebase Storage
-    List<Future<String>> downloadUrlFutures = [];
-    List<UploadTask> uploadTasks = [];
-    for (final file in resourceUploadObj.resourceFiles) {
-      // Get a reference to the file in Firebase Storage
-      final Reference fileRef = storageRef.child(
-          'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
-
-      // Upload the file to Firebase Storage
-
-      final UploadTask uploadTask = fileRef.putData(file.bytes);
-      uploadTasks.add(uploadTask);
-
-      // Get a future for the download URL for the uploaded file
-      final Future<String> downloadUrlFuture = fileRef.getDownloadURL();
-      downloadUrlFutures.add(downloadUrlFuture);
-    }
-    final List<String> downloadUrls = await Future.wait(downloadUrlFutures);
-
-    // Create a document in Cloud Firestore with the relevant information
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final DocumentReference docRef = firestore.collection('resources').doc();
-    docRef.set({
-      'date': resourceUploadObj.date,
-      'topic': resourceUploadObj.topic,
-      'subject': resourceUploadObj.subject,
-      'uploadTeacher': resourceUploadObj.uploadTeacher,
-      'downloadUrls': downloadUrls,
-    });
-
-    // Return a stream that emits the upload progress as a percentage
-    double totalBytes = 0;
-    double bytesUploaded = 0;
-    for (final uploadTask in uploadTasks) {
-      totalBytes += uploadTask.snapshot.totalBytes;
-      print('total bytes: $totalBytes');
-    }
-
-    for (final uploadTask in uploadTasks) {
-      await for (final event in uploadTask.snapshotEvents) {
-        bytesUploaded += event.bytesTransferred;
-        print('bytesUploaded: $bytesUploaded');
-
-        final double progress = bytesUploaded / totalBytes;
-        print('progress = ${bytesUploaded / totalBytes * 100}');
-        yield progress;
-      }
-    }
-
-    // Wait for all uploads to complete and get download URLs
-
-    // Set the document in Cloud Firestore with the relevant information
-  }
-
   Future<void> addClassToCF(
     SubjectName name,
     DateTime start,
