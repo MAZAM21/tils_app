@@ -415,7 +415,7 @@ class DatabaseService with ChangeNotifier {
       final List<UploadTask> uploadTasks = [];
 
       print('resourceFiles length: ${resourceUploadObj.resourceFiles.length}');
-      print('storageRef: $storageRef');
+      print('storageRef: ${storageRef.fullPath}');
       for (final file in resourceUploadObj.resourceFiles) {
         // Get a reference to the file in Firebase Storage
         final Reference fileRef = storageRef.child(
