@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "231869960195",
+    "firebase_url": "https://sil-app-c5b47-default-rtdb.firebaseio.com",
     "project_id": "sil-app-c5b47",
     "storage_bucket": "sil-app-c5b47.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "231869960195-nt5ei0smfcnqf1dr1e9oletb499ovsv1.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "231869960195-578ihnp7eqch3d23dc8gtfvu26kfqu59.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tilsApp"
+              }
             }
           ]
         }

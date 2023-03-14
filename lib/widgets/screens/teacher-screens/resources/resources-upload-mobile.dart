@@ -123,22 +123,65 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Form(
-        key: _formKey,
-        child: Column(children: [
-          if (!uploadPressed)
-            Center(
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    pickFiles();
-                  });
-                },
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(children: [
+            if (!uploadPressed)
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      pickFiles();
+                    });
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    child: Container(
+                      height: 150,
+                      width:300,
+                      color: Theme.of(context).primaryColor,
+                      child: DottedBorder(
+                        color: Colors.white,
+                        borderType: BorderType.RRect,
+                        radius: Radius.circular(12),
+                        dashPattern: [4, 4],
+                        strokeWidth: 1,
+                        padding: EdgeInsets.all(6),
+                        borderPadding: EdgeInsets.all(4),
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.cloud,
+                                color: Colors.white,
+                                size: 50,
+                              ),
+                              Text(
+                                'Upload file',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (uploadPressed)
+              Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   child: Container(
-                    height: 100,
-                    width: 250,
+                    height: 150,
+                    width: 300,
                     color: Theme.of(context).primaryColor,
                     child: DottedBorder(
                       color: Colors.white,
@@ -151,21 +194,51 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.cloud,
-                              color: Colors.white,
-                              size: 50,
-                            ),
-                            Text(
-                              'Upload file',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Proxima Nova',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          children: <Widget>[
+                            if (!uploadComplete)
+                              StreamBuilder(
+                                  stream: db.uploadResource(resUp),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data == 1) {
+                                      Future.delayed(Duration.zero, () {
+                                        uploadCompleted();
+                                      });
+                                      return SizedBox.shrink();
+                                    }
+                                    if (snapshot.hasData) {
+                                      final progress = snapshot.data;
+
+                                      return Text(
+                                        'Uploading: ${(progress * 100).toStringAsFixed(2)}%',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontFamily: 'Proxima Nova',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    } else {
+                                      return Text(
+                                        'Upload Processing',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontFamily: 'Proxima Nova',
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    }
+                                  }),
+                            if (uploadComplete)
+                              Text(
+                                'Upload Completed',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
                           ],
                         ),
                       ),
@@ -173,164 +246,93 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                   ),
                 ),
               ),
+            SizedBox(
+              height: 30,
             ),
-          if (uploadPressed)
-            Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                child: Container(
-                  height: 200,
-                  width: 600,
-                  color: Theme.of(context).primaryColor,
-                  child: DottedBorder(
-                    color: Colors.white,
-                    borderType: BorderType.RRect,
-                    radius: Radius.circular(12),
-                    dashPattern: [4, 4],
-                    strokeWidth: 1,
-                    padding: EdgeInsets.all(6),
-                    borderPadding: EdgeInsets.all(4),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          if (!uploadComplete)
-                            StreamBuilder(
-                                stream: db.uploadResource(resUp),
-                                builder: (context, snapshot) {
-                                  if (snapshot.data == 1) {
-                                    Future.delayed(Duration.zero, () {
-                                      uploadCompleted();
-                                    });
-                                    return SizedBox.shrink();
-                                  }
-                                  if (snapshot.hasData) {
-                                    final progress = snapshot.data;
-
-                                    return Text(
-                                      'Uploading: ${(progress * 100).toStringAsFixed(2)}%',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    );
-                                  } else {
-                                    return Text(
-                                      'Upload Processing',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    );
-                                  }
-                                }),
-                          if (uploadComplete)
-                            Text(
-                              'Upload Completed',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Proxima Nova',
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                        ],
-                      ),
+            Text(
+              'Topic:',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Proxima Nova',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                width: 300,
+                color: Colors.white,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Topic',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide:
+                          BorderSide(color: Theme.of(context).primaryColor),
                     ),
                   ),
+                  controller: topicController,
+                  key: ValueKey('res-topic'),
+                  onSaved: (value) {
+                    resUp.topic = value;
+                  },
                 ),
               ),
             ),
-          SizedBox(
-            height: 30,
-          ),
-          Text(
-            'Topic:',
-            style: TextStyle(
-              fontSize: 18,
-              fontFamily: 'Proxima Nova',
-              fontWeight: FontWeight.w600,
+            SizedBox(
+              height: 20,
             ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Container(
-              width: 300,
-              color: Colors.white,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Topic',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide:
-                        BorderSide(color: Theme.of(context).primaryColor),
-                  ),
-                ),
-                controller: topicController,
-                key: ValueKey('res-topic'),
-                onSaved: (value) {
-                  resUp.topic = value;
-                },
-              ),
+            Column(
+              children: rows,
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Column(
-            children: rows,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          if (resUp.resourceFiles.isNotEmpty)
-            Container(
-              height: 300,
-              width: 500,
-              child: ListView.builder(
-                itemBuilder: (ctx, i) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 3.5),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      tileColor: Colors.white,
-                      title: Text(
-                        '${resUp.resourceFiles[i].name}',
-                        style: Theme.of(context).textTheme.headline4,
+            SizedBox(
+              height: 20,
+            ),
+            if (resUp.resourceFiles.isNotEmpty)
+              Container(
+                height: 100,
+                width: MediaQuery.of(context).size.width,
+                child: ListView.builder(
+                  itemBuilder: (ctx, i) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.5),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        tileColor: Colors.white,
+                        title: Text(
+                          '${resUp.resourceFiles[i].name}',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        // subtitle: Text(
+                        //   '${topThree[i].subject}',
+                        //   style: TextStyle(
+                        //     fontSize: 12,
+                        //     fontFamily: 'Proxima Nova',
+                        //     color: Color(0xff5F686F),
+                        //   ),
+                        // ),
                       ),
-                      // subtitle: Text(
-                      //   '${topThree[i].subject}',
-                      //   style: TextStyle(
-                      //     fontSize: 12,
-                      //     fontFamily: 'Proxima Nova',
-                      //     color: Color(0xff5F686F),
-                      //   ),
-                      // ),
-                    ),
-                  );
-                },
-                itemCount: resUp.resourceFiles.length,
+                    );
+                  },
+                  itemCount: resUp.resourceFiles.length,
+                ),
               ),
-            ),
-          if (resUp.resourceFiles.isNotEmpty && !uploadComplete)
-            RedButtonMobile(
-                child: 'Upload',
-                onPressed: () {
-                  setState(() {
-                    _formKey.currentState.save();
-                    db.uploadResource(resUp);
-                    uploadPressed = true;
-                  });
-                })
-        ]),
+            if (resUp.resourceFiles.isNotEmpty && !uploadComplete)
+              RedButtonMobile(
+                  child: 'Upload',
+                  onPressed: () {
+                    setState(() {
+                      _formKey.currentState.save();
+                      db.uploadResource(resUp);
+                      uploadPressed = true;
+                    });
+                  })
+          ]),
+        ),
       ),
     );
   }

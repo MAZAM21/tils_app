@@ -401,84 +401,87 @@ class DatabaseService with ChangeNotifier {
     });
   }
 
-   Stream<double> uploadResource(ResourceUploadObj resourceUploadObj) async* {
-    print(
-        'resourceuploadobj: ${resourceUploadObj.date} ,  ${resourceUploadObj.resourceFiles.length}, ${resourceUploadObj.topic}');
+  Stream<double> uploadResource(ResourceUploadObj resourceUploadObj) async* {
+    try {
+      print(
+          'resourceuploadobj: ${resourceUploadObj.date} ,  ${resourceUploadObj.resourceFiles.length}, ${resourceUploadObj.topic}');
 
-    // Get a reference to the Firebase Storage bucket
-    final FirebaseStorage storage = FirebaseStorage.instance;
-    final Reference storageRef = storage.ref();
+      // Get a reference to the Firebase Storage bucket
+      final FirebaseStorage storage = FirebaseStorage.instance;
+      final Reference storageRef = storage.ref();
 
-    // Upload each file in the resourceFiles list to Firebase Storage
-    final List<Future<Map<String, String>>> downloadUrlFutures = [];
-    final List<UploadTask> uploadTasks = [];
-    for (final file in resourceUploadObj.resourceFiles) {
-      // Get a reference to the file in Firebase Storage
-      final Reference fileRef = storageRef.child(
-          'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
+      // Upload each file in the resourceFiles list to Firebase Storage
+      final List<Future<Map<String, String>>> downloadUrlFutures = [];
+      final List<UploadTask> uploadTasks = [];
+      for (final file in resourceUploadObj.resourceFiles) {
+        // Get a reference to the file in Firebase Storage
+        final Reference fileRef = storageRef.child(
+            'resources/${resourceUploadObj.subject}/${resourceUploadObj.date}/${file.name}');
 
-      print('refrecence added storage');
+        print('refrecence added storage');
 
-      // Upload the file to Firebase Storage
-      final UploadTask uploadTask = fileRef.putData(file.bytes);
-      uploadTasks.add(uploadTask);
+        // Upload the file to Firebase Storage
+        final UploadTask uploadTask = fileRef.putData(file.bytes);
+        uploadTasks.add(uploadTask);
 
-      print('Upload the file to Firebase Storage');
+        print('Upload the file to Firebase Storage');
 
-      // Get a future for the download URL for the uploaded file
-      final Future<TaskSnapshot> uploadTaskSnapshot =
-          uploadTask.whenComplete(() {});
-      final Future<String> downloadUrlFuture =
-          uploadTaskSnapshot.then((snapshot) => snapshot.ref.getDownloadURL());
-      downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
-        return {file.name: downloadUrl};
-      }));
-      // final Future<String> downloadUrlFuture = fileRef.getDownloadURL();
-      // downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
-      //   return {file.name: downloadUrl};
-      // }));
+        // Get a future for the download URL for the uploaded file
+        final Future<TaskSnapshot> uploadTaskSnapshot =
+            uploadTask.whenComplete(() {});
+        final Future<String> downloadUrlFuture = uploadTaskSnapshot
+            .then((snapshot) => snapshot.ref.getDownloadURL());
+        downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
+          return {file.name: downloadUrl};
+        }));
+        // final Future<String> downloadUrlFuture = fileRef.getDownloadURL();
+        // downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
+        //   return {file.name: downloadUrl};
+        // }));
 
-      print('Get a future for the download URL for the uploaded file');
-    }
-    final List<Map<String, String>> downloadUrls =
-        await Future.wait(downloadUrlFutures);
-
-    // Create a document in Cloud Firestore with the relevant information
-
-    final DocumentReference docRef = _db.collection('resources').doc();
-    print('doc created');
-    docRef.set({
-      'date': resourceUploadObj.date,
-      'topic': resourceUploadObj.topic,
-      'subject': resourceUploadObj.subject,
-      'uploadTeacher': resourceUploadObj.uploadTeacher,
-      'downloadUrls': Map<String, String>.fromIterable(
-        downloadUrls.expand((map) => map.entries),
-        key: (entry) => entry.key,
-        value: (entry) => entry.value,
-      ),
-    });
-
-    // Return a stream that emits the upload progress as a percentage
-    double totalBytes = 0;
-    double bytesUploaded = 0;
-    for (final uploadTask in uploadTasks) {
-      totalBytes += uploadTask.snapshot.totalBytes;
-      print('total bytes: $totalBytes');
-    }
-
-    for (final uploadTask in uploadTasks) {
-      await for (final event in uploadTask.snapshotEvents) {
-        bytesUploaded += event.bytesTransferred;
-        print('bytesUploaded: $bytesUploaded');
-
-        final double progress = bytesUploaded / totalBytes;
-        print('progress = ${bytesUploaded / totalBytes * 100}');
-        yield progress;
+        print('Get a future for the download URL for the uploaded file');
       }
+      final List<Map<String, String>> downloadUrls =
+          await Future.wait(downloadUrlFutures);
+
+      // Create a document in Cloud Firestore with the relevant information
+
+      final DocumentReference docRef = _db.collection('resources').doc();
+      print('doc created');
+      docRef.set({
+        'date': resourceUploadObj.date,
+        'topic': resourceUploadObj.topic,
+        'subject': resourceUploadObj.subject,
+        'uploadTeacher': resourceUploadObj.uploadTeacher,
+        'downloadUrls': Map<String, String>.fromIterable(
+          downloadUrls.expand((map) => map.entries),
+          key: (entry) => entry.key,
+          value: (entry) => entry.value,
+        ),
+      });
+
+      // Return a stream that emits the upload progress as a percentage
+      double totalBytes = 0;
+      double bytesUploaded = 0;
+      for (final uploadTask in uploadTasks) {
+        totalBytes += uploadTask.snapshot.totalBytes;
+        print('total bytes: $totalBytes');
+      }
+
+      for (final uploadTask in uploadTasks) {
+        await for (final event in uploadTask.snapshotEvents) {
+          bytesUploaded += event.bytesTransferred;
+          print('bytesUploaded: $bytesUploaded');
+
+          final double progress = bytesUploaded / totalBytes;
+          print('progress = ${bytesUploaded / totalBytes * 100}');
+          yield progress;
+        }
+      }
+    } on Exception catch (err) {
+      print('error in uploadResource: $err');
     }
   }
-
 
   //adds attendance status to database in attendance and individual student document
   Future<void> addAttToCF(String name, int status, String id) async {
@@ -1009,13 +1012,9 @@ class DatabaseService with ChangeNotifier {
         // Get references to the stud id sub-collections
         final CollectionReference studIDColl =
             documentSnapshot.reference.collection('student-IDs');
-       
 
         // Delete the student document from the studid sub-collection
         await studIDColl.doc(studID).delete();
-
-       
-        
       }
 
       //copy student data into bin, sets the same doc ID as in students collection
@@ -1030,7 +1029,6 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-
   Future<void> deleteAttendanceRecordFromStud(
       String studID, String attendanceid) async {
     final DocumentReference studRef = _db.collection('students').doc(studID);
@@ -1043,7 +1041,7 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> deleteAssessment(String id) async {
     final ref = _db.collection('remote-assessment');
-    
+
     try {
       return await ref.doc(id).delete();
     } catch (err) {

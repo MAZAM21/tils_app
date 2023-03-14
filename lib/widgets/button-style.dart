@@ -23,7 +23,7 @@ class RedButtonMobile extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
         minimumSize: MaterialStateProperty.all(Size(107, 25)),
-        fixedSize: MaterialStateProperty.all(Size(117, 27)) ,
+        fixedSize: MaterialStateProperty.all(Size(117, 27)),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
         ),
@@ -36,13 +36,28 @@ class WhiteButtonMobile extends StatelessWidget {
   final String child;
   final VoidCallback onPressed;
   const WhiteButtonMobile({@required this.child, @required this.onPressed});
+  
 
   @override
   Widget build(BuildContext context) {
+
+    bool ifJuris = false;
+    if (child == 'Jurisprudence') {
+      ifJuris = true;
+    }
+
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(
+      child: !ifJuris ? Text(
         '$child',
+        style: TextStyle(
+          fontSize: 16,
+          fontFamily: 'Proxima Nova',
+          color: Color(0xff000000),
+          fontWeight: FontWeight.w600,
+        ),
+      ) : Text(
+        'Juris',
         style: TextStyle(
           fontSize: 16,
           fontFamily: 'Proxima Nova',
