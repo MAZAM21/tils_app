@@ -413,6 +413,9 @@ class DatabaseService with ChangeNotifier {
       // Upload each file in the resourceFiles list to Firebase Storage
       final List<Future<Map<String, String>>> downloadUrlFutures = [];
       final List<UploadTask> uploadTasks = [];
+
+      print('resourceFiles length: ${resourceUploadObj.resourceFiles.length}');
+      print('storageRef: $storageRef');
       for (final file in resourceUploadObj.resourceFiles) {
         // Get a reference to the file in Firebase Storage
         final Reference fileRef = storageRef.child(
@@ -430,7 +433,11 @@ class DatabaseService with ChangeNotifier {
         final Future<TaskSnapshot> uploadTaskSnapshot =
             uploadTask.whenComplete(() {});
         final Future<String> downloadUrlFuture = uploadTaskSnapshot
-            .then((snapshot) => snapshot.ref.getDownloadURL());
+            .then((snapshot) => snapshot.ref.getDownloadURL())
+            .catchError((error) => throw FirebaseException(
+                  plugin: 'firebase_storage',
+                  message: error.toString(),
+                ));
         downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
           return {file.name: downloadUrl};
         }));
@@ -438,11 +445,18 @@ class DatabaseService with ChangeNotifier {
         // downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
         //   return {file.name: downloadUrl};
         // }));
-
+        print('fileRef: $fileRef');
+        print('uploadTask: $uploadTask');
+        print('uploadTaskSnapshot: $uploadTaskSnapshot');
+        print('downloadUrlFuture: $downloadUrlFuture');
+        print('downloadUrlFutures length: ${downloadUrlFutures.length}');
         print('Get a future for the download URL for the uploaded file');
       }
       final List<Map<String, String>> downloadUrls =
-          await Future.wait(downloadUrlFutures);
+          await Future.wait(downloadUrlFutures).catchError((error) {
+        print('error: $error');
+        return null;
+      });
 
       // Create a document in Cloud Firestore with the relevant information
 
