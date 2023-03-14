@@ -332,7 +332,8 @@ class DatabaseService with ChangeNotifier {
     // Get a reference to the Firebase Storage bucket
     final FirebaseStorage storage = FirebaseStorage.instance;
     final Reference storageRef = storage.ref();
-
+    print('resourceFiles length: ${resourceUploadObj.resourceFiles.length}');
+    print('storageRef: $storageRef');
     // Upload each file in the resourceFiles list to Firebase Storage
     final List<Future<Map<String, String>>> downloadUrlFutures = [];
     final List<UploadTask> uploadTasks = [];
@@ -361,6 +362,11 @@ class DatabaseService with ChangeNotifier {
       // downloadUrlFutures.add(downloadUrlFuture.then((downloadUrl) {
       //   return {file.name: downloadUrl};
       // }));
+      print('fileRef: $fileRef');
+      print('uploadTask: $uploadTask');
+      print('uploadTaskSnapshot: $uploadTaskSnapshot');
+      print('downloadUrlFuture: $downloadUrlFuture');
+      print('downloadUrlFutures length: ${downloadUrlFutures.length}');
 
       print('Get a future for the download URL for the uploaded file');
     }
