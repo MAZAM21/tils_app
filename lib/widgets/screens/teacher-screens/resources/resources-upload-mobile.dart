@@ -6,7 +6,7 @@ import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:tils_app/service/db.dart';
 
-import 'package:tils_app/widgets/button-styles.dart';
+import 'package:tils_app/widgets/button-style.dart';
 
 class ResourcesUpload extends StatefulWidget {
   const ResourcesUpload({Key key}) : super(key: key);
@@ -90,7 +90,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
       for (int j = 0; j < 3 && i + j < subLength; j++) {
         if (resUp.subject != null &&
             '${teacherData.subjects[i + j]}' == resUp.subject) {
-          children.add(RedButtonMain(
+          children.add(RedButtonMobile(
               child: '${teacherData.subjects[i + j]}',
               onPressed: () {
                 setState(() {
@@ -98,7 +98,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                 });
               }));
         } else {
-          children.add(WhiteButtonMain(
+          children.add(WhiteButtonMobile(
               child: '${teacherData.subjects[i + j]}',
               onPressed: () {
                 setState(() {
@@ -137,8 +137,8 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   child: Container(
-                    height: 200,
-                    width: 600,
+                    height: 100,
+                    width: 250,
                     color: Theme.of(context).primaryColor,
                     child: DottedBorder(
                       color: Colors.white,
@@ -321,7 +321,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
               ),
             ),
           if (resUp.resourceFiles.isNotEmpty && !uploadComplete)
-            RedButtonMain(
+            RedButtonMobile(
                 child: 'Upload',
                 onPressed: () {
                   setState(() {
