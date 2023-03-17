@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
@@ -24,6 +25,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/records/student_records
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/rt-input.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-main-mobile.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 import 'package:tils_app/widgets/student-screens/edit-student-profile.dart';
@@ -50,6 +52,10 @@ class RoutesAndTheme extends StatelessWidget {
         ),
         ChangeNotifierProvider<AssignmentMarks>(
           create: (ctx) => AssignmentMarks(),
+        ),
+        StreamProvider<List<ResourceDownload>>(
+          create: (ctx) => db.streamResource(),
+          initialData: [],
         ),
         StreamProvider<List<Meeting>>(
           create: (ctx) => db.streamMeetings(),
@@ -165,6 +171,7 @@ class RoutesAndTheme extends StatelessWidget {
           StudentHome.routeName: (context) => StudentHome(),
           AssessmentPage.routeName: (context) => AssessmentPage(),
           EditStudentProfile.routeName: (context) => EditStudentProfile(),
+          ResourcesMain.routeName: (context) => ResourcesMain(),
           StudentRankingDisplay.routeName: (context) => StudentRankingDisplay(),
           AssignmentMain.routeName: (context) => AssignmentMain(),
           AddAssignment.routeName: (context) => AddAssignment(),
