@@ -35,7 +35,7 @@ class ResourceDownload {
   final DateTime date;
   final String topic;
   final String subject;
-  final Map<String, String> urlMap;
+  final Map urlMap;
   ResourceDownload({
     @required this.date,
     @required this.topic,
@@ -45,19 +45,23 @@ class ResourceDownload {
   factory ResourceDownload.fromFirestore(
       QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     try {
+    
       final data = doc.data();
-      DateTime time = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['time']);
-      print('$time');
+      Timestamp time = data['date'];
+      DateTime date = DateTime.parse(time.toDate().toString());
+    
       String topic = data['topic'];
       String subject = data['subject'];
-      Map urlMap = data['downloadUrls'];
-      ResourceDownload(
-        date: time,
+      Map urlMap = Map<dynamic, dynamic>.from(data['downloadUrls']);
+      return ResourceDownload(
+        date: date,
         subject: subject,
         topic: topic,
         urlMap: urlMap,
       );
-    } catch (err) {}
+    } catch (err) {
+      print('error in ResourceDownload: $err');
+    }
     return null;
   }
 }

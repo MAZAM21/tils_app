@@ -313,12 +313,16 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                               : 30,
                                         ),
                                       SizedBox(width: 11),
-                                      Text(
-                                        '${students[i].name}',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'Proxima Nova',
-                                          fontWeight: FontWeight.w700,
+                                      Container(
+                                        width: 180,
+                                        child: Text(
+                                          '${students[i].name}',
+                                          overflow: TextOverflow.fade,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'Proxima Nova',
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
                                       Spacer(),

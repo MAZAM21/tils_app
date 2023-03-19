@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/resource.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/teachers-service.dart';
+import 'package:tils_app/models/student-user-data.dart';
+
+import 'package:tils_app/service/student-service.dart';
+
 import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+
 import 'package:tils_app/widgets/screens/teacher-screens/resources/display-resource.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-upload-mobile.dart';
 
-class ResourcesMain extends StatefulWidget {
+class ResourcesMainStudent extends StatefulWidget {
   static const routeName = '/resource-main';
-  const ResourcesMain({
+  const ResourcesMainStudent({
     Key key,
     @required this.sub,
   }) : super(key: key);
   final String sub;
 
   @override
-  State<ResourcesMain> createState() => _ResourcesMainState();
+  State<ResourcesMainStudent> createState() => _ResourcesMainStudentState();
 }
 
-class _ResourcesMainState extends State<ResourcesMain> {
-  final ts = TeacherService();
+class _ResourcesMainStudentState extends State<ResourcesMainStudent> {
+  final ss = StudentService();
   @override
   Widget build(BuildContext context) {
     final resources = Provider.of<List<ResourceDownload>>(context);
-    final userData = Provider.of<TeacherUser>(context);
+    final userData = Provider.of<StudentUser>(context);
 
     List<ResourceDownload> subRes = [];
     int totalRes;
@@ -36,7 +36,7 @@ class _ResourcesMainState extends State<ResourcesMain> {
     bool isActive = false;
     if (resources.isNotEmpty && userData != null) {
       isActive = true;
-      subRes = ts.getSubResources(widget.sub, resources);
+      subRes = ss.getSubResources(widget.sub, resources);
       totalRes = subRes.length;
     }
     return isActive
@@ -84,29 +84,8 @@ class _ResourcesMainState extends State<ResourcesMain> {
                                     ),
                                   ],
                                 ),
-                                Spacer(),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            ChangeNotifierProvider.value(
-                                          value: userData,
-                                          child: ResourcesUpload(),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Upload Resource',
-                                    style: TextStyle(
-                                      fontFamily: 'Proxima Nova',
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xffc54134),
-                                    ),
-                                  ),
-                                ),
+                                
+                                
                               ],
                             ),
                           ),

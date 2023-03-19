@@ -46,8 +46,8 @@ class _AllRAsState extends State<AllRAs> {
         : Scaffold(
             appBar: AppBar(
               title: Text(
-                'Assessments Main',
-                style: Theme.of(context).appBarTheme.textTheme.caption,
+                'Assessments',
+                style: Theme.of(context).appBarTheme.toolbarTextStyle,
               ),
             ),
             body: SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject-class.dart';
 
@@ -106,6 +107,42 @@ class StudentService {
       stat = true;
     }
     return stat;
+  }
+
+  
+  //Get subject resources
+  List<ResourceDownload> getSubResources(
+      String sub, List<ResourceDownload> resList) {
+    List<ResourceDownload> subResList = [];
+    resList.forEach((res) {
+      if (res.subject == sub) {
+        subResList.add(res);
+      }
+    });
+    return subResList;
+  }
+
+
+   List<ResourceDownload> getTopThreeRes(
+    List<ResourceDownload> allRes,
+    StudentUser stuDdata,
+  ) {
+    List<ResourceDownload> myRes = [];
+    final List<String> subjects = stuDdata.subjects;
+    allRes.forEach((res) {
+     
+      if (subjects.contains(res.subject)) {
+        myRes.add(res);
+      }
+    });
+    myRes.sort((a, b) => b.date.compareTo(a.date));
+    List<ResourceDownload> topthree;
+    if (myRes.length > 3) {
+      topthree = myRes.sublist(0, 3);
+    } else {
+      topthree = myRes;
+    }
+    return topthree;
   }
 
   ///Gets top three assessments for students assessment panel

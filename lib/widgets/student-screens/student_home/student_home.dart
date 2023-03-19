@@ -14,6 +14,7 @@ import 'package:tils_app/widgets/student-screens/student_home/metric_panel.dart'
 import 'package:tils_app/widgets/student-screens/student_home/student-attendance-panel.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student-avatar-panel.dart';
 import 'package:tils_app/widgets/student-screens/student_home/student-class-timer-panel.dart';
+import 'package:tils_app/widgets/student-screens/student_home/student-resources-panel.dart';
 
 import './classes-grid.dart';
 
@@ -161,6 +162,7 @@ class _StudentHomeState extends State<StudentHome> {
                         SizedBox(
                           height: 15,
                         ),
+                        StudentResourcesPanel(studData: studData),
                         AssessmentHomePanel(ss: ss, studData: studData),
                         StudentAttendancePanel(studData: studData),
                       ],

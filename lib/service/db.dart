@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:tils_app/models/admin-user-data.dart';
 import 'package:tils_app/models/allTextQAs.dart';
@@ -30,6 +30,7 @@ import '../models/meeting.dart';
 import '../models/subject-class.dart';
 import '../models/assessment-result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 
 class DatabaseService with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -213,6 +214,39 @@ class DatabaseService with ChangeNotifier {
       print('error in getstudbysub $err');
     }
     return null;
+  }
+
+  Future<void> downloadFile(String url, String fileName) async {
+    final Reference storage = FirebaseStorage.instance.ref();
+
+    final httpsReference = FirebaseStorage.instance.refFromURL(url);
+   
+
+    final appDocDir = await getApplicationDocumentsDirectory();
+    final filePath = "${appDocDir.path}/${httpsReference.name}";
+    print(appDocDir.path);
+    final file = File(filePath);
+
+    final downloadTask = httpsReference.writeToFile(file);
+    downloadTask.snapshotEvents.listen((taskSnapshot) {
+      switch (taskSnapshot.state) {
+        case TaskState.running:
+          print('download running');
+          break;
+        case TaskState.paused:
+          // TODO: Handle this case.
+          break;
+        case TaskState.success:
+          print('download complete');
+          break;
+        case TaskState.canceled:
+          // TODO: Handle this case.
+          break;
+        case TaskState.error:
+          print('download err');
+          break;
+      }
+    });
   }
 
   ///get all student docs from student collection

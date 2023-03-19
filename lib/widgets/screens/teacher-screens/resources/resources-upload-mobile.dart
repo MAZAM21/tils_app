@@ -56,7 +56,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
       results = await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'mp4', 'mp3'],
+        allowedExtensions: ['pdf', 'docx', 'mp4', 'mp3'],
       );
     } catch (e) {
       // User canceled the picker
@@ -73,52 +73,60 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
   Widget build(BuildContext context) {
     final teacherData = Provider.of<TeacherUser>(context);
 
-    final subLength = teacherData.subjects.length;
+    int subLength = 0;
+    bool _isActive = false;
+    if (teacherData!=null) {
+      print('isActive in res');
+      _isActive = true;
+      subLength = teacherData.subjects.length;
+    }
 
     // This list will have a row of button widgets
     List<Widget> rows = [];
 
     /// The main for loop iterates for every three subjects added
     /// when the value of i exceeds the subjects, it terminates
-    for (int i = 0; i < subLength; i += 3) {
-      List<Widget> children = [];
+    if (_isActive) {
+      for (int i = 0; i < subLength; i += 3) {
+        List<Widget> children = [];
 
-      /// the inner for loop condition iterates to three and checks whether
-      /// the subject length has been reached by adding the main for loop i with
-      /// the inner for loop j and seeing if they are less than subLength
+        /// the inner for loop condition iterates to three and checks whether
+        /// the subject length has been reached by adding the main for loop i with
+        /// the inner for loop j and seeing if they are less than subLength
 
-      for (int j = 0; j < 3 && i + j < subLength; j++) {
-        if (resUp.subject != null &&
-            '${teacherData.subjects[i + j]}' == resUp.subject) {
-          children.add(RedButtonMobile(
-              child: '${teacherData.subjects[i + j]}',
-              onPressed: () {
-                setState(() {
-                  resUp.subject = '${teacherData.subjects[i + j]}';
-                });
-              }));
-        } else {
-          children.add(WhiteButtonMobile(
-              child: '${teacherData.subjects[i + j]}',
-              onPressed: () {
-                setState(() {
-                  resUp.subject = '${teacherData.subjects[i + j]}';
-                });
-              }));
+        for (int j = 0; j < 3 && i + j < subLength; j++) {
+          if (resUp.subject != null &&
+              '${teacherData.subjects[i + j]}' == resUp.subject) {
+            children.add(RedButtonMobile(
+                child: '${teacherData.subjects[i + j]}',
+                onPressed: () {
+                  setState(() {
+                    resUp.subject = '${teacherData.subjects[i + j]}';
+                  });
+                }));
+          } else {
+            children.add(WhiteButtonMobile(
+                child: '${teacherData.subjects[i + j]}',
+                onPressed: () {
+                  setState(() {
+                    resUp.subject = '${teacherData.subjects[i + j]}';
+                  });
+                }));
+          }
+
+          //end of inner for loop
         }
 
-        //end of inner for loop
+        rows.add(Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: children,
+          ),
+        ));
+
+        //end of outer for loop
       }
-
-      rows.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: children,
-        ),
-      ));
-
-      //end of outer for loop
     }
 
     return Scaffold(
@@ -139,7 +147,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                     child: Container(
                       height: 150,
-                      width:300,
+                      width: 300,
                       color: Theme.of(context).primaryColor,
                       child: DottedBorder(
                         color: Colors.white,

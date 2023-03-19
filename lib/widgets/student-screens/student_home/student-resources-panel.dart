@@ -3,25 +3,28 @@ import 'package:intl/intl.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/resource.dart';
+import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/service/student-service.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-studs-main.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+
 import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-upload-mobile.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/resources/select-subjects-resources.dart';
+import 'package:tils_app/widgets/student-screens/resources/select-subjects-resources-student.dart';
 
-class TeacherResourcesPanel extends StatelessWidget {
-  TeacherResourcesPanel({
+class StudentResourcesPanel extends StatelessWidget {
+  StudentResourcesPanel({
     Key key,
-    @required this.teacherData,
+    @required this.studData,
   }) : super(key: key);
 
-  final ts = TeacherService();
+  final ss = StudentService();
 
-  final TeacherUser teacherData;
+  final StudentUser studData;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class TeacherResourcesPanel extends StatelessWidget {
     bool _isActive = false;
 
     if (resources.isNotEmpty) {
-      topThree = ts.getTopThreeRes(resources, teacherData);
+      topThree = ss.getTopThreeRes(resources, studData);
       print(topThree.length);
       _isActive = true;
     }
@@ -50,10 +53,10 @@ class TeacherResourcesPanel extends StatelessWidget {
                               RouteSettings(name: '/select-subject-resource'),
                           builder: (BuildContext context) =>
                               ChangeNotifierProvider.value(
-                            value: teacherData,
-                            child: SelectSubjectResource(
-                              teacher: teacherData,
-                              subs: teacherData.subjects,
+                            value: studData,
+                            child: SelectSubjectResourceStudent(
+                              student: studData,
+                              subs: studData.subjects,
                             ),
                           ),
                         ),
@@ -64,23 +67,7 @@ class TeacherResourcesPanel extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              ChangeNotifierProvider.value(
-                            value: teacherData,
-                            child: ResourcesUpload(),
-                          ),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.add_circle_outline_rounded),
-                    color: Color(0xffC54134),
-                    iconSize: 20,
-                  ),
+                 
                 ],
               ),
               Container(
@@ -112,37 +99,7 @@ class TeacherResourcesPanel extends StatelessWidget {
                   },
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      settings: RouteSettings(name: '/manage-studs'),
-                      builder: (BuildContext context) =>
-                          ChangeNotifierProvider.value(
-                        value: teacherData,
-                        child: ManageStudents(),
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Manage Students',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Proxima Nova',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Color(0xffC54134)),
-                    minimumSize: MaterialStateProperty.all(Size(107, 25)),
-                    fixedSize: MaterialStateProperty.all(Size(145, 27)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(23)),
-                    )),
-              )
+             
             ],
           )
         : CircularProgressIndicator();

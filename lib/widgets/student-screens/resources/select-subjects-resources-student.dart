@@ -1,17 +1,19 @@
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-main-mobile.dart';
+import 'package:tils_app/widgets/student-screens/resources/resources-main-stud-mobile.dart';
 
-class SelectSubjectResource extends StatelessWidget {
-  const SelectSubjectResource({
+class SelectSubjectResourceStudent extends StatelessWidget {
+  const SelectSubjectResourceStudent({
     Key key,
     @required this.subs,
-    @required this.teacher,
+    @required this.student,
   }) : super(key: key);
   final List<String> subs;
-  final TeacherUser teacher;
+  final StudentUser student;
 
   Widget _buttonBuilder(
     String buttName,
@@ -29,8 +31,8 @@ class SelectSubjectResource extends StatelessWidget {
               MaterialPageRoute(
                 settings: RouteSettings(name: '/deploy-assessments'),
                 builder: (BuildContext context) => ChangeNotifierProvider.value(
-                  value: teacher,
-                  child: ResourcesMain(
+                  value: student,
+                  child: ResourcesMainStudent(
                     sub: sub,
                   ),
                 ),
