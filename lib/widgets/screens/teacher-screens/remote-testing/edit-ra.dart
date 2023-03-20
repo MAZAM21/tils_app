@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/deploy-assessment.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/deploy-assessment.dart';
 
 ///this is the overview and deployment page
 

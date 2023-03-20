@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
 
 import 'package:provider/provider.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/results/result-main.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart';
 
 class TeacherAssessmentPanel extends StatelessWidget {
   final ts = TeacherService();

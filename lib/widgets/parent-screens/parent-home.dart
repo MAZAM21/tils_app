@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/parent-service.dart';
-import 'package:tils_app/service/ranking-service.dart';
-import 'package:tils_app/widgets/parent-screens/ar-parent-panel.dart';
-import 'package:tils_app/widgets/parent-screens/parent-attendance-grid.dart';
-import 'package:tils_app/widgets/parent-screens/parent-attendance-panel.dart';
-import 'package:tils_app/widgets/parent-screens/parent-classposition-panel.dart';
-import 'package:tils_app/widgets/parent-screens/parent-home-avatar-panel.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/parent-service.dart';
+import 'package:SIL_app/service/ranking-service.dart';
+import 'package:SIL_app/widgets/parent-screens/ar-parent-panel.dart';
+import 'package:SIL_app/widgets/parent-screens/parent-attendance-grid.dart';
+import 'package:SIL_app/widgets/parent-screens/parent-attendance-panel.dart';
+import 'package:SIL_app/widgets/parent-screens/parent-classposition-panel.dart';
+import 'package:SIL_app/widgets/parent-screens/parent-home-avatar-panel.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 import './parent-drawer.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:tils_app/main.dart';
+import 'package:SIL_app/main.dart';
 
 ///Unlike teacher homes, each widget here defines its width with the help of mediaquery.
 /// It is yet to be determined which is the better approach.

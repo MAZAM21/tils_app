@@ -1,12 +1,12 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/resource.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:SIL_app/models/resource.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/service/db.dart';
 
-import 'package:tils_app/widgets/button-styles.dart';
+import 'package:SIL_app/widgets/button-styles.dart';
 
 class ResourcesUpload extends StatefulWidget {
   const ResourcesUpload({Key key}) : super(key: key);

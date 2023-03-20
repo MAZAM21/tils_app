@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/models/subject-class.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/models/subject-class.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/service/parent-service.dart';
+import 'package:SIL_app/service/parent-service.dart';
 
 class ParentAttendanceGrid extends StatefulWidget {
   const ParentAttendanceGrid({

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/student.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/models/student.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/service/db.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 
 class StudentProvider extends StatelessWidget {
   //adds a document to attendance collection

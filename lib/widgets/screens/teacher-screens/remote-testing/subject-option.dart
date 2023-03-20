@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
 
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 import './rt-input.dart';
 

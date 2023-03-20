@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
 
 class TeacherAvatarPanel extends StatelessWidget {
   const TeacherAvatarPanel({

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/service/db.dart';
 
 class MarkIndividualQA extends StatefulWidget {
   final stuId;

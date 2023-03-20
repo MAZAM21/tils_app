@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/announcement.dart';
+import 'package:SIL_app/models/announcement.dart';
 
-import 'package:tils_app/widgets/student-screens/student-newsfeed/student-nf-detail.dart';
+import 'package:SIL_app/widgets/student-screens/student-newsfeed/student-nf-detail.dart';
 
 class StudentNFTile extends StatelessWidget {
   final Announcement announcement;

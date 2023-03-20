@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/service/student-db.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/service/student-db.dart';
 
 class EditStudentProfile extends StatefulWidget {
   static const routeName = '/edit-student-profile';

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:quiver/collection.dart';
-import 'package:tils_app/models/assignment-marks.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
+import 'package:SIL_app/models/assignment-marks.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/assignments/mark-student-assignments.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/assignments/mark-student-assignments.dart';
 
 class AssignmentMain extends StatefulWidget {
   const AssignmentMain({Key key}) : super(key: key);

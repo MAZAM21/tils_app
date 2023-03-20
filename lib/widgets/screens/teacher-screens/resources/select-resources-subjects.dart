@@ -1,8 +1,8 @@
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:flutter/material.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-main.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-main.dart';
 
 class SelectSubjectResource extends StatelessWidget {
   const SelectSubjectResource({

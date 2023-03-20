@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 
 
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 class StudentRecords extends StatelessWidget {
   static const routeName = '/student-records';

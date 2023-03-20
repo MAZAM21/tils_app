@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/student_rank.dart';
+import 'package:SIL_app/models/student_rank.dart';
 
 class AssignmentMarks with ChangeNotifier {
   /// title of assignment

@@ -2,15 +2,15 @@
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/edit-ra.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 
 class AllRAs extends StatefulWidget {
   static const routeName = '/all-remote-assessments';
@@ -47,7 +47,7 @@ class _AllRAsState extends State<AllRAs> {
             appBar: AppBar(
               title: Text(
                 'Assessments Main',
-                style: Theme.of(context).appBarTheme.textTheme.caption,
+                style: Theme.of(context).appBarTheme.toolbarTextStyle,
               ),
             ),
             body: SingleChildScrollView(

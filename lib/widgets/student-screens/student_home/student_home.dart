@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/meeting.dart';
-import 'package:tils_app/models/metrics.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/student-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/meeting.dart';
+import 'package:SIL_app/models/metrics.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/student-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
-import 'package:tils_app/widgets/student-screens/student_home/assessment_home_panel.dart';
-import 'package:tils_app/widgets/student-screens/student_home/metric_panel.dart';
-import 'package:tils_app/widgets/student-screens/student_home/student-attendance-panel.dart';
-import 'package:tils_app/widgets/student-screens/student_home/student-avatar-panel.dart';
-import 'package:tils_app/widgets/student-screens/student_home/student-class-timer-panel.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/assessment_home_panel.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/metric_panel.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/student-attendance-panel.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/student-avatar-panel.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/student-class-timer-panel.dart';
 
 import './classes-grid.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:tils_app/main.dart';
+import 'package:SIL_app/main.dart';
 
 class StudentHome extends StatefulWidget {
   static const routeName = '/student-home';

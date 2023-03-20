@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
 
 

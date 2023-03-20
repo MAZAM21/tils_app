@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/allTextQAs.dart';
-import 'package:tils_app/models/student-textAnswers.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/allTextQAs.dart';
+import 'package:SIL_app/models/student-textAnswers.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-script.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/mark-TextQs/mark-script.dart';
 
 class StudentAnswerScripts extends StatefulWidget {
   final assid;

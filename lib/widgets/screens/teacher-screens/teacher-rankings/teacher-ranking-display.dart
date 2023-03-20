@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/ranking-service.dart';
-import 'package:tils_app/service/student-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/ranking-service.dart';
+import 'package:SIL_app/service/student-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 // This needs to be the page where the students with the top score are displayed
 class TeacherRankingDisplay extends StatefulWidget {

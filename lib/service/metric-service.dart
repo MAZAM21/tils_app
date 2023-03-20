@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'package:emojis/emoji.dart';
 import 'package:emojis/emojis.dart';
-import 'package:tils_app/models/metrics.dart';
+import 'package:SIL_app/models/metrics.dart';
 
 class MetricService {
   MetricAchievement getAssignmentMetric(

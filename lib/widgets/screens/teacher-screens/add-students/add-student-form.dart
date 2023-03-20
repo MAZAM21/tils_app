@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/service/db.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 import 'package:excel/excel.dart';
-import 'package:tils_app/service/upload-service.dart';
+import 'package:SIL_app/service/upload-service.dart';
 
 class AddStudent extends StatefulWidget {
   static const routeName = '/add-students';

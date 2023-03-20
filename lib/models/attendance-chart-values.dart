@@ -1,5 +1,5 @@
-import 'package:tils_app/models/attendance.dart';
-import 'package:tils_app/models/meeting.dart';
+import 'package:SIL_app/models/attendance.dart';
+import 'package:SIL_app/models/meeting.dart';
 
 class AttChartVals {
   final String day;

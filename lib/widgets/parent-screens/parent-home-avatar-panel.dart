@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/parent-user-data.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:tils_app/main.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/main.dart';
+import 'package:SIL_app/service/db.dart';
 
 class ParentHomeAvatarPanel extends StatefulWidget {
   const ParentHomeAvatarPanel({

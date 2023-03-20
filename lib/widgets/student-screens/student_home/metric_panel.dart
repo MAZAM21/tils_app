@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/metrics.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/service/metric-service.dart';
-import 'package:tils_app/service/student-service.dart';
+import 'package:SIL_app/models/metrics.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/service/metric-service.dart';
+import 'package:SIL_app/service/student-service.dart';
 import 'package:emojis/emoji.dart';
 import 'package:emojis/emojis.dart';
 

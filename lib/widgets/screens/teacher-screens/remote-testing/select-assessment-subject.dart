@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 import 'package:provider/provider.dart';
 
 class SelectAssessmentSubject extends StatelessWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/announcement.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
+import 'package:SIL_app/models/announcement.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
 
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
 import './announcement-tile.dart';
 
 class AllAnnouncements extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/service/teachers-service.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/service/teachers-service.dart';
 
 class AnswerChoiceInput extends StatefulWidget {
   static const routeName = '/answer-choice-input';

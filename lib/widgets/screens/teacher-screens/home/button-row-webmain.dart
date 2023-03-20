@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/widgets/button-styles.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/results/result-main.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/widgets/button-styles.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 import 'package:provider/provider.dart';
 
 class ButtonRowMain extends StatelessWidget {

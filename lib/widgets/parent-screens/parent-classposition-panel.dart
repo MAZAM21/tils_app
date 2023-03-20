@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/service/ranking-service.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/service/ranking-service.dart';
 
 class ClassPositionPanel extends StatefulWidget {
   const ClassPositionPanel({

@@ -1,4 +1,4 @@
-import 'package:tils_app/models/student_rank.dart';
+import 'package:SIL_app/models/student_rank.dart';
 
 class ManagementService {
   List<StudentRank> alphabeticalSort(List<StudentRank> studs) {

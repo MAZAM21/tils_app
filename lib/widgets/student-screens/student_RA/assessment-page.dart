@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/student-service.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/student-service.dart';
 
 class AssessmentPage extends StatefulWidget {
   static const routeName = '/assessment-page-attempt';

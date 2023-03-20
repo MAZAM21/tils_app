@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/service/parent-service.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/service/parent-service.dart';
 
 class ParentAttendancePanel extends StatelessWidget {
   final ParentUser pData;

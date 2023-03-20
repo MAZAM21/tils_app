@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
 
-import 'package:tils_app/models/meeting.dart';
+import 'package:SIL_app/models/meeting.dart';
 
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
 import './edit-timetable-form.dart';
 
 class CalendarApp extends StatefulWidget {

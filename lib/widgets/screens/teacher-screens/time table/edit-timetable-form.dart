@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 // import 'package:provider/provider.dart';
-import 'package:tils_app/models/meeting.dart';
+import 'package:SIL_app/models/meeting.dart';
 
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/service/db.dart';
 // import './time_table.dart';
 
 class EditTTForm extends StatefulWidget {

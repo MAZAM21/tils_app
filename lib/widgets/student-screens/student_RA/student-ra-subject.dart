@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/student-user-data.dart';
+import 'package:SIL_app/models/student-user-data.dart';
 
 
-import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
+import 'package:SIL_app/widgets/student-screens/student_RA/student-ra-display.dart';
 
 
 
@@ -56,7 +56,7 @@ class StudentRASubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.textTheme.caption,
+          style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
       ),
       body: SingleChildScrollView(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/student_rank.dart';
+import 'package:SIL_app/models/student_rank.dart';
 
 class SecondThirdStudRow extends StatelessWidget {
   const SecondThirdStudRow({

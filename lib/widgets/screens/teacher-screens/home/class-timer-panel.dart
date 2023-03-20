@@ -2,16 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tils_app/models/meeting.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/teachers-service.dart';
+import 'package:SIL_app/models/meeting.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/home/timer-text.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
-import 'package:tils_app/widgets/student-screens/time-table-student/student-calendarapp.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/timer-text.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
+import 'package:SIL_app/widgets/student-screens/time-table-student/student-calendarapp.dart';
 
 class ClassTimerPanel extends StatefulWidget {
   ///start time

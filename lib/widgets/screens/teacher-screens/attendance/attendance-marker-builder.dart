@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tils_app/models/attendance.dart';
+import 'package:SIL_app/models/attendance.dart';
 
 import 'package:provider/provider.dart';
 
-import 'package:tils_app/models/student.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject-class.dart';
+import 'package:SIL_app/models/student.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/models/subject-class.dart';
 
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 class AttendanceMarkerBuilder extends StatefulWidget {
   static const routeName = '/marker-builder';
@@ -97,7 +97,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
               },
               child: Text(
                 'Save',
-                style: Theme.of(context).appBarTheme.textTheme.caption,
+                style: Theme.of(context).appBarTheme.toolbarTextStyle,
               ))
         ],
       ),

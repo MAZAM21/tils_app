@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/announcement.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/models/announcement.dart';
+import 'package:SIL_app/service/db.dart';
 import 'package:provider/provider.dart';
 
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
 
 class AnnouncementForm extends StatefulWidget {
   static const routeName = '/announcement-input';

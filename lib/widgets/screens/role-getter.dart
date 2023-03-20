@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/role.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/models/role.dart';
+import 'package:SIL_app/service/db.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/widgets/data-providers/admin_datastream.dart';
-import 'package:tils_app/widgets/data-providers/parent-datastream.dart';
-import 'package:tils_app/widgets/data-providers/student-datastream.dart';
-import 'package:tils_app/widgets/data-providers/teacher-datastream.dart';
+import 'package:SIL_app/widgets/data-providers/admin_datastream.dart';
+import 'package:SIL_app/widgets/data-providers/parent-datastream.dart';
+import 'package:SIL_app/widgets/data-providers/student-datastream.dart';
+import 'package:SIL_app/widgets/data-providers/teacher-datastream.dart';
 
-import 'package:tils_app/widgets/screens/auth_page.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/auth_page.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 class RoleGetter extends StatelessWidget {
   final db = DatabaseService();

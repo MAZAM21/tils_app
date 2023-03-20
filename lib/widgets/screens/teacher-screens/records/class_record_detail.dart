@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/class-data.dart';
+import 'package:SIL_app/models/class-data.dart';
 
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 class ClassRecordDetail extends StatelessWidget {
   static const routeName = '/class-record-detail';

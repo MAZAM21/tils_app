@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:tils_app/widgets/drawer.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
+import 'package:SIL_app/widgets/drawer.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-home.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/teacher-rankings/teacher-ranking-display.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-home.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/teacher-rankings/teacher-ranking-display.dart';
 
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
@@ -39,7 +39,7 @@ class _AllTabsState extends State<AllTabs> {
         drawer: AppDrawer(),
         appBar: AppBar(
           title: Text(
-            'Lords College Teacher\'s Portal',
+            'SIL Teacher\'s Portal',
             style:TextStyle(
                 color: Color.fromARGB(255, 76, 76, 76),
                 fontFamily: 'Proxima Nova',

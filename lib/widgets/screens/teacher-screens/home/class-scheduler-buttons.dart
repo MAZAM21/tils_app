@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 
 import 'package:provider/provider.dart';
 

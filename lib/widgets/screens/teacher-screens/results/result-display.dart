@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/student-answers.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/student-answers.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 /// The main result page navigated to from the home
 /// displays list of all assessments

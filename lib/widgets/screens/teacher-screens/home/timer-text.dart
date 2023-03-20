@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/subject-class.dart';
+import 'package:SIL_app/models/subject-class.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/home/class-timer-panel.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/class-timer-panel.dart';
 
 class TimerText extends StatelessWidget {
   const TimerText({

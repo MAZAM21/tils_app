@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/student-user-data.dart';
+import 'package:SIL_app/models/student-user-data.dart';
 
 class StudentAvatarPanel extends StatelessWidget {
   const StudentAvatarPanel({

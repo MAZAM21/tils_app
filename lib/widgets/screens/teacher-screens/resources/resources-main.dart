@@ -3,14 +3,14 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/resource.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/resources/display-resource.dart';
+import 'package:SIL_app/models/resource.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/resources/display-resource.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-upload-web.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-upload-web.dart';
 
 class ResourcesMain extends StatefulWidget {
   static const routeName = '/resource-main';

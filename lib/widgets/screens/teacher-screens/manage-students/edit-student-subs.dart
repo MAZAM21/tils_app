@@ -4,8 +4,8 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:numberpicker/numberpicker.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/service/db.dart';
 
 class EditStudSubs extends StatefulWidget {
   static const routeName = '/edit-stud-subs';

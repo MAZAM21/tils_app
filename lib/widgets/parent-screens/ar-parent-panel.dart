@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/service/ranking-service.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/service/ranking-service.dart';
 import 'package:provider/provider.dart';
 
 class ARParentPanel extends StatefulWidget {

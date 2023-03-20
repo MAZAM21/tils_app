@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/service/db.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/service/db.dart';
 
 class ActivateParentPortal extends StatefulWidget {
   const ActivateParentPortal(this.stud);

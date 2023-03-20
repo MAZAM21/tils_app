@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
 
-import 'package:tils_app/models/student_rank.dart';
+import 'package:SIL_app/models/student_rank.dart';
 
 import '../models/remote_assessment.dart';
 

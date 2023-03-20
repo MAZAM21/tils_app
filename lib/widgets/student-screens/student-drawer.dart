@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/widgets/student-screens/edit-student-profile.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/widgets/student-screens/edit-student-profile.dart';
 import 'package:provider/provider.dart';
 
 class StudentDrawer extends StatelessWidget {

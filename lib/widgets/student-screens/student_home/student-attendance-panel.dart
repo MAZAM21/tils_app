@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/service/student-service.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/service/student-service.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/student-screens/attendance-record/student-attendance-record.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/student-screens/attendance-record/student-attendance-record.dart';
 
 class StudentAttendancePanel extends StatelessWidget {
   StudentAttendancePanel({

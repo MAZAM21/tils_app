@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/announcement.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
+import 'package:SIL_app/models/announcement.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
 
 class AnnouncementTile extends StatelessWidget {
   final Announcement announcement;

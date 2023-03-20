@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/models/allTextQAs.dart';
-import 'package:tils_app/models/assignment-marks.dart';
-import 'package:tils_app/models/resource.dart';
-import 'package:tils_app/models/student_rank.dart';
+import 'package:SIL_app/models/allTextQAs.dart';
+import 'package:SIL_app/models/assignment-marks.dart';
+import 'package:SIL_app/models/resource.dart';
+import 'package:SIL_app/models/student_rank.dart';
 
 import '../models/teacher-user-data.dart';
 import '../models/announcement.dart';

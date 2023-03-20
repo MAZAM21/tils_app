@@ -1,10 +1,11 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/start-end-time.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/widgets/button-styles.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/answer-choice-input.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/start-end-time.dart';
 
 ///This is the main RA creation page where you input questions
 class RemoteAssessmentInput extends StatefulWidget {
@@ -84,7 +85,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
       appBar: AppBar(
         title: Text(
           'Remote Assessment',
-          style: Theme.of(context).appBarTheme.textTheme.caption,
+          style: Theme.of(context).appBarTheme.toolbarTextStyle,
         ),
         actions: <Widget>[
           TextButton(
@@ -102,7 +103,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -181,10 +182,9 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                       maxLines: 3,
                       minLines: 2,
                     ),
+                    SizedBox(height: 20,),
                     if (_isMCQ)
-                      ElevatedButton(
-                        child: Text('Add Answer Choices'),
-                        onPressed: () {
+                      RedButtonMain(child: 'Add Answer Choices', onPressed: () {
                           _formKey.currentState.save();
 
                           if (queController.text.isNotEmpty) {
@@ -199,8 +199,8 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                               ),
                             );
                           }
-                        },
-                      ),
+                        },),
+                     
                     if (!_isMCQ)
                       ElevatedButton(
                         child: Text('Add Question'),

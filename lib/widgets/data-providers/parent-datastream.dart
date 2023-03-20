@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/parent-user-data.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/parent-screens/parent-home.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/parent-user-data.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/widgets/parent-screens/parent-home.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 class ParentDataStream extends StatelessWidget {
   final db = DatabaseService();

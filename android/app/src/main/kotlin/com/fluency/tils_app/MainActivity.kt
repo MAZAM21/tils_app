@@ -1,4 +1,4 @@
-package com.fluency.tils_app
+package com.fluency.SIL_app
 
 import io.flutter.embedding.android.FlutterActivity
 

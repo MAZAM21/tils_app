@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/student-user-data.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/student-service.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:tils_app/widgets/student-screens/student_RA/assessment-page.dart';
-import 'package:tils_app/widgets/student-screens/student_RA/student-ra-subject.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/service/student-service.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/student-screens/student_RA/assessment-page.dart';
+import 'package:SIL_app/widgets/student-screens/student_RA/student-ra-subject.dart';
 
 class StudentRADisplay extends StatefulWidget {
   StudentRADisplay({@required this.subject});
@@ -52,7 +52,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
             appBar: AppBar(
               title: Text(
                 'Assessments Main',
-                style: Theme.of(context).appBarTheme.textTheme.caption,
+                style: Theme.of(context).appBarTheme.toolbarTextStyle,
               ),
             ),
             body: SingleChildScrollView(

@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.fluency" "\0"
-            VALUE "FileDescription", "tils_app" "\0"
+            VALUE "FileDescription", "SIL_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "tils_app" "\0"
+            VALUE "InternalName", "SIL_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.fluency. All rights reserved." "\0"
-            VALUE "OriginalFilename", "tils_app.exe" "\0"
-            VALUE "ProductName", "tils_app" "\0"
+            VALUE "OriginalFilename", "SIL_app.exe" "\0"
+            VALUE "ProductName", "SIL_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

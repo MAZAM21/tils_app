@@ -1,39 +1,39 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:tils_app/main.dart';
+import 'package:SIL_app/main.dart';
 
-import 'package:tils_app/models/meeting.dart';
-import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/models/teacher-user-data.dart';
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/meeting.dart';
+import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/student_rank.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/button-row-webmain.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/button-row-webmain.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/results/result-main.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 
-import 'package:tils_app/widgets/student-screens/student_home/classes-grid.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/classes-grid.dart';
 
 import './class-timer-panel.dart';
 import 'package:provider/provider.dart';
-import 'package:tils_app/service/teachers-service.dart';
-import 'package:tils_app/widgets/drawer.dart';
+import 'package:SIL_app/service/teachers-service.dart';
+import 'package:SIL_app/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';

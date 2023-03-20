@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:tils_app/models/subject-class.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/models/subject-class.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 import './class_record_detail.dart';
 

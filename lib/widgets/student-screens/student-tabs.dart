@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tils_app/widgets/student-screens/rankings/student-ranking-display.dart';
+import 'package:SIL_app/widgets/student-screens/rankings/student-ranking-display.dart';
 
-import 'package:tils_app/widgets/student-screens/student-drawer.dart';
-import 'package:tils_app/widgets/student-screens/student-newsfeed/student-newsfeed.dart';
+import 'package:SIL_app/widgets/student-screens/student-drawer.dart';
+import 'package:SIL_app/widgets/student-screens/student-newsfeed/student-newsfeed.dart';
 
 import './student_home/student_home.dart';
 
