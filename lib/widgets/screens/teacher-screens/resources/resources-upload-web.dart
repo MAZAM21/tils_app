@@ -56,7 +56,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
       results = await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'mp4', 'mp3'],
+        allowedExtensions: ['pdf', 'doc', 'mp4', 'mp3', 'docx'],
       );
     } catch (e) {
       // User canceled the picker
@@ -64,7 +64,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
 
     if (results != null) {
       setState(() {
-        resUp.resourceFiles = results.files;
+        resUp.resourceFiles.addAll(results.files);
       });
     }
   }

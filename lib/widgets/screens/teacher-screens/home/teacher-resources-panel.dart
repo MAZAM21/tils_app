@@ -11,6 +11,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-upload-web.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/resources/select-resources-subjects.dart';
 
 class TeacherResourcesPanel extends StatelessWidget {
   TeacherResourcesPanel({
@@ -24,15 +25,16 @@ class TeacherResourcesPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final amList = Provider.of<List<AMfromDB>>(context);
+     final resources = Provider.of<List<ResourceDownload>>(context);
+    int totalNumRes = resources.length;
+    List<ResourceDownload> topThree = [];
+    bool _isActive = false;
 
-    // int totalNumAM = amList.length;
-    // List<AMfromDB> topThree = [];
-
-    // if (amList.isNotEmpty) {
-    //   topThree = ts.getTopThreeAM(amList, teacherData);
-    //   print(topThree.length);
-    // }
+    if (resources.isNotEmpty) {
+      topThree = ts.getTopThreeRes(resources, teacherData);
+      print(topThree.length);
+      _isActive = true;
+    }
 
     return Container(
       width: 400,
@@ -43,7 +45,20 @@ class TeacherResourcesPanel extends StatelessWidget {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                 
+                 Navigator.of(context).push(
+                        MaterialPageRoute(
+                          settings:
+                              RouteSettings(name: '/select-subject-resource'),
+                          builder: (BuildContext context) =>
+                              ChangeNotifierProvider.value(
+                            value: teacherData,
+                            child: SelectSubjectResource(
+                              teacher: teacherData,
+                              subs: teacherData.subjects,
+                            ),
+                          ),
+                        ),
+                      );
                 },
                 child: Text(
                   'Resources',
@@ -82,24 +97,34 @@ class TeacherResourcesPanel extends StatelessWidget {
             ],
           ),
           Container(
-            child: ListTile(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    tileColor: Colors.white,
-                    title: Text(
-                      'None Added',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                    subtitle: Text(
-                      '',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Proxima Nova',
-                        color: Color(0xff5F686F),
-                      ),
-                    ),
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: topThree.length,
+                    shrinkWrap: true,
+                    itemBuilder: (ctx, i) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.5),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          tileColor: Colors.white,
+                          title: Text(
+                            '${topThree[i].topic}',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          subtitle: Text(
+                            '${topThree[i].subject}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Proxima Nova',
+                              color: Color(0xff5F686F),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-          ),
+                ),
           
           
         ],

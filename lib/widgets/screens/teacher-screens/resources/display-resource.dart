@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -48,51 +49,57 @@ class _DisplayResourceState extends State<DisplayResource> {
     List<Widget> children = [];
     for (int i = 0; i < widget.resourceDownload.urlMap.length; i++) {
       if (widget.resourceDownload.urlMap.keys.elementAt(i).endsWith('.mp4')) {
-        children.add(GestureDetector(
-          onTap: () {
-            if (!_isInitialized[i]) {
-              _controllers[i]
-                ..initialize().then((_) {
+        children.add(Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: GestureDetector(
+              onTap: () {
+                if (!_isInitialized[i]) {
+                  _controllers[i]
+                    ..initialize().then((_) {
+                      setState(() {
+                        _isInitialized[i] = true;
+                        _isPlaying[i] = true;
+                      });
+                      _controllers[i].play();
+                    });
+                } else {
                   setState(() {
-                    _isInitialized[i] = true;
-                    _isPlaying[i] = true;
+                    _isPlaying[i] = !_isPlaying[i];
                   });
-                  _controllers[i].play();
-                });
-            } else {
-              setState(() {
-                _isPlaying[i] = !_isPlaying[i];
-              });
-              if (_isPlaying[i]) {
-                _controllers[i].play();
-              } else {
-                _controllers[i].pause();
-              }
-            }
-          },
-          child: AspectRatio(
-            aspectRatio: _controllers[i].value.aspectRatio,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                VideoPlayer(_controllers[i]),
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 1000),
-                  reverseDuration: Duration(milliseconds: 1000),
-                  child: _isPlaying[i]
-                      ? SizedBox.shrink()
-                      : Container(
-                          color: Colors.black26,
-                          child: Center(
-                            child: Icon(
-                              Icons.play_arrow,
-                              size: 50.0,
-                              color: Colors.white,
+                  if (_isPlaying[i]) {
+                    _controllers[i].play();
+                  } else {
+                    _controllers[i].pause();
+                  }
+                }
+              },
+              child: AspectRatio(
+                aspectRatio: _controllers[i].value.aspectRatio,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    VideoPlayer(_controllers[i]),
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 1000),
+                      reverseDuration: Duration(milliseconds: 1000),
+                      child: _isPlaying[i]
+                          ? SizedBox.shrink()
+                          : Container(
+                              color: Colors.black26,
+                              child: Center(
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  size: 50.0,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ));
@@ -103,15 +110,27 @@ class _DisplayResourceState extends State<DisplayResource> {
           onTap: () async {
             final url = widget.resourceDownload.urlMap.values.elementAt(i);
             final fileName = widget.resourceDownload.urlMap.keys.elementAt(i);
-            setState(() {
-              Permission.storage.request().then((value) {
-                if (value.isGranted) {
-                  _db.downloadFile(url, fileName);
-                } else {
-                  return null;
-                }
+            if (defaultTargetPlatform == TargetPlatform.android) {
+              setState(() {
+                Permission.storage.request().then((value) {
+                  if (value.isGranted) {
+                    _db.downloadFile(url, fileName);
+                  } else {
+                    return null;
+                  }
+                });
               });
-            });
+            } else {
+              String webUrl;
+
+              webUrl = await _db.downloadFileWeb(url, fileName);
+
+              if (await canLaunchUrl(Uri.parse(webUrl))) {
+                await launchUrl(Uri.parse(webUrl));
+              } else {
+                throw 'Could not launch $url';
+              }
+            }
           },
         ));
       }

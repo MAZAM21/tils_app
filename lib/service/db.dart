@@ -31,6 +31,8 @@ import '../models/subject-class.dart';
 import '../models/assessment-result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:html' as html;
 
 class DatabaseService with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -244,11 +246,18 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  Future<String> downloadFileWeb(String downloadUrl, String fileName) async {
+    final httpsReference = FirebaseStorage.instance.refFromURL(downloadUrl);
+    final webUrl = await httpsReference.getDownloadURL();
+    return webUrl;
+
+   
+  }
+
   Future<void> downloadFile(String url, String fileName) async {
     final Reference storage = FirebaseStorage.instance.ref();
 
     final httpsReference = FirebaseStorage.instance.refFromURL(url);
-   
 
     final appDocDir = await getApplicationDocumentsDirectory();
     final filePath = "${appDocDir.path}/${httpsReference.name}";
