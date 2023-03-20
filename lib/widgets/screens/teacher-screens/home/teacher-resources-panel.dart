@@ -43,16 +43,7 @@ class TeacherResourcesPanel extends StatelessWidget {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     settings: RouteSettings(name: '/assignment-main'),
-                  //     builder: (BuildContext context) =>
-                  //         ChangeNotifierProvider.value(
-                  //       value: teacherData,
-                  //       child: AssignmentMain(),
-                  //     ),
-                  //   ),
-                  // );
+                 
                 },
                 child: Text(
                   'Resources',

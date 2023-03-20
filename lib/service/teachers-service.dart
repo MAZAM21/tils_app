@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/student_rank.dart';
 
 import '../models/teacher-user-data.dart';
@@ -53,6 +54,39 @@ class TeacherService with ChangeNotifier {
     });
     String stat = '$marked / $total';
     return stat;
+  }
+
+  List<ResourceDownload> getSubResources(
+      String sub, List<ResourceDownload> resList) {
+    List<ResourceDownload> subResList = [];
+    resList.forEach((res) {
+      if (res.subject == sub) {
+        subResList.add(res);
+      }
+    });
+    return subResList;
+  }
+
+  List<ResourceDownload> getTopThreeRes(
+    List<ResourceDownload> allRes,
+    TeacherUser tdata,
+  ) {
+    List<ResourceDownload> myRes = [];
+    final List<String> subjects = tdata.subjects;
+    allRes.forEach((res) {
+     
+      if (subjects.contains(res.subject)) {
+        myRes.add(res);
+      }
+    });
+    myRes.sort((a, b) => b.date.compareTo(a.date));
+    List<ResourceDownload> topthree;
+    if (myRes.length > 3) {
+      topthree = myRes.sublist(0, 3);
+    } else {
+      topthree = myRes;
+    }
+    return topthree;
   }
 
   ///Get top three assingments for teachers assignment panel

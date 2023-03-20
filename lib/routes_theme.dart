@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
@@ -59,6 +60,10 @@ class RoutesAndTheme extends StatelessWidget {
           create: (ctx) => db.streamClasses(),
           initialData: [],
         ),
+        StreamProvider<List<ResourceDownload>>(
+          create: (ctx) => db.streamResource(),
+          initialData: [],
+        ),
         StreamProvider<User>(
           create: (ctx) => db.authStateStream(),
           initialData: null,
@@ -82,7 +87,7 @@ class RoutesAndTheme extends StatelessWidget {
       ],
       child: MaterialApp(
         initialRoute: '/',
-        theme: ThemeData(        
+        theme: ThemeData(
           elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
