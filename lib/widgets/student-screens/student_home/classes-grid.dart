@@ -19,16 +19,16 @@ class MyClassesGrid extends StatelessWidget {
     return !isActive
         ? SizedBox(height: 10, width: 10,)
         : Container(
-          height: 140,
+          height: 200,
           child: GridView.builder(
               itemCount: myClasses.length,
               scrollDirection: Axis.horizontal,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                mainAxisExtent: 138,
-                maxCrossAxisExtent: 140,
+                mainAxisExtent: 200,
+                maxCrossAxisExtent: 200,
                 childAspectRatio: 1,
                 crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+                mainAxisSpacing: 30,
               ),
               itemBuilder: (context, i) {
                 return Container(
@@ -37,8 +37,8 @@ class MyClassesGrid extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Container(
-                          height: 86,
-                          width: 138,
+                          height: 124,
+                          width: 200,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: AssetImage(

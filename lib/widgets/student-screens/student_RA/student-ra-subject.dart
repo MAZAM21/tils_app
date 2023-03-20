@@ -56,7 +56,7 @@ class StudentRASubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.titleTextStyle,
+          style: Theme.of(context).appBarTheme.toolbarTextStyle,
         ),
       ),
       body: SingleChildScrollView(

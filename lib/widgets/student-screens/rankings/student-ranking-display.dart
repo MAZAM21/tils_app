@@ -122,6 +122,35 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
   //   );
   // }
 
+   Widget _filterButtonFirstWeb({String text, String filterText}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: _filter == text
+                ? MaterialStateProperty.all(Color(0xffC54134))
+                : MaterialStateProperty.all(Color(0xffDEE4ED)),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
+            )),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'Proxima Nova',
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: _filter == text ? Colors.white : Colors.black,
+          ),
+        ),
+        onPressed: () {
+          setState(() {
+            _filter = '$filterText';
+          });
+        },
+      ),
+    );
+  }
+
   Widget _filterButtonSubject({
     String text,
     String filterText,
@@ -204,19 +233,19 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: <Widget>[
-                              _filterButtonFirst(
+                              _filterButtonFirstWeb(
                                 filterText: 'Year',
                                 text: 'Year',
                               ),
-                              _filterButtonFirst(
+                              _filterButtonFirstWeb(
                                 filterText: 'Attendance',
                                 text: 'Attendance',
                               ),
-                              _filterButtonFirst(
+                              _filterButtonFirstWeb(
                                 filterText: 'Assignments',
                                 text: 'Assignments',
                               ),
-                              _filterButtonFirst(
+                              _filterButtonFirstWeb(
                                 filterText: 'Subject',
                                 text: 'Subject',
                               ),
@@ -232,6 +261,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     for (var x = 0;
                                         x < yearSub['$_subYearFilter'].length;

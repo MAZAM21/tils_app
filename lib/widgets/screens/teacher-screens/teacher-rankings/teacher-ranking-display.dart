@@ -214,154 +214,163 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                     SizedBox(
                       height: 40,
                     ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'Attendance Percentage',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          '(',
-                          style: TextStyle(
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Text(
-                          '$present  ',
-                          style: TextStyle(
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.green[600],
-                          ),
-                        ),
-                        Text(
-                          '$late  ',
-                          style: TextStyle(
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.yellow[900],
-                          ),
-                        ),
-                        Text(
-                          '$absent',
-                          style: TextStyle(
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.red[800],
-                          ),
-                        ),
-                        Text(
-                          ')   ',
-                          style: TextStyle(
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        Text(
-                          '${rs.attendancePercentage(stud)}% ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'Total Score (Year)',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          '${stud.yearScore.toInt()} ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'Assignment Score',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          '${stud.assignmentScore.toInt()} ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    for (var x = 0; x < stud.subjects.length; x++)
-                      Row(
+                    Container(
+                      width: 600,
+                      child: Column(children: <Widget>[
+                        Row(
                         children: <Widget>[
                           Text(
-                            '${stud.subjects[x]}',
+                            'Attendance Percentage',
                             style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Proxima Nova',
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Spacer(),
                           Text(
-                            stud.raSubScore['${stud.subjects[x]}'] == null
-                                ? '0'
-                                : '${stud.raSubScore['${stud.subjects[x]}']}',
+                            '(',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            '$present  ',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.green[600],
+                            ),
+                          ),
+                          Text(
+                            '$late  ',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.yellow[900],
+                            ),
+                          ),
+                          Text(
+                            '$absent',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red[800],
+                            ),
+                          ),
+                          Text(
+                            ')   ',
+                            style: TextStyle(
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text(
+                            '${rs.attendancePercentage(stud)}% ',
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Proxima Nova',
                               fontWeight: FontWeight.w600,
-                              color: Colors.grey[700],
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ],
                       ),
-                    SizedBox(
-                      height: 15,
+                      SizedBox(
+                        height: 35,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            'Total Score (Year)',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${stud.yearScore.toInt()} ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 35,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            'Assignment Score',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            '${stud.assignmentScore.toInt()} ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Proxima Nova',
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 35,
+                      ),
+                      for (var x = 0; x < stud.subjects.length; x++)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Text(
+                                '${stud.subjects[x]}',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Spacer(),
+                              Text(
+                                stud.raSubScore['${stud.subjects[x]}'] == null
+                                    ? '0'
+                                    : '${stud.raSubScore['${stud.subjects[x]}']}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      SizedBox(
+                        height: 35,
+                      ),
+                      ],),
                     ),
+                    
                   ],
                 ),
               ),

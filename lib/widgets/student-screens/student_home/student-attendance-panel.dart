@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:SIL_app/models/student-user-data.dart';
@@ -35,7 +36,8 @@ class StudentAttendancePanel extends StatelessWidget {
     }
     return !isActive
         ? LoadingScreen()
-        : Container(
+        : defaultTargetPlatform == TargetPlatform.android ||
+           defaultTargetPlatform == TargetPlatform.iOS ?  Container(
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
@@ -181,6 +183,155 @@ class StudentAttendancePanel extends StatelessWidget {
                 ),
               ],
             ),
-          );
+          ) :
+          //WEB
+          Container(
+            width: 400,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            settings: RouteSettings(
+                                name: '/student-attendance-record'),
+                            builder: (BuildContext context) =>
+                                ChangeNotifierProvider.value(
+                              value: studData,
+                              child: StudentAttendanceRecord(),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Attendance',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ),
+                    Text(
+                      '($perc%)',
+                      style: TextStyle(
+                        color: Color(0xff5f686f),
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Spacer(),
+                    Text(
+                      '$present  ',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.green[600],
+                      ),
+                    ),
+                    Text(
+                      '$late  ',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.yellow[900],
+                      ),
+                    ),
+                    Text(
+                      '$absent',
+                      style: TextStyle(
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red[800],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    )
+                  ],
+                ),
+                Container(
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: topThree.length,
+                    shrinkWrap: true,
+                    itemBuilder: (ctx, i) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.5),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          tileColor: Colors.white,
+                          trailing: studData.attendance['${topThree[i].id}'] ==
+                                  1
+                              ? Text(
+                                  'Present',
+                                  style: TextStyle(
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green[600],
+                                  ),
+                                )
+                              : studData.attendance['${topThree[i].id}'] == 2
+                                  ? Text(
+                                      'Late',
+                                      style: TextStyle(
+                                        fontFamily: 'Proxima Nova',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.yellow[900],
+                                      ),
+                                    )
+                                  : studData.attendance['${topThree[i].id}'] ==
+                                          3
+                                      ? Text(
+                                          'Absent',
+                                          style: TextStyle(
+                                            fontFamily: 'Proxima Nova',
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red[800],
+                                          ),
+                                        )
+                                      : null,
+                          title: topThree[i].topic == ''
+                              ? Text(
+                                  '${topThree[i].subjectName}',
+                                  style: Theme.of(context).textTheme.headline4,
+                                )
+                              : Text(
+                                  '${topThree[i].subjectName} ${topThree[i].topic}',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                          subtitle: Text(
+                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Proxima Nova',
+                              color: Color(0xff5F686F),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 19,
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ); 
   }
 }

@@ -1,5 +1,6 @@
 import 'package:SIL_app/models/meeting.dart';
 import 'package:SIL_app/models/remote_assessment.dart';
+import 'package:SIL_app/models/resource.dart';
 import 'package:SIL_app/models/student-user-data.dart';
 import 'package:SIL_app/models/subject-class.dart';
 
@@ -64,6 +65,17 @@ class StudentService {
     return a;
   }
 
+  List<ResourceDownload> getSubResources(
+      String sub, List<ResourceDownload> resList) {
+    List<ResourceDownload> subResList = [];
+    resList.forEach((res) {
+      if (res.subject == sub) {
+        subResList.add(res);
+      }
+    });
+    return subResList;
+  }
+
   ///Gets top three classes for which attendance would have been marked
   ///to display on homepage attendance panel of student
   List<SubjectClass> getTopThreeAtt(
@@ -106,6 +118,28 @@ class StudentService {
       stat = true;
     }
     return stat;
+  }
+
+  List<ResourceDownload> getTopThreeRes(
+    List<ResourceDownload> allRes,
+    StudentUser stdata,
+  ) {
+    List<ResourceDownload> myRes = [];
+    final List<String> subjects = stdata.subjects;
+    allRes.forEach((res) {
+     
+      if (subjects.contains(res.subject)) {
+        myRes.add(res);
+      }
+    });
+    myRes.sort((a, b) => b.date.compareTo(a.date));
+    List<ResourceDownload> topthree;
+    if (myRes.length > 3) {
+      topthree = myRes.sublist(0, 3);
+    } else {
+      topthree = myRes;
+    }
+    return topthree;
   }
 
   ///Gets top three assessments for students assessment panel

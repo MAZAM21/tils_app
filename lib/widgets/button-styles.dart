@@ -14,16 +14,17 @@ class RedButtonMain extends StatelessWidget {
       child: Text(
         '$child',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: 'Proxima Nova',
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w400,
+          overflow: TextOverflow.visible,
         ),
       ),
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
         minimumSize: MaterialStateProperty.all(Size(107, 25)),
-        fixedSize: MaterialStateProperty.all(Size(200, 47)),
+        fixedSize: MaterialStateProperty.all(Size(165, 37)),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
         ),
@@ -44,16 +45,17 @@ class WhiteButtonMain extends StatelessWidget {
       child: Text(
         '$child',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 14,
           fontFamily: 'Proxima Nova',
           color: Color(0xff000000),
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w400,
+          overflow: TextOverflow.visible
         ),
       ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(Color(0xffffffff)),
           minimumSize: MaterialStateProperty.all(Size(107, 25)),
-          fixedSize: MaterialStateProperty.all(Size(200, 47)),
+          fixedSize: MaterialStateProperty.all(Size(165, 37)),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
           )),

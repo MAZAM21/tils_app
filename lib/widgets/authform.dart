@@ -133,8 +133,8 @@ class _AuthFormState extends State<AuthForm> {
                                 cursorColor: Colors.white,
                                 key: ValueKey('password'),
                                 validator: (value) {
-                                  if (value.isEmpty || value.length < 7) {
-                                    return 'Password must be at least 7 characters long.';
+                                  if (value.isEmpty || value.length < 6) {
+                                    return 'Password must be at least 6 characters long.';
                                   }
                                   return null;
                                 },
@@ -273,8 +273,8 @@ class _AuthFormState extends State<AuthForm> {
                                   cursorColor: Colors.white,
                                   key: ValueKey('password'),
                                   validator: (value) {
-                                    if (value.isEmpty || value.length < 7) {
-                                      return 'Password must be at least 7 characters long.';
+                                    if (value.isEmpty || value.length < 6) {
+                                      return 'Password must be at least 6 characters long.';
                                     }
                                     return null;
                                   },

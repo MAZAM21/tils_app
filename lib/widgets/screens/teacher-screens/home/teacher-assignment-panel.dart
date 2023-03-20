@@ -151,8 +151,11 @@ class TeacherAssignmentPanel extends StatelessWidget {
               )
             ],
           )
+
+          //WEB
+
         : Container(
-          width: 500,
+          width: 400,
           child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
