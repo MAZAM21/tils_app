@@ -8,6 +8,7 @@ import 'package:video_player/video_player.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 class DisplayResource extends StatefulWidget {
   final ResourceDownload resourceDownload;
@@ -104,11 +105,9 @@ class _DisplayResourceState extends State<DisplayResource> {
             final url = widget.resourceDownload.urlMap.values.elementAt(i);
             final fileName = widget.resourceDownload.urlMap.keys.elementAt(i);
             final webUrl = await _db.downloadWithUrl(url);
-            if (await canLaunchUrl(Uri.parse(webUrl))) {
-              await launchUrl(Uri.parse(webUrl));
-            } else {
-              throw 'Could not launch $url';
-            }
+            
+              FileDownloader.downloadFile(url: webUrl);
+           
           },
         ));
       }

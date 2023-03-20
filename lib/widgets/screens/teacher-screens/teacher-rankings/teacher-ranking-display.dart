@@ -545,12 +545,16 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                               : 30,
                                         ),
                                       SizedBox(width: 11),
-                                      Text(
-                                        '${students[i].name}',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontFamily: 'Proxima Nova',
-                                          fontWeight: FontWeight.w700,
+                                      Container(
+                                        width: 180,
+                                        child: Text(
+                                          '${students[i].name}',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: 'Proxima Nova',
+                                            fontWeight: FontWeight.w700,
+                                            overflow: TextOverflow.fade,
+                                          ),
                                         ),
                                       ),
                                       Spacer(),
