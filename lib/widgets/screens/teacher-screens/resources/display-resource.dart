@@ -103,15 +103,12 @@ class _DisplayResourceState extends State<DisplayResource> {
           onTap: () async {
             final url = widget.resourceDownload.urlMap.values.elementAt(i);
             final fileName = widget.resourceDownload.urlMap.keys.elementAt(i);
-            setState(() {
-              Permission.storage.request().then((value) {
-                if (value.isGranted) {
-                  _db.downloadFile(url, fileName);
-                } else {
-                  return null;
-                }
-              });
-            });
+            final webUrl = await _db.downloadWithUrl(url);
+            if (await canLaunchUrl(Uri.parse(webUrl))) {
+              await launchUrl(Uri.parse(webUrl));
+            } else {
+              throw 'Could not launch $url';
+            }
           },
         ));
       }

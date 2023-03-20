@@ -216,6 +216,12 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  Future<String> downloadWithUrl (String url)async  {
+    final httpsReference = FirebaseStorage.instance.refFromURL(url);
+    final webUrl = await httpsReference.getDownloadURL();
+    return webUrl;
+  }
+
   Future<void> downloadFile(String url, String fileName) async {
     final Reference storage = FirebaseStorage.instance.ref();
 

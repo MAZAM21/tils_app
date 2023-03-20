@@ -112,37 +112,7 @@ class TeacherResourcesPanel extends StatelessWidget {
                   },
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      settings: RouteSettings(name: '/manage-studs'),
-                      builder: (BuildContext context) =>
-                          ChangeNotifierProvider.value(
-                        value: teacherData,
-                        child: ManageStudents(),
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Manage Students',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Proxima Nova',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all(Color(0xffC54134)),
-                    minimumSize: MaterialStateProperty.all(Size(107, 25)),
-                    fixedSize: MaterialStateProperty.all(Size(145, 27)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(23)),
-                    )),
-              )
+              
             ],
           )
         : CircularProgressIndicator();
