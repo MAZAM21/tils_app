@@ -195,31 +195,34 @@ class _EditTTFormState extends State<EditTTForm> {
 //subject option buttons,
 //set _subName.
   Widget buildSubjectButton(String subName) {
-    return ElevatedButton(
-      child: Text(
-        subName == 'Jurisprudence' ? 'Juris' : subName,
-        style: TextStyle(
-          fontSize: 12.5,
-          fontFamily: 'Proxima Nova',
-          fontWeight: FontWeight.w600,
-          color: _subName == checkSubject(subName)
-              ? Color(0xffffffff)
-              : Color(0xff161616),
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: ElevatedButton(
+        child: Text(
+          subName == 'Jurisprudence' ? 'Juris' : subName,
+          style: TextStyle(
+            fontSize: 12.5,
+            fontFamily: 'Proxima Nova',
+            fontWeight: FontWeight.w600,
+            color: _subName == checkSubject(subName)
+                ? Color(0xffffffff)
+                : Color(0xff161616),
+          ),
         ),
-      ),
-      onPressed: () {
-        setState(() {
-          setSubject(subName);
-        });
-        print(_subName);
-      },
-      style: ButtonStyle(
-        elevation: MaterialStateProperty.all(0),
-        minimumSize: MaterialStateProperty.all(Size(40, 25)),
-        fixedSize: MaterialStateProperty.all(Size(107, 38)),
-        backgroundColor: _subName == checkSubject(subName)
-            ? MaterialStateProperty.all(Color(0xffc54134))
-            : MaterialStateProperty.all(Color(0xfff4f6f9)),
+        onPressed: () {
+          setState(() {
+            setSubject(subName);
+          });
+          print(_subName);
+        },
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0),
+          minimumSize: MaterialStateProperty.all(Size(40, 25)),
+          fixedSize: MaterialStateProperty.all(Size(107, 38)),
+          backgroundColor: _subName == checkSubject(subName)
+              ? MaterialStateProperty.all(Color(0xffc54134))
+              : MaterialStateProperty.all(Color(0xfff4f6f9)),
+        ),
       ),
     );
   }

@@ -182,7 +182,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                       maxLines: 3,
                       minLines: 2,
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 40,),
                     if (_isMCQ)
                       RedButtonMain(child: 'Add Answer Choices', onPressed: () {
                           _formKey.currentState.save();
@@ -202,8 +202,8 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                         },),
                      
                     if (!_isMCQ)
-                      ElevatedButton(
-                        child: Text('Add Question'),
+                      RedButtonMain(
+                        child: 'Add Question',
                         onPressed: () {
                           if (queController.text.isNotEmpty) {
                             setState(() {
@@ -219,6 +219,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                           }
                         },
                       ),
+                      SizedBox(height: 20,),
                     Switch(
                       value: _isMCQ,
                       onChanged: (option) {
@@ -226,15 +227,18 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                           _isMCQ = option;
                         });
                       },
-                      inactiveThumbColor: Colors.teal,
-                      inactiveTrackColor: Colors.tealAccent,
-                      activeColor: Colors.indigo,
+                      inactiveThumbColor: Colors.white,
+                      inactiveTrackColor: Colors.grey,
+                      activeColor: Theme.of(context).primaryColor,
                     ),
                     Text(_isMCQ ? 'MCQ' : 'Text'),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Divider(),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Column(
                       children: <Widget>[
                         TextButton(
@@ -248,6 +252,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                             });
                           },
                         ),
+                        SizedBox(height: 20,),
                         Row(
                           children: <Widget>[
                             Spacer(),

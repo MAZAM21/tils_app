@@ -42,7 +42,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good morning,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -65,7 +65,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good afternoon,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -88,7 +88,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good evening,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -99,7 +99,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                 Text(
                   '${teacherData.name}',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 18,
                     fontFamily: 'Proxima Nova',
                     fontWeight: FontWeight.w700,
                     color: Color(0xff2A353F),
@@ -140,7 +140,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good morning,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -163,7 +163,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good afternoon,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -186,7 +186,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                       Text(
                         'Good evening,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           color: Color(0xff5F686F),
@@ -197,7 +197,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                 Text(
                   '${teacherData.name}',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 18,
                     fontFamily: 'Proxima Nova',
                     fontWeight: FontWeight.w700,
                     color: Color(0xff2A353F),
