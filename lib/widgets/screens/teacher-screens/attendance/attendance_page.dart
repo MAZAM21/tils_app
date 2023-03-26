@@ -9,7 +9,6 @@ import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 
-
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';
   // final List<SubjectClass> allClassesAdded;
@@ -21,32 +20,46 @@ class AttendancePage extends StatelessWidget {
     final classData = Provider.of<List<SubjectClass>>(context);
     final studList = Provider.of<List<StudentRank>>(context);
     final teacherData = Provider.of<TeacherUser>(context);
+    print(teacherData.name);
+    print(teacherData.subjects);
     final myClasses = ts.getMyAttendance(classData, teacherData.subjects);
+    for (var cls in myClasses) {
+      print('classes : ${cls.subjectName}');
+    }
     bool isActive = false;
     bool classesAdded = false;
     if (classData != null && studList != null) {
       isActive = true;
     }
-    if (myClasses != null) {
+    if (myClasses.isNotEmpty) {
       classesAdded = true;
     }
     return !isActive
         ? LoadingScreen()
         : Scaffold(
-          appBar: AppBar(),
-            body: ListView.builder(
-              itemCount: myClasses.length,
-              itemBuilder: (ctx, i) {
-                String trail =
-                    ts.getAttendanceIndicator(studList, myClasses[i]);
-                return !classesAdded
-                    ? Text(
-                        'No Classes Scheduled',
-                        style: Theme.of(context).textTheme.headline4,
-                      )
-                    : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
+            appBar: AppBar(title: Text('Attendance', style: Theme.of(context).appBarTheme.toolbarTextStyle,),),
+            body: !classesAdded
+                ? Center(
+                    child: Wrap(children: [
+                      Text(
+                        'None of ${teacherData.name}\'s classes scheduled',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontFamily: 'Proxima Nova',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ]),
+                  )
+                : ListView.builder(
+                    itemCount: myClasses.length,
+                    itemBuilder: (ctx, i) {
+                      String trail =
+                          ts.getAttendanceIndicator(studList, myClasses[i]);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: ListTile(
                           tileColor: Colors.white,
                           title: myClasses[i].topic == ''
                               ? Text(
@@ -90,9 +103,9 @@ class AttendancePage extends StatelessWidget {
                             );
                           },
                         ),
-                    );
-              },
-            ),
+                      );
+                    },
+                  ),
           );
   }
 }

@@ -383,6 +383,7 @@ class TeacherService with ChangeNotifier {
     /// all classes with teachers subs get separated
     allClasses.forEach((cls) {
       if (subs.contains(cls.subjectName)) {
+        print('sub name in attendance list:${cls.subjectName}');
         myClasses.add(cls);
       }
     });
@@ -409,7 +410,7 @@ class TeacherService with ChangeNotifier {
     // } else {
     //   displayClasses = allClasses;
     // }
-    displayClasses = allClasses;
+    displayClasses = myClasses;
 
     displayClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
     return displayClasses;
