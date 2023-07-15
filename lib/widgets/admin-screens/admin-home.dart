@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
-import '';
 import 'dart:async';
 import 'dart:convert';
 
 class AdminHome extends StatefulWidget {
-  const AdminHome({Key key}) : super(key: key);
+  const AdminHome({Key? key}) : super(key: key);
 
   @override
   _AdminHomeState createState() => _AdminHomeState();
@@ -70,7 +69,7 @@ class _AdminHomeState extends State<AdminHome> {
       appBar: AppBar(
         title: Text(
           'BLS Admin Portal',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
       ),
       body: SingleChildScrollView(

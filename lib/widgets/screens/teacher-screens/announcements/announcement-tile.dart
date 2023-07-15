@@ -7,12 +7,12 @@ class AnnouncementTile extends StatelessWidget {
 
   const AnnouncementTile(
     this.announcement, {
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String imagePath;
+    String? imagePath;
     if (announcement.category == 'uol') {
       imagePath = 'lib/assets/uol-logo.png';
     } else if (announcement.category == 'bls') {

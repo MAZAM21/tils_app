@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'package:emojis/emoji.dart';
 import 'package:emojis/emojis.dart';
 import 'package:SIL_app/models/metrics.dart';
 
@@ -10,11 +9,11 @@ class MetricService {
     var metAchievment = MetricAchievement();
 
     metrics.forEach((m) {
-      if (m.name == 'assignment-marks' && !m.allZero) {
+      if (m.name == 'assignment-marks' && !m.allZero!) {
         /// iterating through the assignment-marks map, we extract the postion from
         /// an already sorted id and marks map. We then store the time and position in a LHM.
         /// LHM is used because it retains the order in which the values were added
-        m.assignmentMarks.forEach((time, idMarks) {
+        m.assignmentMarks!.forEach((time, idMarks) {
           if (idMarks.keys.contains(id)) {
             timePos[time] = idMarks.keys.toList().indexOf(id);
            
@@ -93,9 +92,9 @@ class MetricAchievement {
   ///this object is meant to be used to pass information to metrics panel so the different information may be
   ///displayed in different styles
   ///
-  String achievement;
-  String duration;
-  String emoji;
+  String? achievement;
+  String? duration;
+  String? emoji;
   MetricAchievement({
     this.achievement,
     this.duration,

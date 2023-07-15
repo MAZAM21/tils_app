@@ -15,11 +15,11 @@ class AddStudent extends StatefulWidget {
 class _AddStudentState extends State<AddStudent> {
   final us= UploadService();
   final _formKey = GlobalKey<FormState>();
-  var _userEmail = '';
-  var _userName = '';
-  var _userPassword = '';
-  String _section;
-  var _batch = '';
+  String? _userEmail = '';
+  String? _userName = '';
+  String? _userPassword = '';
+  String? _section;
+  String? _batch = '';
   final db = DatabaseService();
   List<String> years = [
     'First',
@@ -60,13 +60,13 @@ class _AddStudentState extends State<AddStudent> {
           IconButton(
             icon: Icon(Icons.save_outlined),
             onPressed: () {
-              _formKey.currentState.validate();
-              if (_formKey.currentState.validate() &&
+              _formKey.currentState!.validate();
+              if (_formKey.currentState!.validate() &&
                   _year != '' &&
-                  _section.isNotEmpty) {
-                _formKey.currentState.save();
+                  _section!.isNotEmpty) {
+                _formKey.currentState!.save();
                
-                _formKey.currentState.reset();
+                _formKey.currentState!.reset();
                 setState(() {
                   _selectedSubs.clear();
                 });
@@ -97,7 +97,7 @@ class _AddStudentState extends State<AddStudent> {
                       key: ValueKey('name'),
                       keyboardType: TextInputType.text,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter name';
                         }
                         return null;
@@ -112,7 +112,7 @@ class _AddStudentState extends State<AddStudent> {
                       key: ValueKey('email'),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter email address';
                         }
                         return null;
@@ -127,7 +127,7 @@ class _AddStudentState extends State<AddStudent> {
                       key: ValueKey('pass'),
                       keyboardType: TextInputType.visiblePassword,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter password';
                         }
                         return null;
@@ -142,7 +142,7 @@ class _AddStudentState extends State<AddStudent> {
                       key: ValueKey('batch'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'Please enter batch';
                         }
                         return null;
@@ -272,10 +272,10 @@ class _AddStudentState extends State<AddStudent> {
                     ElevatedButton(
                       child: Text('Add students from spreadsheet'),
                       onPressed: () async {
-                        FilePickerResult result = await FilePicker.platform
+                        FilePickerResult? result = await FilePicker.platform
                             .pickFiles(allowMultiple: false);
                         if (result != null) {
-                          var file = result.paths.first;
+                          var file = result.paths.first!;
                           var bytes = File(file).readAsBytesSync();
                           var excel = Excel.decodeBytes(bytes);
                           us.uploadStudentToDB(excel);

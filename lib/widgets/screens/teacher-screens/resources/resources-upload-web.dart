@@ -9,7 +9,7 @@ import 'package:SIL_app/service/db.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
 
 class ResourcesUpload extends StatefulWidget {
-  const ResourcesUpload({Key key}) : super(key: key);
+  const ResourcesUpload({Key? key}) : super(key: key);
 
   @override
   State<ResourcesUpload> createState() => _ResourcesUploadState();
@@ -50,7 +50,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
   }
 
   void pickFiles() async {
-    FilePickerResult results;
+    FilePickerResult? results;
 
     try {
       results = await FilePicker.platform.pickFiles(
@@ -64,7 +64,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
 
     if (results != null) {
       setState(() {
-        resUp.resourceFiles.addAll(results.files);
+        resUp.resourceFiles.addAll(results!.files);
       });
     }
   }
@@ -88,8 +88,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
       /// the inner for loop j and seeing if they are less than subLength
 
       for (int j = 0; j < 3 && i + j < subLength; j++) {
-        if (resUp.subject != null &&
-            '${teacherData.subjects[i + j]}' == resUp.subject) {
+        if ('${teacherData.subjects[i + j]}' == resUp.subject) {
           children.add(RedButtonMain(
               child: '${teacherData.subjects[i + j]}',
               onPressed: () {
@@ -195,7 +194,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           if (!uploadComplete)
-                            StreamBuilder(
+                            StreamBuilder<double?>(
                                 stream: db.uploadResource(resUp),
                                 builder: (context, snapshot) {
                                   if (snapshot.data == 1) {
@@ -204,18 +203,20 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                                     });
                                     return SizedBox.shrink();
                                   }
-                                  if (snapshot.hasData) {
+                                  if (snapshot.data != null) {
                                     final progress = snapshot.data;
 
-                                    return Text(
-                                      'Uploading: ${(progress * 100).toStringAsFixed(2)}%',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    );
+                                    return progress != null
+                                        ? Text(
+                                            'Uploading: ${(progress * 100).toStringAsFixed(2)}%',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontFamily: 'Proxima Nova',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          )
+                                        : Text('');
                                   } else {
                                     return Text(
                                       'Upload Processing',
@@ -304,7 +305,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                       tileColor: Colors.white,
                       title: Text(
                         '${resUp.resourceFiles[i].name}',
-                        style: Theme.of(context).textTheme.headline4,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       // subtitle: Text(
                       //   '${topThree[i].subject}',
@@ -325,7 +326,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                 child: 'Upload',
                 onPressed: () {
                   setState(() {
-                    _formKey.currentState.save();
+                    _formKey.currentState!.save();
                     db.uploadResource(resUp);
                     uploadPressed = true;
                   });

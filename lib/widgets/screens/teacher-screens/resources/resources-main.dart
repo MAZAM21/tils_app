@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:SIL_app/models/resource.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/teachers-service.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/subject-option.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/resources/display-resource.dart';
 
 import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-upload-web.dart';
@@ -15,8 +11,8 @@ import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-uplo
 class ResourcesMain extends StatefulWidget {
   static const routeName = '/resource-main';
   const ResourcesMain({
-    Key key,
-    @required this.sub,
+    Key? key,
+    required this.sub,
   }) : super(key: key);
   final String sub;
 
@@ -32,10 +28,10 @@ class _ResourcesMainState extends State<ResourcesMain> {
     final userData = Provider.of<TeacherUser>(context);
 
     List<ResourceDownload> subRes = [];
-    int totalRes;
+    int? totalRes;
 
     bool isActive = false;
-    if (resources.isNotEmpty && userData != null) {
+    if (resources.isNotEmpty) {
       isActive = true;
       subRes = ts.getSubResources(widget.sub, resources);
       totalRes = subRes.length;

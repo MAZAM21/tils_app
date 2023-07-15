@@ -31,7 +31,7 @@ class _AllTextQsState extends State<AllTextQs> {
           return LoadingScreen();
         }
         if (snap.hasData) {
-          List<TextQAs> textAs = ts.getTeacherScripts(snap.data, tData);
+          List<TextQAs> textAs = ts.getTeacherScripts(snap.data!, tData);
 
           return Scaffold(
             appBar: AppBar(),

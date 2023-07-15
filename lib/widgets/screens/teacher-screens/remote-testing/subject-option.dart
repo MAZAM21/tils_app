@@ -34,7 +34,7 @@ class RASubject extends StatelessWidget {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
           child: Text(buttName),
         ),
@@ -48,10 +48,8 @@ class RASubject extends StatelessWidget {
     final id = Provider.of<User>(context).uid;
     final td = Provider.of<TeacherUser>(context);
     List<String> subs = [];
-    if (id != null && td != null) {
-      _idRecieved = true;
-      subs = td.subjects;
-    }
+    _idRecieved = true;
+    subs = td.subjects;
     final time = DateTime.now();
     return Scaffold(
       appBar: AppBar(),

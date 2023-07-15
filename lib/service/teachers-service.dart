@@ -14,7 +14,7 @@ import '../models/remote_assessment.dart';
 class TeacherService with ChangeNotifier {
   bool getStudentScriptMarkedStat(
       String studentId, String assid, TeacherUser tdata) {
-    Map mtq = tdata.markedTexQs;
+    Map mtq = tdata.markedTexQs!;
 
     if (mtq['$assid'] != null) {
       if (mtq['$assid'].contains('$studentId')) {
@@ -30,7 +30,7 @@ class TeacherService with ChangeNotifier {
   /// for all tq icons. if checked a single student, return true,
   /// else false
   bool getTextQCheckedStat(TeacherUser tdata, String assid) {
-    Map mtq = tdata.markedTexQs;
+    Map mtq = tdata.markedTexQs!;
     if (mtq.containsKey('$assid')) {
       return true;
     } else {
@@ -44,7 +44,7 @@ class TeacherService with ChangeNotifier {
     int marked = 0;
     int total = 0;
     studList.forEach((stud) {
-      if (stud.subjects.contains(cls.subjectName) &&
+      if (stud.subjects!.contains(cls.subjectName) &&
           stud.section == cls.section) {
         total++;
       }
@@ -69,12 +69,11 @@ class TeacherService with ChangeNotifier {
 
   List<ResourceDownload> getTopThreeRes(
     List<ResourceDownload> allRes,
-    TeacherUser tdata,
+    TeacherUser? tdata,
   ) {
     List<ResourceDownload> myRes = [];
-    final List<String> subjects = tdata.subjects;
+    final List<String> subjects = tdata!.subjects;
     allRes.forEach((res) {
-     
       if (subjects.contains(res.subject)) {
         myRes.add(res);
       }
@@ -92,16 +91,16 @@ class TeacherService with ChangeNotifier {
   ///Get top three assingments for teachers assignment panel
   List<AMfromDB> getTopThreeAM(
     List<AMfromDB> allAm,
-    TeacherUser tdata,
+    TeacherUser? tdata,
   ) {
     List<AMfromDB> myAM = [];
-    final List<String> subjects = tdata.subjects;
+    final List<String> subjects = tdata!.subjects;
     allAm.forEach((am) {
       if (subjects.contains(am.subject)) {
         myAM.add(am);
       }
     });
-    myAM.sort((a, b) => a.timeCreated.compareTo(b.timeCreated));
+    myAM.sort((a, b) => a.timeCreated!.compareTo(b.timeCreated!));
     List<AMfromDB> topthree;
     if (myAM.length > 3) {
       topthree = myAM.sublist(0, 3);
@@ -112,10 +111,10 @@ class TeacherService with ChangeNotifier {
   }
 
   ///Get deadline status
-  String getdeadlineStatus(RAfromDB ra) {
-    if (ra.endTime.isAfter(DateTime.now())) {
+  String? getdeadlineStatus(RAfromDB ra) {
+    if (ra.endTime!.isAfter(DateTime.now())) {
       return 'Pending';
-    } else if (ra.endTime.isBefore(DateTime.now())) {
+    } else if (ra.endTime!.isBefore(DateTime.now())) {
       return 'Finished';
     }
     return null;
@@ -124,23 +123,23 @@ class TeacherService with ChangeNotifier {
   ///Gets top three assessments for teachers assessment panel
   List<RAfromDB> getTopThree(
     List<RAfromDB> allRa,
-    TeacherUser tdata,
+    TeacherUser? tdata,
   ) {
     List<RAfromDB> myRA = [];
-    final List<String> subjects = tdata.subjects;
+    final List<String> subjects = tdata!.subjects;
     allRa.forEach((ra) {
       if (subjects.contains(ra.subject)) {
         myRA.add(ra);
       }
     });
-    myRA.sort((a, b) => b.startTime.compareTo(a.startTime));
+    myRA.sort((a, b) => b.startTime!.compareTo(a.startTime!));
     List<RAfromDB> topthree;
     if (myRA.length > 3) {
       topthree = myRA.sublist(0, 3);
     } else {
       topthree = myRA;
     }
-    topthree.sort((a, b) => b.endTime.compareTo(a.endTime));
+    topthree.sort((a, b) => b.endTime!.compareTo(a.endTime!));
     return topthree;
   }
 
@@ -159,10 +158,10 @@ class TeacherService with ChangeNotifier {
 
   ///Gets students registered for the subject
   List<StudentRank> getStudentsOfSub(
-      List<StudentRank> students, String subject) {
+      List<StudentRank> students, String? subject) {
     List<StudentRank> regStuds = [];
     students.forEach((stud) {
-      if (stud.subjects.contains(subject)) {
+      if (stud.subjects!.contains(subject)) {
         regStuds.add(stud);
       }
     });
@@ -171,10 +170,10 @@ class TeacherService with ChangeNotifier {
   }
 
   List<StudentRank> getStudentsOfSubandSection(
-      List<StudentRank> students, String subject, String section) {
+      List<StudentRank> students, String? subject, String? section) {
     List<StudentRank> regStuds = [];
     students.forEach((stud) {
-      if (stud.subjects.contains(subject) && stud.section == section) {
+      if (stud.subjects!.contains(subject) && stud.section == section) {
         regStuds.add(stud);
       }
     });
@@ -186,7 +185,7 @@ class TeacherService with ChangeNotifier {
     final now = DateTime.now();
     Meeting latestClass = list.firstWhere(
       (meeting) {
-        return meeting.to.isAfter(now);
+        return meeting.to!.isAfter(now);
       },
       orElse: () => Meeting(
         'no class',
@@ -200,8 +199,8 @@ class TeacherService with ChangeNotifier {
     );
 
     list.forEach((meeting) {
-      if (meeting.to.isAfter(now) &&
-          meeting.to.isBefore(latestClass.to) &&
+      if (meeting.to!.isAfter(now) &&
+          meeting.to!.isBefore(latestClass.to!) &&
           meeting.docId != latestClass.docId) {
         latestClass = meeting;
         //print('${meeting.eventName} latest class');
@@ -235,7 +234,7 @@ class TeacherService with ChangeNotifier {
       SubjectClass temp = list[i];
       for (int z = 0; z < list.length; z++) {
         SubjectClass tempZ = list[z];
-        if (z != i && list[i].startTime.isBefore(list[z].startTime)) {
+        if (z != i && list[i].startTime!.isBefore(list[z].startTime!)) {
           list[i] = list[z];
           list[z] = temp;
           temp = tempZ;
@@ -249,7 +248,7 @@ class TeacherService with ChangeNotifier {
     List<SubjectClass> myClasses = [];
     var now = DateTime.now();
     all.forEach((cls) {
-      if (cls.startTime.isAfter(now)) {
+      if (cls.startTime!.isAfter(now)) {
         myClasses.add(cls);
       }
     });
@@ -277,7 +276,7 @@ class TeacherService with ChangeNotifier {
   Map randomiseChoices(Map ansChoices) {
     List keys = ansChoices.keys.toList();
 
-    Map<String, String> randomised = {};
+    Map<String, String?> randomised = {};
     keys.shuffle();
     keys.forEach((k) {
       randomised.addAll({k: ansChoices['$k']});
@@ -291,7 +290,7 @@ class TeacherService with ChangeNotifier {
       Announcement temp = list[i];
       for (int z = 0; z < list.length; z++) {
         Announcement tempZ = list[z];
-        if (z != i && list[i].time.isBefore(list[z].time)) {
+        if (z != i && list[i].time!.isBefore(list[z].time!)) {
           list[i] = list[z];
           list[z] = temp;
           temp = tempZ;
@@ -302,11 +301,11 @@ class TeacherService with ChangeNotifier {
   }
 
   List<String> valueList(Map map) {
-    return map.values.toList();
+    return map.values.toList() as List<String>;
   }
 
   List<String> keyList(Map map) {
-    return map.keys.toList();
+    return map.keys.toList() as List<String>;
   }
 
   List<RAfromDB> getRAfromSub(List<RAfromDB> allRAs, String sub) {
@@ -314,8 +313,8 @@ class TeacherService with ChangeNotifier {
     allRAs.forEach((ra) {
       if (sub == ra.subject) {
         subRAs.add(ra);
-        if (ra.startTime.isBefore(DateTime.now()) &&
-            ra.endTime.isAfter(DateTime.now())) {
+        if (ra.startTime!.isBefore(DateTime.now()) &&
+            ra.endTime!.isAfter(DateTime.now())) {
           ra.isDeployed = true;
         } else {
           ra.isDeployed = false;
@@ -334,7 +333,7 @@ class TeacherService with ChangeNotifier {
     //iterating through each ra.
     ras.forEach((ra) {
       //if userdata reg subs contains subject of this particular ra
-      if (userData.subjects.contains(ra.subject) && ra != null) {
+      if (userData.subjects.contains(ra.subject)) {
         //add the ra to the list of assessments in value. key is the string sub name.
         filtered.update('${ra.subject}', (list) {
           list.add(ra);
@@ -374,7 +373,7 @@ class TeacherService with ChangeNotifier {
 
     List<SubjectClass> myClasses = [];
     List<SubjectClass> displayClasses = [];
-    allClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
+    allClasses.sort((a, b) => b.startTime!.compareTo(a.startTime!));
     int x;
     int y;
     int clsAfterNext;
@@ -410,12 +409,12 @@ class TeacherService with ChangeNotifier {
     // }
     displayClasses = allClasses;
 
-    displayClasses.sort((a, b) => b.startTime.compareTo(a.startTime));
+    displayClasses.sort((a, b) => b.startTime!.compareTo(a.startTime!));
     return displayClasses;
   }
 
-  List<int> getMarksList(Map marks, int l) {
-    List<int> markList = [];
+  List<int?>? getMarksList(Map marks, int l) {
+    List<int?> markList = [];
     try {
       if (marks.isEmpty) {
         print('marks = null');
@@ -424,7 +423,7 @@ class TeacherService with ChangeNotifier {
         }
       } else {
         print('marks!=null');
-        markList = marks.values.toList();
+        markList = marks.values.toList() as List<int?>;
       }
       return markList;
     } catch (e) {
@@ -458,8 +457,8 @@ class TeacherService with ChangeNotifier {
   int getDeployedRA(List<RAfromDB> raList, TeacherUser tData) {
     int num = 0;
     raList.forEach((ra) {
-      if (ra.startTime.isAfter(DateTime.now()) &&
-          ra.endTime.isBefore(DateTime.now()) &&
+      if (ra.startTime!.isAfter(DateTime.now()) &&
+          ra.endTime!.isBefore(DateTime.now()) &&
           tData.subjects.contains(ra.subject)) {
         num++;
       }
@@ -467,7 +466,7 @@ class TeacherService with ChangeNotifier {
     return num;
   }
 
-  Color getColor(String sub) {
+  Color getColor(String? sub) {
     switch (sub) {
       case 'Jurisprudence':
         return Color.fromARGB(255, 56, 85, 89);

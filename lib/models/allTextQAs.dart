@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TextQAs {
-  final String subject;
+  final String? subject;
   final String assId;
-  final String assTitle;
+  final String? assTitle;
   final bool marked;
   final bool isText;
   TextQAs(this.subject, this.assId, this.assTitle, this.marked, this.isText);
@@ -12,7 +12,6 @@ class TextQAs {
     try {
       final data = doc.data();
 
-    
       final sub = data['subject'];
       final title = data['title'];
       bool isText = false;
@@ -31,6 +30,6 @@ class TextQAs {
     } catch (e) {
       print('error in TextQAs: $e');
     }
-    return null;
+    throw Exception;
   }
 }

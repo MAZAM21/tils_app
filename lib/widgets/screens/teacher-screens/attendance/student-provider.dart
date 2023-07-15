@@ -12,12 +12,12 @@ class StudentProvider extends StatelessWidget {
   final db = DatabaseService();
   @override
   Widget build(BuildContext context) {
-    final sub = ModalRoute.of(context).settings.arguments as SubjectClass;
-    final subName= sub.subjectName;
+    final sub = ModalRoute.of(context)!.settings.arguments as SubjectClass;
+    final subName = sub.subjectName;
     final subId = sub.id;
-    db.addClassDetailToAttColl(subName, subId, sub.startTime);
+    db.addClassDetailToAttColl(subName, subId, sub.startTime!);
     try {
-      return FutureProvider<List<Student>>(
+      return FutureProvider<List<Student>?>(
         initialData: [],
         create: (ctx) => db.getStudentsBySub(subName),
         child: AttendanceMarkerBuilder(),
@@ -25,7 +25,7 @@ class StudentProvider extends StatelessWidget {
     } on Exception catch (e) {
       print('error in studentprovider attendance: $e');
     }
-    return null;
+    throw Exception;
   }
 }
 

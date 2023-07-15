@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class RedButtonMain extends StatelessWidget {
   final String child;
   final VoidCallback onPressed;
-  const RedButtonMain({@required this.child, @required this.onPressed});
+  const RedButtonMain({required this.child, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +33,7 @@ class RedButtonMain extends StatelessWidget {
 class WhiteButtonMain extends StatelessWidget {
   final String child;
   final VoidCallback onPressed;
-  const WhiteButtonMain({@required this.child, @required this.onPressed});
+  const WhiteButtonMain({required this.child, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

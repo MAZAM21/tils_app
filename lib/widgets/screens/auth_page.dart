@@ -40,7 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
         );
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(authResult.user.uid)
+            .doc(authResult.user!.uid)
             .set({
           'username': username,
           'email': email,
@@ -51,7 +51,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
           content: Text('Authentication Failed. Please try again'),
-          backgroundColor: Theme.of(ctx).errorColor,
+          backgroundColor: Theme.of(ctx).colorScheme.error,
         ),
       );
       setState(() {

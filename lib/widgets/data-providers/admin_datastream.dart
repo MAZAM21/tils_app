@@ -12,12 +12,10 @@ class AdminDataStream extends StatelessWidget {
   Widget build(BuildContext context) {
     final uid = Provider.of<User>(context).uid;
     bool isActive = false;
-    if (uid != null) {
-      isActive = true;
-    }
+    isActive = true;
     return !isActive
         ? LoadingScreen()
-        : StreamProvider<AdminUser>(
+        : StreamProvider<AdminUser?>(
             initialData: null,
             create: (context) => db.streamAdminUser(uid),
             builder: (context, _) => AdminHome(),

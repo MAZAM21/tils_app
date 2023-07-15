@@ -1,17 +1,16 @@
 import 'package:provider/provider.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:flutter/material.dart';
-import 'package:SIL_app/widgets/screens/loading-screen.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-main.dart';
 
 class SelectSubjectResource extends StatelessWidget {
   const SelectSubjectResource({
-    Key key,
-    @required this.subs,
-    @required this.teacher,
+    Key? key,
+    required this.subs,
+    required this.teacher,
   }) : super(key: key);
   final List<String> subs;
-  final TeacherUser teacher;
+  final TeacherUser? teacher;
 
   Widget _buttonBuilder(
     String buttName,
@@ -42,7 +41,7 @@ class SelectSubjectResource extends StatelessWidget {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
           child: Text(buttName),
         ),

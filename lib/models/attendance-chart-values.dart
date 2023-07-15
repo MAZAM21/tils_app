@@ -8,14 +8,12 @@ class AttChartVals {
   //fromMeetings constructer takes meeting object and attendance object and converts to chart value
   factory AttChartVals.fromMeetings(Meeting meeting, Attendance att) {
     int i = 0;
-    if (att.attStat != null) {
-      att.attStat.forEach((k, v) {
-        if (v == 1) {
-          i++;
-        }
-      });
-    }
-    return AttChartVals(setWeekday(meeting.from.weekday), i);
+    att.attStat.forEach((k, v) {
+      if (v == 1) {
+        i++;
+      }
+    });
+    return AttChartVals(setWeekday(meeting.from!.weekday), i);
   }
 }
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:SIL_app/widgets/drawer.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
 
-import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-home.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/teacher-rankings/teacher-ranking-display.dart';
 
@@ -11,11 +10,11 @@ import 'package:SIL_app/widgets/screens/teacher-screens/teacher-rankings/teacher
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
 
-  final Color color;
-  final TabBar tabBar;
+  final Color? color;
+  final TabBar? tabBar;
 
   @override
-  Size get preferredSize => tabBar.preferredSize;
+  Size get preferredSize => tabBar!.preferredSize;
 
   @override
   Widget build(BuildContext context) => Container(

@@ -25,20 +25,20 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
   var _isLogin = true;
-  var _userEmail = '';
+  String? _userEmail = '';
   var _userName = '';
-  var _userPassword = '';
+  String? _userPassword = '';
 
   void _trySubmit() {
     //IsValid stores bool on whether the text inputs are validated
-    final isValid = _formKey.currentState.validate();
+    final isValid = _formKey.currentState!.validate();
     //removes focus from the fields
     FocusScope.of(context).unfocus();
     //if IsValid is true then save form state and execute submitfn on inputs
     //.trim removes whitespace
     if (isValid) {
-      _formKey.currentState.save();
-      widget.submitFn(_userEmail.trim(), _userPassword.trim(), _userName.trim(),
+      _formKey.currentState!.save();
+      widget.submitFn(_userEmail!.trim(), _userPassword!.trim(), _userName.trim(),
           _isLogin, context);
     }
   }
@@ -91,7 +91,7 @@ class _AuthFormState extends State<AuthForm> {
                                 cursorColor: Colors.white,
                                 key: ValueKey('email'),
                                 validator: (value) {
-                                  if (value.isEmpty || !value.contains('@')) {
+                                  if (value!.isEmpty || !value.contains('@')) {
                                     return 'Please enter a valid email address.';
                                   }
                                   return null;
@@ -133,7 +133,7 @@ class _AuthFormState extends State<AuthForm> {
                                 cursorColor: Colors.white,
                                 key: ValueKey('password'),
                                 validator: (value) {
-                                  if (value.isEmpty || value.length < 6) {
+                                  if (value!.isEmpty || value.length < 6) {
                                     return 'Password must be at least 6 characters long.';
                                   }
                                   return null;
@@ -225,7 +225,7 @@ class _AuthFormState extends State<AuthForm> {
                                   cursorColor: Colors.white,
                                   key: ValueKey('email'),
                                   validator: (value) {
-                                    if (value.isEmpty || !value.contains('@')) {
+                                    if (value!.isEmpty || !value.contains('@')) {
                                       return 'Please enter a valid email address.';
                                     }
                                     return null;
@@ -273,7 +273,7 @@ class _AuthFormState extends State<AuthForm> {
                                   cursorColor: Colors.white,
                                   key: ValueKey('password'),
                                   validator: (value) {
-                                    if (value.isEmpty || value.length < 6) {
+                                    if (value!.isEmpty || value.length < 6) {
                                       return 'Password must be at least 6 characters long.';
                                     }
                                     return null;

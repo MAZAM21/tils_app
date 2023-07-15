@@ -1,25 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:SIL_app/models/assignment-marks.dart';
-import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 
 class TeacherAssignmentPanel extends StatelessWidget {
   TeacherAssignmentPanel({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
   final ts = TeacherService();
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +52,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                     },
                     child: Text(
                       'Assignments',
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
                   Text(
@@ -103,7 +100,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                         tileColor: Colors.white,
                         title: Text(
                           '${topThree[i].title}',
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         subtitle: Text(
                           '${topThree[i].subject}',
@@ -152,11 +149,11 @@ class TeacherAssignmentPanel extends StatelessWidget {
             ],
           )
 
-          //WEB
+        //WEB
 
         : Container(
-          width: 400,
-          child: Column(
+            width: 400,
+            child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
                 Row(
@@ -176,7 +173,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                       },
                       child: Text(
                         'Assignments',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                     Text(
@@ -224,7 +221,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                           tileColor: Colors.white,
                           title: Text(
                             '${topThree[i].title}',
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           subtitle: Text(
                             '${topThree[i].subject}',
@@ -272,6 +269,6 @@ class TeacherAssignmentPanel extends StatelessWidget {
                 // )
               ],
             ),
-        );
+          );
   }
 }

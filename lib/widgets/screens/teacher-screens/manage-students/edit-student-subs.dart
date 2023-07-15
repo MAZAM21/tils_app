@@ -1,9 +1,4 @@
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:SIL_app/models/student_rank.dart';
 import 'package:SIL_app/service/db.dart';
 
@@ -22,11 +17,11 @@ class EditStudSubs extends StatefulWidget {
 class _EditStudProfileState extends State<EditStudSubs> {
   List<String> _selectedSubs = [];
   final db = DatabaseService();
-  String _yearVal;
+  String? _yearVal;
 
   @override
   void didChangeDependencies() {
-    widget.stud.subjects.forEach((sub) {
+    widget.stud.subjects!.forEach((sub) {
       _selectedSubs.add(sub);
     });
     _yearVal = widget.stud.year;
@@ -104,7 +99,7 @@ class _EditStudProfileState extends State<EditStudSubs> {
         children: <Widget>[
           Text(
             'Registered Subjects',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(
             height: 20,
@@ -195,7 +190,7 @@ class _EditStudProfileState extends State<EditStudSubs> {
           ),
           Text(
             'Year',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(
             height: 20,

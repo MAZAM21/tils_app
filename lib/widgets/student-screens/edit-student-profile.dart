@@ -17,24 +17,20 @@ class EditStudentProfile extends StatefulWidget {
 class _EditStudentProfileState extends State<EditStudentProfile> {
   final _picker = ImagePicker();
   final ref = FirebaseStorage.instance.ref().child('student_profile_pictures');
-  File _pickedImageFile;
+  File? _pickedImageFile;
   final studentDB = StudentDB();
 
   void _pickImage(String uid) async {
-    final pickedImage = await _picker.pickImage(
-        source: ImageSource.gallery, imageQuality: 50, maxWidth: 120);
+    final pickedImage = (await _picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50, maxWidth: 120))!;
     final File fImage = File(pickedImage.path);
     setState(() {
       _pickedImageFile = fImage;
     });
-    if (fImage != null) {
-      await ref.child(uid + '.jpg').putFile(fImage);
-    }
+    await ref.child(uid + '.jpg').putFile(fImage);
 
     final url = await ref.child(uid + '.jpg').getDownloadURL();
-    if (url != null) {
-      await studentDB.addProfileURL(url, uid);
-    }
+    await studentDB.addProfileURL(url, uid);
   }
 
   @override
@@ -53,11 +49,11 @@ class _EditStudentProfileState extends State<EditStudentProfile> {
                 children: <Widget>[
                   CircleAvatar(
                     radius: 60,
-                    backgroundImage: _pickedImageFile != null
-                        ? FileImage(_pickedImageFile)
+                    backgroundImage: (_pickedImageFile != null
+                        ? FileImage(_pickedImageFile!)
                         : studentUser.imageURL != null
-                            ? NetworkImage(studentUser.imageURL)
-                            : null,
+                            ? NetworkImage(studentUser.imageURL!)
+                            : null) as ImageProvider<Object>?,
                   ),
                   TextButton(
                     onPressed: () {

@@ -12,12 +12,10 @@ class ParentDataStream extends StatelessWidget {
   Widget build(BuildContext context) {
     final uid = Provider.of<User>(context).uid;
     bool isActive = false;
-    if (uid != null) {
-      isActive = true;
-    }
+    isActive = true;
     return !isActive
         ? LoadingScreen()
-        : StreamProvider<ParentUser>(
+        : StreamProvider<ParentUser?>(
             initialData: null,
             create: (context) => db.streamParentUser(uid),
             builder: (context, _) => ParentHome(),

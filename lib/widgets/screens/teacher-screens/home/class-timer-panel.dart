@@ -3,15 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:SIL_app/models/meeting.dart';
-import 'package:SIL_app/models/student-user-data.dart';
 import 'package:SIL_app/models/subject-class.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/teachers-service.dart';
-import 'package:provider/provider.dart';
 
 import 'package:SIL_app/widgets/screens/teacher-screens/home/timer-text.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
-import 'package:SIL_app/widgets/student-screens/time-table-student/student-calendarapp.dart';
 
 class ClassTimerPanel extends StatefulWidget {
   ///start time
@@ -21,10 +18,10 @@ class ClassTimerPanel extends StatefulWidget {
   final int end;
 
   ///meeting object
-  final Meeting meeting;
+  final Meeting? meeting;
 
   ///teacher data
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   ClassTimerPanel(this.timer, this.meeting, this.end, this.teacherData);
 
@@ -37,16 +34,14 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final String meetingID = widget.meeting.docId;
+    final String meetingID = widget.meeting!.docId;
 
     final subClassList = Provider.of<List<SubjectClass>>(context);
-    SubjectClass subClassNext;
+    SubjectClass? subClassNext;
     bool isActive = false;
-    if (subClassList != null) {
-      isActive = true;
-      if (meetingID != 'no class') {
-        subClassNext = ts.getSubjectClass(subClassList, meetingID);
-      }
+    isActive = true;
+    if (meetingID != 'no class') {
+      subClassNext = ts.getSubjectClass(subClassList, meetingID);
     }
 
     return !isActive

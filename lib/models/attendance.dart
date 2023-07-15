@@ -1,18 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 
 class Attendance {
   final String id;
-  final Map attendanceStatus;
-  final String classID;
-  final String subject;
+  final Map? attendanceStatus;
+  final String? classID;
+  final String? subject;
   Attendance(
-      {@required this.id, this.attendanceStatus, this.subject, this.classID});
+      {required this.id, this.attendanceStatus, this.subject, this.classID});
 
   factory Attendance.fromFirestore(QueryDocumentSnapshot doc) {
-    Map data = doc.data();
-    Map attStat = {};
+    Map data = doc.data() as Map<dynamic, dynamic>;
+    Map? attStat = {};
     String classID = data['classId'] ?? '';
     String subject = data['subject'] ?? '';
 
@@ -27,15 +25,15 @@ class Attendance {
     );
   }
   Map get attStat {
-    return {...attendanceStatus};
+    return {...attendanceStatus!};
   }
 }
 
 class AttendanceInput {
-  Map attendanceStatus;
-  String classID;
-  String subject;
-  String date;
+  Map? attendanceStatus;
+  String? classID;
+  String? subject;
+  String? date;
   AttendanceInput({
     this.attendanceStatus,
     this.subject,

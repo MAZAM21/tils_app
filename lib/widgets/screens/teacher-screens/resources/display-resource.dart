@@ -1,19 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:SIL_app/models/resource.dart';
 import 'package:SIL_app/service/db.dart';
 import 'package:video_player/video_player.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:android_intent_plus/android_intent.dart';
 
 class DisplayResource extends StatefulWidget {
   final ResourceDownload resourceDownload;
 
-  DisplayResource({@required this.resourceDownload});
+  DisplayResource({required this.resourceDownload});
 
   @override
   _DisplayResourceState createState() => _DisplayResourceState();

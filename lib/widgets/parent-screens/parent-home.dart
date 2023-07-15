@@ -14,16 +14,13 @@ import 'package:SIL_app/widgets/parent-screens/parent-classposition-panel.dart';
 import 'package:SIL_app/widgets/parent-screens/parent-home-avatar-panel.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
 import './parent-drawer.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:SIL_app/main.dart';
 
 ///Unlike teacher homes, each widget here defines its width with the help of mediaquery.
 /// It is yet to be determined which is the better approach.
 //TODO
 /// add notifications
 class ParentHome extends StatefulWidget {
-  const ParentHome({Key key}) : super(key: key);
+  const ParentHome({Key? key}) : super(key: key);
 
   @override
   _ParentHomeState createState() => _ParentHomeState();
@@ -33,7 +30,7 @@ class _ParentHomeState extends State<ParentHome> {
   final ps = ParentService();
   final rs = RankingService();
   final db = DatabaseService();
-  String _token;
+  String? _token;
   bool _tokenAdded = false;
 
   @override
@@ -51,17 +48,7 @@ class _ParentHomeState extends State<ParentHome> {
     bool isActive = false;
 
     // If all lists are null, I need to
-    if (allStudRanks != null &&
-        raList != null &&
-        allClasses != null &&
-        parentData != null) {
-      //marked = ps.getMarkedClasses(allClasses, parentData.attendance);
-      //sorted = rs.getStudentScores(allStudRanks, raList);
-
-      isActive = true;
-
-      // compRaList = rs.completedAssessmentsParent(raList, parentData);
-    }
+    isActive = true;
 
     return !isActive
         ? LoadingScreen()

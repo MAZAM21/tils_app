@@ -16,16 +16,16 @@ import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart
 class TeacherAssessmentPanel extends StatelessWidget {
   final ts = TeacherService();
   TeacherAssessmentPanel({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
-    final raList = Provider.of<List<RAfromDB>>(context);
-
+    // final raList = Provider.of<List<RAfromDB>>(context);
+    final raList = DummyAssessments().dummyData;
     int totalNumRA = raList.length;
     List<RAfromDB> topThree = [];
 
@@ -43,7 +43,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                 children: <Widget>[
                   TextButton(
                     onPressed: () {
-                      if (teacherData.subjects.length > 1) {
+                      if (teacherData!.subjects.length > 1) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             settings: RouteSettings(name: '/select-subects-ra'),
@@ -51,12 +51,12 @@ class TeacherAssessmentPanel extends StatelessWidget {
                                 ChangeNotifierProvider.value(
                               value: teacherData,
                               child: SelectAssessmentSubject(
-                                  subjects: teacherData.subjects,
+                                  subjects: teacherData!.subjects,
                                   tc: teacherData),
                             ),
                           ),
                         );
-                      } else if (teacherData.subjects.length == 1) {
+                      } else if (teacherData!.subjects.length == 1) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             settings: RouteSettings(name: '/all-Ras'),
@@ -64,7 +64,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                                 ChangeNotifierProvider.value(
                               value: teacherData,
                               child: AllRAs(
-                                subject: teacherData.subjects[0],
+                                subject: teacherData!.subjects[0],
                               ),
                             ),
                           ),
@@ -73,7 +73,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                     },
                     child: Text(
                       'Assessements',
-                      style: Theme.of(context).textTheme.headline5,
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
                   Text(
@@ -113,7 +113,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                   itemCount: topThree.length,
                   shrinkWrap: true,
                   itemBuilder: (ctx, i) {
-                    String dStat = ts.getdeadlineStatus(topThree[i]);
+                    String? dStat = ts.getdeadlineStatus(topThree[i]);
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 3.5),
                       child: ListTile(
@@ -122,10 +122,10 @@ class TeacherAssessmentPanel extends StatelessWidget {
                         tileColor: Colors.white,
                         title: Text(
                           '${topThree[i].assessmentTitle}',
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         subtitle: Text(
-                          'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime)}',
+                          'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'Proxima Nova',
@@ -179,7 +179,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                         ///if there are more than one subjects reg with teacher
                         ///subject selector will open
                         ///else it will go directly to the teacher's one subject assessment list
-                        if (teacherData.subjects.length > 1) {
+                        if (teacherData!.subjects.length > 1) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               settings:
@@ -188,12 +188,12 @@ class TeacherAssessmentPanel extends StatelessWidget {
                                   ChangeNotifierProvider.value(
                                 value: teacherData,
                                 child: SelectAssessmentSubject(
-                                    subjects: teacherData.subjects,
+                                    subjects: teacherData!.subjects,
                                     tc: teacherData),
                               ),
                             ),
                           );
-                        } else if (teacherData.subjects.length == 1) {
+                        } else if (teacherData!.subjects.length == 1) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               settings: RouteSettings(name: '/all-Ras'),
@@ -201,7 +201,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                                   ChangeNotifierProvider.value(
                                 value: teacherData,
                                 child: AllRAs(
-                                  subject: teacherData.subjects[0],
+                                  subject: teacherData!.subjects[0],
                                 ),
                               ),
                             ),
@@ -293,31 +293,32 @@ class TeacherAssessmentPanel extends StatelessWidget {
             ],
           )
 
-          //WEB
+        //WEB
 
         : Container(
-          width: 400,
-          child: Column(
+            width: 400,
+            child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
                 Row(
                   children: <Widget>[
                     TextButton(
                       onPressed: () {
-                        if (teacherData.subjects.length > 1) {
+                        if (teacherData!.subjects.length > 1) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              settings: RouteSettings(name: '/select-subects-ra'),
+                              settings:
+                                  RouteSettings(name: '/select-subects-ra'),
                               builder: (BuildContext context) =>
                                   ChangeNotifierProvider.value(
                                 value: teacherData,
                                 child: SelectAssessmentSubject(
-                                    subjects: teacherData.subjects,
+                                    subjects: teacherData!.subjects,
                                     tc: teacherData),
                               ),
                             ),
                           );
-                        } else if (teacherData.subjects.length == 1) {
+                        } else if (teacherData!.subjects.length == 1) {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               settings: RouteSettings(name: '/all-Ras'),
@@ -325,7 +326,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                                   ChangeNotifierProvider.value(
                                 value: teacherData,
                                 child: AllRAs(
-                                  subject: teacherData.subjects[0],
+                                  subject: teacherData!.subjects[0],
                                 ),
                               ),
                             ),
@@ -334,7 +335,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                       },
                       child: Text(
                         'Assessements',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                     Text(
@@ -347,8 +348,6 @@ class TeacherAssessmentPanel extends StatelessWidget {
                       ),
                     ),
                     Spacer(),
-
-                   
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).push(
@@ -373,7 +372,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                     itemCount: topThree.length,
                     shrinkWrap: true,
                     itemBuilder: (ctx, i) {
-                      String dStat = ts.getdeadlineStatus(topThree[i]);
+                      String? dStat = ts.getdeadlineStatus(topThree[i]);
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 3.5),
                         child: ListTile(
@@ -382,10 +381,10 @@ class TeacherAssessmentPanel extends StatelessWidget {
                           tileColor: Colors.white,
                           title: Text(
                             '${topThree[i].assessmentTitle}',
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           subtitle: Text(
-                            'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime)}',
+                            'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Proxima Nova',
@@ -421,9 +420,8 @@ class TeacherAssessmentPanel extends StatelessWidget {
                 const SizedBox(
                   height: 19,
                 ),
-                
               ],
             ),
-        );
+          );
   }
 }

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 class StudentUser with ChangeNotifier {
   final attendance;
-  final List completedAssessments;
+  final List? completedAssessments;
   final List subjects;
   final String year;
   final String name;
   final String uid;
   final String section;
   final String batch;
-  final String imageURL;
+  final String? imageURL;
 
   StudentUser(
     this.name,
@@ -65,6 +65,6 @@ class StudentUser with ChangeNotifier {
     } catch (err) {
       print('erro in student user moder: $err');
     }
-    return null;
+    throw Exception;
   }
 }

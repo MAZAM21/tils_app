@@ -11,7 +11,7 @@ class StudentDB with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   //gets students collection data as per the registeration status of student
-  Future<List<Student>> getStudentsBySub(String subName) async {
+  Future<List<Student>?> getStudentsBySub(String subName) async {
     CollectionReference ref = _db.collection('students');
     try {
       QuerySnapshot query =
@@ -24,7 +24,7 @@ class StudentDB with ChangeNotifier {
   }
 
   //get all student docs from student collection
-  Future<List<Student>> getAllStudents() async {
+  Future<List<Student>?> getAllStudents() async {
     try {
       QuerySnapshot ref = await _db.collection('students').get();
       return ref.docs.map((doc) => Student.fromFirestore(doc)).toList();

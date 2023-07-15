@@ -1,3 +1,4 @@
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,7 +31,6 @@ import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.
 import 'package:SIL_app/widgets/student-screens/edit-student-profile.dart';
 import 'package:SIL_app/widgets/student-screens/rankings/student-ranking-display.dart';
 import 'package:SIL_app/widgets/student-screens/student_RA/assessment-page.dart';
-import 'package:SIL_app/widgets/student-screens/student_RA/student-ra-display.dart';
 import 'package:SIL_app/widgets/student-screens/student_home/student_home.dart';
 import './models/meeting.dart';
 import './service/db.dart';
@@ -64,7 +64,7 @@ class RoutesAndTheme extends StatelessWidget {
           create: (ctx) => db.streamResource(),
           initialData: [],
         ),
-        StreamProvider<User>(
+        StreamProvider<User?>(
           create: (ctx) => db.authStateStream(),
           initialData: null,
         ),
@@ -109,7 +109,7 @@ class RoutesAndTheme extends StatelessWidget {
               TabBarTheme(labelColor: Color.fromARGB(255, 24, 118, 133)),
           //cardcolor removed
           textTheme: TextTheme(
-              headline6: TextStyle(
+              titleLarge: TextStyle(
                 color: Color.fromARGB(255, 76, 76, 76),
                 fontFamily: 'Proxima Nova',
                 fontSize: 18,
@@ -117,7 +117,7 @@ class RoutesAndTheme extends StatelessWidget {
               ),
 
               /// HL5 is for titles
-              headline5: TextStyle(
+              headlineSmall: TextStyle(
                 fontSize: 18,
                 fontFamily: 'Proxima Nova',
                 fontWeight: FontWeight.w700,
@@ -126,18 +126,18 @@ class RoutesAndTheme extends StatelessWidget {
 
               /// HL4 is for descriptive text
               /// e.g subject names and assessment titles
-              headline4: TextStyle(
+              headlineMedium: TextStyle(
                   color: Color(0xff161616),
                   fontFamily: 'Proxima Nova',
                   fontWeight: FontWeight.w600,
                   fontSize: 14),
-              headline3: TextStyle(
+              displaySmall: TextStyle(
                 color: Color(0xffC54134),
                 fontFamily: 'Proxima Nova',
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
-              headline2: TextStyle(
+              displayMedium: TextStyle(
                 color: Colors.white,
                 fontFamily: 'Proxima Nova',
                 fontSize: 18,
@@ -171,6 +171,7 @@ class RoutesAndTheme extends StatelessWidget {
           StudentRankingDisplay.routeName: (context) => StudentRankingDisplay(),
           AssignmentMain.routeName: (context) => AssignmentMain(),
           AddAssignment.routeName: (context) => AddAssignment(),
+          CallChatGPT.routeName: (context) => CallChatGPT(),
           AttendanceMarkerBuilder.routeName: (context) =>
               AttendanceMarkerBuilder(),
         },

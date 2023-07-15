@@ -4,8 +4,8 @@ import 'package:SIL_app/models/student_rank.dart';
 /// The top student display tile in rankings
 class TopStudentTile extends StatelessWidget {
   const TopStudentTile({
-    Key key,
-    @required this.topStud,
+    Key? key,
+    required this.topStud,
   }) : super(key: key);
 
   final StudentRank topStud;
@@ -37,7 +37,7 @@ class TopStudentTile extends StatelessWidget {
                   CircleAvatar(
                     radius: 40,
                     backgroundImage: topStud.imageUrl != ''
-                        ? NetworkImage(topStud.imageUrl)
+                        ? NetworkImage(topStud.imageUrl!)
                         : null,
                   ),
                   Row(

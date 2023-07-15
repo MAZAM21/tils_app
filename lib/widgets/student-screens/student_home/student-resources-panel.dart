@@ -2,24 +2,13 @@ import 'package:SIL_app/models/student-user-data.dart';
 import 'package:SIL_app/service/student-service.dart';
 import 'package:SIL_app/widgets/student-screens/student-resources-web/select-subject-resource-student.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:SIL_app/models/assignment-marks.dart';
-import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:SIL_app/models/resource.dart';
-import 'package:SIL_app/models/teacher-user-data.dart';
-import 'package:SIL_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-upload-web.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/resources/select-resources-subjects.dart';
 
 class StudentResourcesPanel extends StatelessWidget {
   StudentResourcesPanel({
-    Key key,
-    @required this.studUser,
+    Key? key,
+    required this.studUser,
   }) : super(key: key);
 
   final ss = StudentService();
@@ -57,7 +46,7 @@ class StudentResourcesPanel extends StatelessWidget {
                             value: studUser,
                             child: SelectSubjectResourceStudent(
                               student: studUser,
-                              subs: studUser.subjects,
+                              subs: studUser.subjects as List<String>,
                             ),
                           ),
                         ),
@@ -65,7 +54,7 @@ class StudentResourcesPanel extends StatelessWidget {
                 },
                 child: Text(
                   'Resources',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
               // Text(
@@ -98,7 +87,7 @@ class StudentResourcesPanel extends StatelessWidget {
                           tileColor: Colors.white,
                           title: Text(
                             '${topThree[i].topic}',
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headlineMedium,
                           ),
                           subtitle: Text(
                             '${topThree[i].subject}',

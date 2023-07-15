@@ -35,7 +35,7 @@ class AllAnnouncements extends StatelessWidget {
             }
 
             if (announcementSnap.hasData) {
-              List ordered = ts.orderAnnouncement(announcementSnap.data);
+              List ordered = ts.orderAnnouncement(announcementSnap.data!);
               return ListView.builder(
                 itemCount: ordered.length,
                 itemBuilder: (ctx, i) => AnnouncementTile(ordered[i]),

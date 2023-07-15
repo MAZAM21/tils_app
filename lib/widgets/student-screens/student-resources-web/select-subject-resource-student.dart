@@ -1,16 +1,13 @@
 import 'package:SIL_app/models/student-user-data.dart';
 import 'package:SIL_app/widgets/student-screens/student-resources-web/resources-main.dart';
 import 'package:provider/provider.dart';
-import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:flutter/material.dart';
-import 'package:SIL_app/widgets/screens/loading-screen.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/resources/resources-main.dart';
 
 class SelectSubjectResourceStudent extends StatelessWidget {
   const SelectSubjectResourceStudent({
-    Key key,
-    @required this.subs,
-    @required this.student,
+    Key? key,
+    required this.subs,
+    required this.student,
   }) : super(key: key);
   final List<String> subs;
   final StudentUser student;
@@ -44,7 +41,7 @@ class SelectSubjectResourceStudent extends StatelessWidget {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
           child: Text(buttName),
         ),

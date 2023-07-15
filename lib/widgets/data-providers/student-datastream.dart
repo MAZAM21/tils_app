@@ -12,12 +12,10 @@ class StudentDataStream extends StatelessWidget {
   Widget build(BuildContext context) {
     final uid = Provider.of<User>(context).uid;
     bool isActive = false;
-    if (uid != null) {
-      isActive = true;
-    }
+    isActive = true;
     return !isActive
         ? LoadingScreen()
-        : StreamProvider<StudentUser>(
+        : StreamProvider<StudentUser?>(
           initialData: null,
             create: (context) => db.streamStudentUser(uid),
             builder: (context, _) => AllStudentTabs(),

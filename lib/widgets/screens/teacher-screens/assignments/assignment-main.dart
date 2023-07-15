@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quiver/collection.dart';
 import 'package:SIL_app/models/assignment-marks.dart';
 import 'package:SIL_app/models/student_rank.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
@@ -10,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/assignments/mark-student-assignments.dart';
 
 class AssignmentMain extends StatefulWidget {
-  const AssignmentMain({Key key}) : super(key: key);
+  const AssignmentMain({Key? key}) : super(key: key);
   static const routeName = '/assignment-main';
   @override
   _AssignmentMainState createState() => _AssignmentMainState();
@@ -29,12 +28,10 @@ class _AssignmentMainState extends State<AssignmentMain> {
     final students = Provider.of<List<StudentRank>>(context);
     bool isActive = false;
     List<AMfromDB> teachersAM = [];
-    int totalAM;
-    if (amData != null && students != null) {
-      isActive = true;
-      teachersAM = ts.getTeachersAssignments(amData, td);
-      totalAM = teachersAM.length;
-    }
+    int? totalAM;
+    isActive = true;
+    teachersAM = ts.getTeachersAssignments(amData, td);
+    totalAM = teachersAM.length;
     return !isActive
         ? LoadingScreen()
         : Scaffold(
@@ -145,7 +142,7 @@ class _AssignmentMainState extends State<AssignmentMain> {
                               ),
                             ),
                             trailing: Text(
-                              'Marked: ${teachersAM[i].nameMarks.length} / ${ts.getStudentsOfSub(students, teachersAM[i].subject).length}',
+                              'Marked: ${teachersAM[i].nameMarks!.length} / ${ts.getStudentsOfSub(students, teachersAM[i].subject).length}',
                               style: TextStyle(
                                 fontFamily: 'Proxima Nova',
                                 fontSize: 16,

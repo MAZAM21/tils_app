@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:SIL_app/models/announcement.dart';
 import 'package:SIL_app/service/db.dart';
 
-import 'package:SIL_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
 
 class StudentNFDetail extends StatelessWidget {
   static const routeName = '/announcement-detail';
@@ -11,9 +10,9 @@ class StudentNFDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final announcement =
-        ModalRoute.of(context).settings.arguments as Announcement;
+        ModalRoute.of(context)!.settings.arguments as Announcement;
 
-    String imagePath;
+    String? imagePath;
     if (announcement.category == 'uol') {
       imagePath = 'lib/assets/uol-logo.png';
     } else if (announcement.category == 'bls') {

@@ -16,25 +16,25 @@ class EditTTForm extends StatefulWidget {
 }
 
 class _EditTTFormState extends State<EditTTForm> {
-  DateTime _startDate = DateTime.now();
-  DateTime _startTime = DateTime.now();
-  DateTime _endTime = DateTime.now();
-  SubjectName _subName;
-  String _topic = '';
-  String _section;
+  DateTime? _startDate = DateTime.now();
+  DateTime? _startTime = DateTime.now();
+  DateTime? _endTime = DateTime.now();
+  SubjectName? _subName;
+  String? _topic = '';
+  String? _section;
   String _duration = '';
   int _customHours = 0;
   int _customMinutes = 0;
   final _form = GlobalKey<FormState>();
   var _isInit = true;
   var _isEdit = false;
-  String _editedId;
+  String? _editedId;
 
   final db = DatabaseService();
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final editClass = ModalRoute.of(context).settings.arguments as Meeting;
+      final editClass = ModalRoute.of(context)!.settings.arguments as Meeting?;
       if (editClass != null) {
         _section = editClass.section;
         _topic = editClass.topic ?? '';
@@ -99,7 +99,7 @@ class _EditTTFormState extends State<EditTTForm> {
   }
 
   //returns string from enum
-  String enToString(SubjectName name) {
+  String enToString(SubjectName? name) {
     switch (name) {
       case SubjectName.Jurisprudence:
         return 'Jurisprudence';
@@ -231,7 +231,7 @@ class _EditTTFormState extends State<EditTTForm> {
   void pickDate() {
     showDatePicker(
       context: context,
-      initialDate: _isEdit ? _startDate : DateTime.now(),
+      initialDate: _isEdit ? _startDate! : DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(Duration(days: 365)),
     ).then((pickedDate) {
@@ -255,7 +255,7 @@ class _EditTTFormState extends State<EditTTForm> {
           backgroundColor:
               MaterialStateProperty.all(Theme.of(context).primaryColor),
           textStyle:
-              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
+              MaterialStateProperty.all(Theme.of(context).textTheme.titleLarge),
         ),
         onPressed: () {
           pickDate();
@@ -272,8 +272,8 @@ class _EditTTFormState extends State<EditTTForm> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          DateFormat('d MMM').format(_startDate),
-          style: Theme.of(context).textTheme.headline5,
+          DateFormat('d MMM').format(_startDate!),
+          style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
       ),
@@ -284,16 +284,16 @@ class _EditTTFormState extends State<EditTTForm> {
     showTimePicker(
       context: context,
       initialTime:
-          _isEdit ? TimeOfDay.fromDateTime(_startDate) : TimeOfDay.now(),
+          _isEdit ? TimeOfDay.fromDateTime(_startDate!) : TimeOfDay.now(),
     ).then((time) {
       if (time == null) {
         return;
       }
       setState(() {
         _startTime = DateTime(
-          _startDate.year,
-          _startDate.month,
-          _startDate.day,
+          _startDate!.year,
+          _startDate!.month,
+          _startDate!.day,
           time.hour,
           time.minute,
         );
@@ -314,7 +314,7 @@ class _EditTTFormState extends State<EditTTForm> {
           backgroundColor:
               MaterialStateProperty.all(Theme.of(context).primaryColor),
           textStyle:
-              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
+              MaterialStateProperty.all(Theme.of(context).textTheme.titleLarge),
         ),
       ),
     );
@@ -326,8 +326,8 @@ class _EditTTFormState extends State<EditTTForm> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
-          DateFormat('h:mm a').format(_startTime),
-          style: Theme.of(context).textTheme.headline5,
+          DateFormat('h:mm a').format(_startTime!),
+          style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
       ),
@@ -335,18 +335,18 @@ class _EditTTFormState extends State<EditTTForm> {
   }
 
   void _saveForm(BuildContext context) {
-    if (!_endTime.isBefore(_startTime) &&
+    if (!_endTime!.isBefore(_startTime!) &&
         _subName != SubjectName.Undeclared &&
         _subName != null &&
         _duration != '' &&
         _section != null) {
-      _form.currentState.save();
-      _form.currentState.reset();
+      _form.currentState!.save();
+      _form.currentState!.reset();
       if (!_isEdit) {
         db.addClassToCF(
           _subName,
-          _startTime,
-          _endTime,
+          _startTime!,
+          _endTime!,
           _section,
           _topic,
         );
@@ -363,8 +363,8 @@ class _EditTTFormState extends State<EditTTForm> {
         db.editClassInCF(
           _editedId,
           enToString(_subName),
-          _startTime,
-          _endTime,
+          _startTime!,
+          _endTime!,
           _section,
           _topic,
         );
@@ -616,7 +616,7 @@ class _EditTTFormState extends State<EditTTForm> {
                                     ),
                                     Text(
                                       DateFormat('d MMMM, y')
-                                          .format(_startDate),
+                                          .format(_startDate!),
                                       style: TextStyle(
                                           color: Color(0xffC54134),
                                           fontSize: 16,
@@ -657,7 +657,7 @@ class _EditTTFormState extends State<EditTTForm> {
                                               horizontal: 8, vertical: 4),
                                           child: Text(
                                             DateFormat('h:mm a')
-                                                .format(_startTime),
+                                                .format(_startTime!),
                                             style: TextStyle(
                                                 color: Color(0xff161616),
                                                 fontSize: 24,
@@ -769,13 +769,12 @@ class _EditTTFormState extends State<EditTTForm> {
                                     .hideCurrentSnackBar();
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
-                                  content: !_endTime.isBefore(_startTime) &&
+                                  content: !_endTime!.isBefore(_startTime!) &&
                                           _subName != SubjectName.Undeclared &&
                                           _subName != null &&
-                                          _duration != null &&
                                           _section != null
                                       ? Text(
-                                          '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime)} added to Time Table')
+                                          '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime!)} added to Time Table')
                                       : Text('Class not added'),
                                 ));
                                 setState(() {
@@ -1022,7 +1021,7 @@ class _EditTTFormState extends State<EditTTForm> {
     setState(() {
       setStateModal(() {
         _duration = d;
-        _endTime = _startTime.add(Duration(hours: h, minutes: m));
+        _endTime = _startTime!.add(Duration(hours: h, minutes: m));
       });
     });
   }

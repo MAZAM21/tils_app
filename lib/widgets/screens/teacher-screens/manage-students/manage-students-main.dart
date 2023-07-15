@@ -1,24 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:SIL_app/models/student_rank.dart';
-import 'package:SIL_app/models/subject-class.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/db.dart';
-import 'package:SIL_app/service/ranking-service.dart';
 import 'package:SIL_app/service/student-management-service.dart';
-import 'package:SIL_app/service/student-service.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
-import 'package:provider/provider.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/activate-parent-portal.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/edit-student-subs.dart';
 
 class ManageStudents extends StatefulWidget {
-  const ManageStudents({Key key}) : super(key: key);
+  const ManageStudents({Key? key}) : super(key: key);
 
   static const routeName = '/managementMain';
 
@@ -30,10 +23,10 @@ class _ManageStudentsState extends State<ManageStudents> {
   final ms = ManagementService();
   final db = DatabaseService();
 
-  String _yearFilter;
-  String _filter;
-  String _subjectFilter;
-  String _subYearFilter;
+  String? _yearFilter;
+  String? _filter;
+  String? _subjectFilter;
+  String? _subYearFilter;
 
   Map<String, List<String>> yearSub = {
     '1': ['Contract', 'LSM', 'Criminal', 'Public'],
@@ -54,7 +47,7 @@ class _ManageStudentsState extends State<ManageStudents> {
 
 //main filter button
 
-  Widget _filterButtonFirst({String text, String filterText}) {
+  Widget _filterButtonFirst({required String text, String? filterText}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.5),
       child: ElevatedButton(
@@ -85,7 +78,7 @@ class _ManageStudentsState extends State<ManageStudents> {
 
   //sub filters
 
-  ElevatedButton _filterButtonYear({String text, String filterText}) {
+  ElevatedButton _filterButtonYear({required String text, String? filterText}) {
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: _yearFilter == text
@@ -112,8 +105,8 @@ class _ManageStudentsState extends State<ManageStudents> {
   }
 
   Widget _filterButtonSubject({
-    String text,
-    String filterText,
+    required String text,
+    String? filterText,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -144,8 +137,8 @@ class _ManageStudentsState extends State<ManageStudents> {
   }
 
   ElevatedButton _filterButtonSubYear({
-    String text,
-    String filterText,
+    required String text,
+    String? filterText,
   }) {
     return ElevatedButton(
       style: ButtonStyle(
@@ -442,11 +435,11 @@ class _ManageStudentsState extends State<ManageStudents> {
                           child: Row(
                             children: <Widget>[
                               for (var x = 0;
-                                  x < yearSub['$_subYearFilter'].length;
+                                  x < yearSub['$_subYearFilter']!.length;
                                   x++)
                                 _filterButtonSubject(
-                                    text: yearSub['$_subYearFilter'][x],
-                                    filterText: yearSub['$_subYearFilter'][x]),
+                                    text: yearSub['$_subYearFilter']![x],
+                                    filterText: yearSub['$_subYearFilter']![x]),
                             ],
                           ),
                         )
@@ -490,7 +483,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                  return showOptions(students[i]);
+                                  showOptions(students[i]);
                                 },
                                 child: Container(
                                   color: Colors.white,
@@ -504,7 +497,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                                         CircleAvatar(
                                           backgroundImage:
                                               CachedNetworkImageProvider(
-                                            students[i].imageUrl,
+                                            students[i].imageUrl!,
                                           ),
                                           radius: 20,
                                         )

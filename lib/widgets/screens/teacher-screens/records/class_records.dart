@@ -36,9 +36,7 @@ class _ClassRecordsState extends State<ClassRecords> {
   Widget build(BuildContext context) {
     final allClassesData = Provider.of<List<SubjectClass>>(context);
     bool isActive = false;
-    if (allClassesData != null) {
-      isActive = true;
-    }
+    isActive = true;
 
     return !isActive
         ? LoadingScreen()
@@ -66,8 +64,8 @@ class _ClassRecordsState extends State<ClassRecords> {
                   child: GestureDetector(
                     child: Card(
                       child: Text(
-                        allClassesData[i].subjectName,
-                        style: Theme.of(context).textTheme.headline4,
+                        allClassesData[i].subjectName!,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       color: allClassesData[i].getColor(),
                     ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:SIL_app/models/student-user-data.dart';
@@ -8,10 +7,9 @@ import 'package:SIL_app/service/student-service.dart';
 import 'package:SIL_app/service/teachers-service.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
 import 'package:SIL_app/widgets/student-screens/student_RA/assessment-page.dart';
-import 'package:SIL_app/widgets/student-screens/student_RA/student-ra-subject.dart';
 
 class StudentRADisplay extends StatefulWidget {
-  StudentRADisplay({@required this.subject});
+  StudentRADisplay({required this.subject});
   final String subject;
   static const routeName = '/student-ra-display';
 
@@ -34,18 +32,16 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
 
     ///a list of all ra's of the subject passed in constructor
     List<RAfromDB> subRa = [];
-    int totalRa;
+    int? totalRa;
     bool isActive = false;
-    String uid;
-    String name;
-    if (allRa != null && userData != null) {
-      name = userData.name;
-      uid = userData.uid;
-      // filtering allra for all of the subs registered.
-      isActive = true;
-      subRa = ts.getRAfromSub(allRa, widget.subject);
-      totalRa = subRa.length;
-    }
+    String? uid;
+    String? name;
+    name = userData.name;
+    uid = userData.uid;
+    // filtering allra for all of the subs registered.
+    isActive = true;
+    subRa = ts.getRAfromSub(allRa, widget.subject);
+    totalRa = subRa.length;
     return !isActive
         ? LoadingScreen()
         : Scaffold(
@@ -128,7 +124,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                 color: Color(0xff2b3443),
                               ),
                             ),
-                            trailing: subRa[i].isDeployed &&
+                            trailing: subRa[i].isDeployed! &&
                                     !ss.submitted(subRa[i].id, userData)
                                 ? Text(
                                     'In Progress',
@@ -138,7 +134,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                       color: Colors.green[400],
                                     ),
                                   )
-                                : !subRa[i].isDeployed &&
+                                : !subRa[i].isDeployed! &&
                                         !ss.submitted(subRa[i].id, userData)
                                     ? Text(
                                         'Not Deployed',
@@ -156,7 +152,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
                                           color: Colors.blue[400],
                                         ),
                                       ),
-                            onTap: subRa[i].isDeployed &&
+                            onTap: subRa[i].isDeployed! &&
                                     !ss.submitted(subRa[i].id, userData)
                                 ? () {
                                     Navigator.popAndPushNamed(

@@ -8,10 +8,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import './routes_theme.dart';
-import 'dart:io' show Platform;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
@@ -39,7 +38,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-Future<void> _connectEmulator() async {
+Future _connectEmulator() async {
   final localHostString = '10.0.2.2';
 
   FirebaseFirestore.instance.settings = Settings(

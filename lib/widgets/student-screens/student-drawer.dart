@@ -14,7 +14,7 @@ class StudentDrawer extends StatelessWidget {
           AppBar(
             title: Text(
               'Hello!',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             automaticallyImplyLeading: true, //does not display back button
           ),

@@ -24,17 +24,17 @@ class ParentService {
   ///getMarkedClasses takes all subjectclass list and the user's attendance map and returns the marked attendance classes
   ///made for parents attendance grid
 
-  List<SubjectClass> getMarkedClasses(List<SubjectClass> allClasses, Map att) {
+  List<SubjectClass> getMarkedClasses(List<SubjectClass> allClasses, Map? att) {
     List<SubjectClass> marked = [];
     if (att != null) {
       allClasses.forEach((element) {
-        if (att.containsKey(element.id) && element != null) {
+        if (att.containsKey(element.id)) {
           marked.add(element);
         }
       });
     }
-    marked.sort((a, b) => b.startTime.compareTo(
-        a.startTime)); // easy sorting of dates. Use in attendance grid as well
+    marked.sort((a, b) => b.startTime!.compareTo(
+        a.startTime!)); // easy sorting of dates. Use in attendance grid as well
     return marked;
   }
 

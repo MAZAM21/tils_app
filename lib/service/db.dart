@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart';
+
 import 'package:SIL_app/models/admin-user-data.dart';
 import 'package:SIL_app/models/allTextQAs.dart';
 import 'package:SIL_app/models/assignment-marks.dart';
@@ -31,15 +31,13 @@ import '../models/subject-class.dart';
 import '../models/assessment-result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:html' as html;
 
 class DatabaseService with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   //gets classes collection data and converts to Meeting list for TT
-  Stream<List<Meeting>> streamMeetings() {
+  Stream<List<Meeting>>? streamMeetings() {
     CollectionReference ref = _db.collection('classes');
     try {
       return ref.snapshots().map((list) =>
@@ -64,13 +62,13 @@ class DatabaseService with ChangeNotifier {
         list.docs.map((doc) => Attendance.fromFirestore(doc)).toList());
   }
 
-  Stream<List<StudentRank>> streamStudents() {
+  Stream<List<StudentRank>>? streamStudents() {
     try {
       CollectionReference ref = _db.collection('students');
       return ref.snapshots().map((list) =>
           list.docs.map((doc) => StudentRank.fromFirestore(doc)).toList());
     } catch (e) {
-      print('error in student list stream db:' + e);
+      print('error in student list stream db:' + '$e');
     }
     return null;
   }
@@ -78,16 +76,19 @@ class DatabaseService with ChangeNotifier {
 //stream resource
   Stream<List<ResourceDownload>> streamResource() {
     CollectionReference ref = _db.collection('resources');
-    return ref.snapshots().map((list) =>
-        list.docs.map((doc) => ResourceDownload.fromFirestore(doc)).toList());
+    return ref.snapshots().map((list) => list.docs
+        .map((doc) => ResourceDownload.fromFirestore(
+            doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+        .toList());
   }
 
   //gets data from student collection and checks uid and then makes data into studentuser
-  Stream<StudentUser> streamStudentUser(String uid) {
+  Stream<StudentUser>? streamStudentUser(String uid) {
     try {
       CollectionReference ref = _db.collection('students');
       return ref.snapshots().map((list) => StudentUser.fromFirestore(
-          list.docs.firstWhere((doc) => doc['uid'] == uid)));
+          list.docs.firstWhere((doc) => doc['uid'] == uid)
+              as QueryDocumentSnapshot<Map<String, dynamic>>));
     } catch (e) {
       print('bloody error: $e');
     }
@@ -98,22 +99,25 @@ class DatabaseService with ChangeNotifier {
   Stream<TeacherUser> streamTeacherUser(String uid) {
     CollectionReference ref = _db.collection('teachers');
     return ref.snapshots().map((list) => TeacherUser.fromFirestore(
-        list.docs.firstWhere((doc) => doc['uid'] == uid)));
+        list.docs.firstWhere((doc) => doc['uid'] == uid)
+            as QueryDocumentSnapshot<Map<String, dynamic>>));
   }
 
   Stream<ParentUser> streamParentUser(String puid) {
     CollectionReference ref = _db.collection('students');
     return ref.snapshots().map((list) => ParentUser.fromFirestore(
-        list.docs.firstWhere((doc) => doc['parent-uid'] == puid)));
+        list.docs.firstWhere((doc) => doc['parent-uid'] == puid)
+            as QueryDocumentSnapshot<Map<String, dynamic>>));
   }
 
   Stream<AdminUser> streamAdminUser(String uid) {
     CollectionReference ref = _db.collection('admins');
     return ref.snapshots().map((list) => AdminUser.fromFirestore(
-        list.docs.firstWhere((doc) => doc['uid'] == uid)));
+        list.docs.firstWhere((doc) => doc['uid'] == uid)
+            as QueryDocumentSnapshot<Map<String, dynamic>>));
   }
 
-  Stream<List<Announcement>> streamAnnouncement() {
+  Stream<List<Announcement>>? streamAnnouncement() {
     CollectionReference ref = _db.collection('announcements');
     try {
       return ref.snapshots().map((list) =>
@@ -125,22 +129,26 @@ class DatabaseService with ChangeNotifier {
   }
 
   /// stream Assignment Marks
-  Stream<List<AMfromDB>> streamAM() {
+  Stream<List<AMfromDB>>? streamAM() {
     CollectionReference ref = _db.collection('assignment-marks');
     try {
-      return ref.snapshots().map((list) =>
-          list.docs.map((doc) => AMfromDB.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => AMfromDB.fromFirestore(
+              doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+          .toList());
     } catch (err) {
       print('error in streamAM: $err');
     }
     return null;
   }
 
-  Stream<List<RAfromDB>> streamRA() {
+  Stream<List<RAfromDB>>? streamRA() {
     CollectionReference ref = _db.collection('remote-assessment');
     try {
-      return ref.snapshots().map((list) =>
-          list.docs.map((doc) => RAfromDB.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => RAfromDB.fromFirestore(
+              doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+          .toList());
     } catch (err) {
       print('err in stream RA: $err');
     }
@@ -148,26 +156,30 @@ class DatabaseService with ChangeNotifier {
   }
 
   ///stream all submitted text answers scripts for all assessments
-  Stream<List<TextQAs>> streamTextQAs() {
+  Stream<List<TextQAs>>? streamTextQAs() {
     CollectionReference ref = _db.collection('assessment-result');
 
     try {
-      return ref.snapshots().map((list) =>
-          list.docs.map((doc) => TextQAs.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => TextQAs.fromFirestore(
+              doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+          .toList());
     } catch (err) {
       print('error in stream textqas: $err');
     }
     return null;
   }
 
-  Stream<List<StudentAnswers>> streamResFromID(String assid) {
+  Stream<List<StudentAnswers>>? streamResFromID(String? assid) {
     try {
       CollectionReference ref = _db
           .collection('assessment-result')
           .doc('$assid')
           .collection('student-IDs');
-      return ref.snapshots().map((list) =>
-          list.docs.map((doc) => StudentAnswers.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => StudentAnswers.fromFirestore(
+              doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+          .toList());
     } catch (err) {
       print('error in stream ans from id db: $err');
     }
@@ -175,14 +187,16 @@ class DatabaseService with ChangeNotifier {
   }
 
   ///stream list of scripts for chosen assessment
-  Stream<List<StudentTextAns>> streamAnsFromID(String assid) {
+  Stream<List<StudentTextAns>>? streamAnsFromID(String assid) {
     try {
       CollectionReference ref = _db
           .collection('assessment-result')
           .doc('$assid')
           .collection('student-IDs');
-      return ref.snapshots().map((list) =>
-          list.docs.map((doc) => StudentTextAns.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => StudentTextAns.fromFirestore(
+              doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+          .toList());
     } catch (err) {
       print('error in stream ans from id db: $err');
     }
@@ -190,7 +204,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   ///get metrics stream as a collection
-  Stream<List<StudentMetrics>> streamMetrics() {
+  Stream<List<StudentMetrics>>? streamMetrics() {
     CollectionReference ref = _db.collection('metrics');
     try {
       return ref.snapshots().map((list) =>
@@ -202,16 +216,17 @@ class DatabaseService with ChangeNotifier {
   }
 
   ///gets auth state stream
-  Stream<User> authStateStream() {
+  Stream<User?> authStateStream() {
     return auth.authStateChanges();
   }
 
   ///gets students collection data as per the registeration status of student
-  Future<List<Student>> getStudentsBySub(String subName) async {
+  Future<List<Student>?> getStudentsBySub(String? subName) async {
     CollectionReference ref = _db.collection('students');
     try {
-      QuerySnapshot<Map<String, dynamic>> query =
-          await ref.where('registeredSubs.$subName', isEqualTo: true).get();
+      QuerySnapshot<Map<String, dynamic>> query = await (ref
+          .where('registeredSubs.$subName', isEqualTo: true)
+          .get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       return query.docs.map((doc) => Student.fromFirestore(doc)).toList();
     } catch (err) {
       print('error in getstudbysub $err');
@@ -220,7 +235,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   ///get all student docs from student collection
-  Future<List<Student>> getAllStudents() async {
+  Future<List<Student>?> getAllStudents() async {
     try {
       QuerySnapshot<Map<String, dynamic>> ref =
           await _db.collection('students').get();
@@ -231,11 +246,12 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  Future<List<String>> getAllAssessmentIds() async {
+  Future<List<String>?> getAllAssessmentIds() async {
     CollectionReference ref = _db.collection('remote-assessment');
     List<String> allIds = [];
     try {
-      QuerySnapshot<Map<String, dynamic>> allDocs = await ref.get();
+      QuerySnapshot<Map<String, dynamic>> allDocs =
+          await (ref.get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       allDocs.docs.forEach((doc) {
         allIds.add(doc.id);
       });
@@ -250,8 +266,6 @@ class DatabaseService with ChangeNotifier {
     final httpsReference = FirebaseStorage.instance.refFromURL(downloadUrl);
     final webUrl = await httpsReference.getDownloadURL();
     return webUrl;
-
-   
   }
 
   Future<void> downloadFile(String url, String fileName) async {
@@ -286,12 +300,13 @@ class DatabaseService with ChangeNotifier {
     });
   }
 
-  Future<List<String>> getAllARTitles(String subject) async {
+  Future<List<String?>?> getAllARTitles(String subject) async {
     CollectionReference ref = _db.collection('assessment-result');
-    List<String> titles = [];
+    List<String?> titles = [];
     try {
-      QuerySnapshot<Map<String, dynamic>> qtitles =
-          await ref.where('subject', isEqualTo: '$subject').get();
+      QuerySnapshot<Map<String, dynamic>> qtitles = await (ref
+          .where('subject', isEqualTo: '$subject')
+          .get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       //all titles and doc ids of the assessments of that subject
       qtitles.docs.forEach((doc) {
         titles.add(doc['title']);
@@ -304,7 +319,7 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  Future<List<ARStudent>> getARData(
+  Future<List<ARStudent>?> getARData(
     String subject,
   ) async {
     CollectionReference ref = _db.collection('assessment-result');
@@ -312,15 +327,16 @@ class DatabaseService with ChangeNotifier {
     CollectionReference stu = _db.collection('students');
 
     ///map containing {ids, titles}
-    Map<String, String> idTitles = {};
+    Map<String, String?> idTitles = {};
 
     //map of number of questions and assid
     Map<String, int> idL = {};
 
     try {
       //all assessments results of subject
-      QuerySnapshot<Map<String, dynamic>> qtitles =
-          await ref.where('subject', isEqualTo: '$subject').get();
+      QuerySnapshot<Map<String, dynamic>> qtitles = await (ref
+          .where('subject', isEqualTo: '$subject')
+          .get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       //all titles and doc ids of the assessments of that subject
       qtitles.docs.forEach((doc) {
         idTitles.addAll({doc.id: doc['title']});
@@ -338,8 +354,9 @@ class DatabaseService with ChangeNotifier {
       // print(idL);
 
       //checks student collection for all registered students fro this sub
-      QuerySnapshot<Map<String, dynamic>> qs =
-          await stu.where('registeredSubs.$subject', isEqualTo: true).get();
+      QuerySnapshot<Map<String, dynamic>> qs = await (stu
+          .where('registeredSubs.$subject', isEqualTo: true)
+          .get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       return qs.docs.map((doc) {
         // print(doc['name']);
         return ARStudent.fromFirebase(doc, idTitles, idL);
@@ -350,21 +367,22 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
-  Future<Map<String, int>> getAllStudentMarks(String assid) async {
+  Future<Map<String?, int>?> getAllStudentMarks(String assid) async {
     try {
       CollectionReference ref = _db
           .collection('assessment-result')
           .doc('$assid')
           .collection('student-IDs');
-      Map<String, int> allStMarks = {};
-      QuerySnapshot<Map<String, dynamic>> q = await ref.get();
+      Map<String?, int> allStMarks = {};
+      QuerySnapshot<Map<String, dynamic>> q =
+          await (ref.get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       q.docs.forEach((doc) {
         final Map tqmarks = {...doc['TQMarks']};
         final name = doc['name'];
         int l = tqmarks.length;
         //print(l);
         if (l != 0) {
-          int allTotal = tqmarks.values.fold(0, (p, e) => p + e);
+          int allTotal = tqmarks.values.fold(0, (p, e) => p + e as int);
           double aggregate = ((allTotal / (l * 100)) * 100);
           //print(aggregate);
           allStMarks.addAll({name: aggregate.toInt()});
@@ -397,7 +415,7 @@ class DatabaseService with ChangeNotifier {
       print('refrecence added storage');
 
       // Upload the file to Firebase Storage
-      final UploadTask uploadTask = fileRef.putData(file.bytes);
+      final UploadTask uploadTask = fileRef.putData(file.bytes!);
       uploadTasks.add(uploadTask);
 
       print('Upload the file to Firebase Storage');
@@ -434,7 +452,7 @@ class DatabaseService with ChangeNotifier {
       'topic': resourceUploadObj.topic,
       'subject': resourceUploadObj.subject,
       'uploadTeacher': resourceUploadObj.uploadTeacher,
-      'downloadUrls': Map<String, String>.fromIterable(
+      'downloadUrls': Map<String?, String?>.fromIterable(
         downloadUrls.expand((map) => map.entries),
         key: (entry) => entry.key,
         value: (entry) => entry.value,
@@ -461,12 +479,12 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addClassToCF(
-    SubjectName name,
+  Future addClassToCF(
+    SubjectName? name,
     DateTime start,
     DateTime end,
-    String section, [
-    String topic,
+    String? section, [
+    String? topic,
   ]) async {
     final _classCollection = _db.collection('classes');
     String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
@@ -507,15 +525,15 @@ class DatabaseService with ChangeNotifier {
         (StudentRank stud) => addAttToStudent(
             stud,
             attInput.classID,
-            attInput.attendanceStatus['${stud.id}'],
+            attInput.attendanceStatus!['${stud.id}'],
             attInput.subject,
             attInput.date),
       ),
     );
   }
 
-  Future<void> addAttToStudent(StudentRank student, String clsId, int stat,
-      String subName, String notifdate) async {
+  Future<void> addAttToStudent(StudentRank student, String? clsId, int? stat,
+      String? subName, String? notifdate) async {
     CollectionReference studentRef = _db.collection('students');
     if (stat == 3) {
       studentAbsentNotification(student, subName, notifdate);
@@ -529,7 +547,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> studentAbsentNotification(
-      StudentRank stud, String clsName, String date) async {
+      StudentRank stud, String? clsName, String? date) async {
     FirebaseFunctions.instance.httpsCallable('studentAbsentNotif').call({
       'className': clsName,
       'studentName': stud.name,
@@ -544,8 +562,9 @@ class DatabaseService with ChangeNotifier {
     CollectionReference studentRef = _db.collection('students');
     try {
       //gets doc of student
-      QuerySnapshot<Map<String, dynamic>> q =
-          await studentRef.where('name', isEqualTo: '$name').get();
+      QuerySnapshot<Map<String, dynamic>> q = await (studentRef
+          .where('name', isEqualTo: '$name')
+          .get() as Future<QuerySnapshot<Map<String, dynamic>>>);
       DocumentSnapshot stDoc = q.docs.firstWhere((doc) {
         return doc['name'] == '$name';
       });
@@ -562,7 +581,7 @@ class DatabaseService with ChangeNotifier {
 
   //adds class name and date to att page
   Future<void> addClassDetailToAttColl(
-    String className,
+    String? className,
     String id,
     DateTime date,
   ) async {
@@ -586,7 +605,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   ///Add token to teacher doc
-  Future<void> addTokenToTeacher(String token, String tID) async {
+  Future<void> addTokenToTeacher(String? token, String tID) async {
     DocumentReference ref = _db.collection('teachers').doc('$tID');
     try {
       return await ref.set({
@@ -598,7 +617,7 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addTokenToStudent(String token, String studID) async {
+  Future<void> addTokenToStudent(String? token, String studID) async {
     DocumentReference ref = _db.collection('students').doc('$studID');
     try {
       return await ref.set({
@@ -610,7 +629,7 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addParentTokenToStudent(String token, String studID) async {
+  Future<void> addParentTokenToStudent(String? token, String studID) async {
     DocumentReference ref = _db.collection('students').doc('$studID');
     try {
       return await ref.set({
@@ -622,12 +641,12 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addAnnouncementToCF(
-    String title,
-    String body,
+  Future addAnnouncementToCF(
+    String? title,
+    String? body,
     String uid,
     DateTime now,
-    String category,
+    String? category,
   ) async {
     CollectionReference ref = _db.collection('announcements');
     try {
@@ -643,7 +662,8 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> addAssignmentToCF([AssignmentMarks am, AMfromDB editAm]) async {
+  Future<void> addAssignmentToCF(
+      [AssignmentMarks? am, AMfromDB? editAm]) async {
     ///New approach is being tested here
     try {
       /// if editAm is not passed then adding new assignment code executes
@@ -651,7 +671,7 @@ class DatabaseService with ChangeNotifier {
         CollectionReference ref = _db.collection('assignment-marks');
         return await ref.add(
           {
-            'title': am.title,
+            'title': am!.title,
             'subject': am.subject,
             'student-marks': am.marks,
             'totalMarks': am.totalMarks,
@@ -664,7 +684,7 @@ class DatabaseService with ChangeNotifier {
           ///after which each student doc is individually updated
         ).then(
           (value) => Future.forEach(
-            am.uidMarks.entries,
+            am.uidMarks!.entries,
             (MapEntry element) => addAssignmentMarksToStudent(
               element.value,
               element.key,
@@ -676,7 +696,7 @@ class DatabaseService with ChangeNotifier {
 
         ///if editAm is there, then only student marks and uid marks are updated and indivual student
         ///docs as well
-      } else if (editAm != null) {
+      } else {
         DocumentReference eref =
             _db.collection('assignment-marks').doc(editAm.docId);
         return await eref.set(
@@ -687,7 +707,7 @@ class DatabaseService with ChangeNotifier {
           SetOptions(merge: true),
         ).then(
           (value) => Future.forEach(
-            editAm.uidMarks.entries,
+            editAm.uidMarks!.entries,
             (MapEntry element) => addAssignmentMarksToStudent(
               element.value,
               element.key,
@@ -703,7 +723,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> addAssignmentMarksToStudent(
-      int m, String id, String docId, String subject) async {
+      int m, String id, String? docId, String? subject) async {
     try {
       DocumentReference ref = _db.collection('students').doc(id);
 
@@ -717,10 +737,10 @@ class DatabaseService with ChangeNotifier {
   }
 
   //adds remote assessment to cf. only for input
-  Future<void> addAssessmentToCF(RemoteAssessment assessment) async {
+  Future addAssessmentToCF(RemoteAssessment assessment) async {
     CollectionReference ref = _db.collection('remote-assessment');
-    DateTime start;
-    DateTime end;
+    DateTime? start;
+    DateTime? end;
     if (assessment.deployTime != null && assessment.deadline != null) {
       start = assessment.deployTime;
       end = assessment.deadline;
@@ -738,7 +758,7 @@ class DatabaseService with ChangeNotifier {
         'teacherId': assessment.teacherId,
         'startTime': start,
         'endTime': end,
-        'isText': assessment.allTextQs.isNotEmpty ? true : false,
+        'isText': assessment.allTextQs!.isNotEmpty ? true : false,
       });
     } catch (err) {
       print('error in add assessment: $err');
@@ -747,7 +767,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> addAssessmentDeployment(
-      DateTime start, DateTime end, String assid) async {
+      DateTime start, DateTime end, String? assid) async {
     DocumentReference ref = _db.collection('remote-assessment').doc('$assid');
     return await ref.set({
       'startTime': start,
@@ -757,14 +777,14 @@ class DatabaseService with ChangeNotifier {
 
   ///Used in student portal to add stundent's answers to db
   Future<void> addMCQAnswer(
-    String question,
-    String stat,
-    String ans,
-    String assid,
-    String uid,
-    String title,
-    String subject,
-    String name,
+    String? question,
+    String? stat,
+    String? ans,
+    String? assid,
+    String? uid,
+    String? title,
+    String? subject,
+    String? name,
   ) async {
     DocumentReference ref = _db.collection('assessment-result').doc('$assid');
     DocumentReference stud = _db.collection('students').doc(uid);
@@ -809,7 +829,7 @@ class DatabaseService with ChangeNotifier {
 
   ///adds marks to student and teacher
   Future<void> addTotalMarkToStudent(int mark, String uid, String assid,
-      String subject, String teacherId) async {
+      String? subject, String teacherId) async {
     DocumentReference stuRef = _db.collection('students').doc('$uid');
     DocumentReference teachRef = _db.collection('teachers').doc('$teacherId');
     await stuRef.set({
@@ -844,13 +864,13 @@ class DatabaseService with ChangeNotifier {
 
   //add answer of text q to db
   Future<void> addTextQAnswer(
-    String q,
+    String? q,
     String a,
-    String assid,
-    String uid,
-    String title,
-    String name,
-    String subject,
+    String? assid,
+    String? uid,
+    String? title,
+    String? name,
+    String? subject,
   ) async {
     DocumentReference stud = _db.collection('students').doc(uid);
 
@@ -892,10 +912,10 @@ class DatabaseService with ChangeNotifier {
       uploadStudents,
       (UploadStudent stud) => auth
           .createUserWithEmailAndPassword(
-            email: stud.email,
-            password: stud.password,
+            email: stud.email!,
+            password: stud.password!,
           )
-          .then((UserCredential cred) => stud.uid = cred.user.uid),
+          .then((UserCredential cred) => stud.uid = cred.user!.uid),
     )
         .then(
           (value) => Future.forEach(
@@ -949,14 +969,14 @@ class DatabaseService with ChangeNotifier {
       auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((UserCredential credential) {
-        userRef.doc(credential.user.uid).set({
+        userRef.doc(credential.user!.uid).set({
           'role': 'parent',
           'email': email,
           'password': password,
           'child_name': stud.name,
         }, SetOptions(merge: true)).then(
           (value) => studRef.set(
-            {'parent-uid': credential.user.uid},
+            {'parent-uid': credential.user!.uid},
             SetOptions(merge: true),
           ),
         );
@@ -974,10 +994,10 @@ class DatabaseService with ChangeNotifier {
       uploadTeachers,
       (UploadTeacher teach) => auth
           .createUserWithEmailAndPassword(
-            email: teach.email,
-            password: teach.password,
+            email: teach.email!,
+            password: teach.password!,
           )
-          .then((UserCredential cred) => teach.uid = cred.user.uid),
+          .then((UserCredential cred) => teach.uid = cred.user!.uid),
     )
         .then(
           (value) => Future.forEach(
@@ -1013,7 +1033,7 @@ class DatabaseService with ChangeNotifier {
         );
   }
 
-  Future<void> editStudentYear(String newYear, StudentRank stud) async {
+  Future<void> editStudentYear(String? newYear, StudentRank stud) async {
     DocumentReference studRef = _db.collection('students').doc(stud.id);
     try {
       await studRef.set(
@@ -1066,12 +1086,12 @@ class DatabaseService with ChangeNotifier {
 
   //adds edited class to cf
   Future<void> editClassInCF(
-    String id,
+    String? id,
     String name,
     DateTime start,
     DateTime end,
-    String section, [
-    String topic,
+    String? section, [
+    String? topic,
   ]) async {
     final _classCollection = _db.collection('classes');
     String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
@@ -1089,8 +1109,8 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> editAnnouncement(
-      String id, String title, String body, String uid, String category) async {
+  Future<void> editAnnouncement(String? id, String? title, String? body,
+      String uid, String? category) async {
     CollectionReference ref = _db.collection('announcements');
     try {
       return await ref.doc(id).set({
@@ -1105,7 +1125,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   //get attendance and class docs for Class Records data object(ClassData)
-  Future<ClassData> getClassRecord(String id) async {
+  Future<ClassData> getClassRecord(String? id) async {
     DocumentSnapshot attDoc = await _db.collection('attendance').doc(id).get();
     DocumentSnapshot classDoc = await _db.collection('classes').doc(id).get();
     ClassData cd = ClassData.fromFirestore(attDoc, classDoc);
@@ -1130,7 +1150,8 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> deleteStudent(String studID) async {
     final studRef = _db.collection('students');
-    final binRef = _db.collection('bin');
+    final CollectionReference<Map<String, dynamic>?> binRef =
+        _db.collection('bin');
     try {
       // Get a reference to the assessment-result collection
       final CollectionReference assessmentResultCollection =
@@ -1172,7 +1193,7 @@ class DatabaseService with ChangeNotifier {
     } catch (e) {}
   }
 
-  Future<void> deleteAssessment(String id) async {
+  Future<void> deleteAssessment(String? id) async {
     final ref = _db.collection('remote-assessment');
 
     try {
@@ -1182,7 +1203,7 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> deleteAnnouncement(String id) async {
+  Future<void> deleteAnnouncement(String? id) async {
     final ref = _db.collection('announcements');
     try {
       return await ref.doc(id).delete();
@@ -1191,7 +1212,7 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> deleteEntireAssignment(String asgId) async {
+  Future<void> deleteEntireAssignment(String? asgId) async {
     final asgRef = _db.collection('assignment-marks');
     try {
       await asgRef.doc(asgId).delete();
@@ -1202,9 +1223,9 @@ class DatabaseService with ChangeNotifier {
 
   Future<void> deleteAssignment(
     String studId,
-    String asgId,
+    String? asgId,
     String studName,
-    String subName,
+    String? subName,
   ) async {
     final ref = _db.collection('assignment-marks');
     final studRef = _db.collection('students').doc(studId);
@@ -1271,7 +1292,7 @@ SubjectName setSubject(String sub) {
   }
 }
 
-String enToString(SubjectName name) {
+String enToString(SubjectName? name) {
   switch (name) {
     case SubjectName.Jurisprudence:
       return 'Jurisprudence';

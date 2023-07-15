@@ -18,7 +18,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
 
   DateTime _endTime = DateTime.now();
 
-  String _duration;
+  String? _duration;
 
   void pickDate() {
     showDatePicker(
@@ -49,7 +49,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
           onPressed: () {
             pickDate();
@@ -96,7 +96,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
         ),
       ),
@@ -113,7 +113,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             DateFormat('h:mm a').format(_startTime),
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
         ),
@@ -131,7 +131,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             DateFormat('d MMM').format(_startDate),
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
         ),
@@ -153,7 +153,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
           ),
           child: Text(
             duration,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           onPressed: () {
             setState(() {

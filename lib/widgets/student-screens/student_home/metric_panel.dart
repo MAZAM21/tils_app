@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:SIL_app/models/metrics.dart';
 import 'package:SIL_app/models/student-user-data.dart';
 import 'package:SIL_app/service/metric-service.dart';
-import 'package:SIL_app/service/student-service.dart';
-import 'package:emojis/emoji.dart';
-import 'package:emojis/emojis.dart';
 
 class MetricDisplay extends StatelessWidget {
   const MetricDisplay({
-    @required this.studData,
-    @required this.metrics,
-    Key key,
+    required this.studData,
+    required this.metrics,
+    Key? key,
   }) : super(key: key);
   final List<StudentMetrics> metrics;
   final StudentUser studData;
@@ -19,13 +16,11 @@ class MetricDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final ms = MetricService();
     bool isActive = false;
-    MetricAchievement display;
-    if (ms != null) {
-        print('working');
-      display = ms.getAssignmentMetric(metrics, studData.uid);
-      if (display.achievement != null) {
-        isActive = true;
-      }
+    late MetricAchievement display;
+      print('working');
+    display = ms.getAssignmentMetric(metrics, studData.uid);
+    if (display.achievement != null) {
+      isActive = true;
     }
 
     return !isActive
@@ -43,7 +38,7 @@ class MetricDisplay extends StatelessWidget {
                     children: <Widget>[
                       Spacer(),
                       Text(
-                        display.achievement + display.emoji,
+                        display.achievement! + display.emoji!,
                         style: TextStyle(
                             color: Color(0xff030453),
                             fontFamily: 'Proxima Nova',
@@ -55,7 +50,7 @@ class MetricDisplay extends StatelessWidget {
                   ),
                   SizedBox(height: 7,),
                   Text(
-                    display.duration,
+                    display.duration!,
                     style: TextStyle(
                         color: Color(0xff0077B6),
                         fontFamily: 'Proxima Nova',

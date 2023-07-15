@@ -10,8 +10,8 @@ import 'package:SIL_app/widgets/student-screens/attendance-record/student-attend
 
 class StudentAttendancePanel extends StatelessWidget {
   StudentAttendancePanel({
-    Key key,
-    @required this.studData,
+    Key? key,
+    required this.studData,
   }) : super(key: key);
 
   final StudentUser studData;
@@ -20,20 +20,18 @@ class StudentAttendancePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final classList = Provider.of<List<SubjectClass>>(context);
-    List<SubjectClass> topThree;
-    int perc;
-    int present;
-    int late;
-    int absent;
+    late List<SubjectClass> topThree;
+    int? perc;
+    int? present;
+    int? late;
+    int? absent;
     bool isActive = false;
-    if (classList != null) {
-      topThree = ss.getTopThreeAtt(classList, studData);
-      perc = ss.attendancePercentage(studData);
-      present = ss.presents(studData.attendance);
-      late = ss.lates(studData.attendance);
-      absent = ss.absents(studData.attendance);
-      isActive = true;
-    }
+    topThree = ss.getTopThreeAtt(classList, studData);
+    perc = ss.attendancePercentage(studData);
+    present = ss.presents(studData.attendance);
+    late = ss.lates(studData.attendance);
+    absent = ss.absents(studData.attendance);
+    isActive = true;
     return !isActive
         ? LoadingScreen()
         : defaultTargetPlatform == TargetPlatform.android ||
@@ -59,7 +57,7 @@ class StudentAttendancePanel extends StatelessWidget {
                       },
                       child: Text(
                         'Attendance',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                     Text(
@@ -152,14 +150,14 @@ class StudentAttendancePanel extends StatelessWidget {
                           title: topThree[i].topic == ''
                               ? Text(
                                   '${topThree[i].subjectName}',
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headlineMedium,
                                 )
                               : Text(
                                   '${topThree[i].subjectName} ${topThree[i].topic}',
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headlineMedium,
                                 ),
                           subtitle: Text(
-                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime)}',
+                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime!)}',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Proxima Nova',
@@ -208,7 +206,7 @@ class StudentAttendancePanel extends StatelessWidget {
                       },
                       child: Text(
                         'Attendance',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                     Text(
@@ -301,14 +299,14 @@ class StudentAttendancePanel extends StatelessWidget {
                           title: topThree[i].topic == ''
                               ? Text(
                                   '${topThree[i].subjectName}',
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headlineMedium,
                                 )
                               : Text(
                                   '${topThree[i].subjectName} ${topThree[i].topic}',
-                                  style: Theme.of(context).textTheme.headline4,
+                                  style: Theme.of(context).textTheme.headlineMedium,
                                 ),
                           subtitle: Text(
-                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime)}',
+                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime!)}',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Proxima Nova',

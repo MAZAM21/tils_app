@@ -26,7 +26,7 @@ class StudentNewsFeed extends StatelessWidget {
             }
 
             if (announcementSnap.hasData) {
-              List ordered = ts.orderAnnouncement(announcementSnap.data);
+              List ordered = ts.orderAnnouncement(announcementSnap.data!);
               return ListView.builder(
                 itemCount: ordered.length,
                 itemBuilder: (ctx, i) => StudentNFTile(ordered[i]),

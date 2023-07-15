@@ -24,12 +24,8 @@ class AttendancePage extends StatelessWidget {
     final myClasses = ts.getMyAttendance(classData, teacherData.subjects);
     bool isActive = false;
     bool classesAdded = false;
-    if (classData != null && studList != null) {
-      isActive = true;
-    }
-    if (myClasses != null) {
-      classesAdded = true;
-    }
+    isActive = true;
+    classesAdded = true;
     return !isActive
         ? LoadingScreen()
         : Scaffold(
@@ -42,7 +38,7 @@ class AttendancePage extends StatelessWidget {
                 return !classesAdded
                     ? Text(
                         'No Classes Scheduled',
-                        style: Theme.of(context).textTheme.headline4,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       )
                     : Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -68,7 +64,7 @@ class AttendancePage extends StatelessWidget {
                                   ),
                                 ),
                           subtitle: Text(
-                            '${DateFormat('hh:mm a - EEE, MMM d').format(myClasses[i].startTime)}',
+                            '${DateFormat('hh:mm a - EEE, MMM d').format(myClasses[i].startTime!)}',
                             style: TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontSize: 12,

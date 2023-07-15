@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:SIL_app/models/student_rank.dart';
 import 'package:SIL_app/service/db.dart';
 
@@ -17,14 +14,14 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
   final _formKey = GlobalKey<FormState>();
   final db = DatabaseService();
 
-  String email;
-  String password;
+  String? email;
+  String? password;
 
-  String errorMessage;
+  String? errorMessage;
 
   void saveParentToDb(email, password) {
     setState(() {
-      _formKey.currentState.validate();
+      _formKey.currentState!.validate();
 
       db.saveParent(email, password, widget.stud);
     });
@@ -52,7 +49,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                 SizedBox(height: 50,),
                 Text(
                   'Enter Email',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
@@ -68,7 +65,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                           validator: (value) {
                             if (!RegExp(
                                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value)) {
+                                .hasMatch(value!)) {
                               errorMessage = 'Invalid email';
                               return errorMessage;
                             }
@@ -98,7 +95,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                   height: 40,
                 ),
                 Text('Enter Password',
-                    style: Theme.of(context).textTheme.headline6),
+                    style: Theme.of(context).textTheme.titleLarge),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Container(
@@ -109,7 +106,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                         password = newPass;
                       },
                       validator: (value) {
-                        if (value.length < 6 || value.isEmpty) {
+                        if (value!.length < 6 || value.isEmpty) {
                           return 'Password should have 6 characters at least';
                         }
                         return null;
@@ -136,7 +133,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    _formKey.currentState.save();
+                    _formKey.currentState!.save();
                     saveParentToDb(email, password);
                     Navigator.pop(context);
                   },

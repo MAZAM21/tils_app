@@ -10,9 +10,9 @@ import 'package:SIL_app/widgets/student-screens/student_RA/student-ra-display.da
 
 class StudentRASubject extends StatelessWidget {
   const StudentRASubject({
-    Key key,
-    @required this.subjects,
-    @required this.studentUser,
+    Key? key,
+    required this.subjects,
+    required this.studentUser,
   }) : super(key: key);
   final List<String> subjects;
   final StudentUser studentUser;
@@ -43,7 +43,7 @@ class StudentRASubject extends StatelessWidget {
           backgroundColor:
               MaterialStateProperty.all(Theme.of(context).primaryColor),
           textStyle:
-              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
+              MaterialStateProperty.all(Theme.of(context).textTheme.titleLarge),
         ),
         child: Text(sub),
       ),

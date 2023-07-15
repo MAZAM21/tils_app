@@ -34,7 +34,7 @@ class _StudentAttendanceRecordState extends State<StudentAttendanceRecord> {
                 itemBuilder: (context, i) {
                   return ListTile(
                     subtitle: Text(
-                        '${DateFormat('EEE, MMM d').format(marked[i].startTime)}'),
+                        '${DateFormat('EEE, MMM d').format(marked[i].startTime!)}'),
                     title: marked[i].topic == ''
                         ? Text(
                             '${marked[i].subjectName}',

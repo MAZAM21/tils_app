@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:SIL_app/models/parent-user-data.dart';
 import 'package:SIL_app/models/remote_assessment.dart';
 
 import 'package:SIL_app/models/student_rank.dart';
 
-import '../models/remote_assessment.dart';
 
 ///To-do
 /// Attach attendance to score, maybe 15 marks per present, 10 late
@@ -68,12 +66,12 @@ class RankingService {
   }
 
   List<StudentRank> getStudentAssignmentScore(List<StudentRank> studlist) {
-    studlist.sort((a, b) => b.assignmentScore.compareTo(a.assignmentScore));
+    studlist.sort((a, b) => b.assignmentScore!.compareTo(a.assignmentScore!));
     for (var i = 0; i < studlist.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
       studlist[i].position = i + 1;
-      double s = studlist[i].assignmentScore;
+      double? s = studlist[i].assignmentScore;
 
       for (var x = i + 1; x < studlist.length; x++) {
         if (studlist[x].assignmentScore == s) {
@@ -85,28 +83,28 @@ class RankingService {
     return studlist;
   }
 
-  List<StudentRank> getStudentBySub(String sub, List<StudentRank> studList) {
+  List<StudentRank> getStudentBySub(String? sub, List<StudentRank> studList) {
     List<StudentRank> studSubs = [];
     studList.forEach((stud) {
-      if (stud.subjects.contains(sub) && stud.raSubScore.containsKey('$sub')) {
+      if (stud.subjects!.contains(sub) && stud.raSubScore!.containsKey('$sub')) {
         studSubs.add(stud);
       }
     });
     studSubs
-        .sort((a, b) => b.raSubScore['$sub'].compareTo(a.raSubScore['$sub']));
+        .sort((a, b) => b.raSubScore!['$sub'].compareTo(a.raSubScore!['$sub']));
 
     for (var i = 0; i < studSubs.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
       studSubs[i].position = i + 1;
-      int s = studSubs[i].raSubScore['$sub'];
+      int? s = studSubs[i].raSubScore!['$sub'];
 
       //to account for same scores we will iterate through the studlist to see where are the other same scores
       //we will only go bellow the current positon as all studs are already sorted
       //once we find same score we just set it to x+1
 
       for (var x = i + 1; x < studSubs.length; x++) {
-        if (studSubs[x].raSubScore['$sub'] == s) {
+        if (studSubs[x].raSubScore!['$sub'] == s) {
           studSubs[i].position = x + 1;
         }
       }
@@ -115,7 +113,7 @@ class RankingService {
   }
 
   List<StudentRank> getStudentYearScore(
-    String year,
+    String? year,
     List<StudentRank> studlist,
   ) {
     List<StudentRank> yearList = [];
@@ -125,13 +123,13 @@ class RankingService {
       }
     });
 
-    yearList.sort((a, b) => b.yearScore.compareTo(a.yearScore));
+    yearList.sort((a, b) => b.yearScore!.compareTo(a.yearScore!));
 
     for (var i = 0; i < yearList.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
       yearList[i].position = i + 1;
-      double s = yearList[i].yearScore;
+      double? s = yearList[i].yearScore;
 
       //to account for same scores we will iterate through the studlist to see where are the other same scores
       //we will only go bellow the current positon as all studs are already sorted
@@ -148,13 +146,13 @@ class RankingService {
 
   List<StudentRank> getStudentAttendanceScore(List<StudentRank> studlist) {
     List<StudentRank> attList = studlist;
-    attList.sort((a, b) => b.attendanceScore.compareTo(a.attendanceScore));
+    attList.sort((a, b) => b.attendanceScore!.compareTo(a.attendanceScore!));
 
     for (var i = 0; i < attList.length; i++) {
       //by default postion is i + 1 since list is sorted. if all scores are unique this will suffice.
 
       attList[i].position = i + 1;
-      double s = attList[i].attendanceScore;
+      double? s = attList[i].attendanceScore;
 
       //to account for same scores we will iterate through the studlist to see where are the other same scores
       //we will only go bellow the current positon as all studs are already sorted
@@ -170,22 +168,22 @@ class RankingService {
     return attList;
   }
 
-  List<AssessmentResult> completedAssessmentsParent(
+  List<AssessmentResult>? completedAssessmentsParent(
     List<RAfromDB> raList,
     ParentUser parentData,
   ) {
     try {
       List<RAfromDB> compList = [];
       List<AssessmentResult> arList = [];
-      Map assidPercMap = _individualPercentages(parentData, raList);
+      Map? assidPercMap = _individualPercentages(parentData, raList);
       compList = raList
-          .where((ra) => parentData.completedAssessments.contains(ra.id))
+          .where((ra) => parentData.completedAssessments!.contains(ra.id))
           .toList();
       compList.forEach((ra) {
         arList.add(AssessmentResult(
           subject: ra.subject,
           title: ra.assessmentTitle,
-          percentage: assidPercMap['${ra.id}'],
+          percentage: assidPercMap!['${ra.id}'],
         ));
       });
       return arList;
@@ -196,32 +194,32 @@ class RankingService {
   }
 
   /// this function is to provide a map of each assessment id as value and overall percentage scored on that assessment
-  Map<String, int> _individualPercentages(
+  Map<String, int>? _individualPercentages(
     ParentUser pd,
     List<RAfromDB> raList,
   ) {
     try {
       Map<String, int> assidPerc = {};
-      final Map mcqRes = pd.mcqMarks;
-      final Map textQ = pd.textQMarks;
+      final Map? mcqRes = pd.mcqMarks;
+      final Map? textQ = pd.textQMarks;
 
       raList.forEach((ra) {
-        int totalMarks = (ra.allTextQs.length + ra.allMCQs.length) * 100;
-        int obtained;
+        int totalMarks = (ra.allTextQs!.length + ra.allMCQs!.length) * 100;
+        int? obtained;
 
         /// where there are no text qs,
         /// obtained marks will only be taken from mcqs
-        if (textQ['${ra.id}'] == null && mcqRes['${ra.id}'] != null) {
+        if (textQ!['${ra.id}'] == null && mcqRes!['${ra.id}'] != null) {
           obtained = (mcqRes['${ra.id}'] * 100) ?? 0;
           //print('obtained: $obtained');
-        } else if (mcqRes['${ra.id}'] == null && textQ['${ra.id}'] != null) {
+        } else if (mcqRes!['${ra.id}'] == null && textQ['${ra.id}'] != null) {
           obtained = textQ['${ra.id}'];
         } else if (textQ['${ra.id}'] != null && mcqRes['${ra.id}'] != null) {
           obtained = textQ['${ra.id}'] + (mcqRes['${ra.id}'] * 100) ?? 0;
         } else {
           obtained = 0;
         }
-        double perc = (obtained / totalMarks) * 100;
+        double perc = (obtained! / totalMarks) * 100;
         assidPerc['${ra.id}'] = perc.toInt();
       });
       return assidPerc;
@@ -232,8 +230,8 @@ class RankingService {
   }
 
   ///For Parent's portal
-  StudentRank getSingleStudentPos(List<StudentRank> studlist, String id) {
-    StudentRank stud = studlist.firstWhere((s) => s.id == id, orElse: () {
+  StudentRank? getSingleStudentPos(List<StudentRank?> studlist, String id) {
+    StudentRank? stud = studlist.firstWhere((s) => s!.id == id, orElse: () {
       return null;
     });
     return stud;
@@ -286,12 +284,12 @@ class AssessmentResult {
   ///This class is created to easily display individual assessment results.
   ///May also be used for assignments.
 
-  final String subject;
-  final int percentage;
-  final String title;
+  final String? subject;
+  final int? percentage;
+  final String? title;
   AssessmentResult({
-    @required this.subject,
-    @required this.percentage,
-    @required this.title,
+    required this.subject,
+    required this.percentage,
+    required this.title,
   });
 }

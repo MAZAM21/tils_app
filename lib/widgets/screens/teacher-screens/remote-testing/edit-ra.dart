@@ -56,7 +56,7 @@ class _EditRAState extends State<EditRA> {
                                     child: Text(
                                       'Q: \n${mcqList[i].question}',
                                       style:
-                                          Theme.of(context).textTheme.headline2,
+                                          Theme.of(context).textTheme.displayMedium,
                                     ),
                                   ),
                                 ),
@@ -68,7 +68,7 @@ class _EditRAState extends State<EditRA> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
-                                      'Answer Choices:\n${ts.mapToStrings(mcqList[i].answerChoices)}',
+                                      'Answer Choices:\n${ts.mapToStrings(mcqList[i].answerChoices!)}',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Proxima Nova',
@@ -128,7 +128,7 @@ class _EditRAState extends State<EditRA> {
                                     child: Text(
                                       'Q: \n${textQList[i]}',
                                       style:
-                                          Theme.of(context).textTheme.headline2,
+                                          Theme.of(context).textTheme.displayMedium,
                                     ),
                                   ),
                                 ),
@@ -146,7 +146,7 @@ class _EditRAState extends State<EditRA> {
     );
   }
 
-  void showDeploySheet(String assid) {
+  void showDeploySheet(String? assid) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -255,7 +255,7 @@ class _EditRAState extends State<EditRA> {
                       ),
                     ],
                   ),
-                  buildMCQListTile(widget.ra.allMCQs),
+                  buildMCQListTile(widget.ra.allMCQs!),
                   SizedBox(
                     height: 10,
                   ),
@@ -274,7 +274,7 @@ class _EditRAState extends State<EditRA> {
                       ),
                     ],
                   ),
-                  buildTextQListTile(widget.ra.allTextQs),
+                  buildTextQListTile(widget.ra.allTextQs as List<String>),
                 ],
               ),
             ),

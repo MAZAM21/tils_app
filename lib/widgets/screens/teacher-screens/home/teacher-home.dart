@@ -19,14 +19,8 @@ import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-assignment-
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart';
 
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 
 import 'package:SIL_app/widgets/student-screens/student_home/classes-grid.dart';
 
@@ -43,13 +37,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _token;
+  String? _token;
   final ts = TeacherService();
   final db = DatabaseService();
   @override
   void initState() {
     super.initState();
-    final teacherData = Provider.of<TeacherUser>(context, listen: false);
+    final teacherData = Provider.of<TeacherUser?>(context, listen: false);
 
     ///this is for foreground notifications supposedly
 
@@ -63,8 +57,8 @@ class _HomePageState extends State<HomePage> {
 
       flutterLocalNotificationsPlugin.initialize(initializationSettings);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        RemoteNotification notification = message.notification;
-        AndroidNotification android = message.notification?.android;
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
         if (notification != null && android != null) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -96,7 +90,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   getToken(String tID) async {
-    String token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -122,7 +116,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final teacherData = Provider.of<TeacherUser>(context);
+    final teacherData = Provider.of<TeacherUser?>(context);
     final meetingsList = Provider.of<List<Meeting>>(context);
     final subClassList = Provider.of<List<SubjectClass>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
@@ -135,20 +129,17 @@ class _HomePageState extends State<HomePage> {
     int deployedRA = 0;
     bool isActive = false;
     List<SubjectClass> gridList = [];
-    Meeting nextClass;
+    Meeting? nextClass;
 
-    if (meetingsList != null &&
-        teacherData != null &&
-        subClassList != null &&
-        raList != null) {
+    if (teacherData != null) {
       gridList = ts.getClassesForGrid(subClassList);
       final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
       nextClass = ts.getNextClass(myClasses);
       deployedRA = ts.getDeployedRA(raList, teacherData);
 
       if (nextClass.eventName != 'no class') {
-        estimateTs = nextClass.from.millisecondsSinceEpoch;
-        endTime = nextClass.to.millisecondsSinceEpoch;
+        estimateTs = nextClass.from!.millisecondsSinceEpoch;
+        endTime = nextClass.to!.millisecondsSinceEpoch;
       }
       isActive = true;
     }

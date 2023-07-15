@@ -6,17 +6,17 @@ class ManagementService {
     return studs;
   }
 
-  List<StudentRank> getStudentsOfSub(String sub, List<StudentRank> allStuds) {
+  List<StudentRank> getStudentsOfSub(String? sub, List<StudentRank> allStuds) {
     List<StudentRank> subStuds = [];
     allStuds.forEach((stud) {
-      if (stud.subjects.contains(sub)) {
+      if (stud.subjects!.contains(sub)) {
         subStuds.add(stud);
       }
     });
     return alphabeticalSort(subStuds);
   }
 
-  List<StudentRank> getStudentsOfYear(String year, List<StudentRank> allStuds) {
+  List<StudentRank> getStudentsOfYear(String? year, List<StudentRank> allStuds) {
     List<StudentRank> yearStuds = [];
     allStuds.forEach((stud) {
       if (stud.year == year) {

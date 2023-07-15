@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/results/result-display.dart';
 
 class ResultMain extends StatefulWidget {
-  const ResultMain({Key key}) : super(key: key);
+  const ResultMain({Key? key}) : super(key: key);
 
   @override
   _ResultMainState createState() => _ResultMainState();
@@ -33,7 +33,7 @@ class _ResultMainState extends State<ResultMain> {
             return LoadingScreen();
           }
           if (snap.hasData) {
-            final resList = ts.getResults(snap.data, tData);
+            final resList = ts.getResults(snap.data!, tData);
 
             return Scaffold(
               appBar: AppBar(

@@ -4,19 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ParentUser with ChangeNotifier {
   final String studentName;
   final String year;
-  final String section;
-  final String imageUrl;
+  final String? section;
+  final String? imageUrl;
   final attendance;
-  final Map textQMarks;
-  final Map mcqMarks;
+  final Map? textQMarks;
+  final Map? mcqMarks;
   final String studId;
-  final List completedAssessments;
+  final List? completedAssessments;
 
   ParentUser({
-    @required this.studentName,
-    @required this.year,
-    @required this.section,
-    @required this.studId,
+    required this.studentName,
+    required this.year,
+    required this.section,
+    required this.studId,
     this.imageUrl,
     this.attendance,
     this.textQMarks,
@@ -37,7 +37,7 @@ class ParentUser with ChangeNotifier {
       Map mcqm = {};
       List compAss = [];
 
-      if(url.isEmpty){
+      if (url.isEmpty) {
         url = '';
       }
 
@@ -72,6 +72,6 @@ class ParentUser with ChangeNotifier {
     } catch (err) {
       print('error in parent user data: $err');
     }
-    return null;
+    throw Exception;
   }
 }

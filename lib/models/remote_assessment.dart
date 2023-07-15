@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RemoteAssessment with ChangeNotifier {
-  DateTime timeAdded;
-  DateTime deployTime;
-  DateTime deadline;
-  String subject;
-  String teacherId;
-  String assessmentTitle;
-  List<MCQ> allMCQs;
-  List<String> allTextQs = [];
+  DateTime? timeAdded;
+  DateTime? deployTime;
+  DateTime? deadline;
+  String? subject;
+  String? teacherId;
+  String? assessmentTitle;
+  List<MCQ>? allMCQs;
+  List<String>? allTextQs = [];
 
   RemoteAssessment({
     this.timeAdded,
@@ -21,15 +21,15 @@ class RemoteAssessment with ChangeNotifier {
   });
   void addMCQ(MCQ mcq) {
     MCQ rMcq = randomizeMCQ(mcq);
-    allMCQs.add(rMcq);
-    print('${allMCQs.length}');
+    allMCQs!.add(rMcq);
+    print('${allMCQs!.length}');
     notifyListeners();
   }
 
   bool validate() {
     if (assessmentTitle != null &&
         subject != null &&
-        (allMCQs.isNotEmpty || allTextQs.isNotEmpty)) {
+        (allMCQs!.isNotEmpty || allTextQs!.isNotEmpty)) {
       return true;
     } else {
       return false;
@@ -38,36 +38,37 @@ class RemoteAssessment with ChangeNotifier {
 
   // key is the question. the value map has a key of option category and value is the option.
   Map returnMcqs() {
-    Map<String, Map<String, String>> mcqMap = {};
-    allMCQs.forEach((mcq) {
-      mcqMap.addAll({'${mcq.question}': mcq.answerChoices});
+    Map<String, Map<String, String?>?> mcqMap = {};
+    allMCQs!.forEach((mcq) {
+      mcqMap.addAll(
+          {'${mcq.question}': mcq.answerChoices as Map<String, String?>?});
     });
     return mcqMap;
   }
 
   void deleteMCQ(MCQ mcq) {
-    allMCQs.remove(mcq);
+    allMCQs!.remove(mcq);
     notifyListeners();
   }
 }
 
 class MCQ with ChangeNotifier {
-  Map answerChoices = {};
-  String question;
+  Map? answerChoices = {};
+  String? question;
   MCQ({this.question, this.answerChoices});
 }
 
 class RAfromDB {
-  final String id;
-  final DateTime timeAdded;
-  final String subject;
-  final String teacherId;
-  final String assessmentTitle;
-  DateTime startTime;
-  DateTime endTime;
-  List<MCQ> allMCQs = [];
-  List allTextQs = [];
-  bool isDeployed;
+  final String? id;
+  final DateTime? timeAdded;
+  final String? subject;
+  final String? teacherId;
+  final String? assessmentTitle;
+  DateTime? startTime;
+  DateTime? endTime;
+  List<MCQ>? allMCQs = [];
+  List? allTextQs = [];
+  bool? isDeployed;
 
   RAfromDB({
     this.id,
@@ -93,15 +94,14 @@ class RAfromDB {
       Timestamp endTime = data['endTime'] ?? Timestamp.now();
       Timestamp time = data['timeCreated'];
       DateTime d = DateTime.parse(time.toDate().toString());
-      DateTime start;
-      DateTime end;
+      DateTime? start;
+      DateTime? end;
       bool isDep;
       //print(startTime);
-      if (startTime != null && endTime != null) {
-        start =
-            DateTime.parse(startTime.toDate().toString() ?? Timestamp.now());
-        end = DateTime.parse(endTime.toDate().toString() ?? Timestamp.now());
-      }
+      start = DateTime.parse(
+          startTime.toDate().toString() ?? Timestamp.now() as String);
+      end = DateTime.parse(
+          endTime.toDate().toString() ?? Timestamp.now() as String);
       mcqs.forEach((q, a) {
         converted.add(MCQ(question: q, answerChoices: a));
       });
@@ -132,25 +132,51 @@ class RAfromDB {
     } catch (e) {
       print('err in rafromdb constructor: $e');
     }
-    return null;
+    throw Exception;
   }
 }
 
 MCQ randomizeMCQ(MCQ mcq) {
-  List ansList = mcq.answerChoices.keys.toList();
-  Map<String, String> temp = {};
+  List ansList = mcq.answerChoices!.keys.toList();
+  Map<String, String?> temp = {};
 
   // create temp map of mcq answer choices
-  mcq.answerChoices.forEach((key, value) {
+  mcq.answerChoices!.forEach((key, value) {
     temp[key] = value;
   });
 
   //shuffle extracted choices
   ansList.shuffle();
-  mcq.answerChoices.clear();
+  mcq.answerChoices!.clear();
 
   ansList.forEach((ansChoice) {
-    mcq.answerChoices[ansChoice] = temp[ansChoice];
+    mcq.answerChoices![ansChoice] = temp[ansChoice];
   });
   return mcq;
+}
+
+class DummyAssessments {
+  List<RAfromDB> dummyData = [
+    RAfromDB(
+        id: 'asdf',
+        subject: 'Conflict',
+        startTime: DateTime.now(),
+        endTime: DateTime.now(),
+        teacherId: 'ad',
+        assessmentTitle: 'Assessment 1'),
+    RAfromDB(
+        id: 'asdsdf',
+        subject: 'Conflict',
+        startTime: DateTime.now(),
+        endTime: DateTime.now(),
+        teacherId: 'ad',
+        assessmentTitle: 'Assessment 3'),
+    RAfromDB(
+        id: 'asgsadf',
+        subject: 'Conflict',
+        startTime: DateTime.now(),
+        endTime: DateTime.utc(2023, 7, 9, 0, 0, 0),
+        teacherId: 'ad',
+        assessmentTitle: 'Assessment 2')
+  ];
 }

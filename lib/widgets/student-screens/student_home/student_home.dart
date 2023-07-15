@@ -12,7 +12,6 @@ import 'package:SIL_app/service/student-service.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
 import 'package:SIL_app/widgets/student-screens/student_home/assessment_home_panel.dart';
-import 'package:SIL_app/widgets/student-screens/student_home/metric_panel.dart';
 import 'package:SIL_app/widgets/student-screens/student_home/student-attendance-panel.dart';
 import 'package:SIL_app/widgets/student-screens/student_home/student-avatar-panel.dart';
 import 'package:SIL_app/widgets/student-screens/student_home/student-class-timer-panel.dart';
@@ -33,7 +32,7 @@ class StudentHome extends StatefulWidget {
 
 class _StudentHomeState extends State<StudentHome> {
   final ss = StudentService();
-  String _token;
+  String? _token;
   final db = DatabaseService();
 
   @override
@@ -50,8 +49,8 @@ class _StudentHomeState extends State<StudentHome> {
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${notification.title}'),
@@ -64,7 +63,7 @@ class _StudentHomeState extends State<StudentHome> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                icon: android?.smallIcon,
+                icon: android.smallIcon,
               ),
             ));
       }
@@ -81,7 +80,7 @@ class _StudentHomeState extends State<StudentHome> {
   }
 
   getToken(studID) async {
-    String token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -98,26 +97,22 @@ class _StudentHomeState extends State<StudentHome> {
 
     int estimateTs = 0;
     int endTime = 0;
-    Meeting nextClass;
+    Meeting? nextClass;
     bool isActive = false;
     bool mActive = false;
     List<SubjectClass> myClasses = [];
 
-    if (studData != null && allClasses != null && meetingsList != null) {
-      myClasses =
-          ss.getMyClasses(allClasses, studData.subjects, studData.section);
-      final myMeets = ss.getMyClassesforTimer(
-          meetingsList, studData.subjects, studData.section);
-      nextClass = ss.getNextClass(myMeets);
-      if (nextClass.eventName != 'no class') {
-        estimateTs = nextClass.from.millisecondsSinceEpoch;
-        endTime = nextClass.to.millisecondsSinceEpoch;
-      }
-      isActive = true;
+    myClasses =
+        ss.getMyClasses(allClasses, studData.subjects, studData.section);
+    final myMeets = ss.getMyClassesforTimer(
+        meetingsList, studData.subjects, studData.section);
+    nextClass = ss.getNextClass(myMeets);
+    if (nextClass.eventName != 'no class') {
+      estimateTs = nextClass.from!.millisecondsSinceEpoch;
+      endTime = nextClass.to!.millisecondsSinceEpoch;
     }
-    if (metrics != null) {
-      mActive = true;
-    }
+    isActive = true;
+    mActive = true;
 
     return !isActive
         ? LoadingScreen()

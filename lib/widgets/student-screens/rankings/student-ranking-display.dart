@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:SIL_app/models/student-user-data.dart';
 import 'package:SIL_app/models/student_rank.dart';
-import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/ranking-service.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
 
@@ -18,15 +17,15 @@ class StudentRankingDisplay extends StatefulWidget {
 
 class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
   final rs = RankingService();
-  String _filter;
-  String _yearFilter;
-  String _subYearFilter;
+  String? _filter;
+  String? _yearFilter;
+  String? _subYearFilter;
   Map<String, List<String>> yearSub = {
     '1': ['Contract', 'LSM', 'Criminal', 'Public'],
     '2': ['Tort', 'Property', 'HR', 'EU'],
     '3': ['Jurisprudence', 'Trust', 'Company', 'Conflict', 'Islamic']
   };
-  String _subjectFilter;
+  String? _subjectFilter;
 
   @override
   void didChangeDependencies() {
@@ -38,7 +37,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
     super.didChangeDependencies();
   }
 
-  Widget _filterButtonFirst({String text, String filterText}) {
+  Widget _filterButtonFirst({required String text, String? filterText}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.5),
       child: ElevatedButton(
@@ -122,7 +121,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
   //   );
   // }
 
-   Widget _filterButtonFirstWeb({String text, String filterText}) {
+   Widget _filterButtonFirstWeb({required String text, String? filterText}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: ElevatedButton(
@@ -152,8 +151,8 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
   }
 
   Widget _filterButtonSubject({
-    String text,
-    String filterText,
+    required String text,
+    String? filterText,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -191,30 +190,28 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
     final studsFromdb = Provider.of<List<StudentRank>>(context);
     final assessments = Provider.of<List<RAfromDB>>(context);
 
-    if (studsFromdb != null && assessments != null) {
-      isActive = true;
-      switch (_filter) {
-        case 'Year':
-          students = rs.getStudentYearScore(
-            _yearFilter,
-            studsFromdb,
-          );
-          break;
-        case 'Attendance':
-          students = rs.getStudentAttendanceScore(studsFromdb);
-          break;
-        case 'Subject':
-          students = rs.getStudentBySub(
-            _subjectFilter,
-            studsFromdb,
-          );
-          break;
-        case 'Assignments':
-          students = rs.getStudentAssignmentScore(studsFromdb);
-          break;
-        default:
-          students = rs.getStudentYearScore(_yearFilter, studsFromdb);
-      }
+    isActive = true;
+    switch (_filter) {
+      case 'Year':
+        students = rs.getStudentYearScore(
+          _yearFilter,
+          studsFromdb,
+        );
+        break;
+      case 'Attendance':
+        students = rs.getStudentAttendanceScore(studsFromdb);
+        break;
+      case 'Subject':
+        students = rs.getStudentBySub(
+          _subjectFilter,
+          studsFromdb,
+        );
+        break;
+      case 'Assignments':
+        students = rs.getStudentAssignmentScore(studsFromdb);
+        break;
+      default:
+        students = rs.getStudentYearScore(_yearFilter, studsFromdb);
     }
 
     return isActive == true
@@ -264,11 +261,11 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     for (var x = 0;
-                                        x < yearSub['$_subYearFilter'].length;
+                                        x < yearSub['$_subYearFilter']!.length;
                                         x++)
                                       _filterButtonSubject(
-                                          text: yearSub['$_subYearFilter'][x],
-                                          filterText: yearSub['$_subYearFilter']
+                                          text: yearSub['$_subYearFilter']![x],
+                                          filterText: yearSub['$_subYearFilter']!
                                               [x]),
                                   ],
                                 ),
@@ -330,7 +327,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                         CircleAvatar(
                                           backgroundImage:
                                               CachedNetworkImageProvider(
-                                                  students[i].imageUrl),
+                                                  students[i].imageUrl!),
                                           radius: i == 0 || i == 1 || i == 2
                                               ? 25
                                               : 15,
@@ -355,7 +352,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                       if (students[i].id == studentUser.uid &&
                                           _filter == 'Year')
                                         Text(
-                                          '${students[i].yearScore.toInt()}',
+                                          '${students[i].yearScore!.toInt()}',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontFamily: 'Proxima Nova',
@@ -365,7 +362,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                       if (students[i].id == studentUser.uid &&
                                           _filter == 'Attendance')
                                         Text(
-                                          '${students[i].attendanceScore.toInt()}',
+                                          '${students[i].attendanceScore!.toInt()}',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontFamily: 'Proxima Nova',
@@ -375,7 +372,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                        if (students[i].id == studentUser.uid &&
                                           _filter == 'Assignments')
                                         Text(
-                                          '${students[i].assignmentScore.toInt()}',
+                                          '${students[i].assignmentScore!.toInt()}',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontFamily: 'Proxima Nova',
@@ -385,7 +382,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                       if (students[i].id == studentUser.uid &&
                                           _filter == 'Subject')
                                         Text(
-                                          '${students[i].raSubScore['$_subjectFilter'].toInt()}',
+                                          '${students[i].raSubScore!['$_subjectFilter'].toInt()}',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontFamily: 'Proxima Nova',

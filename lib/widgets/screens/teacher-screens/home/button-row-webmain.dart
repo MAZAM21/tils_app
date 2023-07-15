@@ -10,14 +10,15 @@ import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 import 'package:provider/provider.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI_screen.dart';
 
 class ButtonRowMain extends StatelessWidget {
   const ButtonRowMain({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ButtonRowMain extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           child: Container(
             width: MediaQuery.of(context).size.width * 0.95,
-            child:Wrap(
+            child: Wrap(
               alignment: WrapAlignment.spaceEvenly,
               children: <Widget>[
                 Padding(
@@ -93,7 +94,7 @@ class ButtonRowMain extends StatelessWidget {
                       ///if there are more than one subjects reg with teacher
                       ///subject selector will open
                       ///else it will go directly to the teacher's one subject assessment list
-                      if (teacherData.subjects.length > 1) {
+                      if (teacherData!.subjects.length > 1) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             settings: RouteSettings(name: '/select-subects-ra'),
@@ -101,12 +102,12 @@ class ButtonRowMain extends StatelessWidget {
                                 ChangeNotifierProvider.value(
                               value: teacherData,
                               child: SelectAssessmentSubject(
-                                  subjects: teacherData.subjects,
+                                  subjects: teacherData!.subjects,
                                   tc: teacherData),
                             ),
                           ),
                         );
-                      } else if (teacherData.subjects.length == 1) {
+                      } else if (teacherData!.subjects.length == 1) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             settings: RouteSettings(name: '/all-Ras'),
@@ -114,7 +115,7 @@ class ButtonRowMain extends StatelessWidget {
                                 ChangeNotifierProvider.value(
                               value: teacherData,
                               child: AllRAs(
-                                subject: teacherData.subjects[0],
+                                subject: teacherData!.subjects[0],
                               ),
                             ),
                           ),
@@ -126,15 +127,15 @@ class ButtonRowMain extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: WhiteButtonMain(
-                    child: 'Mark Assessments',
+                    child: 'AI',
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          settings: RouteSettings(name: '/all-text-qs'),
+                          settings: RouteSettings(name: '/call-chatgpt'),
                           builder: (BuildContext context) =>
                               ChangeNotifierProvider.value(
                             value: teacherData,
-                            child: AllTextQs(),
+                            child: CallChatGPT(),
                           ),
                         ),
                       );
@@ -153,6 +154,24 @@ class ButtonRowMain extends StatelessWidget {
                               ChangeNotifierProvider.value(
                             value: teacherData,
                             child: ResultMain(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RedButtonMain(
+                    child: 'Manage Students',
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          settings: RouteSettings(name: '/manage-studs'),
+                          builder: (BuildContext context) =>
+                              ChangeNotifierProvider.value(
+                            value: teacherData,
+                            child: ManageStudents(),
                           ),
                         ),
                       );

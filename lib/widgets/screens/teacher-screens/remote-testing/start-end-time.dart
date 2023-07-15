@@ -20,7 +20,7 @@ class _StartEndTimeState extends State<StartEndTime> {
 
   DateTime _endTime = DateTime.now();
 
-  String _duration;
+  String? _duration;
 
   void pickDate() {
     showDatePicker(
@@ -51,7 +51,7 @@ class _StartEndTimeState extends State<StartEndTime> {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
           onPressed: () {
             pickDate();
@@ -98,7 +98,7 @@ class _StartEndTimeState extends State<StartEndTime> {
             backgroundColor:
                 MaterialStateProperty.all(Theme.of(context).primaryColor),
             textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                Theme.of(context).textTheme.titleLarge),
           ),
         ),
       ),
@@ -115,7 +115,7 @@ class _StartEndTimeState extends State<StartEndTime> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             DateFormat('h:mm a').format(_startTime),
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
         ),
@@ -133,7 +133,7 @@ class _StartEndTimeState extends State<StartEndTime> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             DateFormat('d MMM').format(_startDate),
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
         ),
@@ -155,7 +155,7 @@ class _StartEndTimeState extends State<StartEndTime> {
           ),
           child: Text(
             duration,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
           onPressed: () {
             setState(() {

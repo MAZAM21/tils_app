@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:SIL_app/models/subject-class.dart';
 
-import 'package:SIL_app/widgets/screens/teacher-screens/home/class-timer-panel.dart';
-
 class TimerText extends StatelessWidget {
   const TimerText({
-    Key key,
-    @required this.inSession,
-    @required this.dateString,
-    @required this.timeUp,
-    @required this.timeClose,
-    @required this.subClassNext,
-    @required this.meetingId,
-    @required this.toEndString,
+    Key? key,
+    required this.inSession,
+    required this.dateString,
+    required this.timeUp,
+    required this.timeClose,
+    required this.subClassNext,
+    required this.meetingId,
+    required this.toEndString,
   }) : super(key: key);
 
   final bool inSession;
@@ -20,7 +18,7 @@ class TimerText extends StatelessWidget {
   final String dateString;
   final bool timeUp;
   final bool timeClose;
-  final SubjectClass subClassNext;
+  final SubjectClass? subClassNext;
   final String meetingId;
   final String toEndString;
 
@@ -48,7 +46,7 @@ class TimerText extends StatelessWidget {
                     style: TextStyle(
                       fontFamily: 'Proxima Nova',
                       fontWeight: FontWeight.w600,
-                      fontSize:20,
+                      fontSize: 20,
                       letterSpacing: 1,
                       fontStyle: FontStyle.normal,
                       color: Color(0xff5F686F),
@@ -57,7 +55,7 @@ class TimerText extends StatelessWidget {
                 if (meetingId != 'no class')
                   inSession
                       ? Text(
-                          '${subClassNext.subjectName} ends in',
+                          '${subClassNext!.subjectName} ends in',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',
@@ -68,7 +66,7 @@ class TimerText extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          '${subClassNext.subjectName} starts in:',
+                          '${subClassNext!.subjectName} starts in:',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',

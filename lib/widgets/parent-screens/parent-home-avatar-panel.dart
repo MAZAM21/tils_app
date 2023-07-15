@@ -3,14 +3,13 @@ import 'package:SIL_app/models/parent-user-data.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:SIL_app/main.dart';
 import 'package:SIL_app/service/db.dart';
 
 class ParentHomeAvatarPanel extends StatefulWidget {
   const ParentHomeAvatarPanel({
-    Key key,
-    @required this.parentData,
+    Key? key,
+    required this.parentData,
   }) : super(key: key);
 
   final ParentUser parentData;
@@ -20,7 +19,7 @@ class ParentHomeAvatarPanel extends StatefulWidget {
 }
 
 class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
-  String _token;
+  String? _token;
   final db = DatabaseService();
   void initState() {
     super.initState();
@@ -35,8 +34,8 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${notification.title}'),
@@ -49,21 +48,19 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                icon: android?.smallIcon,
+                icon: android.smallIcon,
               ),
             ));
       }
     });
 
-    if (pd != null) {
-      getToken(pd.studId);
-      print(_token);
-    }
+    getToken(pd.studId);
+    print(_token);
     // getTopics();
   }
 
   getToken(studID) async {
-    String token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -104,10 +101,10 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
                     ),
                   ],
                 ),
-                if (widget.parentData.imageUrl.isNotEmpty)
+                if (widget.parentData.imageUrl!.isNotEmpty)
                   CircleAvatar(
                     backgroundImage: widget.parentData.imageUrl != null
-                        ? NetworkImage(widget.parentData.imageUrl)
+                        ? NetworkImage(widget.parentData.imageUrl!)
                         : null,
                     radius: 30,
                   ),
