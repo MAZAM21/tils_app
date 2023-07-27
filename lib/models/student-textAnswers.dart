@@ -31,8 +31,8 @@ class StudentTextAns {
     try {
       final data = doc.data();
       final String name = data['name'] ?? '';
-      final Map dbMap = {...data['TQAs']} ?? {};
-      Map marks = {...data['TQMarks']} ?? {};
+      final Map dbMap = {...data['TQAs']};
+      Map marks = {...data['TQMarks']};
       Map<String, int?> qMarks = {};
       Map<String, String> qas = {};
       bool marked = false;

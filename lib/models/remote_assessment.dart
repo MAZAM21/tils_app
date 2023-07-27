@@ -56,6 +56,13 @@ class MCQ with ChangeNotifier {
   Map? answerChoices = {};
   String? question;
   MCQ({this.question, this.answerChoices});
+
+  factory MCQ.fromJson(Map<String, dynamic> json) {
+    return MCQ(
+      question: json['mcq'],
+      answerChoices: Map<String, String>.from(json['options']),
+    );
+  }
 }
 
 class RAfromDB {

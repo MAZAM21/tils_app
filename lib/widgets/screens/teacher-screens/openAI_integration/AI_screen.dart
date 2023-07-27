@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
 import 'package:flutter/material.dart';
 import 'package:SIL_app/service/openAi-service.dart';
@@ -40,6 +39,8 @@ class _CallChatGPTState extends State<CallChatGPT> {
 
   @override
   Widget build(BuildContext context) {
+    // aiService.testSplittint();
+    bool isTesting = false;
     return Scaffold(
       appBar: AppBar(),
       body: Form(
@@ -79,10 +80,50 @@ class _CallChatGPTState extends State<CallChatGPT> {
             SizedBox(
               height: 20,
             ),
+            WhiteButtonMain(
+                child: 'Test API',
+                onPressed: () {
+                  setState(() {
+                    isTesting = true;
+                  });
+                }),
+            if (isTesting = true)
+              Container(
+                child: FutureBuilder<List<MCQ>?>(
+                    future: aiService.textGenTesting(),
+                    builder: (ctx, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        print('waiting');
+                        return CircularProgressIndicator();
+                      }
+                      if (snap.connectionState == ConnectionState.none) {
+                        print('none');
+                        return Container();
+                      }
+                      if (snap.connectionState == ConnectionState.done) {
+                        print('done');
+                        List<MCQ>? mcqList = snap.data;
+                        return Container(
+                          height: 500,
+                          padding: EdgeInsets.all(16.0),
+                          child: ListView.builder(
+                            itemCount: mcqList!.length,
+                            itemBuilder: (context, index) {
+                              return buildMCQCard(mcqList[index]);
+                            },
+                          ),
+                        );
+                      }
+                      print('no state');
+                      return Column(
+                        children: [],
+                      );
+                    }),
+              ),
             if (que != null)
               Container(
                 child: FutureBuilder<String?>(
-                    future: aiService.getResponse(que),
+                    future: aiService.serverTest(que),
                     builder: (ctx, snap) {
                       if (snap.connectionState == ConnectionState.waiting) {
                         print('waiting');
@@ -106,6 +147,40 @@ class _CallChatGPTState extends State<CallChatGPT> {
                       );
                     }),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildMCQCard(MCQ mcq) {
+    return Card(
+      elevation: 2.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              mcq.question!,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: mcq.answerChoices!.entries.map((entry) {
+                final option = entry.key;
+                final answer = entry.value;
+                final isCorrect = option == "correct";
+
+                return ListTile(
+                  title: Text(answer),
+                  leading: isCorrect
+                      ? Icon(Icons.check_circle, color: Colors.green)
+                      : Icon(Icons.radio_button_unchecked),
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
