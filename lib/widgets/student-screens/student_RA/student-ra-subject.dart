@@ -1,12 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/student-user-data.dart';
 
-
 import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.dart';
-
-
 
 class StudentRASubject extends StatelessWidget {
   const StudentRASubject({
@@ -17,7 +13,7 @@ class StudentRASubject extends StatelessWidget {
   final List<String> subjects;
   final StudentUser studentUser;
 
- Widget _buttonBuilder(
+  Widget _buttonBuilder(
     String sub,
     StudentUser teacherUser,
     BuildContext context,
@@ -56,7 +52,7 @@ class StudentRASubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.textTheme!.caption,
+          style: Theme.of(context).appBarTheme.toolbarTextStyle,
         ),
       ),
       body: SingleChildScrollView(

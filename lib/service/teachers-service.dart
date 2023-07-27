@@ -58,10 +58,10 @@ class TeacherService with ChangeNotifier {
   ///Get top three assingments for teachers assignment panel
   List<AMfromDB> getTopThreeAM(
     List<AMfromDB> allAm,
-    TeacherUser tdata,
+    TeacherUser? tdata,
   ) {
     List<AMfromDB> myAM = [];
-    final List<String> subjects = tdata.subjects;
+    final List<String> subjects = tdata!.subjects;
     allAm.forEach((am) {
       if (subjects.contains(am.subject)) {
         myAM.add(am);
@@ -90,10 +90,10 @@ class TeacherService with ChangeNotifier {
   ///Gets top three assessments for teachers assessment panel
   List<RAfromDB> getTopThree(
     List<RAfromDB> allRa,
-    TeacherUser tdata,
+    TeacherUser? tdata,
   ) {
     List<RAfromDB> myRA = [];
-    final List<String> subjects = tdata.subjects;
+    final List<String> subjects = tdata!.subjects;
     allRa.forEach((ra) {
       if (subjects.contains(ra.subject)) {
         myRA.add(ra);

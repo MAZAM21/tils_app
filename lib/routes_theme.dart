@@ -91,13 +91,11 @@ class RoutesAndTheme extends StatelessWidget {
           primaryColor: Color(0xffC54134),
           canvasColor: Color(0xfff4f6f9),
           appBarTheme: AppBarTheme(
-              textTheme: TextTheme(
-                caption: TextStyle(
-                    color: Color(0xff161616),
-                    fontFamily: 'Proxima Nova',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18),
-              ),
+              toolbarTextStyle: TextStyle(
+                  color: Color(0xff161616),
+                  fontFamily: 'Proxima Nova',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18),
               elevation: 0,
               color: Color(0xfff4f6f9),
               iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))),

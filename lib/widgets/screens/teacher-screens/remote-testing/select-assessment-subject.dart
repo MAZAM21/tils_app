@@ -10,11 +10,11 @@ class SelectAssessmentSubject extends StatelessWidget {
     required this.tc,
   }) : super(key: key);
   final List<String> subjects;
-  final TeacherUser tc;
+  final TeacherUser? tc;
 
   Widget _buttonBuilder(
     String sub,
-    TeacherUser teacherUser,
+    TeacherUser? teacherUser,
     BuildContext context,
   ) {
     return Padding(
@@ -51,7 +51,7 @@ class SelectAssessmentSubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.textTheme!.caption,
+          style: Theme.of(context).appBarTheme.toolbarTextStyle,
         ),
       ),
       body: SingleChildScrollView(

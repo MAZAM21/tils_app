@@ -7,7 +7,7 @@ class TeacherAvatarPanel extends StatelessWidget {
     required this.teacherData,
   }) : super(key: key);
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  '${teacherData.name}',
+                  '${teacherData!.name}',
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Proxima Nova',

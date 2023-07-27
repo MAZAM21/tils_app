@@ -18,7 +18,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
 
   final ts = TeacherService();
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
@@ -116,16 +116,17 @@ class TeacherAssignmentPanel extends StatelessWidget {
           ),
         ),
         ElevatedButton(
-          onPressed: () { Navigator.of(context).push(
-                    MaterialPageRoute(
-                      settings: RouteSettings(name: '/manage-studs'),
-                      builder: (BuildContext context) =>
-                          ChangeNotifierProvider.value(
-                        value: teacherData,
-                        child: ManageStudents(),
-                      ),
-                    ),
-                  );},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                settings: RouteSettings(name: '/manage-studs'),
+                builder: (BuildContext context) => ChangeNotifierProvider.value(
+                  value: teacherData,
+                  child: ManageStudents(),
+                ),
+              ),
+            );
+          },
           child: Text(
             'Manage Students',
             style: TextStyle(

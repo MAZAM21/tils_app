@@ -97,7 +97,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
               },
               child: Text(
                 'Save',
-                style: Theme.of(context).appBarTheme.textTheme!.caption,
+                style: Theme.of(context).appBarTheme.titleTextStyle,
               ))
         ],
       ),

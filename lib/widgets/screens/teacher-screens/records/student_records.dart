@@ -13,83 +13,87 @@ class StudentRecords extends StatelessWidget {
     final db = Provider.of<DatabaseService>(context);
     return db == null
         ? LoadingScreen()
-        : FutureBuilder(
+        : FutureBuilder<List<Student>?>(
             future: db.getAllStudents(),
-            builder: (context, studentsSnapshot) => studentsSnapshot
-                        .connectionState ==
-                    ConnectionState.waiting
-                ? LoadingScreen()
-                : studentsSnapshot.hasError
-                    ? Text('error in get all student records builder')
-                    : Scaffold(
-                        appBar: AppBar(
-                          title: Text('Student records'),
-                          backgroundColor: Theme.of(context).primaryColor,
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text('HomePage'),
+            builder: (context, studentsSnapshot) =>
+                studentsSnapshot.connectionState == ConnectionState.waiting
+                    ? LoadingScreen()
+                    : studentsSnapshot.hasError
+                        ? Text('error in get all student records builder')
+                        : Scaffold(
+                            appBar: AppBar(
+                              title: Text('Student records'),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('HomePage'),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        body: ListView.builder(
-                          itemCount: studentsSnapshot.data?.length,
-                          itemBuilder: (ctx, i) {
-                            return Card(
-                              child: InkWell(
-                                child: ListTile(
-                                  leading: Text(studentsSnapshot.data[i].name),
-                                  trailing: Container(
-                                    width: 200,
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            for (var x = 0;
-                                                x <
-                                                    studentsSnapshot.data[i]
-                                                        .attStatStud.length;
-                                                x++)
-                                              CircleAvatar(
-                                                child: Text(studentsSnapshot
-                                                            .data[i]
-                                                            .attStatStud[x] ==
-                                                        1
-                                                    ? 'P'
-                                                    : studentsSnapshot.data[i]
+                            body: ListView.builder(
+                              itemCount: studentsSnapshot.data?.length,
+                              itemBuilder: (ctx, i) {
+                                return Card(
+                                  child: InkWell(
+                                    child: ListTile(
+                                      leading:
+                                          Text(studentsSnapshot.data![i].name),
+                                      trailing: Container(
+                                        width: 200,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                for (var x = 0;
+                                                    x <
+                                                        studentsSnapshot
+                                                            .data![i]
+                                                            .attStatStud
+                                                            .length;
+                                                    x++)
+                                                  CircleAvatar(
+                                                    child: Text(studentsSnapshot
+                                                                    .data![i]
                                                                     .attStatStud[
                                                                 x] ==
-                                                            3
-                                                        ? 'A'
-                                                        : 'L'),
-                                                backgroundColor: studentsSnapshot
-                                                            .data[i]
-                                                            .attStatStud[x] ==
-                                                        1
-                                                    ? Colors.green
-                                                    : studentsSnapshot.data[i]
+                                                            1
+                                                        ? 'P'
+                                                        : studentsSnapshot
+                                                                    .data![i]
+                                                                    .attStatStud[x] ==
+                                                                3
+                                                            ? 'A'
+                                                            : 'L'),
+                                                    backgroundColor: studentsSnapshot
+                                                                    .data![i]
                                                                     .attStatStud[
                                                                 x] ==
-                                                            3
-                                                        ? Colors.red
-                                                        : Colors.yellow,
-                                              )
-                                          ]),
+                                                            1
+                                                        ? Colors.green
+                                                        : studentsSnapshot
+                                                                    .data![i]
+                                                                    .attStatStud[x] ==
+                                                                3
+                                                            ? Colors.red
+                                                            : Colors.yellow,
+                                                  )
+                                              ]),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        //Navigator.of(context).pushNamed();
+                                      },
                                     ),
                                   ),
-                                  onTap: () {
-                                    //Navigator.of(context).pushNamed();
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                                );
+                              },
+                            ),
+                          ),
           );
   }
 }

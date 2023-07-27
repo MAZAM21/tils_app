@@ -23,7 +23,7 @@ class ClassTimerPanel extends StatefulWidget {
   final Meeting? meeting;
 
   ///teacher data
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   ClassTimerPanel(this.timer, this.meeting, this.end, this.teacherData);
 

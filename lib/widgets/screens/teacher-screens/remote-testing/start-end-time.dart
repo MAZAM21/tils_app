@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tils_app/service/db.dart';
 
-
 ///for Remote assessment input
 class StartEndTime extends StatefulWidget {
   final Function addTime;
@@ -55,7 +54,7 @@ class _StartEndTimeState extends State<StartEndTime> {
           ),
           onPressed: () {
             pickDate();
-           // print(_startDate);
+            // print(_startDate);
           },
         ),
       ),
@@ -115,7 +114,7 @@ class _StartEndTimeState extends State<StartEndTime> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
             DateFormat('h:mm a').format(_startTime),
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headlineSmall,
             textAlign: TextAlign.center,
           ),
         ),

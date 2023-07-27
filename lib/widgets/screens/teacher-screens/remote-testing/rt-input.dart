@@ -84,7 +84,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
       appBar: AppBar(
         title: Text(
           'Remote Assessment',
-          style: Theme.of(context).appBarTheme.textTheme!.caption,
+          style: Theme.of(context).appBarTheme.toolbarTextStyle,
         ),
         actions: <Widget>[
           TextButton(
@@ -207,7 +207,8 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                         onPressed: () {
                           if (queController.text.isNotEmpty) {
                             setState(() {
-                              assessment.allTextQs!.add('${queController.text}');
+                              assessment.allTextQs!
+                                  .add('${queController.text}');
                             });
                           } else {
                             showDialog(

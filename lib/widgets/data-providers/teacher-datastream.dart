@@ -11,7 +11,7 @@ class TeacherDataStream extends StatelessWidget {
   final db = DatabaseService();
   @override
   Widget build(BuildContext context) {
-    final uid = Provider.of<User>(context).uid;
+    final uid = Provider.of<User?>(context)!.uid;
     bool isActive = false;
     if (uid != null) {
       isActive = true;

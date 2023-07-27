@@ -20,7 +20,7 @@ class TeacherResourcesPanel extends StatelessWidget {
 
   final ts = TeacherService();
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
@@ -94,26 +94,26 @@ class TeacherResourcesPanel extends StatelessWidget {
         //     itemCount: topThree.length,
         //     shrinkWrap: true,
         //     itemBuilder: (ctx, i) {
-              // return Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 3.5),
-              //   child: ListTile(
-              //     shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(8)),
-              //     tileColor: Colors.white,
-              //     title: Text(
-              //       '${topThree[i].title}',
-              //       style: Theme.of(context).textTheme.headline4,
-              //     ),
-              //     subtitle: Text(
-              //       '${topThree[i].subject}',
-              //       style: TextStyle(
-              //         fontSize: 12,
-              //         fontFamily: 'Proxima Nova',
-              //         color: Color(0xff5F686F),
-              //       ),
-              //     ),
-              //   ),
-              // );
+        // return Padding(
+        //   padding: const EdgeInsets.symmetric(vertical: 3.5),
+        //   child: ListTile(
+        //     shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(8)),
+        //     tileColor: Colors.white,
+        //     title: Text(
+        //       '${topThree[i].title}',
+        //       style: Theme.of(context).textTheme.headline4,
+        //     ),
+        //     subtitle: Text(
+        //       '${topThree[i].subject}',
+        //       style: TextStyle(
+        //         fontSize: 12,
+        //         fontFamily: 'Proxima Nova',
+        //         color: Color(0xff5F686F),
+        //       ),
+        //     ),
+        //   ),
+        // );
         //     },
         //   ),
         // ),
@@ -145,7 +145,6 @@ class TeacherResourcesPanel extends StatelessWidget {
         //       )),
         // )
       ],
-
     );
   }
 }

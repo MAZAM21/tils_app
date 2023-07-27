@@ -52,7 +52,7 @@ class _StudentRADisplayState extends State<StudentRADisplay> {
             appBar: AppBar(
               title: Text(
                 'Assessments Main',
-                style: Theme.of(context).appBarTheme.textTheme!.caption,
+                style: Theme.of(context).appBarTheme.toolbarTextStyle,
               ),
             ),
             body: SingleChildScrollView(

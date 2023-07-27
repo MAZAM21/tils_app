@@ -19,7 +19,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
     required this.teacherData,
   }) : super(key: key);
 
-  final TeacherUser teacherData;
+  final TeacherUser? teacherData;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
           children: <Widget>[
             TextButton(
               onPressed: () {
-                if (teacherData.subjects.length > 1) {
+                if (teacherData!.subjects.length > 1) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       settings: RouteSettings(name: '/select-subects-ra'),
@@ -48,11 +48,11 @@ class TeacherAssessmentPanel extends StatelessWidget {
                           ChangeNotifierProvider.value(
                         value: teacherData,
                         child: SelectAssessmentSubject(
-                            subjects: teacherData.subjects, tc: teacherData),
+                            subjects: teacherData!.subjects, tc: teacherData),
                       ),
                     ),
                   );
-                } else if (teacherData.subjects.length == 1) {
+                } else if (teacherData!.subjects.length == 1) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       settings: RouteSettings(name: '/all-Ras'),
@@ -60,7 +60,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                           ChangeNotifierProvider.value(
                         value: teacherData,
                         child: AllRAs(
-                          subject: teacherData.subjects[0],
+                          subject: teacherData!.subjects[0],
                         ),
                       ),
                     ),
@@ -175,7 +175,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                   ///if there are more than one subjects reg with teacher
                   ///subject selector will open
                   ///else it will go directly to the teacher's one subject assessment list
-                  if (teacherData.subjects.length > 1) {
+                  if (teacherData!.subjects.length > 1) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         settings: RouteSettings(name: '/select-subects-ra'),
@@ -183,11 +183,11 @@ class TeacherAssessmentPanel extends StatelessWidget {
                             ChangeNotifierProvider.value(
                           value: teacherData,
                           child: SelectAssessmentSubject(
-                              subjects: teacherData.subjects, tc: teacherData),
+                              subjects: teacherData!.subjects, tc: teacherData),
                         ),
                       ),
                     );
-                  } else if (teacherData.subjects.length == 1) {
+                  } else if (teacherData!.subjects.length == 1) {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         settings: RouteSettings(name: '/all-Ras'),
@@ -195,7 +195,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                             ChangeNotifierProvider.value(
                           value: teacherData,
                           child: AllRAs(
-                            subject: teacherData.subjects[0],
+                            subject: teacherData!.subjects[0],
                           ),
                         ),
                       ),

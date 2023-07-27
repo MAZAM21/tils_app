@@ -1,4 +1,3 @@
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -43,48 +42,49 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final teacherData = Provider.of<TeacherUser>(context, listen: false);
+    final teacherData = Provider.of<TeacherUser?>(context, listen: false);
 
     ///this is for foreground notifications supposedly
 
-    if (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android) {
-  var initialzationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettings =
-      InitializationSettings(android: initialzationSettingsAndroid, );
-  
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${notification.title}'),
-      ));
-      flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              icon: 'LCI_icon',
-            ),
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.android) {
+      var initialzationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+      var initializationSettings = InitializationSettings(
+        android: initialzationSettingsAndroid,
+      );
+
+      flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+        if (notification != null && android != null) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('${notification.title}'),
           ));
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  icon: 'LCI_icon',
+                ),
+              ));
+        }
+      });
+      if (teacherData != null) {
+        for (var i = 0; i < teacherData.subjects.length; i++) {
+          //print('${teacherData.subjects[i]}');
+          FirebaseMessaging.instance
+              .subscribeToTopic('${teacherData.subjects[i]}');
+        }
+        getToken(teacherData.docId);
+      }
     }
-  });
-  if (teacherData != null) {
-    for (var i = 0; i < teacherData.subjects.length; i++) {
-      //print('${teacherData.subjects[i]}');
-      FirebaseMessaging.instance
-          .subscribeToTopic('${teacherData.subjects[i]}');
-    }
-    getToken(teacherData.docId);
-  }
-}
     // getTopics();
   }
 
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final teacherData = Provider.of<TeacherUser>(context);
+    final teacherData = Provider.of<TeacherUser?>(context);
     final meetingsList = Provider.of<List<Meeting>>(context);
     final subClassList = Provider.of<List<SubjectClass>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
@@ -244,8 +244,7 @@ class _HomePageState extends State<HomePage> {
                                 onPressed: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      settings: RouteSettings(
-                                          name: '/attpage'),
+                                      settings: RouteSettings(name: '/attpage'),
                                       builder: (BuildContext context) =>
                                           ChangeNotifierProvider.value(
                                         value: teacherData,
@@ -264,7 +263,9 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 5,)
+                              SizedBox(
+                                width: 5,
+                              )
                             ],
                           ),
 

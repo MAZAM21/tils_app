@@ -1,4 +1,3 @@
-
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -47,7 +46,7 @@ class _AllRAsState extends State<AllRAs> {
             appBar: AppBar(
               title: Text(
                 'Assessments Main',
-                style: Theme.of(context).appBarTheme.textTheme!.caption,
+                style: Theme.of(context).appBarTheme.toolbarTextStyle,
               ),
             ),
             body: SingleChildScrollView(

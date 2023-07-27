@@ -113,7 +113,7 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                   }),
             );
           }
-          return null;
+          throw Exception;
         });
   }
 
@@ -171,7 +171,6 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                           ],
                         ),
                       ),
-
                 ],
               ),
             ),

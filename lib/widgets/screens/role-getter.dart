@@ -18,7 +18,7 @@ class RoleGetter extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isLoggedIn = false;
     bool provIsActive = false;
-    final authState = Provider.of<User>(context);
+    final authState = Provider.of<User?>(context);
     //FirebaseAuth.instance.signOut();
     if (authState != null) {
       isLoggedIn = true;
@@ -26,20 +26,20 @@ class RoleGetter extends StatelessWidget {
     return isLoggedIn
         ? FutureProvider<Role?>(
             initialData: null,
-            create: (ctx) => db.getRole(authState.uid),
+            create: (ctx) => db.getRole(authState!.uid),
             //catchError: (context,_){return Role('teacher');},
             builder: (context, _) {
-              final roleProv = Provider.of<Role>(context);
+              final roleProv = Provider.of<Role?>(context);
               if (roleProv != null) {
                 provIsActive = true;
               }
-              return provIsActive && roleProv.getRole == 'teacher'
+              return provIsActive && roleProv!.getRole == 'teacher'
                   ? TeacherDataStream()
-                  : provIsActive && roleProv.getRole == 'student'
+                  : provIsActive && roleProv!.getRole == 'student'
                       ? StudentDataStream()
-                      : provIsActive && roleProv.getRole == 'parent'
+                      : provIsActive && roleProv!.getRole == 'parent'
                           ? ParentDataStream()
-                          : provIsActive && roleProv.getRole == 'admin'
+                          : provIsActive && roleProv!.getRole == 'admin'
                               ? AdminDataStream()
                               : LoadingScreen();
             },
