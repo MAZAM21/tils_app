@@ -20,7 +20,7 @@ class _StartEndTimeState extends State<StartEndTime> {
 
   DateTime _endTime = DateTime.now();
 
-  String _duration;
+  String? _duration;
 
   void pickDate() {
     showDatePicker(

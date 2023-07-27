@@ -20,11 +20,11 @@ class _AssessmentPageState extends State<AssessmentPage> {
   final _db = DatabaseService();
   final _ansController = TextEditingController();
 
-  String _question;
-  Map _answers;
+  String? _question;
+  Map? _answers;
   int _qIndex = 0;
-  String _selectedStat;
-  String _selectedAns;
+  String? _selectedStat;
+  String? _selectedAns;
 
   void dispose() {
     _ansController.dispose();
@@ -33,7 +33,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map args = ModalRoute.of(context).settings.arguments as Map;
+    Map args = ModalRoute.of(context)!.settings.arguments as Map;
     final ra = args['ra'] as RAfromDB;
     final uid = args['uid'];
     final name = args['name'];
@@ -138,11 +138,11 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           child: Container(
                             alignment: Alignment.center,
                             color:
-                                _selectedAns == _answers.values.toList()[index]
+                                _selectedAns == _answers!.values.toList()[index]
                                     ? Colors.redAccent
                                     : Colors.lightBlue[100],
                             child: Text(
-                              '${_answers.values.toList()[index]}',
+                              '${_answers!.values.toList()[index]}',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16,
@@ -152,8 +152,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           ),
                           onTap: () {
                             setState(() {
-                              _selectedStat = _answers.keys.toList()[index];
-                              _selectedAns = _answers.values.toList()[index];
+                              _selectedStat = _answers!.keys.toList()[index];
+                              _selectedAns = _answers!.values.toList()[index];
                             });
                             //print('$_selectedStat');
                           },
@@ -181,7 +181,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           )
                         : null;
               },
-              childCount: _answers != null ? _answers.keys.toList().length : 1,
+              childCount: _answers != null ? _answers!.keys.toList().length : 1,
             ),
           ),
         ],

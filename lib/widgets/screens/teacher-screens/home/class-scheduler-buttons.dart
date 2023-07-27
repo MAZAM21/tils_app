@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 
 class ClassSchedulerButtons extends StatelessWidget {
   const ClassSchedulerButtons({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
   final TeacherUser teacherData;

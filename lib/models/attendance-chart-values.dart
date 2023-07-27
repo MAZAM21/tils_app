@@ -15,7 +15,7 @@ class AttChartVals {
         }
       });
     }
-    return AttChartVals(setWeekday(meeting.from.weekday), i);
+    return AttChartVals(setWeekday(meeting.from!.weekday), i);
   }
 }
 

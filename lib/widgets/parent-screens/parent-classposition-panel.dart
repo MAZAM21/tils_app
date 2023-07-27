@@ -8,7 +8,7 @@ class ClassPositionPanel extends StatefulWidget {
   const ClassPositionPanel({
     this.pData,
   });
-  final ParentUser pData;
+  final ParentUser? pData;
 
   @override
   _ClassPositionPanelState createState() => _ClassPositionPanelState();
@@ -20,11 +20,11 @@ class _ClassPositionPanelState extends State<ClassPositionPanel> {
   Widget build(BuildContext context) {
     final studList = Provider.of<List<StudentRank>>(context);
     List<StudentRank> yearScoreSorted = [];
-    int position;
+    int? position;
     if (studList != null) {
-      yearScoreSorted = rs.getStudentYearScore(widget.pData.year, studList);
+      yearScoreSorted = rs.getStudentYearScore(widget.pData!.year, studList);
       position = yearScoreSorted
-          .firstWhere((stud) => stud.id == widget.pData.studId)
+          .firstWhere((stud) => stud.id == widget.pData!.studId)
           .getPostion();
     }
     return ClipRRect(

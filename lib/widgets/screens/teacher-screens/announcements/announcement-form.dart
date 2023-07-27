@@ -17,17 +17,17 @@ class AnnouncementForm extends StatefulWidget {
 class _AnnouncementFormState extends State<AnnouncementForm> {
   final db = DatabaseService();
   final _formKey = GlobalKey<FormState>();
-  Map<String, String> vals = {'title': '', 'body': ''};
-  String id;
+  Map<String, String?> vals = {'title': '', 'body': ''};
+  String? id;
   bool _isInit = true;
   bool _isEdit = false;
-  String category;
+  String? category;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
       final routeArgs =
-          ModalRoute.of(context).settings.arguments as Announcement;
+          ModalRoute.of(context)!.settings.arguments as Announcement?;
       if (routeArgs != null) {
         vals['title'] = routeArgs.title;
         vals['body'] = routeArgs.body;
@@ -41,12 +41,12 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
     super.didChangeDependencies();
   }
 
-  void _saveState(String title, String body, String uid, String cat) {
-    bool isValid = _formKey.currentState.validate();
+  void _saveState(String? title, String? body, String uid, String? cat) {
+    bool isValid = _formKey.currentState!.validate();
     if (isValid) {
       if (!_isEdit) {
         db.addAnnouncementToCF(title, body, uid, DateTime.now(), cat);
-        _formKey.currentState.reset();
+        _formKey.currentState!.reset();
         category = null;
         Navigator.pop(context);
       }
@@ -78,7 +78,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.save),
               onPressed: () {
-                _formKey.currentState.save();
+                _formKey.currentState!.save();
                 if (category != null) {
                   _saveState(vals['title'], vals['body'], id, category);
                 } else {
@@ -114,7 +114,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                           TextFormField(
                             key: ValueKey('announcement title'),
                             validator: (value) {
-                              if (value.isEmpty || value == '') {
+                              if (value!.isEmpty || value == '') {
                                 return 'Please enter a title';
                               }
                               return null;
@@ -138,7 +138,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                           TextFormField(
                             key: ValueKey('announcement body'),
                             validator: (value) {
-                              if (value.isEmpty || value == '') {
+                              if (value!.isEmpty || value == '') {
                                 return 'Please enter announcement body';
                               }
                               return null;

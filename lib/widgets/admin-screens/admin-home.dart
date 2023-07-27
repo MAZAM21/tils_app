@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 
 class AdminHome extends StatefulWidget {
-  const AdminHome({Key key}) : super(key: key);
+  const AdminHome({Key? key}) : super(key: key);
 
   @override
   _AdminHomeState createState() => _AdminHomeState();

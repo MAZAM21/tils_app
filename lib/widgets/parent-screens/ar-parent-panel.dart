@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class ARParentPanel extends StatefulWidget {
   const ARParentPanel({
-    @required this.parentData,
+    required this.parentData,
   });
   final ParentUser parentData;
 
@@ -18,7 +18,7 @@ class _ARParentPanelState extends State<ARParentPanel> {
   final rs = RankingService();
   @override
   Widget build(BuildContext context) {
-    List<AssessmentResult> compRaList = [];
+    List<AssessmentResult>? compRaList = [];
     final raList = Provider.of<List<RAfromDB>>(context);
     if (raList != null) {
       compRaList = rs.completedAssessmentsParent(raList, widget.parentData);
@@ -56,7 +56,7 @@ class _ARParentPanelState extends State<ARParentPanel> {
               itemBuilder: (ctx, i) {
                 return ListTile(
                   leading: Text(
-                    '${compRaList[i].title}',
+                    '${compRaList![i].title}',
                     style: TextStyle(
                       fontFamily: 'Proxima Nova',
                       fontSize: 14,
@@ -75,7 +75,7 @@ class _ARParentPanelState extends State<ARParentPanel> {
                   ),
                 );
               },
-              itemCount: compRaList.length ?? 0,
+              itemCount: compRaList!.length ?? 0,
             ),
           ),
         ],

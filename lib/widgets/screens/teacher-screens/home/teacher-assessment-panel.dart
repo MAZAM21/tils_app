@@ -15,8 +15,8 @@ import 'package:tils_app/widgets/screens/teacher-screens/results/result-main.dar
 class TeacherAssessmentPanel extends StatelessWidget {
   final ts = TeacherService();
   TeacherAssessmentPanel({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
   final TeacherUser teacherData;
@@ -109,7 +109,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
             itemCount: topThree.length,
             shrinkWrap: true,
             itemBuilder: (ctx, i) {
-              String dStat = ts.getdeadlineStatus(topThree[i]);
+              String? dStat = ts.getdeadlineStatus(topThree[i]);
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 3.5),
                 child: ListTile(
@@ -121,7 +121,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   subtitle: Text(
-                    'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime)}',
+                    'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'Proxima Nova',

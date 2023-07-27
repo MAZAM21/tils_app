@@ -10,10 +10,10 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 /// displays list of all assessments
 /// gets a stream of assessments
 class ResultsDisplay extends StatefulWidget {
-  final String assid;
-  final String title;
-  final String subject;
-  final List<StudentRank> studList;
+  final String? assid;
+  final String? title;
+  final String? subject;
+  final List<StudentRank?>? studList;
   const ResultsDisplay({
     this.assid,
     this.title,
@@ -40,7 +40,7 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
           if (snap.connectionState == ConnectionState.waiting) {
             return LoadingScreen();
           }
-          if (widget.studList.isEmpty) {
+          if (widget.studList!.isEmpty) {
             return Scaffold(
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +49,7 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
             );
           }
           if (snap.hasData && widget.studList != null) {
-            List<StudentAnswers> studAns = snap.data;
+            List<StudentAnswers>? studAns = snap.data;
 
             return Scaffold(
               appBar: AppBar(
@@ -62,13 +62,13 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                 ),
               ),
               body: ListView.builder(
-                  itemCount: snap.data.length,
+                  itemCount: snap.data!.length,
                   itemBuilder: (context, i) {
-                    String imageURL = '';
-                    StudentRank stud = widget.studList.firstWhere(
+                    String? imageURL = '';
+                    StudentRank? stud = widget.studList!.firstWhere(
                         (element) =>
-                            studAns[i].studentId == element.id &&
-                            element.imageUrl.isNotEmpty, orElse: () {
+                            studAns![i].studentId == element!.id &&
+                            element.imageUrl!.isNotEmpty, orElse: () {
                       return null;
                     });
                     if (stud != null) {
@@ -79,20 +79,20 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
                         onTap: () {
-                          resultDetail(context, studAns[i]);
+                          resultDetail(context, studAns![i]);
                         },
                         tileColor: Colors.white,
                         leading: imageURL != ''
                             ? CircleAvatar(
                                 backgroundImage:
-                                    CachedNetworkImageProvider(imageURL),
+                                    CachedNetworkImageProvider(imageURL!),
                               )
                             : Icon(
                                 Icons.person,
                                 size: 36,
                               ),
                         title: Text(
-                          "${studAns[i].name}",
+                          "${studAns![i].name}",
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',
                             fontSize: 18,
@@ -136,8 +136,8 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                   SizedBox(
                     height: 30,
                   ),
-                  if (ans.mcqAnsMap.isNotEmpty)
-                    for (var i = 0; i < ans.mcqAnsMap.length; i++)
+                  if (ans.mcqAnsMap!.isNotEmpty)
+                    for (var i = 0; i < ans.mcqAnsMap!.length; i++)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
@@ -145,7 +145,7 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: Text(
-                                '${ans.mcqAnsMap.keys.toList()[i]}',
+                                '${ans.mcqAnsMap!.keys.toList()[i]}',
                                 style: TextStyle(
                                   fontFamily: 'Proxima Nova',
                                   color: Colors.black87,
@@ -157,10 +157,10 @@ class _ResultsDisplayState extends State<ResultsDisplay> {
                             ),
                             Spacer(),
                             Text(
-                              '${mcqStatus(ans.mcqAnsMap.values.toList()[i])}',
+                              '${mcqStatus(ans.mcqAnsMap!.values.toList()[i])}',
                               style: TextStyle(
                                 fontFamily: 'Proxima Nova',
-                                color: ans.mcqAnsMap.values.toList()[i] ==
+                                color: ans.mcqAnsMap!.values.toList()[i] ==
                                         'correct'
                                     ? Colors.green[800]
                                     : Colors.red,

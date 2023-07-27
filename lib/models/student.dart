@@ -14,26 +14,24 @@ class Student with ChangeNotifier {
   final String batch;
   final String section;
   final String year;
-  Map attendance = {};
-  Map textMarks = {};
-  Map mcqMarks = {};
+  Map? attendance = {};
+  Map? textMarks = {};
+  Map? mcqMarks = {};
 
   Student({
-    @required this.id,
-    @required this.name,
-    @required this.year,
-    @required this.batch,
-    @required this.section,
+    required this.id,
+    required this.name,
+    required this.year,
+    required this.batch,
+    required this.section,
     this.attendance,
     this.textMarks,
     this.mcqMarks,
   });
 
-  factory Student.fromFirestore(
-      QueryDocumentSnapshot doc) {
+  factory Student.fromFirestore(QueryDocumentSnapshot doc) {
     try {
-      Map data = doc.data();
-      
+      Map data = doc.data() as Map<dynamic, dynamic>;
 
       return Student(
         id: doc.id ?? '',
@@ -46,13 +44,13 @@ class Student with ChangeNotifier {
         mcqMarks: {...data['Assessment-MCQMarks'] ?? {}} ?? {},
       );
     } catch (e) {
-      print('error in Student model:' + e);
-      return null;
+      print('error in Student model: $e');
+      throw Exception;
     }
   }
 
   List get attStatStud {
-    return [...attendance.values];
+    return [...attendance!.values];
   }
 
   String get getId {

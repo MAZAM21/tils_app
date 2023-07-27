@@ -31,7 +31,7 @@ class StudentHome extends StatefulWidget {
 
 class _StudentHomeState extends State<StudentHome> {
   final ss = StudentService();
-  String _token;
+  String? _token;
   final db = DatabaseService();
 
   @override
@@ -48,8 +48,8 @@ class _StudentHomeState extends State<StudentHome> {
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${notification.title}'),
@@ -80,7 +80,7 @@ class _StudentHomeState extends State<StudentHome> {
   }
 
   getToken(studID) async {
-    String token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -97,7 +97,7 @@ class _StudentHomeState extends State<StudentHome> {
 
     int estimateTs = 0;
     int endTime = 0;
-    Meeting nextClass;
+    Meeting? nextClass;
     bool isActive = false;
     bool mActive = false;
     List<SubjectClass> myClasses = [];
@@ -109,8 +109,8 @@ class _StudentHomeState extends State<StudentHome> {
           meetingsList, studData.subjects, studData.section);
       nextClass = ss.getNextClass(myMeets);
       if (nextClass.eventName != 'no class') {
-        estimateTs = nextClass.from.millisecondsSinceEpoch;
-        endTime = nextClass.to.millisecondsSinceEpoch;
+        estimateTs = nextClass.from!.millisecondsSinceEpoch;
+        endTime = nextClass.to!.millisecondsSinceEpoch;
       }
       isActive = true;
     }

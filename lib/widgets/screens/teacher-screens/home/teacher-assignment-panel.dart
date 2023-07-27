@@ -12,8 +12,8 @@ import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-
 
 class TeacherAssignmentPanel extends StatelessWidget {
   TeacherAssignmentPanel({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
   final ts = TeacherService();

@@ -9,16 +9,16 @@ import 'package:provider/provider.dart';
 
 class MarkStudentAssignments extends StatefulWidget {
   MarkStudentAssignments({
-    @required this.students,
-    @required this.subject,
-    @required this.title,
+    required this.students,
+    required this.subject,
+    required this.title,
     final this.editAM,
   });
 
   final List<StudentRank> students;
-  final String subject;
-  final String title;
-  final AMfromDB editAM;
+  final String? subject;
+  final String? title;
+  final AMfromDB? editAM;
 
   @override
   _MarkStudentAssignmentsState createState() => _MarkStudentAssignmentsState();
@@ -28,21 +28,21 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
   ///This is where the sliders are generated
   final ts = TeacherService();
   final db = DatabaseService();
-  Map<String, int> stMark = {};
-  Map<String, int> idMark = {};
+  Map<String, int>? stMark = {};
+  Map<String, int>? idMark = {};
 
   @override
   void didChangeDependencies() {
     if (widget.editAM != null) {
-      stMark = widget.editAM.nameMarks;
-      idMark = widget.editAM.uidMarks;
+      stMark = widget.editAM!.nameMarks;
+      idMark = widget.editAM!.uidMarks;
     }
     super.didChangeDependencies();
   }
 
-  void marksFromSliders(String name, double mark, String uid) {
-    stMark.addAll({name: mark.toInt()});
-    idMark.addAll({uid: mark.toInt()});
+  void marksFromSliders(String name, double? mark, String uid) {
+    stMark!.addAll({name: mark!.toInt()});
+    idMark!.addAll({uid: mark.toInt()});
     //print('$name: ${stMark[name]}');
   }
 
@@ -53,8 +53,8 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
       isEditing = true;
     }
     var assignmentMarks;
-    double totalMark;
-    String title;
+    double? totalMark;
+    String? title;
 
     ///if dbID is null then a new assignment is being created
     if (!isEditing) {
@@ -64,8 +64,8 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
         totalMark = assignmentMarks.totalMarks.toDouble() ?? 100;
       }
     } else {
-      title = widget.editAM.title;
-      totalMark = widget.editAM.totalMarks.toDouble() ?? 100;
+      title = widget.editAM!.title;
+      totalMark = widget.editAM!.totalMarks!.toDouble() ?? 100;
     }
 
     final td = Provider.of<TeacherUser>(context);
@@ -93,10 +93,10 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
                   db.addAssignmentToCF(
                       null,
                       AMfromDB(
-                          docId: widget.editAM.docId,
+                          docId: widget.editAM!.docId,
                           nameMarks: stMark,
                           uidMarks: idMark,
-                          subject: widget.editAM.subject));
+                          subject: widget.editAM!.subject));
                 }
                 Navigator.pop(context);
               },
@@ -147,12 +147,12 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
                 url: widget.students[i].imageUrl,
                 totalMark: totalMark,
                 isEditing: isEditing,
-                subName: isEditing ? widget.editAM.subject : '',
-                asgId: isEditing ? widget.editAM.docId : '',
+                subName: isEditing ? widget.editAM!.subject : '',
+                asgId: isEditing ? widget.editAM!.docId : '',
                 initVal: isEditing &&
-                        widget.editAM.uidMarks['${widget.students[i].id}'] !=
+                        widget.editAM!.uidMarks!['${widget.students[i].id}'] !=
                             null
-                    ? widget.editAM.uidMarks['${widget.students[i].id}']
+                    ? widget.editAM!.uidMarks!['${widget.students[i].id}']!
                         .toDouble()
                     : 0.0,
               ),
@@ -165,10 +165,10 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
 
 class AssignmentSlider extends StatefulWidget {
   const AssignmentSlider({
-    @required this.isEditing,
-    @required this.studName,
-    @required this.getMarks,
-    @required this.uid,
+    required this.isEditing,
+    required this.studName,
+    required this.getMarks,
+    required this.uid,
     this.url,
     this.totalMark,
     this.initVal,
@@ -176,14 +176,14 @@ class AssignmentSlider extends StatefulWidget {
     this.subName,
   });
   final String studName;
-  final String url;
-  final double totalMark;
+  final String? url;
+  final double? totalMark;
   final String uid;
-  final double initVal;
+  final double? initVal;
   final bool isEditing;
-  final void Function(String name, double mark, String uid) getMarks;
-  final String asgId;
-  final String subName;
+  final void Function(String name, double? mark, String uid) getMarks;
+  final String? asgId;
+  final String? subName;
 
   @override
   _AssignmentSliderState createState() => _AssignmentSliderState();
@@ -193,7 +193,7 @@ class _AssignmentSliderState extends State<AssignmentSlider> {
   final db = DatabaseService();
 
   /// individual slider element
-  double _sliderVal;
+  double? _sliderVal;
   @override
   void initState() {
     if (widget.initVal != 0) {
@@ -222,7 +222,7 @@ class _AssignmentSliderState extends State<AssignmentSlider> {
                 SizedBox(
                   width: 10,
                 ),
-                if (widget.url.isNotEmpty)
+                if (widget.url!.isNotEmpty)
                   CircleAvatar(
                     radius: 30,
                     backgroundImage: NetworkImage('${widget.url}'),
@@ -236,7 +236,7 @@ class _AssignmentSliderState extends State<AssignmentSlider> {
                       color: Color.fromARGB(255, 76, 76, 76),
                       fontWeight: FontWeight.w600),
                 ),
-                if (widget.url.isNotEmpty)
+                if (widget.url!.isNotEmpty)
                   SizedBox(
                     width: 60,
                   ),

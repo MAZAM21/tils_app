@@ -3,8 +3,8 @@ import 'package:tils_app/models/student_rank.dart';
 
 class SecondThirdStudRow extends StatelessWidget {
   const SecondThirdStudRow({
-    Key key,
-    @required this.students,
+    Key? key,
+    required this.students,
   }) : super(key: key);
 
   final List<StudentRank> students;
@@ -25,7 +25,7 @@ class SecondThirdStudRow extends StatelessWidget {
                   children: <Widget>[
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(students[1].imageUrl),
+                      backgroundImage: NetworkImage(students[1].imageUrl!),
                     ),
                     SizedBox(
                       height: 10,
@@ -69,7 +69,7 @@ class SecondThirdStudRow extends StatelessWidget {
                   children: <Widget>[
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(students[2].imageUrl),
+                      backgroundImage: NetworkImage(students[2].imageUrl!),
                     ),
                     SizedBox(
                       height: 10,

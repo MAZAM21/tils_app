@@ -15,16 +15,16 @@ enum ResourceType {
 class ResourceUploadObj with ChangeNotifier {
   DateTime date;
 
-  String topic;
+  String? topic;
   String subject;
-  String uploadTeacher;
+  String? uploadTeacher;
   List<PlatformFile> resourceFiles;
 
   ResourceUploadObj({
-    @required this.date,
-    @required this.topic,
-    @required this.subject,
-    @required this.resourceFiles,
+    required this.date,
+    required this.topic,
+    required this.subject,
+    required this.resourceFiles,
     this.uploadTeacher,
   });
 }

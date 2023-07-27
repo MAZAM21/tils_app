@@ -14,7 +14,7 @@ class StudentRank with ChangeNotifier {
   final String batch;
   final String section;
   final String year;
-  final String imageUrl;
+  final String? imageUrl;
   final Map attendance;
   final Map textMarks;
 
@@ -24,42 +24,42 @@ class StudentRank with ChangeNotifier {
   final Map mcqMarks;
 
   //List of subjects as strings
-  final List subjects;
+  final List? subjects;
 
   //Assignment Marks
-  Map assignmentMarks = {};
+  Map? assignmentMarks = {};
 
   //List of assessment IDs of all attempted assessments
-  List completedAssessements = [];
+  List? completedAssessements = [];
 
   ///raScore is a map with subject names as keys and total ra score as value
-  Map raSubScore;
+  Map? raSubScore;
 
   /// Parent token
-  String parentToken;
+  String? parentToken;
 
   /// attendance percentage basically
-  double attendanceScore;
+  double? attendanceScore;
 
   // assignment score.
-  double assignmentScore;
+  double? assignmentScore;
 
   /// Year score. gotten from adding RA and assignment marks of the subjects defined
   /// for the particular year student is registered.
-  double yearScore;
+  double? yearScore;
 
-  int position;
+  int? position;
 
   StudentRank({
-    @required this.id,
-    @required this.name,
-    @required this.year,
-    @required this.batch,
-    @required this.section,
+    required this.id,
+    required this.name,
+    required this.year,
+    required this.batch,
+    required this.section,
     this.imageUrl,
-    @required this.attendance,
-    @required this.textMarks,
-    @required this.mcqMarks,
+    required this.attendance,
+    required this.textMarks,
+    required this.mcqMarks,
     this.completedAssessements,
     this.raSubScore,
     this.assignmentMarks,
@@ -73,7 +73,7 @@ class StudentRank with ChangeNotifier {
 
   factory StudentRank.fromFirestore(QueryDocumentSnapshot doc) {
     try {
-      Map data = doc.data();
+      Map data = doc.data() as Map<dynamic, dynamic>;
       Map att = {...data['attendance'] ?? {}};
       Map tqm = {};
       Map mcqm = {};
@@ -86,9 +86,9 @@ class StudentRank with ChangeNotifier {
       double attScore = 0;
       double asgScore = 0;
       double yearScore = 0;
-      String pToken;
+      String? pToken;
 
-      String getYearofSub(String sub) {
+      String? getYearofSub(String sub) {
         if (sub == 'Jurisprudence' ||
             sub == 'Conflict' ||
             sub == 'Trust' ||
@@ -131,7 +131,8 @@ class StudentRank with ChangeNotifier {
           if (data.containsKey('$sub-textqMarks') &&
               data['$sub-textqMarks'].values.length > 0) {
             //folds all data into one totalvalue for that particular sub
-            int total = data['$sub-textqMarks'].values.fold(0, (a, b) => a + b);
+            int? total =
+                data['$sub-textqMarks'].values.fold(0, (a, b) => a + b);
 
             if (ras.containsKey('$sub')) {
               ras['$sub'] += total;
@@ -160,7 +161,7 @@ class StudentRank with ChangeNotifier {
           if (data.containsKey('$sub-asgMarks') &&
               data['$sub-asgMarks'].values.length > 0) {
             //folds all data into one totalvalue for that particular sub
-            int asgtotal =
+            int? asgtotal =
                 data['$sub-asgMarks'].values.fold(0, (a, b) => a + b);
             if (ras.containsKey('$sub')) {
               ras['$sub'] += asgtotal;
@@ -257,10 +258,10 @@ class StudentRank with ChangeNotifier {
       print('error in StudentRank model: $e');
     }
 
-    return null;
+    throw Exception;
   }
 
-  int getPostion(){
+  int? getPostion() {
     return position;
   }
 }

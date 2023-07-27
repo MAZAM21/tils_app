@@ -37,7 +37,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _token;
+  String? _token;
   final ts = TeacherService();
   final db = DatabaseService();
   @override
@@ -55,8 +55,8 @@ class _HomePageState extends State<HomePage> {
   
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification notification = message.notification;
-    AndroidNotification android = message.notification?.android;
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   getToken(String tID) async {
-    String token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
     int deployedRA = 0;
     bool isActive = false;
     List<SubjectClass> gridList = [];
-    Meeting nextClass;
+    Meeting? nextClass;
 
     if (meetingsList != null &&
         teacherData != null &&
@@ -140,8 +140,8 @@ class _HomePageState extends State<HomePage> {
       deployedRA = ts.getDeployedRA(raList, teacherData);
 
       if (nextClass.eventName != 'no class') {
-        estimateTs = nextClass.from.millisecondsSinceEpoch;
-        endTime = nextClass.to.millisecondsSinceEpoch;
+        estimateTs = nextClass.from!.millisecondsSinceEpoch;
+        endTime = nextClass.to!.millisecondsSinceEpoch;
       }
       isActive = true;
     }

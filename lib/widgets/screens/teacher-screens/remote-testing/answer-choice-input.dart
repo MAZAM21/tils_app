@@ -32,15 +32,15 @@ class _AnswerChoiceInputState extends State<AnswerChoiceInput> {
     x++;
   }
 
-  void saveToAssessment(String que) {
-    final isValid = _formKey.currentState.validate();
-    _formKey.currentState.save();
+  void saveToAssessment(String? que) {
+    final isValid = _formKey.currentState!.validate();
+    _formKey.currentState!.save();
     if (answerChoices.isNotEmpty && isValid) {
       final randomisedAnsChoices = ts.randomiseChoices(answerChoices);
       Provider.of<RemoteAssessment>(context, listen: false)
           .addMCQ(MCQ(question: que, answerChoices: randomisedAnsChoices));
 
-      _formKey.currentState.reset();
+      _formKey.currentState!.reset();
       Navigator.pop(context);
     } else {
       showDialog(
@@ -54,7 +54,7 @@ class _AnswerChoiceInputState extends State<AnswerChoiceInput> {
 
   @override
   Widget build(BuildContext context) {
-    final que = ModalRoute.of(context).settings.arguments as String;
+    final que = ModalRoute.of(context)!.settings.arguments as String?;
 
     return Scaffold(
         appBar: AppBar(
@@ -104,7 +104,7 @@ class _AnswerChoiceInputState extends State<AnswerChoiceInput> {
                         maxLines: 5,
                         key: ValueKey('correct ans'),
                         validator: (value) {
-                          if (value.isEmpty || value == ' ') {
+                          if (value!.isEmpty || value == ' ') {
                             return 'Please enter correct answer choice';
                           }
                           return null;

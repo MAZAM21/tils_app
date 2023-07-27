@@ -3,8 +3,8 @@ import 'package:tils_app/models/student-user-data.dart';
 
 class StudentAvatarPanel extends StatelessWidget {
   const StudentAvatarPanel({
-    Key key,
-    @required this.studData,
+    Key? key,
+    required this.studData,
   }) : super(key: key);
 
   final StudentUser studData;
@@ -17,7 +17,7 @@ class StudentAvatarPanel extends StatelessWidget {
         if (studData.imageURL != '')
           CircleAvatar(
             backgroundImage: studData.imageURL != null
-                ? NetworkImage(studData.imageURL)
+                ? NetworkImage(studData.imageURL!)
                 : null,
             radius: 30,
           ),

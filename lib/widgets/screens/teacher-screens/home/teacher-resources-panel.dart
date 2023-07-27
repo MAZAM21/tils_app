@@ -14,8 +14,8 @@ import 'package:tils_app/widgets/screens/teacher-screens/resources/resources-upl
 
 class TeacherResourcesPanel extends StatelessWidget {
   TeacherResourcesPanel({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
   final ts = TeacherService();

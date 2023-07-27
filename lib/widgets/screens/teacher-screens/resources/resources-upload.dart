@@ -7,7 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:tils_app/widgets/button-style.dart';
 
 class ResourcesUpload extends StatefulWidget {
-  const ResourcesUpload({Key key}) : super(key: key);
+  const ResourcesUpload({Key? key}) : super(key: key);
 
   @override
   State<ResourcesUpload> createState() => _ResourcesUploadState();
@@ -15,7 +15,7 @@ class ResourcesUpload extends StatefulWidget {
 
 class _ResourcesUploadState extends State<ResourcesUpload> {
   final topicController = TextEditingController();
-  ResourceUploadObj resUp;
+  late ResourceUploadObj resUp;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
   }
 
   void pickFiles() async {
-    FilePickerResult results;
+    FilePickerResult? results;
 
     try {
       results = await FilePicker.platform.pickFiles(
@@ -44,7 +44,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
 
     if (results != null) {
       setState(() {
-        resUp.resourceFiles = results.files;
+        resUp.resourceFiles = results!.files;
       });
     }
   }

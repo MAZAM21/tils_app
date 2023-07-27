@@ -9,8 +9,8 @@ import 'package:tils_app/service/db.dart';
 
 class ParentHomeAvatarPanel extends StatefulWidget {
   const ParentHomeAvatarPanel({
-    Key key,
-    @required this.parentData,
+    Key? key,
+    required this.parentData,
   }) : super(key: key);
 
   final ParentUser parentData;
@@ -20,7 +20,7 @@ class ParentHomeAvatarPanel extends StatefulWidget {
 }
 
 class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
-  String _token;
+  String? _token;
   final db = DatabaseService();
   void initState() {
     super.initState();
@@ -35,8 +35,8 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
 
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
       if (notification != null && android != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('${notification.title}'),
@@ -63,7 +63,7 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
   }
 
   getToken(studID) async {
-    String token = await FirebaseMessaging.instance.getToken();
+    String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
     });
@@ -104,10 +104,10 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
                     ),
                   ],
                 ),
-                if (widget.parentData.imageUrl.isNotEmpty)
+                if (widget.parentData.imageUrl!.isNotEmpty)
                   CircleAvatar(
                     backgroundImage: widget.parentData.imageUrl != null
-                        ? NetworkImage(widget.parentData.imageUrl)
+                        ? NetworkImage(widget.parentData.imageUrl!)
                         : null,
                     radius: 30,
                   ),

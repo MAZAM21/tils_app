@@ -10,7 +10,7 @@ class ClassRecordDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final classId = ModalRoute.of(context).settings.arguments as String;
+    final classId = ModalRoute.of(context)!.settings.arguments as String?;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,7 @@ class ClassRecordDetail extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       Text(
-                          'Number of students present:  ${snapShot.data.getPresent()}')
+                          'Number of students present:  ${snapShot.data!.getPresent()}')
                     ],
                   ),
                 )

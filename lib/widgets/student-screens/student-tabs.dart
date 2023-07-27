@@ -9,11 +9,11 @@ import './student_home/student_home.dart';
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
 
-  final Color color;
-  final TabBar tabBar;
+  final Color? color;
+  final TabBar? tabBar;
 
   @override
-  Size get preferredSize => tabBar.preferredSize;
+  Size get preferredSize => tabBar!.preferredSize;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -29,7 +29,7 @@ class AllStudentTabs extends StatefulWidget {
 
 class _AllStudentTabsState extends State<AllStudentTabs>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
+  TabController? _controller;
 
   @override
   Widget build(BuildContext context) {

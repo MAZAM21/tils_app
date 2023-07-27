@@ -66,7 +66,7 @@ class _ClassRecordsState extends State<ClassRecords> {
                   child: GestureDetector(
                     child: Card(
                       child: Text(
-                        allClassesData[i].subjectName,
+                        allClassesData[i].subjectName!,
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       color: allClassesData[i].getColor(),

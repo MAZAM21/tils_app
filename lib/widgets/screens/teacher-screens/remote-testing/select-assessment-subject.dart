@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 
 class SelectAssessmentSubject extends StatelessWidget {
   const SelectAssessmentSubject({
-    Key key,
-    @required this.subjects,
-    @required this.tc,
+    Key? key,
+    required this.subjects,
+    required this.tc,
   }) : super(key: key);
   final List<String> subjects;
   final TeacherUser tc;
@@ -51,7 +51,7 @@ class SelectAssessmentSubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.textTheme.caption,
+          style: Theme.of(context).appBarTheme.textTheme!.caption,
         ),
       ),
       body: SingleChildScrollView(

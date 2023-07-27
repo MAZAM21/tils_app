@@ -9,8 +9,8 @@ import 'package:tils_app/widgets/student-screens/attendance-record/student-atten
 
 class StudentAttendancePanel extends StatelessWidget {
   StudentAttendancePanel({
-    Key key,
-    @required this.studData,
+    Key? key,
+    required this.studData,
   }) : super(key: key);
 
   final StudentUser studData;
@@ -19,11 +19,11 @@ class StudentAttendancePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final classList = Provider.of<List<SubjectClass>>(context);
-    List<SubjectClass> topThree;
-    int perc;
-    int present;
-    int late;
-    int absent;
+    late List<SubjectClass> topThree;
+    int? perc;
+    int? present;
+    int? late;
+    int? absent;
     bool isActive = false;
     if (classList != null) {
       topThree = ss.getTopThreeAtt(classList, studData);
@@ -157,7 +157,7 @@ class StudentAttendancePanel extends StatelessWidget {
                                   style: Theme.of(context).textTheme.headline4,
                                 ),
                           subtitle: Text(
-                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime)}',
+                            '${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].startTime!)}',
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Proxima Nova',

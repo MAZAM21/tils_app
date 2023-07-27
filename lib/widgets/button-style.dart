@@ -6,7 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 class RedButtonMobile extends StatelessWidget {
   final String child;
   final VoidCallback onPressed;
-  const RedButtonMobile({@required this.child, @required this.onPressed});
+  const RedButtonMobile({required this.child, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class RedButtonMobile extends StatelessWidget {
 class WhiteButtonMobile extends StatelessWidget {
   final String child;
   final VoidCallback onPressed;
-  const WhiteButtonMobile({@required this.child, @required this.onPressed});
+  const WhiteButtonMobile({required this.child, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

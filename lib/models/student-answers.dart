@@ -3,22 +3,22 @@ import 'package:flutter/foundation.dart';
 
 class StudentAnswers {
   //Map of MCQ as key and answer as value
-  Map<String, dynamic> mcqAnsMap;
+  Map<String, dynamic>? mcqAnsMap;
 
   // a map of questions as keys and answers as values
-  Map<String, String> tqaMap;
+  Map<String, String>? tqaMap;
 
   //a map of qs as keys and marks as values
-  Map<String, int> qMarks;
+  Map<String, int>? qMarks;
 
   //bool value to determine whether assessment has mcqs
-  final bool isMcq;
+  final bool? isMcq;
 
   //Total correct mcqs
-  int mcqMarks;
+  int? mcqMarks;
 
   //total text q marks
-  int totalQMarks;
+  int? totalQMarks;
 
   //student firebase collection id
   final String studentId;
@@ -28,8 +28,8 @@ class StudentAnswers {
 
   StudentAnswers({
     this.isMcq,
-    @required this.studentId,
-    @required this.name,
+    required this.studentId,
+    required this.name,
     this.mcqAnsMap,
     this.mcqMarks,
     this.qMarks,
@@ -48,7 +48,7 @@ class StudentAnswers {
       Map<String, String> qas = {};
       Map<String, int> qMarks = {};
       int marks = 0;
-      int tqMarks =0;
+      int tqMarks = 0;
 
       if (data.containsKey('TQMarks')) {
         Map tQmarks = {...data['TQMarks']} ?? {};
@@ -56,9 +56,8 @@ class StudentAnswers {
           tQmarks.forEach((q, m) {
             qMarks['$q'] = m.toInt() ?? 0;
           });
-          tqMarks = tQmarks.values.fold(0, (a, b) => a + b);
+          tqMarks = tQmarks.values.fold(0, (a, b) => a + b as int);
         }
-
       }
 
       if (doc.data().containsKey('MCQAns')) {
@@ -107,6 +106,6 @@ class StudentAnswers {
     } on Exception catch (e) {
       print('error in student-answers model: $e');
     }
-    return null;
+    throw Exception;
   }
 }

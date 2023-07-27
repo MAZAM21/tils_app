@@ -11,7 +11,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/assignments/mark-studen
 ///and buttons to select subject.
 
 class AddAssignment extends StatefulWidget {
-  const AddAssignment({Key key}) : super(key: key);
+  const AddAssignment({Key? key}) : super(key: key);
 
   static const routeName = '/add-assignment';
   @override
@@ -35,7 +35,7 @@ class _AddAssignmentState extends State<AddAssignment> {
     super.dispose();
   }
 
-  String subject;
+  String? subject;
 
   Widget _buttonBuilder(
     String sub,
@@ -117,7 +117,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                         key: ValueKey('assignment-title'),
                         controller: titleCont,
                         validator: (value) {
-                          if (value.isEmpty || value == '') {
+                          if (value!.isEmpty || value == '') {
                             return 'Please enter an assessment title';
                           }
                           return null;
@@ -236,10 +236,10 @@ class _AddAssignmentState extends State<AddAssignment> {
                     GestureDetector(
                       onTap: () {
                         /// Validation occurs here
-                        _formKey.currentState.save();
+                        _formKey.currentState!.save();
                         if (subject != null &&
                             regStuds != null &&
-                            assignmentMarks.title.isNotEmpty &&
+                            assignmentMarks.title!.isNotEmpty &&
                             assignmentMarks.totalMarks != null) {
                           Navigator.pushReplacement(
                             context,

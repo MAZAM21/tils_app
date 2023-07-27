@@ -17,7 +17,7 @@ class AdminDataStream extends StatelessWidget {
     }
     return !isActive
         ? LoadingScreen()
-        : StreamProvider<AdminUser>(
+        : StreamProvider<AdminUser?>(
             initialData: null,
             create: (context) => db.streamAdminUser(uid),
             builder: (context, _) => AdminHome(),

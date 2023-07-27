@@ -17,14 +17,14 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
   final _formKey = GlobalKey<FormState>();
   final db = DatabaseService();
 
-  String email;
-  String password;
+  String? email;
+  String? password;
 
-  String errorMessage;
+  String? errorMessage;
 
   void saveParentToDb(email, password) {
     setState(() {
-      _formKey.currentState.validate();
+      _formKey.currentState!.validate();
 
       db.saveParent(email, password, widget.stud);
     });
@@ -68,7 +68,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                           validator: (value) {
                             if (!RegExp(
                                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                .hasMatch(value)) {
+                                .hasMatch(value!)) {
                               errorMessage = 'Invalid email';
                               return errorMessage;
                             }
@@ -109,7 +109,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                         password = newPass;
                       },
                       validator: (value) {
-                        if (value.length < 6 || value.isEmpty) {
+                        if (value!.length < 6 || value.isEmpty) {
                           return 'Password should have 6 characters at least';
                         }
                         return null;
@@ -136,7 +136,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    _formKey.currentState.save();
+                    _formKey.currentState!.save();
                     saveParentToDb(email, password);
                     Navigator.pop(context);
                   },

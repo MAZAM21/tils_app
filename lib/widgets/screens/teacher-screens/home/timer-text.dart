@@ -5,14 +5,14 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/class-timer-panel.
 
 class TimerText extends StatelessWidget {
   const TimerText({
-    Key key,
-    @required this.inSession,
-    @required this.dateString,
-    @required this.timeUp,
-    @required this.timeClose,
-    @required this.subClassNext,
-    @required this.meetingId,
-    @required this.toEndString,
+    Key? key,
+    required this.inSession,
+    required this.dateString,
+    required this.timeUp,
+    required this.timeClose,
+    required this.subClassNext,
+    required this.meetingId,
+    required this.toEndString,
   }) : super(key: key);
 
   final bool inSession;
@@ -20,7 +20,7 @@ class TimerText extends StatelessWidget {
   final String dateString;
   final bool timeUp;
   final bool timeClose;
-  final SubjectClass subClassNext;
+  final SubjectClass? subClassNext;
   final String meetingId;
   final String toEndString;
 
@@ -57,7 +57,7 @@ class TimerText extends StatelessWidget {
                 if (meetingId != 'no class')
                   inSession
                       ? Text(
-                          '${subClassNext.subjectName} ends in',
+                          '${subClassNext!.subjectName} ends in',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',
@@ -68,7 +68,7 @@ class TimerText extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          '${subClassNext.subjectName} starts in:',
+                          '${subClassNext!.subjectName} starts in:',
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Proxima Nova',

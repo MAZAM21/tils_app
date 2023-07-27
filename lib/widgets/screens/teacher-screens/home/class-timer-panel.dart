@@ -20,7 +20,7 @@ class ClassTimerPanel extends StatefulWidget {
   final int end;
 
   ///meeting object
-  final Meeting meeting;
+  final Meeting? meeting;
 
   ///teacher data
   final TeacherUser teacherData;
@@ -36,10 +36,10 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final String meetingID = widget.meeting.docId;
+    final String meetingID = widget.meeting!.docId;
 
     final subClassList = Provider.of<List<SubjectClass>>(context);
-    SubjectClass subClassNext;
+    SubjectClass? subClassNext;
     bool isActive = false;
     if (subClassList != null) {
       isActive = true;

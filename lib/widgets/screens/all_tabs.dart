@@ -11,11 +11,11 @@ import 'package:tils_app/widgets/screens/teacher-screens/teacher-rankings/teache
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
 
-  final Color color;
-  final TabBar tabBar;
+  final Color? color;
+  final TabBar? tabBar;
 
   @override
-  Size get preferredSize => tabBar.preferredSize;
+  Size get preferredSize => tabBar!.preferredSize;
 
   @override
   Widget build(BuildContext context) => Container(

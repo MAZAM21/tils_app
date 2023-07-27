@@ -71,12 +71,12 @@ class StudentService {
     List<SubjectClass> req = [];
     classList.forEach((cls) {
       if (stud.subjects.contains(cls.subjectName) &&
-          cls.startTime.isBefore(DateTime.now()) &&
+          cls.startTime!.isBefore(DateTime.now()) &&
           stud.section == cls.section) {
         req.add(cls);
       }
     });
-    req.sort((a, b) => b.startTime.compareTo(a.startTime));
+    req.sort((a, b) => b.startTime!.compareTo(a.startTime!));
     List<SubjectClass> topthree;
     if (req.length > 3) {
       topthree = req.sublist(0, 3);
@@ -87,22 +87,22 @@ class StudentService {
   }
 
   ///Get deadline status
-  String getdeadlineStatus(RAfromDB ra, StudentUser studData) {
-    if (ra.endTime.isAfter(DateTime.now()) &&
-        !studData.completedAssessments.contains(ra.id)) {
+  String? getdeadlineStatus(RAfromDB ra, StudentUser studData) {
+    if (ra.endTime!.isAfter(DateTime.now()) &&
+        !studData.completedAssessments!.contains(ra.id)) {
       return 'Pending';
-    } else if (ra.endTime.isAfter(DateTime.now()) &&
-        studData.completedAssessments.contains(ra.id)) {
+    } else if (ra.endTime!.isAfter(DateTime.now()) &&
+        studData.completedAssessments!.contains(ra.id)) {
       return 'Submitted';
-    } else if (ra.endTime.isBefore(DateTime.now())) {
+    } else if (ra.endTime!.isBefore(DateTime.now())) {
       return 'Closed';
     }
     return null;
   }
 
-  bool submitted(String raId, StudentUser stud) {
+  bool submitted(String? raId, StudentUser stud) {
     bool stat = false;
-    if (stud.completedAssessments.contains(raId)) {
+    if (stud.completedAssessments!.contains(raId)) {
       stat = true;
     }
     return stat;
@@ -120,7 +120,7 @@ class StudentService {
         myRA.add(ra);
       }
     });
-    myRA.sort((a, b) => b.endTime.compareTo(a.endTime));
+    myRA.sort((a, b) => b.endTime!.compareTo(a.endTime!));
     List<RAfromDB> topthree;
     if (myRA.length > 3) {
       topthree = myRA.sublist(0, 3);
@@ -145,7 +145,7 @@ class StudentService {
     final now = DateTime.now();
     Meeting latestClass = list.firstWhere(
       (meeting) {
-        return meeting.to.isAfter(now);
+        return meeting.to!.isAfter(now);
       },
       orElse: () => Meeting(
         'no class',
@@ -159,8 +159,8 @@ class StudentService {
     );
 
     list.forEach((meeting) {
-      if (meeting.to.isAfter(now) &&
-          meeting.to.isBefore(latestClass.to) &&
+      if (meeting.to!.isAfter(now) &&
+          meeting.to!.isBefore(latestClass.to!) &&
           meeting.docId != latestClass.docId) {
         latestClass = meeting;
         //print('${meeting.eventName} latest class');
@@ -181,8 +181,8 @@ class StudentService {
         marked.add(element);
       }
     });
-    marked.sort((a, b) => b.startTime.compareTo(
-        a.startTime)); // easy sorting of dates. Use in attendance grid as well
+    marked.sort((a, b) => b.startTime!.compareTo(
+        a.startTime!)); // easy sorting of dates. Use in attendance grid as well
     return marked;
   }
 
@@ -223,32 +223,32 @@ class StudentService {
     return filtered;
   }
 
-  String getQuestion(RAfromDB ra, int index) {
+  String? getQuestion(RAfromDB ra, int index) {
     /* 1. need to extract all questions*/
-    List<String> textQs = ra.allTextQs;
-    List<MCQ> mcqs = ra.allMCQs;
-    List<String> mcqQs = [];
+    List<String>? textQs = ra.allTextQs as List<String>?;
+    List<MCQ> mcqs = ra.allMCQs!;
+    List<String?> mcqQs = [];
     mcqs.forEach((mcq) {
       mcqQs.add(mcq.question);
     });
     if (index < mcqQs.length) {
       return mcqQs[index];
     } else if (index >= mcqQs.length &&
-        index < (textQs.length + mcqQs.length)) {
+        index < (textQs!.length + mcqQs.length)) {
       return textQs[index - mcqQs.length];
     }
-    if (index >= textQs.length) {
+    if (index >= textQs!.length) {
       return null;
     }
     return null;
   }
 
-  Map getAnswers(RAfromDB ra, int index) {
+  Map? getAnswers(RAfromDB ra, int index) {
     //tl is total length of assessment q maps
-    int tl = ra.allMCQs.length + ra.allTextQs.length;
-    if (index < ra.allMCQs.length) {
+    int tl = ra.allMCQs!.length + ra.allTextQs!.length;
+    if (index < ra.allMCQs!.length) {
       
-      return ra.allMCQs[index].answerChoices;
+      return ra.allMCQs![index].answerChoices;
     }
     if (index >= tl) {
       return null;
@@ -262,7 +262,7 @@ class StudentService {
       SubjectClass temp = list[i];
       for (int z = 0; z < list.length; z++) {
         SubjectClass tempZ = list[z];
-        if (z != i && list[i].startTime.isBefore(list[z].startTime)) {
+        if (z != i && list[i].startTime!.isBefore(list[z].startTime!)) {
           list[i] = list[z];
           list[z] = temp;
           temp = tempZ;
@@ -282,7 +282,7 @@ class StudentService {
     all.forEach((cls) {
       if (subs.contains(cls.subjectName) &&
           cls.section == section &&
-          cls.startTime.isAfter(now)) {
+          cls.startTime!.isAfter(now)) {
         myClasses.add(cls);
       }
     });

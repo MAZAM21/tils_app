@@ -17,19 +17,19 @@ class UploadService {
     List<UploadStudent> upStud = [];
 
     for (var table in excelSheet.tables.keys) {
-      for (var row in excelSheet.tables[table].rows) {
-        if (row[0].value.toString() != 'Name') {
-          List<String> subs = row[3].value.toString().split(', ');
+      for (var row in excelSheet.tables[table]!.rows) {
+        if (row[0]!.value.toString() != 'Name') {
+          List<String> subs = row[3]!.value.toString().split(', ');
 
           upStud.add(
             UploadStudent(
-                name: '${row[0].value}',
-                email: '${row[1].value}',
-                password: '${row[2].value}',
+                name: '${row[0]!.value}',
+                email: '${row[1]!.value}',
+                password: '${row[2]!.value}',
                 subjects: subs,
-                year: '${row[4].value}',
-                batch: '${row[5].value}',
-                section: '${row[6].value}',
+                year: '${row[4]!.value}',
+                batch: '${row[5]!.value}',
+                section: '${row[6]!.value}',
                 subMap: {}),
           );
         }
@@ -56,11 +56,11 @@ class UploadService {
         subs.forEach(
           (k, v) {
             print(k);
-            if (stud.subjects.contains('$k')) {
+            if (stud.subjects!.contains('$k')) {
               print(stud.name);
-              stud.subMap['$k'] = true;
+              stud.subMap!['$k'] = true;
             } else {
-              stud.subMap['$k'] = false;
+              stud.subMap!['$k'] = false;
             }
           },
         );
@@ -82,14 +82,14 @@ class UploadService {
     //Excel sheets can have multiple tables hence the first for loop checks for the first table
     for (var table in excelSheet.tables.keys) {
       //Now we iterate through each row in the table
-      for (var row in excelSheet.tables[table].rows) {
-        if (row[0].value.toString() != 'Name') {
-          List<String> subs = row[3].value.toString().split(', ');
+      for (var row in excelSheet.tables[table]!.rows) {
+        if (row[0]!.value.toString() != 'Name') {
+          List<String> subs = row[3]!.value.toString().split(', ');
           upTeacher.add(
             UploadTeacher(
-              name: '${row[0].value}',
-              email: '${row[1].value}',
-              password: '${row[2].value}',
+              name: '${row[0]!.value}',
+              email: '${row[1]!.value}',
+              password: '${row[2]!.value}',
               subjects: subs,
               subMap: {},
             ),
@@ -117,11 +117,11 @@ class UploadService {
         subs.forEach(
           (k, v) {
             print(k);
-            if (t.subjects.contains('$k')) {
+            if (t.subjects!.contains('$k')) {
               print(t.name);
-              t.subMap['$k'] = true;
+              t.subMap!['$k'] = true;
             } else {
-              t.subMap['$k'] = false;
+              t.subMap!['$k'] = false;
             }
           },
         );
@@ -132,15 +132,15 @@ class UploadService {
 }
 
 class UploadStudent {
-  String name;
-  String email;
-  String password;
-  List<String> subjects = [];
-  Map subMap = {};
-  String year;
-  String batch;
-  String section;
-  String uid;
+  String? name;
+  String? email;
+  String? password;
+  List<String>? subjects = [];
+  Map? subMap = {};
+  String? year;
+  String? batch;
+  String? section;
+  String? uid;
   UploadStudent({
     this.name,
     this.email,
@@ -155,12 +155,12 @@ class UploadStudent {
 }
 
 class UploadTeacher {
-  String name;
-  String email;
-  String password;
-  List<String> subjects = [];
-  String uid;
-  Map subMap = {};
+  String? name;
+  String? email;
+  String? password;
+  List<String>? subjects = [];
+  String? uid;
+  Map? subMap = {};
   UploadTeacher({
     this.name,
     this.email,

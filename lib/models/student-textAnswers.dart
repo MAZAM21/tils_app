@@ -11,7 +11,7 @@ class StudentTextAns {
   final String name;
 
   //a map of qs as keys and marks as values
-  Map<String, int> qMarks;
+  Map<String, int?>? qMarks;
 
   //bool indicating marking status
   bool marked;
@@ -23,7 +23,8 @@ class StudentTextAns {
     this.name, [
     this.qMarks,
   ]);
-  factory StudentTextAns.fromFirestore(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  factory StudentTextAns.fromFirestore(
+      QueryDocumentSnapshot<Map<String, dynamic>> doc) {
     ///if Tqas not empty creates map
     ///if marks not empty creates map
 
@@ -32,7 +33,7 @@ class StudentTextAns {
       final String name = data['name'] ?? '';
       final Map dbMap = {...data['TQAs']} ?? {};
       Map marks = {...data['TQMarks']} ?? {};
-      Map<String, int> qMarks = {};
+      Map<String, int?> qMarks = {};
       Map<String, String> qas = {};
       bool marked = false;
       if (dbMap.isNotEmpty) {
@@ -51,9 +52,8 @@ class StudentTextAns {
       //print(name);
       return StudentTextAns(qas, doc.id, marked, name, qMarks);
     } catch (e) {
-     
       print('err in student text ans: $e');
     }
-    return null;
+    throw Exception;
   }
 }

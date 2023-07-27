@@ -2,20 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class TeacherUser with ChangeNotifier {
-  final String name;
-  final String year;
+  final String? name;
+  final String? year;
   final List<String> subjects;
-  final String uid;
-  final bool isAdmin;
+  final String? uid;
+  final bool? isAdmin;
   final String docId;
-  final Map markedTexQs;
+  final Map? markedTexQs;
   TeacherUser({
-    @required this.name,
-    @required this.year,
-    @required this.uid,
-    @required this.isAdmin,
-    @required this.subjects,
-    @required this.docId,
+    required this.name,
+    required this.year,
+    required this.uid,
+    required this.isAdmin,
+    required this.subjects,
+    required this.docId,
     this.markedTexQs,
   });
 
@@ -52,6 +52,6 @@ class TeacherUser with ChangeNotifier {
     } catch (err) {
       print('error in teacher user model: $err');
     }
-    return null;
+    throw Exception;
   }
 }

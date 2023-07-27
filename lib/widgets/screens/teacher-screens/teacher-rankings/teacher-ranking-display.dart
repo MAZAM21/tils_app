@@ -20,15 +20,15 @@ class TeacherRankingDisplay extends StatefulWidget {
 class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
   final rs = RankingService();
   final ss = StudentService();
-  String _filter;
-  String _yearFilter;
-  String _subYearFilter;
+  String? _filter;
+  String? _yearFilter;
+  String? _subYearFilter;
   Map<String, List<String>> yearSub = {
     '1': ['Contract', 'LSM', 'Criminal', 'Public'],
     '2': ['Tort', 'Property', 'HR', 'EU'],
     '3': ['Jurisprudence', 'Trust', 'Company', 'Conflict', 'Islamic']
   };
-  String _subjectFilter;
+  String? _subjectFilter;
 
   @override
   void didChangeDependencies() {
@@ -40,7 +40,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     super.didChangeDependencies();
   }
 
-  Widget _filterButtonFirst({String text, String filterText}) {
+  Widget _filterButtonFirst({required String text, String? filterText}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2.5),
       child: ElevatedButton(
@@ -69,7 +69,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     );
   }
 
-  ElevatedButton _filterButtonYear({String text, String filterText}) {
+  ElevatedButton _filterButtonYear({required String text, String? filterText}) {
     return ElevatedButton(
       style: ButtonStyle(
           backgroundColor: _yearFilter == text
@@ -96,8 +96,8 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
   }
 
   ElevatedButton _filterButtonSubYear({
-    String text,
-    String filterText,
+    required String text,
+    String? filterText,
   }) {
     return ElevatedButton(
       style: ButtonStyle(
@@ -125,8 +125,8 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
   }
 
   Widget _filterButtonSubject({
-    String text,
-    String filterText,
+    required String text,
+    String? filterText,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -266,7 +266,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                         ),
                         Spacer(),
                         Text(
-                          '${stud.yearScore.toInt()} ',
+                          '${stud.yearScore!.toInt()} ',
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Proxima Nova',
@@ -291,7 +291,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                         ),
                         Spacer(),
                         Text(
-                          '${stud.assignmentScore.toInt()} ',
+                          '${stud.assignmentScore!.toInt()} ',
                           style: TextStyle(
                             fontSize: 16,
                             fontFamily: 'Proxima Nova',
@@ -304,11 +304,11 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                     SizedBox(
                       height: 15,
                     ),
-                    for (var x = 0; x < stud.subjects.length; x++)
+                    for (var x = 0; x < stud.subjects!.length; x++)
                       Row(
                         children: <Widget>[
                           Text(
-                            '${stud.subjects[x]}',
+                            '${stud.subjects![x]}',
                             style: TextStyle(
                               fontSize: 18,
                               fontFamily: 'Proxima Nova',
@@ -317,9 +317,9 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                           ),
                           Spacer(),
                           Text(
-                            stud.raSubScore['${stud.subjects[x]}'] == null
+                            stud.raSubScore!['${stud.subjects![x]}'] == null
                                 ? '0'
-                                : '${stud.raSubScore['${stud.subjects[x]}']}',
+                                : '${stud.raSubScore!['${stud.subjects![x]}']}',
                             style: TextStyle(
                               fontSize: 16,
                               fontFamily: 'Proxima Nova',
@@ -442,11 +442,11 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                 child: Row(
                                   children: <Widget>[
                                     for (var x = 0;
-                                        x < yearSub['$_subYearFilter'].length;
+                                        x < yearSub['$_subYearFilter']!.length;
                                         x++)
                                       _filterButtonSubject(
-                                          text: yearSub['$_subYearFilter'][x],
-                                          filterText: yearSub['$_subYearFilter']
+                                          text: yearSub['$_subYearFilter']![x],
+                                          filterText: yearSub['$_subYearFilter']!
                                               [x]),
                                   ],
                                 ),
@@ -532,7 +532,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                       if (students[i].imageUrl != '')
                                         CircleAvatar(
                                           backgroundImage: CachedNetworkImageProvider(
-                                              students[i].imageUrl,),
+                                              students[i].imageUrl!,),
                                           radius: i == 0 || i == 1 || i == 2
                                               ? 25
                                               : 15,
@@ -556,7 +556,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                       Spacer(),
                                       if (_filter == 'Year')
                                         Text(
-                                          '${students[i].yearScore.toInt()}',
+                                          '${students[i].yearScore!.toInt()}',
                                           style: TextStyle(
                                               fontSize: 17,
                                               fontFamily: 'Proxima Nova',
@@ -568,7 +568,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                         ),
                                       if (_filter == 'Assignments')
                                         Text(
-                                          '${students[i].assignmentScore.toInt()}',
+                                          '${students[i].assignmentScore!.toInt()}',
                                           style: TextStyle(
                                             fontSize: 17,
                                             fontFamily: 'Proxima Nova',
@@ -578,7 +578,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                         ),
                                       if (_filter == 'Subject')
                                         Text(
-                                          '${students[i].raSubScore['$_subjectFilter'].toInt()}',
+                                          '${students[i].raSubScore!['$_subjectFilter'].toInt()}',
                                           style: TextStyle(
                                             fontSize: 17,
                                             fontFamily: 'Proxima Nova',
@@ -588,7 +588,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                         ),
                                       if (_filter == 'Attendance')
                                         Text(
-                                          '${students[i].attendanceScore.toInt()}',
+                                          '${students[i].attendanceScore!.toInt()}',
                                           style: TextStyle(
                                             fontSize: 17,
                                             fontFamily: 'Proxima Nova',

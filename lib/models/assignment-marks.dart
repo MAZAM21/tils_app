@@ -4,29 +4,29 @@ import 'package:tils_app/models/student_rank.dart';
 
 class AssignmentMarks with ChangeNotifier {
   /// title of assignment
-  String title;
+  String? title;
 
   /// subject
-  String subject;
+  String? subject;
 
   /// Name of teacher who uploaded marks
-  String teacherName;
+  String? teacherName;
 
   /// DB id of teacher
-  String teacherId;
+  String? teacherId;
 
   /// A map of student names as keys and marks entered as values
   /// to be uploaded to assignment-marks collection
-  Map<String, int> marks;
+  Map<String, int>? marks;
 
   /// A map of student IDs as keys and marks as values
-  Map<String, int> uidMarks;
+  Map<String, int>? uidMarks;
 
   /// List of studentrank objects for ui display of names and pics
-  List<StudentRank> studentList;
+  List<StudentRank>? studentList;
 
   /// The max marks of the assignment
-  int totalMarks;
+  int? totalMarks;
 
   AssignmentMarks(
       {this.title,
@@ -40,35 +40,35 @@ class AssignmentMarks with ChangeNotifier {
 
 class AMfromDB {
   /// title of assignment
-  final String title;
+  final String? title;
 
   /// subject
-  final String subject;
+  final String? subject;
 
   /// Name of teacher who uploaded marks
-  final String teacherName;
+  final String? teacherName;
 
   /// DB id of teacher
-  final String teacherId;
+  final String? teacherId;
 
   /// A map of student names as keys and marks entered as values
   /// to be uploaded to assignment-marks collection
-  Map<String, int> nameMarks;
+  Map<String, int>? nameMarks;
 
   /// A map of student IDs as keys and marks as values
-  Map<String, int> uidMarks;
+  Map<String, int>? uidMarks;
 
   /// List of studentrank objects for ui display of names and pics
-  List<StudentRank> studentList;
+  List<StudentRank>? studentList;
 
   /// The max marks of the assignment
-  int totalMarks;
+  int? totalMarks;
 
   /// doc Id
-  String docId;
+  String? docId;
 
   /// time created
-  final DateTime timeCreated;
+  final DateTime? timeCreated;
 
   AMfromDB({
     this.timeCreated,
@@ -88,17 +88,17 @@ class AMfromDB {
     try {
       final data = doc.data();
       String t = data['title'] ?? '';
-      String sub = data['subject'];
+      String? sub = data['subject'];
       Map stmarks = Map<String, int>.from(data['student-marks']) ?? {};
       Map umarks = Map<String, int>.from(data['uid-marks']) ?? {};
-      String teachid = data['uploader-id'];
-      String teacherName = data['uploader'];
-      int totalMarks = data['totalMarks'];
+      String? teachid = data['uploader-id'];
+      String? teacherName = data['uploader'];
+      int? totalMarks = data['totalMarks'];
       Timestamp timeCreated = data['time-created'] ?? Timestamp.now();
       DateTime time;
       if (timeCreated != null) {
-        time =
-            DateTime.parse(timeCreated.toDate().toString() ?? Timestamp.now());
+        time = DateTime.parse(
+            timeCreated.toDate().toString() ?? Timestamp.now() as String);
       } else {
         time = DateTime.now();
       }
@@ -108,14 +108,14 @@ class AMfromDB {
         subject: sub,
         teacherId: teachid,
         teacherName: teacherName,
-        nameMarks: stmarks,
-        uidMarks: umarks,
+        nameMarks: stmarks as Map<String, int>?,
+        uidMarks: umarks as Map<String, int>?,
         totalMarks: totalMarks,
         docId: doc.id,
       );
     } catch (e) {
       print('error in AMfromDB constructor: $e');
     }
-    return null;
+    throw Exception;
   }
 }

@@ -9,7 +9,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-indivi
 class MarkScript extends StatefulWidget {
   final StudentTextAns ans;
   final String assid;
-  final String subject;
+  final String? subject;
   final String teacherId;
   MarkScript(
     this.ans,
@@ -33,8 +33,8 @@ class _MarkScriptState extends State<MarkScript> {
   void didChangeDependencies() {
     StudentTextAns sta = widget.ans;
     int l = sta.qaMap.length;
-    List<int> markList = ts.getMarksList(sta.qMarks, l);
-    var totalE = markList.fold(0, (p, n) => p + n);
+    List<int?> markList = ts.getMarksList(sta.qMarks!, l)!;
+    var totalE = markList.fold(0, (dynamic p, n) => p + n);
     if(totalE>0) {
       totalMarks = totalE;
       print(totalMarks);
@@ -56,7 +56,7 @@ class _MarkScriptState extends State<MarkScript> {
   Widget buildQA(
     String question,
     String answer,
-    double mark,
+    double? mark,
   ) {
     return Flexible(
       fit: FlexFit.loose,
@@ -128,7 +128,7 @@ class _MarkScriptState extends State<MarkScript> {
     List<String> answerList = sta.qaMap.values.toList();
 
     int l = sta.qaMap.length;
-    List<int> markList = ts.getMarksList(sta.qMarks, l);
+    List<int?>? markList = ts.getMarksList(sta.qMarks!, l);
     print(markList);
     return Scaffold(
       appBar: AppBar(),
@@ -144,7 +144,7 @@ class _MarkScriptState extends State<MarkScript> {
                         'You have not properly added marks, please press the save button beneath the answer first'),
                   );
                 });
-          } else if (totalMarks == 0 && markList.isNotEmpty){}
+          } else if (totalMarks == 0 && markList!.isNotEmpty){}
           print('adding to db: $totalMarks');
             db.addTotalMarkToStudent(totalMarks, sta.studentId, widget.assid,
                 widget.subject, widget.teacherId);
@@ -166,7 +166,7 @@ class _MarkScriptState extends State<MarkScript> {
                       widget.assid,
                       questionList[x],
                       answerList[x],
-                      markList[x],
+                      markList![x],
                       aggregateAllMarks,
                     ),
                 ],

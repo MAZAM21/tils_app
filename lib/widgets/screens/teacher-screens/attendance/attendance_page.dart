@@ -68,7 +68,7 @@ class AttendancePage extends StatelessWidget {
                                   ),
                                 ),
                           subtitle: Text(
-                            '${DateFormat('hh:mm a - EEE, MMM d').format(myClasses[i].startTime)}',
+                            '${DateFormat('hh:mm a - EEE, MMM d').format(myClasses[i].startTime!)}',
                             style: TextStyle(
                               fontFamily: 'Proxima Nova',
                               fontSize: 12,

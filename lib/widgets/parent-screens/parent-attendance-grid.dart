@@ -7,7 +7,7 @@ import 'package:tils_app/service/parent-service.dart';
 
 class ParentAttendanceGrid extends StatefulWidget {
   const ParentAttendanceGrid({
-    @required this.pData,
+    required this.pData,
   });
   final ParentUser pData;
   @override
@@ -95,7 +95,7 @@ class _ParentAttendanceGridState extends State<ParentAttendanceGrid> {
                       ),
                       Spacer(),
                       Text(
-                        '${DateFormat('hh:mm a').format(myClasses[i].startTime)}',
+                        '${DateFormat('hh:mm a').format(myClasses[i].startTime!)}',
                         style: TextStyle(
                             color: Color.fromARGB(255, 76, 76, 76),
                             fontFamily: 'Proxima Nova',
@@ -103,7 +103,7 @@ class _ParentAttendanceGridState extends State<ParentAttendanceGrid> {
                             fontSize: 13),
                       ),
                       Text(
-                        '${DateFormat('EEE, MMM d').format(myClasses[i].startTime)}',
+                        '${DateFormat('EEE, MMM d').format(myClasses[i].startTime!)}',
                         style: TextStyle(
                             color: Color.fromARGB(255, 76, 76, 76),
                             fontFamily: 'Proxima Nova',

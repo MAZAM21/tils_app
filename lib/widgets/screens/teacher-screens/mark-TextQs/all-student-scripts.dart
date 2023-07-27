@@ -11,7 +11,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-script
 class StudentAnswerScripts extends StatefulWidget {
   final assid;
   final title;
-  final String subject;
+  final String? subject;
   final TeacherUser tUser;
   StudentAnswerScripts(this.assid, this.title, this.subject, this.tUser);
   @override
@@ -35,7 +35,7 @@ class _StudentAnswerScriptsState extends State<StudentAnswerScripts> {
           return LoadingScreen();
         }
         if (snap.hasData) {
-          List<StudentTextAns> allScripts = snap.data;
+          List<StudentTextAns>? allScripts = snap.data;
           return Scaffold(
             appBar: AppBar(),
             body: Row(
@@ -59,7 +59,7 @@ class _StudentAnswerScriptsState extends State<StudentAnswerScripts> {
                       ),
                       ListView.builder(
                         shrinkWrap: true,
-                        itemCount: snap.data.length,
+                        itemCount: snap.data!.length,
                         itemBuilder: (context, i) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -69,16 +69,16 @@ class _StudentAnswerScriptsState extends State<StudentAnswerScripts> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => MarkScript(
-                                      snap.data[i],
+                                      snap.data![i],
                                       widget.assid,
                                       widget.subject,
                                       widget.tUser.docId),
                                 ));
                               },
-                              title: Text('${snap.data[i].name}',
+                              title: Text('${snap.data![i].name}',
                                   style: Theme.of(context).textTheme.headline5),
                               trailing: ts.getStudentScriptMarkedStat(
-                                      snap.data[i].studentId,
+                                      snap.data![i].studentId,
                                       widget.assid,
                                       widget.tUser)
                                   ? Icon(Icons.check)

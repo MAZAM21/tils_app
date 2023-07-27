@@ -8,9 +8,9 @@ import 'package:emojis/emojis.dart';
 
 class MetricDisplay extends StatelessWidget {
   const MetricDisplay({
-    @required this.studData,
-    @required this.metrics,
-    Key key,
+    required this.studData,
+    required this.metrics,
+    Key? key,
   }) : super(key: key);
   final List<StudentMetrics> metrics;
   final StudentUser studData;
@@ -19,7 +19,7 @@ class MetricDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     final ms = MetricService();
     bool isActive = false;
-    MetricAchievement display;
+    late MetricAchievement display;
     if (ms != null) {
         print('working');
       display = ms.getAssignmentMetric(metrics, studData.uid);
@@ -43,7 +43,7 @@ class MetricDisplay extends StatelessWidget {
                     children: <Widget>[
                       Spacer(),
                       Text(
-                        display.achievement + display.emoji,
+                        display.achievement! + display.emoji!,
                         style: TextStyle(
                             color: Color(0xff030453),
                             fontFamily: 'Proxima Nova',
@@ -55,7 +55,7 @@ class MetricDisplay extends StatelessWidget {
                   ),
                   SizedBox(height: 7,),
                   Text(
-                    display.duration,
+                    display.duration!,
                     style: TextStyle(
                         color: Color(0xff0077B6),
                         fontFamily: 'Proxima Nova',

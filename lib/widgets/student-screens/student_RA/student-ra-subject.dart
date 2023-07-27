@@ -10,9 +10,9 @@ import 'package:tils_app/widgets/student-screens/student_RA/student-ra-display.d
 
 class StudentRASubject extends StatelessWidget {
   const StudentRASubject({
-    Key key,
-    @required this.subjects,
-    @required this.studentUser,
+    Key? key,
+    required this.subjects,
+    required this.studentUser,
   }) : super(key: key);
   final List<String> subjects;
   final StudentUser studentUser;
@@ -56,7 +56,7 @@ class StudentRASubject extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Select Subject',
-          style: Theme.of(context).appBarTheme.textTheme.caption,
+          style: Theme.of(context).appBarTheme.textTheme!.caption,
         ),
       ),
       body: SingleChildScrollView(

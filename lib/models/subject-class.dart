@@ -26,12 +26,12 @@ enum AttendanceStatus {
 }
 
 class SubjectClass with ChangeNotifier {
-  final String subjectName;
+  final String? subjectName;
   final String id;
-  final DateTime startTime;
-  final DateTime endTime;
-  final String section;
-  final String topic;
+  final DateTime? startTime;
+  final DateTime? endTime;
+  final String? section;
+  final String? topic;
 
   /// Now Implemented
   /// attendance status is a map of student ids as keys
@@ -39,21 +39,21 @@ class SubjectClass with ChangeNotifier {
   /// 1 for present
   /// 2 for late
   /// 3 for absent
-  Map attendanceStatus = {};
+  Map? attendanceStatus = {};
 
   SubjectClass({
-    @required this.id,
-    @required this.subjectName,
-    @required this.startTime,
-    @required this.endTime,
-    @required this.section,
+    required this.id,
+    required this.subjectName,
+    required this.startTime,
+    required this.endTime,
+    required this.section,
     this.attendanceStatus,
     this.topic,
   });
 
   factory SubjectClass.fromFirestore(QueryDocumentSnapshot doc) {
-    Map data = doc.data();
-    String name = data['subjectName'];
+    Map data = doc.data() as Map<dynamic, dynamic>;
+    String? name = data['subjectName'];
     DateTime start = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']);
     DateTime end = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']);
     Map attStat ={};
@@ -72,7 +72,7 @@ class SubjectClass with ChangeNotifier {
     );
   }
 
-  Map<dynamic, dynamic> get attStat {
+  Map<dynamic, dynamic>? get attStat {
     return attendanceStatus;
   }
 

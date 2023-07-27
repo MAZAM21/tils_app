@@ -16,7 +16,7 @@ class Meeting {
   ]);
 
   factory Meeting.fromFirestore(QueryDocumentSnapshot doc) {
-    Map data = doc.data();
+    Map data = doc.data() as Map<dynamic, dynamic>;
     return Meeting(
       data['subjectName'] ?? '',
       DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
@@ -33,13 +33,13 @@ class Meeting {
   String eventName;
 
   /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
+  DateTime? from;
 
   /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
+  DateTime? to;
 
   /// Background which is equivalent to color property of [Appointment].
-  Color background;
+  Color? background;
 
   /// IsAllDay which is equivalent to isAllDay property of [Appointment].
   bool isAllDay;
@@ -48,10 +48,10 @@ class Meeting {
   String docId;
 
   /// Topic of class
-  String topic;
+  String? topic;
 
   /// Section
-  String section;
+  String? section;
 }
 
 Color getColor(subjectName) {

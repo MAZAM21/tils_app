@@ -23,7 +23,7 @@ import 'package:tils_app/main.dart';
 //TODO
 /// add notifications
 class ParentHome extends StatefulWidget {
-  const ParentHome({Key key}) : super(key: key);
+  const ParentHome({Key? key}) : super(key: key);
 
   @override
   _ParentHomeState createState() => _ParentHomeState();
@@ -33,7 +33,7 @@ class _ParentHomeState extends State<ParentHome> {
   final ps = ParentService();
   final rs = RankingService();
   final db = DatabaseService();
-  String _token;
+  String? _token;
   bool _tokenAdded = false;
 
   @override

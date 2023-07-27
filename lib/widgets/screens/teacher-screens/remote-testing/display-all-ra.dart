@@ -14,7 +14,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/subject-
 
 class AllRAs extends StatefulWidget {
   static const routeName = '/all-remote-assessments';
-  AllRAs({@required this.subject});
+  AllRAs({required this.subject});
   final String subject;
 
   @override
@@ -33,7 +33,7 @@ class _AllRAsState extends State<AllRAs> {
 
     ///a list of all ra's of the subject passed in constructor
     List<RAfromDB> subRa = [];
-    int totalRa;
+    int? totalRa;
     bool isActive = false;
     if (allRa != null && userData != null) {
       // filtering allra for all of the subs registered.
@@ -47,7 +47,7 @@ class _AllRAsState extends State<AllRAs> {
             appBar: AppBar(
               title: Text(
                 'Assessments Main',
-                style: Theme.of(context).appBarTheme.textTheme.caption,
+                style: Theme.of(context).appBarTheme.textTheme!.caption,
               ),
             ),
             body: SingleChildScrollView(
@@ -146,7 +146,7 @@ class _AllRAsState extends State<AllRAs> {
                                 color: Color(0xff2b3443),
                               ),
                             ),
-                            trailing: subRa[i].isDeployed
+                            trailing: subRa[i].isDeployed!
                                 ? Text(
                                     'In Progress',
                                     style: TextStyle(

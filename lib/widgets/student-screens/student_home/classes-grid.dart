@@ -4,8 +4,8 @@ import 'package:tils_app/models/subject-class.dart';
 
 class MyClassesGrid extends StatelessWidget {
   const MyClassesGrid({
-    Key key,
-    @required this.myClasses,
+    Key? key,
+    required this.myClasses,
   }) : super(key: key);
 
   final List<SubjectClass> myClasses;
@@ -65,7 +65,7 @@ class MyClassesGrid extends StatelessWidget {
                         height: 3,
                       ),
                       Text(
-                        '${DateFormat('MMM dd, yyyy - hh:mm a').format(myClasses[i].startTime)}',
+                        '${DateFormat('MMM dd, yyyy - hh:mm a').format(myClasses[i].startTime!)}',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color(0xff5f686f),

@@ -32,10 +32,10 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
 
   @override
   void didChangeDependencies() {
-    var subClass = ModalRoute.of(context).settings.arguments as SubjectClass;
+    var subClass = ModalRoute.of(context)!.settings.arguments as SubjectClass;
 
-    if (subClass.attStat.isNotEmpty) {
-      attInput.attendanceStatus = {...subClass.attStat};
+    if (subClass.attStat!.isNotEmpty) {
+      attInput.attendanceStatus = {...subClass.attStat!};
     } else {
       attInput.attendanceStatus = {};
     }
@@ -43,10 +43,10 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
   }
 
   void addAttStat(String studId, int stat) {
-    attInput.attendanceStatus.addAll({studId: stat});
+    attInput.attendanceStatus!.addAll({studId: stat});
   }
 
-  Color statusColor(int status) {
+  Color? statusColor(int? status) {
     switch (status) {
       case 1:
         return Colors.green[300];
@@ -66,7 +66,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
   Widget build(BuildContext context) {
     final students = Provider.of<List<StudentRank>>(context);
 
-    final subClass = ModalRoute.of(context).settings.arguments as SubjectClass;
+    final subClass = ModalRoute.of(context)!.settings.arguments as SubjectClass;
 
     String notification =
         DateFormat("EEE, dd-MM hh:mm a").format(DateTime.now());
@@ -97,7 +97,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
               },
               child: Text(
                 'Save',
-                style: Theme.of(context).appBarTheme.textTheme.caption,
+                style: Theme.of(context).appBarTheme.textTheme!.caption,
               ))
         ],
       ),
@@ -109,13 +109,13 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
                 return AttendanceMarkerTile(
                     name: clsStuds[i].name,
                     status:
-                        attInput.attendanceStatus['${clsStuds[i].id}'] == null
+                        attInput.attendanceStatus!['${clsStuds[i].id}'] == null
                             ? 0
-                            : attInput.attendanceStatus['${clsStuds[i].id}'],
+                            : attInput.attendanceStatus!['${clsStuds[i].id}'],
                     studId: clsStuds[i].id,
                     addStat: addAttStat,
                     col: statusColor(
-                        attInput.attendanceStatus['${clsStuds[i].id}']));
+                        attInput.attendanceStatus!['${clsStuds[i].id}']));
               },
             ),
     );
@@ -124,25 +124,25 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
 
 class AttendanceMarkerTile extends StatefulWidget {
   const AttendanceMarkerTile({
-    Key key,
-    @required this.name,
-    @required this.status,
-    @required this.studId,
-    @required this.addStat,
-    @required this.col,
+    Key? key,
+    required this.name,
+    required this.status,
+    required this.studId,
+    required this.addStat,
+    required this.col,
   }) : super(key: key);
   final String name;
   final String studId;
-  final int status;
+  final int? status;
   final Function addStat;
-  final Color col;
+  final Color? col;
 
   @override
   _AttendanceMarkerTileState createState() => _AttendanceMarkerTileState();
 }
 
 class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
-  int colr;
+  int? colr;
   @override
   void initState() {
     colr = widget.status;
@@ -180,7 +180,7 @@ class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
     );
   }
 
-  Color statusColor(int status) {
+  Color? statusColor(int? status) {
     switch (status) {
       case 1:
         return Colors.green[300];

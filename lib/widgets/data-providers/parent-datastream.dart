@@ -17,7 +17,7 @@ class ParentDataStream extends StatelessWidget {
     }
     return !isActive
         ? LoadingScreen()
-        : StreamProvider<ParentUser>(
+        : StreamProvider<ParentUser?>(
             initialData: null,
             create: (context) => db.streamParentUser(uid),
             builder: (context, _) => ParentHome(),

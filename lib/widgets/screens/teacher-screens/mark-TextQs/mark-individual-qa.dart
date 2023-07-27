@@ -7,7 +7,7 @@ class MarkIndividualQA extends StatefulWidget {
   final assid;
   final question;
   final answer;
-  final int mark;
+  final int? mark;
   final void Function(String q, int m) aggMarks;
   MarkIndividualQA(
       this.stuId, this.assid, this.question, this.answer, this.mark, this.aggMarks);
@@ -17,13 +17,13 @@ class MarkIndividualQA extends StatefulWidget {
 
 class _MarkIndividualQAState extends State<MarkIndividualQA> {
   final db = DatabaseService();
-  double _initval;
+  double? _initval;
   bool _isInit = false;
   @override
   void initState() {
     _isInit = true;
     if (widget.mark != 0) {
-      _initval = widget.mark.toDouble();
+      _initval = widget.mark!.toDouble();
     } else {
       _initval = 0;
     }
@@ -96,10 +96,10 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
                       setState(() {
                         _isInit = false;
                       });
-                      widget.aggMarks(widget.question, _initval.toInt());
+                      widget.aggMarks(widget.question, _initval!.toInt());
                       db.addMarksToTextAns(
                         '${widget.question}',
-                        _initval.toInt(),
+                        _initval!.toInt(),
                         widget.assid,
                         widget.stuId,
                       );
@@ -108,7 +108,7 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '${_initval.toInt()}',
+                      '${_initval!.toInt()}',
                       style: TextStyle(
                           fontFamily: 'Proxima Nova',
                           fontSize: 17,

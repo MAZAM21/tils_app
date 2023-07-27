@@ -59,7 +59,7 @@ class RoutesAndTheme extends StatelessWidget {
           create: (ctx) => db.streamClasses(),
           initialData: [],
         ),
-        StreamProvider<User>(
+        StreamProvider<User?>(
           create: (ctx) => db.authStateStream(),
           initialData: null,
         ),

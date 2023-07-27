@@ -11,9 +11,9 @@ import 'package:tils_app/widgets/student-screens/student_RA/student-ra-subject.d
 //Students Assessment Panel
 class AssessmentHomePanel extends StatelessWidget {
   const AssessmentHomePanel({
-    Key key,
-    @required this.ss,
-    @required this.studData,
+    Key? key,
+    required this.ss,
+    required this.studData,
   }) : super(key: key);
 
   final StudentService ss;
@@ -50,7 +50,7 @@ class AssessmentHomePanel extends StatelessWidget {
                             value: studData,
                             child: StudentRASubject(
                               studentUser: studData,
-                              subjects: studData.subjects,
+                              subjects: studData.subjects as List<String>,
                             ),
                           ),
                         ),
@@ -78,7 +78,7 @@ class AssessmentHomePanel extends StatelessWidget {
                   itemCount: topThree.length,
                   shrinkWrap: true,
                   itemBuilder: (ctx, i) {
-                    String dStat = ss.getdeadlineStatus(topThree[i], studData);
+                    String? dStat = ss.getdeadlineStatus(topThree[i], studData);
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 3.5),
                       child: ListTile(
@@ -90,7 +90,7 @@ class AssessmentHomePanel extends StatelessWidget {
                           style: Theme.of(context).textTheme.headline4,
                         ),
                         subtitle: Text(
-                          'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime)}',
+                          'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
                           style: TextStyle(
                             fontSize: 12,
                             fontFamily: 'Proxima Nova',
@@ -106,9 +106,9 @@ class AssessmentHomePanel extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        onTap: !studData.completedAssessments
+                        onTap: !studData.completedAssessments!
                                     .contains(topThree[i].id) &&
-                                topThree[i].isDeployed
+                                topThree[i].isDeployed!
                             ? () {
                                 Navigator.pushNamed(
                                     context, AssessmentPage.routeName,
@@ -118,7 +118,7 @@ class AssessmentHomePanel extends StatelessWidget {
                                       'name': studData.name,
                                     });
                               }
-                            : studData.completedAssessments
+                            : studData.completedAssessments!
                                     .contains(topThree[i].id)
                                 ? () {
                                     showDialog(
@@ -134,7 +134,7 @@ class AssessmentHomePanel extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                : !topThree[i].isDeployed
+                                : (!topThree[i].isDeployed!
                                     ? () {
                                         showDialog(
                                           context: context,
@@ -149,7 +149,7 @@ class AssessmentHomePanel extends StatelessWidget {
                                           ),
                                         );
                                       }
-                                    : {},
+                                    : {}) as void Function()?,
                       ),
                     );
                   },

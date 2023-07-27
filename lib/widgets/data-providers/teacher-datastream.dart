@@ -18,7 +18,7 @@ class TeacherDataStream extends StatelessWidget {
     }
     return !isActive
         ? LoadingScreen()
-        : StreamProvider<TeacherUser>(
+        : StreamProvider<TeacherUser?>(
             initialData: null,
             create: (context) => db.streamTeacherUser(uid),
             builder: (context, _) => AllTabs(),

@@ -22,11 +22,11 @@ class EditStudSubs extends StatefulWidget {
 class _EditStudProfileState extends State<EditStudSubs> {
   List<String> _selectedSubs = [];
   final db = DatabaseService();
-  String _yearVal;
+  String? _yearVal;
 
   @override
   void didChangeDependencies() {
-    widget.stud.subjects.forEach((sub) {
+    widget.stud.subjects!.forEach((sub) {
       _selectedSubs.add(sub);
     });
     _yearVal = widget.stud.year;

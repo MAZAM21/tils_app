@@ -3,8 +3,8 @@ import 'package:tils_app/models/teacher-user-data.dart';
 
 class TeacherAvatarPanel extends StatelessWidget {
   const TeacherAvatarPanel({
-    Key key,
-    @required this.teacherData,
+    Key? key,
+    required this.teacherData,
   }) : super(key: key);
 
   final TeacherUser teacherData;

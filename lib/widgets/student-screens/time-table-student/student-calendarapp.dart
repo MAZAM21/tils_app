@@ -24,19 +24,19 @@ class StudentCalendar extends StatefulWidget {
 class _StudentCalendarState extends State<StudentCalendar> {
   final db = DatabaseService();
   final ss = StudentService();
-  CalendarController _controller;
-  DateTime _jumpToTime = DateTime.now();
+  CalendarController? _controller;
+  DateTime? _jumpToTime = DateTime.now();
   // String _text = '';
 
   @override
   void initState() {
     _controller = CalendarController();
-    _controller.view = CalendarView.workWeek;
+    _controller!.view = CalendarView.workWeek;
     //_text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
     super.initState();
   }
 
-  void _updateState(DateTime date) {
+  void _updateState(DateTime? date) {
     setState(() {
       _jumpToTime = date;
       //_text = DateFormat('MMMM yyyy').format(_jumpToTime).toString();
@@ -60,18 +60,18 @@ class _StudentCalendarState extends State<StudentCalendar> {
     if (appointments != null) {
       showElementDetails(appointments[0]);
     }
-    if (_controller.view == CalendarView.month &&
+    if (_controller!.view == CalendarView.month &&
         calendarTapDetails.targetElement == CalendarElement.calendarCell) {
-      _controller.view = CalendarView.day;
+      _controller!.view = CalendarView.day;
       _updateState(calendarTapDetails.date);
-    } else if ((_controller.view == CalendarView.week ||
-            _controller.view == CalendarView.workWeek) &&
+    } else if ((_controller!.view == CalendarView.week ||
+            _controller!.view == CalendarView.workWeek) &&
         calendarTapDetails.targetElement == CalendarElement.viewHeader) {
-      _controller.view = CalendarView.day;
+      _controller!.view = CalendarView.day;
       _updateState(calendarTapDetails.date);
-    } else if (_controller.view == CalendarView.day &&
+    } else if (_controller!.view == CalendarView.day &&
         calendarTapDetails.targetElement == CalendarElement.header) {
-      _controller.view = CalendarView.workWeek;
+      _controller!.view = CalendarView.workWeek;
       _updateState(calendarTapDetails.date);
     }
   }
@@ -110,7 +110,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
               ),
               Divider(),
               Text(
-                'Starts at: ${DateFormat('d MMM hh mm a').format(selected.from)}',
+                'Starts at: ${DateFormat('d MMM hh mm a').format(selected.from!)}',
                 style: TextStyle(
                   color: Color.fromARGB(255, 250, 235, 215),
                   fontFamily: 'Proxima Nova',
@@ -120,7 +120,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
               ),
               Divider(),
               Text(
-                'Ends at: ${DateFormat('d MMM hh mm a').format(selected.to)}',
+                'Ends at: ${DateFormat('d MMM hh mm a').format(selected.to!)}',
                 style: TextStyle(
                   color: Color.fromARGB(255, 250, 235, 215),
                   fontFamily: 'Proxima Nova',
@@ -176,19 +176,19 @@ class _StudentCalendarState extends State<StudentCalendar> {
           onSelected: (String value) {
             setState(() {
               if (value == 'Day') {
-                _controller.view = CalendarView.day;
+                _controller!.view = CalendarView.day;
               } else if (value == 'Week') {
-                _controller.view = CalendarView.week;
+                _controller!.view = CalendarView.week;
               } else if (value == 'WorkWeek') {
-                _controller.view = CalendarView.workWeek;
+                _controller!.view = CalendarView.workWeek;
               } else if (value == 'Month') {
-                _controller.view = CalendarView.month;
+                _controller!.view = CalendarView.month;
               } else if (value == 'Timeline Day') {
-                _controller.view = CalendarView.timelineDay;
+                _controller!.view = CalendarView.timelineDay;
               } else if (value == 'Timeline Week') {
-                _controller.view = CalendarView.timelineWeek;
+                _controller!.view = CalendarView.timelineWeek;
               } else if (value == 'Timeline WorkWeek') {
-                _controller.view = CalendarView.timelineWorkWeek;
+                _controller!.view = CalendarView.timelineWorkWeek;
               }
             });
           },
@@ -233,7 +233,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
         ],
       ),
       body: SfCalendar(
-        view: _controller.view,
+        view: _controller!.view!,
         controller: _controller,
         dataSource: meetingsData != null && myClass
             ? MeetingDataSource(myClasses)
@@ -243,7 +243,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
         monthViewSettings: MonthViewSettings(
             appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
         onTap: (CalendarTapDetails details) {
-          DateTime date = details.date;
+          DateTime? date = details.date;
           //print(date.toString());
           calendarTapped(details);
         },
@@ -267,26 +267,26 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return appointments[index].from;
+    return appointments![index].from;
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments[index].to;
+    return appointments![index].to;
   }
 
   @override
   String getSubject(int index) {
-    return appointments[index].eventName;
+    return appointments![index].eventName;
   }
 
   @override
   Color getColor(int index) {
-    return appointments[index].background;
+    return appointments![index].background;
   }
 
   @override
   bool isAllDay(int index) {
-    return appointments[index].isAllDay;
+    return appointments![index].isAllDay;
   }
 }

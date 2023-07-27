@@ -19,7 +19,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
   final queController = TextEditingController();
 
   bool _isMCQ = true;
-  String question;
+  String? question;
 
   void initState() {
     Provider.of<RemoteAssessment>(context, listen: false).allMCQs = [];
@@ -33,8 +33,8 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
   }
 
   void _saveAssessment() {
-    _formKey.currentState.save();
-    bool isValid = _formKey.currentState.validate();
+    _formKey.currentState!.save();
+    bool isValid = _formKey.currentState!.validate();
     if (Provider.of<RemoteAssessment>(context, listen: false).validate()) {
       db.addAssessmentToCF(
           Provider.of<RemoteAssessment>(context, listen: false));
@@ -71,7 +71,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
   @override
   Widget build(BuildContext context) {
     final assessment = Provider.of<RemoteAssessment>(context);
-    final routeArgs = ModalRoute.of(context).settings.arguments as Map;
+    final routeArgs = ModalRoute.of(context)!.settings.arguments as Map;
     assessment.subject = routeArgs['sub'];
     assessment.teacherId = routeArgs['id'];
     assessment.timeAdded = routeArgs['time'];
@@ -84,7 +84,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
       appBar: AppBar(
         title: Text(
           'Remote Assessment',
-          style: Theme.of(context).appBarTheme.textTheme.caption,
+          style: Theme.of(context).appBarTheme.textTheme!.caption,
         ),
         actions: <Widget>[
           TextButton(
@@ -123,7 +123,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                     TextFormField(
                       key: ValueKey('assessment-title'),
                       validator: (value) {
-                        if (value.isEmpty || value == '') {
+                        if (value!.isEmpty || value == '') {
                           return 'Please enter an assessment title';
                         }
                         return null;
@@ -162,7 +162,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                       controller: queController,
                       key: ValueKey('question'),
                       validator: (value) {
-                        if (value.isEmpty || value == '') {
+                        if (value!.isEmpty || value == '') {
                           return 'Please enter a question statement';
                         }
                         return null;
@@ -185,7 +185,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                       ElevatedButton(
                         child: Text('Add Answer Choices'),
                         onPressed: () {
-                          _formKey.currentState.save();
+                          _formKey.currentState!.save();
 
                           if (queController.text.isNotEmpty) {
                             Navigator.pushNamed(
@@ -207,7 +207,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                         onPressed: () {
                           if (queController.text.isNotEmpty) {
                             setState(() {
-                              assessment.allTextQs.add('${queController.text}');
+                              assessment.allTextQs!.add('${queController.text}');
                             });
                           } else {
                             showDialog(
@@ -260,7 +260,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                                       textAlign: TextAlign.center,
                                     )
                                   : Text(
-                                      '${DateFormat('MMM d - hh:mm a').format(assessment.deployTime)} \n to \n ${DateFormat('MMM d - hh:mm a').format(assessment.deadline)}',
+                                      '${DateFormat('MMM d - hh:mm a').format(assessment.deployTime!)} \n to \n ${DateFormat('MMM d - hh:mm a').format(assessment.deadline!)}',
                                       style:
                                           Theme.of(context).textTheme.headline4,
                                       textAlign: TextAlign.center,
@@ -289,19 +289,19 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                           border: Border.all(color: Colors.indigo)),
                       height: 200,
                       child: ListView.builder(
-                        itemCount: assessment.allMCQs.length,
+                        itemCount: assessment.allMCQs!.length,
                         itemBuilder: (context, i) {
                           return ListTile(
                             title: Text(
-                              '${assessment.allMCQs[i].question}',
+                              '${assessment.allMCQs![i].question}',
                               overflow: TextOverflow.ellipsis,
                             ),
                             subtitle: Text(
-                                '${assessment.allMCQs[i].answerChoices.length}'),
+                                '${assessment.allMCQs![i].answerChoices!.length}'),
                             trailing: IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {
-                                assessment.deleteMCQ(assessment.allMCQs[i]);
+                                assessment.deleteMCQ(assessment.allMCQs![i]);
                               },
                             ),
                           );
@@ -316,19 +316,19 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
                           BoxDecoration(border: Border.all(color: Colors.teal)),
                       height: 200,
                       child: ListView.builder(
-                        itemCount: assessment.allTextQs.length,
+                        itemCount: assessment.allTextQs!.length,
                         itemBuilder: (context, i) {
                           return ListTile(
                             title: Text(
-                              '${assessment.allTextQs[i]}',
+                              '${assessment.allTextQs![i]}',
                               overflow: TextOverflow.ellipsis,
                             ),
-                            subtitle: Text('${assessment.allTextQs[i]}'),
+                            subtitle: Text('${assessment.allTextQs![i]}'),
                             trailing: IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {
                                 setState(() {
-                                  assessment.allTextQs.removeAt(i);
+                                  assessment.allTextQs!.removeAt(i);
                                 });
                               },
                             ),
