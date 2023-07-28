@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/deploy-assessment.dart';
 
 ///this is the overview and deployment page
@@ -16,8 +16,6 @@ class EditRA extends StatefulWidget {
 }
 
 class _EditRAState extends State<EditRA> {
-  final db = DatabaseService();
-
   final ts = TeacherService();
 
   Widget buildMCQListTile(List<MCQ> mcqList) {
@@ -156,6 +154,7 @@ class _EditRAState extends State<EditRA> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[

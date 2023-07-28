@@ -16,12 +16,12 @@ class ResultMain extends StatefulWidget {
 }
 
 class _ResultMainState extends State<ResultMain> {
-  final db = DatabaseService();
   final ts = TeacherService();
   @override
   Widget build(BuildContext context) {
     final tData = Provider.of<TeacherUser>(context);
     final studData = Provider.of<List<StudentRank>>(context);
+    final db = Provider.of<DatabaseService>(context, listen: false);
 
     return StreamBuilder<List<TextQAs>>(
         stream: db.streamTextQAs(),

@@ -15,7 +15,6 @@ class AnnouncementForm extends StatefulWidget {
 }
 
 class _AnnouncementFormState extends State<AnnouncementForm> {
-  final db = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   Map<String, String?> vals = {'title': '', 'body': ''};
   String? id;
@@ -41,7 +40,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
     super.didChangeDependencies();
   }
 
-  void _saveState(String? title, String? body, String uid, String? cat) {
+  void _saveState(String? title, String? body, String uid, String? cat, db) {
     bool isValid = _formKey.currentState!.validate();
     if (isValid) {
       if (!_isEdit) {
@@ -67,6 +66,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
   @override
   Widget build(BuildContext context) {
     final id = Provider.of<User>(context).uid;
+    final db = Provider.of<DatabaseService>(context, listen: false);
     bool isActive = false;
     if (id != null) {
       isActive = true;
@@ -80,7 +80,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
               onPressed: () {
                 _formKey.currentState!.save();
                 if (category != null) {
-                  _saveState(vals['title'], vals['body'], id, category);
+                  _saveState(vals['title'], vals['body'], id, category, db);
                 } else {
                   showDialog(
                       context: context,

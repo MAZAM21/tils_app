@@ -6,7 +6,6 @@ import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcem
 
 class StudentNFDetail extends StatelessWidget {
   static const routeName = '/announcement-detail';
-  final db = DatabaseService();
 
   @override
   Widget build(BuildContext context) {

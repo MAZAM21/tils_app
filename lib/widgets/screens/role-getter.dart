@@ -12,40 +12,78 @@ import 'package:tils_app/widgets/data-providers/teacher-datastream.dart';
 import 'package:tils_app/widgets/screens/auth_page.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
-class RoleGetter extends StatelessWidget {
-  final db = DatabaseService();
+// class RoleGetter extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     bool isLoggedIn = false;
+//     final authState = Provider.of<User?>(context);
+//     final db = Provider.of<DatabaseService>(context,
+//         listen: false); // Obtain the DatabaseService
 
+//     if (authState != null) {
+//       isLoggedIn = true;
+//     }
+
+//     return isLoggedIn
+//         ? FutureProvider<Role?>(
+//             initialData: null,
+//             create: (ctx) => db.getRole(authState!.uid),
+//             builder: (context, _) {
+//               final roleProv = Provider.of<Role?>(context);
+//               if (roleProv != null) {
+//                 Provider.of<RoleProvider>(context, listen: false)
+//                     .setRole(roleProv);
+//               }
+//               return roleProv != null
+//                   ? roleProv.getRole == 'teacher'
+//                       ? TeacherDataStream()
+//                       : roleProv.getRole == 'student'
+//                           ? StudentDataStream()
+//                           : roleProv.getRole == 'parent'
+//                               ? ParentDataStream()
+//                               : roleProv.getRole == 'admin'
+//                                   ? AdminDataStream()
+//                                   : LoadingScreen()
+//                   : LoadingScreen(); // Return a loading screen or any widget while role is being fetched.
+//             },
+//           )
+//         : AuthScreen();
+//   }
+// }
+class RoleGetter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLoggedIn = false;
-    bool provIsActive = false;
     final authState = Provider.of<User?>(context);
-    final inst = Provider.of<InstituteID?>(context);
-    FirebaseAuth.instance.signOut();
+    final db = Provider.of<DatabaseService>(context, listen: false);
+
     if (authState != null) {
       isLoggedIn = true;
     }
+
     return isLoggedIn
         ? FutureProvider<Role?>(
             initialData: null,
-            create: (ctx) => db.getRole(authState!.uid, inst!.instID),
-            //catchError: (context,_){return Role('teacher');},
+            create: (ctx) => db.getRole(authState!.uid),
             builder: (context, _) {
               final roleProv = Provider.of<Role?>(context);
               if (roleProv != null) {
-                provIsActive = true;
+                Provider.of<RoleProvider>(context, listen: false)
+                    .setRole(roleProv);
               }
-              return provIsActive && roleProv!.getRole == 'teacher'
-                  ? TeacherDataStream()
-                  : provIsActive && roleProv!.getRole == 'student'
-                      ? StudentDataStream()
-                      : provIsActive && roleProv!.getRole == 'parent'
-                          ? ParentDataStream()
-                          : provIsActive && roleProv!.getRole == 'admin'
-                              ? AdminDataStream()
-                              : LoadingScreen();
+              return roleProv != null
+                  ? roleProv.getRole == 'teacher'
+                      ? TeacherDataStream()
+                      : roleProv.getRole == 'student'
+                          ? StudentDataStream()
+                          : roleProv.getRole == 'parent'
+                              ? ParentDataStream()
+                              : roleProv.getRole == 'admin'
+                                  ? AdminDataStream()
+                                  : LoadingScreen()
+                  : LoadingScreen(); // Return a loading screen or any widget while role is being fetched.
             },
           )
-        : AuthScreen();
+        : AuthScreen(); // Show AuthScreen when user is not authenticated.
   }
 }

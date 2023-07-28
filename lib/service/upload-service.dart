@@ -1,9 +1,8 @@
 import 'package:excel/excel.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 class UploadService {
-  final db = DatabaseService();
-
   /// This function takes an excell sheet and makes students out of it
   /// the order of fields is as follows
   /// name
@@ -66,18 +65,17 @@ class UploadService {
         );
       },
     );
-    db.saveStudent(upStud);
+    //db.saveStudent(upStud);
   }
 
   void uploadTeacherToDB(Excel excelSheet) {
-
     ///Error note:
     /// While uploading teachers for bls, two things went wrong
     /// 1. Year was not added
-    /// 2. The registered subjects field name was previously set to 'subjects' in model. 
-    /// but in db upload function it is 'RegisteredSubs' 
+    /// 2. The registered subjects field name was previously set to 'subjects' in model.
+    /// but in db upload function it is 'RegisteredSubs'
     /// This caused me some grief. Fix or take note
-    
+
     List<UploadTeacher> upTeacher = [];
     //Excel sheets can have multiple tables hence the first for loop checks for the first table
     for (var table in excelSheet.tables.keys) {
@@ -127,7 +125,7 @@ class UploadService {
         );
       },
     );
-    db.saveTeacher(upTeacher);
+    //db.saveTeacher(upTeacher);
   }
 }
 

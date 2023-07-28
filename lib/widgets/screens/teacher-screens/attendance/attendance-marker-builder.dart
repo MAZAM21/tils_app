@@ -22,7 +22,6 @@ class AttendanceMarkerBuilder extends StatefulWidget {
 }
 
 class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
-  final db = DatabaseService();
   final ts = TeacherService();
   var attInput = AttendanceInput();
   @override
@@ -84,6 +83,7 @@ class _AttendanceMarkerBuilderState extends State<AttendanceMarkerBuilder> {
 
       streamActive = true;
     }
+    final db = Provider.of<DatabaseService>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -149,7 +149,6 @@ class _AttendanceMarkerTileState extends State<AttendanceMarkerTile> {
     super.initState();
   }
 
-  final db = DatabaseService();
   Widget buildAttButton(
     String studName,
     String buttonText,

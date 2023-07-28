@@ -22,7 +22,6 @@ class CalendarApp extends StatefulWidget {
 }
 
 class _CalendarAppState extends State<CalendarApp> {
-  final db = DatabaseService();
   final ts = TeacherService();
   CalendarController? _controller;
   DateTime? _jumpToTime = DateTime.now();
@@ -56,10 +55,10 @@ class _CalendarAppState extends State<CalendarApp> {
   bool myClass = true;
 
   void calendarTapped(
-      CalendarTapDetails calendarTapDetails, List<StudentRank> students) {
+      CalendarTapDetails calendarTapDetails, List<StudentRank> students, db) {
     dynamic appointments = calendarTapDetails.appointments;
     if (appointments != null) {
-      showElementDetails(appointments[0], students);
+      showElementDetails(appointments[0], students, db);
     }
     if (_controller!.view == CalendarView.month &&
         calendarTapDetails.targetElement == CalendarElement.calendarCell) {
@@ -81,7 +80,7 @@ class _CalendarAppState extends State<CalendarApp> {
     Navigator.pushNamed(context, EditTTForm.routeName, arguments: tappedClass);
   }
 
-  void showElementDetails(Meeting selected, List<StudentRank> students) {
+  void showElementDetails(Meeting selected, List<StudentRank> students, db) {
     showModalBottomSheet(
       backgroundColor: selected.background,
       context: context,
@@ -161,6 +160,7 @@ class _CalendarAppState extends State<CalendarApp> {
     final meetingsData = Provider.of<List<Meeting>>(context);
     final teacherData = Provider.of<TeacherUser>(context);
     final students = Provider.of<List<StudentRank>>(context);
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final myClasses = ts.getMyClasses(meetingsData, teacherData.subjects);
     var source = myClasses;
     return Scaffold(
@@ -245,7 +245,7 @@ class _CalendarAppState extends State<CalendarApp> {
         onTap: (CalendarTapDetails details) {
           DateTime? date = details.date;
           print(date.toString());
-          calendarTapped(details, students);
+          calendarTapped(details, students, db);
         },
         initialDisplayDate: _jumpToTime,
         //maxDate: DateTime.now().add(Duration(days: 7)),

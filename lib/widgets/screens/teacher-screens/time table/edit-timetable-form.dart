@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tils_app/models/meeting.dart';
 
 import 'package:tils_app/models/subject-class.dart';
@@ -30,7 +30,6 @@ class _EditTTFormState extends State<EditTTForm> {
   var _isEdit = false;
   String? _editedId;
 
-  final db = DatabaseService();
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -195,6 +194,7 @@ class _EditTTFormState extends State<EditTTForm> {
 //subject option buttons,
 //set _subName.
   Widget buildSubjectButton(String subName) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return ElevatedButton(
       child: Text(
         subName == 'Jurisprudence' ? 'Juris' : subName,
@@ -332,6 +332,7 @@ class _EditTTFormState extends State<EditTTForm> {
   }
 
   void _saveForm(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     if (!_endTime!.isBefore(_startTime!) &&
         _subName != SubjectName.Undeclared &&
         _subName != null &&

@@ -9,9 +9,10 @@ import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-m
 class StudentProvider extends StatelessWidget {
   //adds a document to attendance collection
   static const routeName = '/student-provider';
-  final db = DatabaseService();
+
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final sub = ModalRoute.of(context)!.settings.arguments as SubjectClass;
     final subName = sub.subjectName;
     final subId = sub.id;

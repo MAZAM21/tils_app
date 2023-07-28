@@ -38,11 +38,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String? _token;
   final ts = TeacherService();
-  final db = DatabaseService();
+
   @override
   void initState() {
     super.initState();
     final teacherData = Provider.of<TeacherUser?>(context, listen: false);
+    final db = Provider.of<DatabaseService>(context, listen: false);
 
     ///this is for foreground notifications supposedly
 
@@ -82,13 +83,13 @@ class _HomePageState extends State<HomePage> {
           FirebaseMessaging.instance
               .subscribeToTopic('${teacherData.subjects[i]}');
         }
-        getToken(teacherData.docId);
+        getToken(teacherData.docId, db);
       }
     }
     // getTopics();
   }
 
-  getToken(String tID) async {
+  getToken(String tID, db) async {
     String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;

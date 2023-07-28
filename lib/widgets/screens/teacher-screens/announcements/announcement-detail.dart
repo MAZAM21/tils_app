@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/service/db.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
 
 class AnnouncementDetail extends StatelessWidget {
   static const routeName = '/announcement-detail';
-  final db = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final announcement =
         ModalRoute.of(context)!.settings.arguments as Announcement;
 

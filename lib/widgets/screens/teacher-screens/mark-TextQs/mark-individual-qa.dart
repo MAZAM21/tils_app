@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 class MarkIndividualQA extends StatefulWidget {
   final stuId;
@@ -9,14 +10,13 @@ class MarkIndividualQA extends StatefulWidget {
   final answer;
   final int? mark;
   final void Function(String q, int m) aggMarks;
-  MarkIndividualQA(
-      this.stuId, this.assid, this.question, this.answer, this.mark, this.aggMarks);
+  MarkIndividualQA(this.stuId, this.assid, this.question, this.answer,
+      this.mark, this.aggMarks);
   @override
   _MarkIndividualQAState createState() => _MarkIndividualQAState();
 }
 
 class _MarkIndividualQAState extends State<MarkIndividualQA> {
-  final db = DatabaseService();
   double? _initval;
   bool _isInit = false;
   @override
@@ -32,6 +32,7 @@ class _MarkIndividualQAState extends State<MarkIndividualQA> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Flexible(
       fit: FlexFit.loose,
       child: Container(

@@ -20,8 +20,6 @@ class StudentRADisplay extends StatefulWidget {
 }
 
 class _StudentRADisplayState extends State<StudentRADisplay> {
-  final db = DatabaseService();
-
   final ss = StudentService();
 
   final ts = TeacherService();

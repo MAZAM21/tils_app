@@ -32,6 +32,10 @@ class DatabaseService with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  Role role;
+
+  DatabaseService(this.role);
+
   //gets classes collection data and converts to Meeting list for TT
   Stream<List<Meeting>>? streamMeetings() {
     CollectionReference ref = _db.collection('classes');
@@ -478,9 +482,9 @@ class DatabaseService with ChangeNotifier {
   }
 
   //gets user role as string
-  Future<Role> getRole(String uid, String instID) async {
-    CollectionReference ref =
-        _db.collection('institutes').doc(instID).collection('users');
+  Future<Role> getRole(String uid) async {
+    print('getting role in db: $uid');
+    CollectionReference ref = _db.collection('users');
     DocumentSnapshot query = await ref.doc(uid).get();
     Role role = Role.fromFirestore(query);
     return role;

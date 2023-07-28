@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 class ActivateParentPortal extends StatefulWidget {
   const ActivateParentPortal(this.stud);
@@ -15,14 +16,13 @@ class ActivateParentPortal extends StatefulWidget {
 
 class _ActivateParentPortalState extends State<ActivateParentPortal> {
   final _formKey = GlobalKey<FormState>();
-  final db = DatabaseService();
 
   String? email;
   String? password;
 
   String? errorMessage;
 
-  void saveParentToDb(email, password) {
+  void saveParentToDb(email, password, db) {
     setState(() {
       _formKey.currentState!.validate();
 
@@ -32,6 +32,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -49,7 +50,9 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
               children: <Widget>[
-                SizedBox(height: 50,),
+                SizedBox(
+                  height: 50,
+                ),
                 Text(
                   'Enter Email',
                   style: Theme.of(context).textTheme.headline6,
@@ -137,7 +140,7 @@ class _ActivateParentPortalState extends State<ActivateParentPortal> {
                 ElevatedButton(
                   onPressed: () {
                     _formKey.currentState!.save();
-                    saveParentToDb(email, password);
+                    saveParentToDb(email, password, db);
                     Navigator.pop(context);
                   },
                   child: Text(

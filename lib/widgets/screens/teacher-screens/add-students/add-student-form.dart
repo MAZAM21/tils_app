@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'package:provider/provider.dart';
 
 import 'package:excel/excel.dart';
 import 'package:tils_app/service/upload-service.dart';
@@ -13,14 +14,14 @@ class AddStudent extends StatefulWidget {
 }
 
 class _AddStudentState extends State<AddStudent> {
-  final us= UploadService();
+  final us = UploadService();
   final _formKey = GlobalKey<FormState>();
   String? _userEmail = '';
   String? _userName = '';
   String? _userPassword = '';
   String? _section;
   String? _batch = '';
-  final db = DatabaseService();
+
   List<String> years = [
     'First',
     'Second',
@@ -29,6 +30,7 @@ class _AddStudentState extends State<AddStudent> {
   var _year = '';
   List<String> _selectedSubs = [];
   Widget _buildSubButton(String subname) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return ElevatedButton(
       child: Text(
         '$subname',
@@ -65,7 +67,7 @@ class _AddStudentState extends State<AddStudent> {
                   _year != '' &&
                   _section!.isNotEmpty) {
                 _formKey.currentState!.save();
-               
+
                 _formKey.currentState!.reset();
                 setState(() {
                   _selectedSubs.clear();
@@ -267,8 +269,9 @@ class _AddStudentState extends State<AddStudent> {
                         ],
                       ),
                     ),
-                    Divider(thickness: 10,),
-
+                    Divider(
+                      thickness: 10,
+                    ),
                     ElevatedButton(
                       child: Text('Add students from spreadsheet'),
                       onPressed: () async {

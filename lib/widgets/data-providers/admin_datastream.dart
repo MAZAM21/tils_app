@@ -7,9 +7,9 @@ import 'package:tils_app/widgets/admin-screens/admin-home.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 class AdminDataStream extends StatelessWidget {
-  final db = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final uid = Provider.of<User>(context).uid;
     bool isActive = false;
     if (uid != null) {

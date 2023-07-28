@@ -28,7 +28,6 @@ class ManageStudents extends StatefulWidget {
 
 class _ManageStudentsState extends State<ManageStudents> {
   final ms = ManagementService();
-  final db = DatabaseService();
 
   String? _yearFilter;
   String? _filter;
@@ -172,7 +171,7 @@ class _ManageStudentsState extends State<ManageStudents> {
     );
   }
 
-  Future<dynamic> showOptions(StudentRank stud) {
+  Future<dynamic> showOptions(StudentRank stud, db) {
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -362,6 +361,7 @@ class _ManageStudentsState extends State<ManageStudents> {
     final studsFromdb = Provider.of<List<StudentRank>>(context);
     final assessments = Provider.of<List<RAfromDB>>(context);
     final teacherData = Provider.of<TeacherUser>(context);
+    final db = Provider.of<DatabaseService>(context, listen: false);
     bool isActive = false;
 
     switch (_filter) {
@@ -490,7 +490,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                  showOptions(students[i]);
+                                  showOptions(students[i], db);
                                 },
                                 child: Container(
                                   color: Colors.white,

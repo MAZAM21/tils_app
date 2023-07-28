@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 class DeployAssessment extends StatefulWidget {
   final assid;
@@ -10,8 +11,6 @@ class DeployAssessment extends StatefulWidget {
 }
 
 class _DeployAssessmentState extends State<DeployAssessment> {
-  final db = DatabaseService();
-
   DateTime _startDate = DateTime.now();
 
   DateTime _startTime = DateTime.now();
@@ -173,6 +172,7 @@ class _DeployAssessmentState extends State<DeployAssessment> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8,

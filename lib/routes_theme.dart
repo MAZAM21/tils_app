@@ -39,48 +39,62 @@ import './service/db.dart';
 class RoutesAndTheme extends StatelessWidget {
   final FirebaseAuth auth = FirebaseAuth.instance;
   // final String uid = auth.currentUser.uid;
-  final db = DatabaseService();
+
+  final RoleProvider roleProvider = RoleProvider();
 
   @override
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<DatabaseService>(
-          create: (ctx) => DatabaseService(),
+        ChangeNotifierProvider<RoleProvider>.value(
+          value: roleProvider,
         ),
+
         ChangeNotifierProvider<RemoteAssessment>(
           create: (ctx) => RemoteAssessment(),
         ),
         ChangeNotifierProvider<AssignmentMarks>(
           create: (ctx) => AssignmentMarks(),
         ),
+        // Use ProxyProvider to create the DatabaseService with the Role object
+        ProxyProvider<RoleProvider, DatabaseService>(
+          update: (context, roleProvider, _) =>
+              DatabaseService(roleProvider.role!),
+        ),
         StreamProvider<List<Meeting>>(
-          create: (ctx) => db.streamMeetings(),
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamMeetings(),
           initialData: [],
         ),
         StreamProvider<List<SubjectClass>>(
-          create: (ctx) => db.streamClasses(),
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamClasses(),
           initialData: [],
         ),
         StreamProvider<User?>(
-          create: (ctx) => db.authStateStream(),
+          create: (ctx) => Provider.of<DatabaseService>(ctx, listen: false)
+              .authStateStream(),
           initialData: null,
         ),
         StreamProvider<List<StudentRank>>(
-          create: (ctx) => db.streamStudents(),
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamStudents(),
           initialData: [],
         ),
         StreamProvider<List<RAfromDB>>(
-          create: (ctx) => db.streamRA(),
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamRA(),
           initialData: [],
         ),
         StreamProvider<List<AMfromDB>>(
-          create: (ctx) => db.streamAM(),
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamAM(),
           initialData: [],
         ),
         StreamProvider<List<StudentMetrics>>(
-          create: (ctx) => db.streamMetrics(),
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamMetrics(),
           initialData: [],
         ),
       ],

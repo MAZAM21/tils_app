@@ -3,7 +3,7 @@ import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-individual-qa.dart';
 
 class MarkScript extends StatefulWidget {
@@ -25,7 +25,7 @@ class _MarkScriptState extends State<MarkScript> {
   double initval = 0;
   Map<String, int> aggMarks = {};
   final ts = TeacherService();
-  final db = DatabaseService();
+
   int totalMarks = 0;
   bool savedToRAResult = false;
 
@@ -35,7 +35,7 @@ class _MarkScriptState extends State<MarkScript> {
     int l = sta.qaMap.length;
     List<int?> markList = ts.getMarksList(sta.qMarks!, l)!;
     var totalE = markList.fold(0, (dynamic p, n) => p + n);
-    if(totalE>0) {
+    if (totalE > 0) {
       totalMarks = totalE;
       print(totalMarks);
       print('workd');
@@ -122,7 +122,7 @@ class _MarkScriptState extends State<MarkScript> {
     /// for marks, the object is first imported from database so as to check if it has already been marked,
     /// the marks map has questions for keys and marks for values.
     /// marks will be a seperate list, the indexes of questionlist and marklist will be matched by ts function
-
+    final db = Provider.of<DatabaseService>(context, listen: false);
     StudentTextAns sta = widget.ans;
     List<String> questionList = sta.qaMap.keys.toList();
     List<String> answerList = sta.qaMap.values.toList();
@@ -144,10 +144,10 @@ class _MarkScriptState extends State<MarkScript> {
                         'You have not properly added marks, please press the save button beneath the answer first'),
                   );
                 });
-          } else if (totalMarks == 0 && markList!.isNotEmpty){}
+          } else if (totalMarks == 0 && markList!.isNotEmpty) {}
           print('adding to db: $totalMarks');
-            db.addTotalMarkToStudent(totalMarks, sta.studentId, widget.assid,
-                widget.subject, widget.teacherId);
+          db.addTotalMarkToStudent(totalMarks, sta.studentId, widget.assid,
+              widget.subject, widget.teacherId);
           Navigator.pop(context);
         },
       ),

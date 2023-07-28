@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/service/db.dart';
@@ -17,7 +16,7 @@ class AssessmentPage extends StatefulWidget {
 
 class _AssessmentPageState extends State<AssessmentPage> {
   final _ss = StudentService();
-  final _db = DatabaseService();
+
   final _ansController = TextEditingController();
 
   String? _question;
@@ -33,6 +32,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _db = Provider.of<DatabaseService>(context, listen: false);
     Map args = ModalRoute.of(context)!.settings.arguments as Map;
     final ra = args['ra'] as RAfromDB;
     final uid = args['uid'];

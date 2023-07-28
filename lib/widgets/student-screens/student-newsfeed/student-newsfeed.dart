@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 import './student-nf-tile.dart';
 
 class StudentNewsFeed extends StatelessWidget {
   static const routeName = '/all-announcements';
-  final db = DatabaseService();
+
   final ts = TeacherService();
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
-     
       body: StreamBuilder<List<Announcement>>(
           stream: db.streamAnnouncement(),
           builder: (context, announcementSnap) {

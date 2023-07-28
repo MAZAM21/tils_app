@@ -21,7 +21,6 @@ class AllRAs extends StatefulWidget {
 }
 
 class _AllRAsState extends State<AllRAs> {
-  final db = DatabaseService();
   final ts = TeacherService();
 
   @override

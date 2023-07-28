@@ -32,13 +32,14 @@ class ParentHome extends StatefulWidget {
 class _ParentHomeState extends State<ParentHome> {
   final ps = ParentService();
   final rs = RankingService();
-  final db = DatabaseService();
+
   String? _token;
   bool _tokenAdded = false;
 
   @override
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final parentData = Provider.of<ParentUser>(context);
     final allClasses = Provider.of<List<SubjectClass>>(context);
     final allStudRanks = Provider.of<List<StudentRank>>(context);

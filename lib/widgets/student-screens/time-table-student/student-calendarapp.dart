@@ -22,7 +22,6 @@ class StudentCalendar extends StatefulWidget {
 }
 
 class _StudentCalendarState extends State<StudentCalendar> {
-  final db = DatabaseService();
   final ss = StudentService();
   CalendarController? _controller;
   DateTime? _jumpToTime = DateTime.now();
@@ -99,7 +98,7 @@ class _StudentCalendarState extends State<StudentCalendar> {
                 ),
               ),
               Divider(),
-               Text(
+              Text(
                 'Topic: ${selected.topic}',
                 style: TextStyle(
                   color: Color.fromARGB(255, 250, 235, 215),

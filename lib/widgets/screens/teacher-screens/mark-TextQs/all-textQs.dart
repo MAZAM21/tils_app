@@ -15,11 +15,11 @@ class AllTextQs extends StatefulWidget {
 }
 
 class _AllTextQsState extends State<AllTextQs> {
-  final db = DatabaseService();
   final ts = TeacherService();
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final tData = Provider.of<TeacherUser>(context);
     return StreamBuilder<List<TextQAs>>(
       stream: db.streamTextQAs(),

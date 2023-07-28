@@ -27,7 +27,7 @@ class MarkStudentAssignments extends StatefulWidget {
 class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
   ///This is where the sliders are generated
   final ts = TeacherService();
-  final db = DatabaseService();
+
   Map<String, int>? stMark = {};
   Map<String, int>? idMark = {};
 
@@ -69,6 +69,7 @@ class _MarkStudentAssignmentsState extends State<MarkStudentAssignments> {
     }
 
     final td = Provider.of<TeacherUser>(context);
+    final db = Provider.of<DatabaseService>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -190,8 +191,6 @@ class AssignmentSlider extends StatefulWidget {
 }
 
 class _AssignmentSliderState extends State<AssignmentSlider> {
-  final db = DatabaseService();
-
   /// individual slider element
   double? _sliderVal;
   @override
@@ -206,6 +205,7 @@ class _AssignmentSliderState extends State<AssignmentSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     // print(widget.url);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3.0),

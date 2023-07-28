@@ -11,8 +11,6 @@ class StartEndTime extends StatefulWidget {
 }
 
 class _StartEndTimeState extends State<StartEndTime> {
-  final db = DatabaseService();
-
   DateTime _startDate = DateTime.now();
 
   DateTime _startTime = DateTime.now();

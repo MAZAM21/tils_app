@@ -32,12 +32,12 @@ class StudentHome extends StatefulWidget {
 class _StudentHomeState extends State<StudentHome> {
   final ss = StudentService();
   String? _token;
-  final db = DatabaseService();
 
   @override
   void initState() {
     super.initState();
     final studDatainit = Provider.of<StudentUser>(context, listen: false);
+    final db = Provider.of<DatabaseService>(context, listen: false);
 
     ///this is for foreground notifications supposedly
 
@@ -62,7 +62,6 @@ class _StudentHomeState extends State<StudentHome> {
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
-                
                 icon: android?.smallIcon,
               ),
             ));
@@ -74,12 +73,12 @@ class _StudentHomeState extends State<StudentHome> {
         FirebaseMessaging.instance
             .subscribeToTopic('${studDatainit.subjects[i]}');
       }
-      getToken(studDatainit.uid);
+      getToken(studDatainit.uid, db);
     }
     // getTopics();
   }
 
-  getToken(studID) async {
+  getToken(studID, db) async {
     String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
@@ -117,7 +116,6 @@ class _StudentHomeState extends State<StudentHome> {
     if (metrics != null) {
       mActive = true;
     }
-    
 
     return !isActive
         ? LoadingScreen()
@@ -142,17 +140,17 @@ class _StudentHomeState extends State<StudentHome> {
                           height: 25,
                         ),
                         if (mActive && isActive)
-                        //MetricDisplay(metrics: metrics, studData: studData),
+                          //MetricDisplay(metrics: metrics, studData: studData),
 
-                        ///Class timer panel widget is same as for teachers
-                        ///stored in teachers HP
-                        ///just passed different postional argument object student user
-                        StudentClassTimerPanel(
-                          estimateTs,
-                          endTime,
-                          nextClass,
-                          studData,
-                        ),
+                          ///Class timer panel widget is same as for teachers
+                          ///stored in teachers HP
+                          ///just passed different postional argument object student user
+                          StudentClassTimerPanel(
+                            estimateTs,
+                            endTime,
+                            nextClass,
+                            studData,
+                          ),
                         SizedBox(
                           height: 14,
                         ),

@@ -5,6 +5,7 @@ import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:provider/provider.dart';
 
 /// The main result page navigated to from the home
 /// displays list of all assessments
@@ -26,10 +27,10 @@ class ResultsDisplay extends StatefulWidget {
 }
 
 class _ResultsDisplayState extends State<ResultsDisplay> {
-  final db = DatabaseService();
   final ts = TeacherService();
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return StreamBuilder<List<StudentAnswers>>(
         stream: db.streamResFromID(widget.assid),
         builder: (context, snap) {

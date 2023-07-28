@@ -14,7 +14,6 @@ class RemoteAssessmentInput extends StatefulWidget {
 }
 
 class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
-  final db = DatabaseService();
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
 
@@ -32,7 +31,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
     super.dispose();
   }
 
-  void _saveAssessment() {
+  void _saveAssessment(db) {
     _formKey.currentState!.save();
     bool isValid = _formKey.currentState!.validate();
     if (Provider.of<RemoteAssessment>(context, listen: false).validate()) {
@@ -71,6 +70,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
   @override
   Widget build(BuildContext context) {
     final assessment = Provider.of<RemoteAssessment>(context);
+    final db = Provider.of<DatabaseService>(context, listen: false);
     final routeArgs = ModalRoute.of(context)!.settings.arguments as Map;
     assessment.subject = routeArgs['sub'];
     assessment.teacherId = routeArgs['id'];
@@ -90,7 +90,7 @@ class _RemoteAssessmentInputState extends State<RemoteAssessmentInput> {
           TextButton(
             child: Text('Save', style: Theme.of(context).textTheme.headline3),
             onPressed: () {
-              _saveAssessment();
+              _saveAssessment(db);
             },
           )
         ],

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/class-data.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 class ClassRecordDetail extends StatelessWidget {
   static const routeName = '/class-record-detail';
-  final db = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
     final classId = ModalRoute.of(context)!.settings.arguments as String?;
-
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -26,11 +25,10 @@ class ClassRecordDetail extends StatelessWidget {
       body: FutureBuilder<ClassData>(
           future: db.getClassRecord(classId),
           builder: (ctx, snapShot) {
-            if(snapShot.connectionState == ConnectionState.waiting){
+            if (snapShot.connectionState == ConnectionState.waiting) {
               return LoadingScreen();
             }
-            if(snapShot.hasError)
-            {
+            if (snapShot.hasError) {
               return Text('error in class data builder');
             }
             return Column(

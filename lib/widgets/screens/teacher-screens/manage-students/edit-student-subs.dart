@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 class EditStudSubs extends StatefulWidget {
   static const routeName = '/edit-stud-subs';
@@ -21,7 +22,7 @@ class EditStudSubs extends StatefulWidget {
 
 class _EditStudProfileState extends State<EditStudSubs> {
   List<String> _selectedSubs = [];
-  final db = DatabaseService();
+
   String? _yearVal;
 
   @override
@@ -94,6 +95,7 @@ class _EditStudProfileState extends State<EditStudSubs> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       appBar: AppBar(

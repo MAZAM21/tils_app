@@ -21,10 +21,11 @@ class ParentHomeAvatarPanel extends StatefulWidget {
 
 class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
   String? _token;
-  final db = DatabaseService();
+
   void initState() {
     super.initState();
     final pd = Provider.of<ParentUser>(context, listen: false);
+    final db = Provider.of<DatabaseService>(context, listen: false);
 
     ///this is for foreground notifications supposedly
 
@@ -56,13 +57,13 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
     });
 
     if (pd != null) {
-      getToken(pd.studId);
+      getToken(pd.studId, db);
       print(_token);
     }
     // getTopics();
   }
 
-  getToken(studID) async {
+  getToken(studID, db) async {
     String? token = await FirebaseMessaging.instance.getToken();
     setState(() {
       _token = token;
@@ -73,6 +74,7 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Container(
       child: Column(
         children: <Widget>[
@@ -111,8 +113,6 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
                         : null,
                     radius: 30,
                   ),
-                
-                
               ],
             ),
           ),

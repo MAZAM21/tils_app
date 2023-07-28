@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:tils_app/models/announcement.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-form.dart';
 import './announcement-tile.dart';
 
 class AllAnnouncements extends StatelessWidget {
   static const routeName = '/all-announcements';
-  final db = DatabaseService();
+
   final ts = TeacherService();
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[

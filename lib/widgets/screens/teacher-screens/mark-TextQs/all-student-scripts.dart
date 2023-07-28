@@ -5,7 +5,7 @@ import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/mark-TextQs/mark-script.dart';
 
 class StudentAnswerScripts extends StatefulWidget {
@@ -19,11 +19,11 @@ class StudentAnswerScripts extends StatefulWidget {
 }
 
 class _StudentAnswerScriptsState extends State<StudentAnswerScripts> {
-  final db = DatabaseService();
   final ts = TeacherService();
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return StreamBuilder<List<StudentTextAns>>(
       stream: db.streamAnsFromID(widget.assid),
       builder: (context, snap) {

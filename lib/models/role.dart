@@ -17,4 +17,15 @@ class Role with ChangeNotifier {
     return role;
   }
 }
- /// This is a point of failure in the app. If there is no role then app won't generate the homescreen
+
+/// This is a point of failure in the app. If there is no role then app won't generate the homescreen
+class RoleProvider with ChangeNotifier {
+  Role? _role;
+
+  Role? get role => _role;
+
+  void setRole(Role role) {
+    _role = role;
+    notifyListeners();
+  }
+}
