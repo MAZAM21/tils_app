@@ -6,6 +6,7 @@ import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_inte
 import 'package:tils_app/models/admin-user-data.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/institute-id.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/resource.dart';
@@ -82,8 +83,9 @@ class DatabaseService with ChangeNotifier {
   }
 
   //gets data from student collection and checks uid and then makes data into teacheruser
-  Stream<TeacherUser> streamTeacherUser(String uid) {
-    CollectionReference ref = _db.collection('teachers');
+  Stream<TeacherUser> streamTeacherUser(String uid, String instID) {
+    CollectionReference ref =
+        _db.collection('institutes').doc(instID).collection('teachers');
     return ref.snapshots().map((list) => TeacherUser.fromFirestore(
         list.docs.firstWhere((doc) => doc['uid'] == uid)
             as QueryDocumentSnapshot<Map<String, dynamic>>));
@@ -204,6 +206,18 @@ class DatabaseService with ChangeNotifier {
   ///gets auth state stream
   Stream<User?> authStateStream() {
     return auth.authStateChanges();
+  }
+
+  Future<InstituteID?> getInstituteID(String uid) async {
+    CollectionReference ref = _db.collection('users');
+    try {
+      final userDoc = await ref.doc(uid).get();
+
+      return InstituteID.fromFirebase(userDoc);
+    } catch (e) {
+      print('error in getInstituteID: $e');
+    }
+    throw Exception;
   }
 
   ///gets students collection data as per the registeration status of student
@@ -464,8 +478,9 @@ class DatabaseService with ChangeNotifier {
   }
 
   //gets user role as string
-  Future<Role> getRole(String uid) async {
-    CollectionReference ref = _db.collection('users');
+  Future<Role> getRole(String uid, String instID) async {
+    CollectionReference ref =
+        _db.collection('institutes').doc(instID).collection('users');
     DocumentSnapshot query = await ref.doc(uid).get();
     Role role = Role.fromFirestore(query);
     return role;
@@ -1108,31 +1123,31 @@ SubjectName setSubject(String sub) {
   switch (sub) {
     case 'Jurisprudence':
       return SubjectName.Jurisprudence;
-      break;
+
     case 'Trust':
       return SubjectName.Trust;
-      break;
+
     case 'Conflict':
       return SubjectName.Conflict;
-      break;
+
     case 'Islamic':
       return SubjectName.Islamic;
-      break;
+
     case 'Company':
       return SubjectName.Company;
-      break;
+
     case 'Tort':
       return SubjectName.Tort;
-      break;
+
     case 'Property':
       return SubjectName.Property;
-      break;
+
     case 'EU':
       return SubjectName.EU;
-      break;
+
     case 'HR':
       return SubjectName.HR;
-      break;
+
     case 'Contract':
       return SubjectName.Contract;
       break;

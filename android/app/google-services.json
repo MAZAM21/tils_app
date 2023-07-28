@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "23860424065",
-    "firebase_url": "https://tils-app-default-rtdb.firebaseio.com",
-    "project_id": "tils-app",
-    "storage_bucket": "tils-app.appspot.com"
+    "project_number": "777208983885",
+    "project_id": "fluency-001",
+    "storage_bucket": "fluency-001.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:23860424065:android:c571411a71dfdce4de4c80",
+        "mobilesdk_app_id": "1:777208983885:android:3396328646d563bce30704",
         "android_client_info": {
           "package_name": "com.fluency.lords"
         }
       },
       "oauth_client": [
         {
-          "client_id": "23860424065-s9oj8jtjdbsap29p3is3oq1bs5m386gk.apps.googleusercontent.com",
+          "client_id": "777208983885-u05mfcr8ih1pa5hfju2mfsgf6dvk6nb4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDV5n2T2-sKbKA5H7tLhPHJujvsSxKMwho"
+          "current_key": "AIzaSyBFSQBn_jBpSaFC1Ll5TGpwh_NTFR_Tnv4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "23860424065-s9oj8jtjdbsap29p3is3oq1bs5m386gk.apps.googleusercontent.com",
+              "client_id": "777208983885-u05mfcr8ih1pa5hfju2mfsgf6dvk6nb4.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "23860424065-3uht4glkrk4g1inl59gp42jfqg6r1isk.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.fluency.lords"
-              }
             }
           ]
         }

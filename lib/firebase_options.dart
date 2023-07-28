@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,44 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBbXwAdGsYxVHpUouq1KkjwVrOp5xJapZE',
-    appId: '1:23860424065:web:199a8967afe09bc1de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    authDomain: 'tils-app.firebaseapp.com',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
-    measurementId: 'G-MVHGL6XJK8',
+    apiKey: 'AIzaSyAYYG1T_t8ym4GkhsJTsrlmyQOEsVlcZHk',
+    appId: '1:777208983885:web:0cccba32e76da016e30704',
+    messagingSenderId: '777208983885',
+    projectId: 'fluency-001',
+    authDomain: 'fluency-001.firebaseapp.com',
+    storageBucket: 'fluency-001.appspot.com',
+    measurementId: 'G-B66FV334PH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDV5n2T2-sKbKA5H7tLhPHJujvsSxKMwho',
-    appId: '1:23860424065:android:c571411a71dfdce4de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
+    apiKey: 'AIzaSyBFSQBn_jBpSaFC1Ll5TGpwh_NTFR_Tnv4',
+    appId: '1:777208983885:android:3396328646d563bce30704',
+    messagingSenderId: '777208983885',
+    projectId: 'fluency-001',
+    storageBucket: 'fluency-001.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDLJSMPVB9X3-HgNcoN86X8FeIvWOccTkY',
-    appId: '1:23860424065:ios:a8a527ea7fd5d397de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
-    iosClientId: '23860424065-aa1s62tcim0arn4gtqpnr18clkb0m2ri.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDQHCMp-zjaXENthPQD0VDT2upe4V83jp0',
+    appId: '1:777208983885:ios:368d507be4609f6ce30704',
+    messagingSenderId: '777208983885',
+    projectId: 'fluency-001',
+    storageBucket: 'fluency-001.appspot.com',
+    iosClientId: '777208983885-2mbuhnm17ino83nfoe5mqdg14cfnhndl.apps.googleusercontent.com',
     iosBundleId: 'com.example.tilsApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDLJSMPVB9X3-HgNcoN86X8FeIvWOccTkY',
-    appId: '1:23860424065:ios:257ee5309b815958de4c80',
-    messagingSenderId: '23860424065',
-    projectId: 'tils-app',
-    databaseURL: 'https://tils-app-default-rtdb.firebaseio.com',
-    storageBucket: 'tils-app.appspot.com',
-    iosClientId: '23860424065-chgs3mfopn555558u77ikslts87sbh37.apps.googleusercontent.com',
-    iosBundleId: 'com.fluency.tilsApp',
   );
 }

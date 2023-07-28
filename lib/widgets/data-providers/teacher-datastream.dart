@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/institute-id.dart';
 
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
@@ -12,6 +13,7 @@ class TeacherDataStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uid = Provider.of<User?>(context)!.uid;
+    final inst = Provider.of<InstituteID?>(context);
     bool isActive = false;
     if (uid != null) {
       isActive = true;
@@ -20,7 +22,7 @@ class TeacherDataStream extends StatelessWidget {
         ? LoadingScreen()
         : StreamProvider<TeacherUser?>(
             initialData: null,
-            create: (context) => db.streamTeacherUser(uid),
+            create: (context) => db.streamTeacherUser(uid, inst!.instID),
             builder: (context, _) => AllTabs(),
           );
   }

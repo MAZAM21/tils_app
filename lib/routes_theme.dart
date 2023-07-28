@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/institute-id.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
@@ -36,7 +38,9 @@ import './service/db.dart';
 
 class RoutesAndTheme extends StatelessWidget {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  // final String uid = auth.currentUser.uid;
   final db = DatabaseService();
+
   @override
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,10 @@ class RoutesAndTheme extends StatelessWidget {
         ),
         ChangeNotifierProvider<RemoteAssessment>(
           create: (ctx) => RemoteAssessment(),
+        ),
+        FutureProvider<InstituteID?>(
+          create: (ctx) => db.getInstituteID(auth.currentUser!.uid),
+          initialData: null,
         ),
         ChangeNotifierProvider<AssignmentMarks>(
           create: (ctx) => AssignmentMarks(),
