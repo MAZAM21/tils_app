@@ -52,10 +52,6 @@ class RoutesAndTheme extends StatelessWidget {
         ChangeNotifierProvider<RemoteAssessment>(
           create: (ctx) => RemoteAssessment(),
         ),
-        FutureProvider<InstituteID?>(
-          create: (ctx) => db.getInstituteID(auth.currentUser!.uid),
-          initialData: null,
-        ),
         ChangeNotifierProvider<AssignmentMarks>(
           create: (ctx) => AssignmentMarks(),
         ),
