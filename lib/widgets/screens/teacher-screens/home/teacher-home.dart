@@ -349,7 +349,6 @@ class _HomePageState extends State<HomePage> {
                               ),
 
                               ///Schedule Class button
-                              ButtonRowMain(teacherData: teacherData),
 
                               /// Teacher Assessment Panel
                               /// includes list of latest three assessments and buttons
@@ -377,6 +376,7 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(
                                 height: 20,
                               ),
+                              ButtonRowMain(teacherData: teacherData),
 
                               ///teacher assignment panel
                               ///built on same format as assessment panel
