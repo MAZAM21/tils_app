@@ -12,7 +12,7 @@ class UploadService {
   /// year
   /// batch
   /// section
-  void uploadStudentToDB(Excel excelSheet) {
+  void uploadStudentToDB(Excel excelSheet, DatabaseService db) {
     List<UploadStudent> upStud = [];
 
     for (var table in excelSheet.tables.keys) {
@@ -65,10 +65,10 @@ class UploadService {
         );
       },
     );
-    //db.saveStudent(upStud);
+    db.saveStudent(upStud);
   }
 
-  void uploadTeacherToDB(Excel excelSheet) {
+  void uploadTeacherToDB(Excel excelSheet, DatabaseService db) {
     ///Error note:
     /// While uploading teachers for bls, two things went wrong
     /// 1. Year was not added
@@ -125,7 +125,7 @@ class UploadService {
         );
       },
     );
-    //db.saveTeacher(upTeacher);
+    db.saveTeacher(upTeacher);
   }
 }
 

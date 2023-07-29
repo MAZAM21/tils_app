@@ -30,7 +30,6 @@ class _AddStudentState extends State<AddStudent> {
   var _year = '';
   List<String> _selectedSubs = [];
   Widget _buildSubButton(String subname) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
     return ElevatedButton(
       child: Text(
         '$subname',
@@ -56,6 +55,7 @@ class _AddStudentState extends State<AddStudent> {
 
   @override
   Widget build(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -281,7 +281,7 @@ class _AddStudentState extends State<AddStudent> {
                           var file = result.paths.first!;
                           var bytes = File(file).readAsBytesSync();
                           var excel = Excel.decodeBytes(bytes);
-                          us.uploadStudentToDB(excel);
+                          us.uploadStudentToDB(excel, db);
                         }
                       },
                     )

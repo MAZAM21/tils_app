@@ -17,16 +17,21 @@ class Meeting {
 
   factory Meeting.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data() as Map<dynamic, dynamic>;
-    return Meeting(
-      data['subjectName'] ?? '',
-      DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
-      DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']),
-      getColor(data['subjectName']) ?? Colors.black,
-      false,
-      doc.id,
-      data['section'],
-      data['topic'] ?? '',
-    );
+    try {
+      return Meeting(
+        data['subjectName'] ?? '',
+        DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']),
+        DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']),
+        getColor(data['subjectName']) ?? Colors.black,
+        false,
+        doc.id,
+        data['section'],
+        data['topic'] ?? '',
+      );
+    } on Exception catch (e) {
+      print('error in Meeting.fromFirestore: $e');
+    }
+    throw Exception();
   }
 
   /// Event name which is equivalent to subject property of [Appointment].

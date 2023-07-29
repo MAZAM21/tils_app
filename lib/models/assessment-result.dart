@@ -22,7 +22,7 @@ class ARStudent {
       //contains assid and total marks
       Map totalMarks = {};
       if (data['Assessment-textqMarks'] != null) {
-        totalMarks = {...data['Assessment-textqMarks']} ?? {};
+        totalMarks = {...data['Assessment-textqMarks']};
       } else {
         totalMarks = {'none': 0};
       }
