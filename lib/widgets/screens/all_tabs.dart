@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/role.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
-
+import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-home.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/teacher-rankings/teacher-ranking-display.dart';
-
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
   ColoredTabBar({this.color, this.tabBar});
@@ -31,6 +31,11 @@ class AllTabs extends StatefulWidget {
 
 class _AllTabsState extends State<AllTabs> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
@@ -40,12 +45,12 @@ class _AllTabsState extends State<AllTabs> {
         appBar: AppBar(
           title: Text(
             'Lords College Teacher\'s Portal',
-            style:TextStyle(
-                color: Color.fromARGB(255, 76, 76, 76),
-                fontFamily: 'Proxima Nova',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+            style: TextStyle(
+              color: Color.fromARGB(255, 76, 76, 76),
+              fontFamily: 'Proxima Nova',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
             textAlign: TextAlign.justify,
           ),
           bottom: PreferredSize(

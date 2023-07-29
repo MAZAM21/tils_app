@@ -9,9 +9,15 @@ class Role with ChangeNotifier {
 
   Role(this.role, this.instID);
   factory Role.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map<dynamic, dynamic>;
-    String instID = data['instID'];
-    return Role(data['role'], instID);
+    try {
+      print('gettin role from doc: ${doc.id}');
+      Map data = doc.data() as Map<dynamic, dynamic>;
+      String instID = data['instID'];
+      return Role(data['role'], instID);
+    } on Exception catch (e) {
+      print('error in role constructor: $e');
+    }
+    throw Exception();
   }
   String get getRole {
     return role;
@@ -19,13 +25,13 @@ class Role with ChangeNotifier {
 }
 
 /// This is a point of failure in the app. If there is no role then app won't generate the homescreen
-class RoleProvider with ChangeNotifier {
-  Role? _role;
+class InstProvider with ChangeNotifier {
+  String? _instID;
 
-  Role? get role => _role;
+  String? get instID => _instID;
 
-  void setRole(Role role) {
-    _role = role;
+  void setID(String instID) {
+    _instID = instID;
     notifyListeners();
   }
 }

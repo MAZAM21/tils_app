@@ -1,0 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:tils_app/models/role.dart';
+import 'package:tils_app/models/teacher-user-data.dart';
+
+class GeneralDatabase with ChangeNotifier {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  Future<Role> getRole(String uid) async {
+    try {
+      print('getting role in db: $uid');
+      CollectionReference ref = _db.collection('users');
+      DocumentSnapshot query = await ref.doc(uid).get();
+      Role role = Role.fromFirestore(query);
+      return role;
+    } on Exception catch (e) {
+      print('error in getrole gendb: $e');
+    }
+    throw Exception();
+  }
+
+  Stream<User?> authStateStream() {
+    return auth.authStateChanges();
+  }
+
+  Stream<TeacherUser> streamTeacherUser(String? uid, String? instID) {
+    CollectionReference ref =
+        _db.collection('institutes').doc(instID).collection('teachers');
+    return ref.snapshots().map((list) => TeacherUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['uid'] == uid)
+            as QueryDocumentSnapshot<Map<String, dynamic>>));
+  }
+}

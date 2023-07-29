@@ -8,6 +8,8 @@ import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
+import 'package:tils_app/service/genDb.dart';
+import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/announcement-detail.dart';
@@ -37,18 +39,19 @@ import './models/meeting.dart';
 import './service/db.dart';
 
 class RoutesAndTheme extends StatelessWidget {
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  //final FirebaseAuth auth = FirebaseAuth.instance;
   // final String uid = auth.currentUser.uid;
+  final genDb = GeneralDatabase();
 
-  final RoleProvider roleProvider = RoleProvider();
+  final InstProvider instProvider = InstProvider();
 
   @override
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<RoleProvider>.value(
-          value: roleProvider,
+        ChangeNotifierProvider<InstProvider>.value(
+          value: instProvider,
         ),
 
         ChangeNotifierProvider<RemoteAssessment>(
@@ -58,9 +61,9 @@ class RoutesAndTheme extends StatelessWidget {
           create: (ctx) => AssignmentMarks(),
         ),
         // Use ProxyProvider to create the DatabaseService with the Role object
-        ProxyProvider<RoleProvider, DatabaseService>(
-          update: (context, roleProvider, _) =>
-              DatabaseService(roleProvider.role!),
+        ListenableProxyProvider<InstProvider, DatabaseService>(
+          update: (context, rProvider, _) =>
+              DatabaseService(instProvider.instID),
         ),
         StreamProvider<List<Meeting>>(
           create: (ctx) =>
@@ -73,8 +76,7 @@ class RoutesAndTheme extends StatelessWidget {
           initialData: [],
         ),
         StreamProvider<User?>(
-          create: (ctx) => Provider.of<DatabaseService>(ctx, listen: false)
-              .authStateStream(),
+          create: (ctx) => genDb.authStateStream(),
           initialData: null,
         ),
         StreamProvider<List<StudentRank>>(

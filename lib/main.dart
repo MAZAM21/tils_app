@@ -72,7 +72,7 @@ class Tapp extends StatelessWidget {
       future: _initialization,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          print('error');
+          print('error in main initialization: ${snapshot.error}');
         }
 
         // Once complete, show your application

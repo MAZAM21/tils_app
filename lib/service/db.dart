@@ -32,9 +32,9 @@ class DatabaseService with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  Role role;
+  String? instID;
 
-  DatabaseService(this.role);
+  DatabaseService(this.instID);
 
   //gets classes collection data and converts to Meeting list for TT
   Stream<List<Meeting>>? streamMeetings() {
@@ -87,7 +87,7 @@ class DatabaseService with ChangeNotifier {
   }
 
   //gets data from student collection and checks uid and then makes data into teacheruser
-  Stream<TeacherUser> streamTeacherUser(String uid, String instID) {
+  Stream<TeacherUser> streamTeacherUser(String? uid, String? instID) {
     CollectionReference ref =
         _db.collection('institutes').doc(instID).collection('teachers');
     return ref.snapshots().map((list) => TeacherUser.fromFirestore(

@@ -5,6 +5,7 @@ import 'package:tils_app/main.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
+import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     final teacherData = Provider.of<TeacherUser?>(context, listen: false);
     final db = Provider.of<DatabaseService>(context, listen: false);
 
