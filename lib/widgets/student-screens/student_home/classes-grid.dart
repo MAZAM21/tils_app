@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tils_app/models/subject-class.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class MyClassesGrid extends StatelessWidget {
-  const MyClassesGrid({
+  MyClassesGrid({
     Key? key,
     required this.myClasses,
   }) : super(key: key);
 
   final List<SubjectClass> myClasses;
+  final storage = FirebaseStorage.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +19,13 @@ class MyClassesGrid extends StatelessWidget {
       isActive = true;
     }
     return !isActive
-        ? SizedBox(height: 10, width: 10,)
+        ? SizedBox(
+            height: 10,
+            width: 10,
+          )
         : Container(
-          height: 140,
-          child: GridView.builder(
+            height: 140,
+            child: GridView.builder(
               itemCount: myClasses.length,
               scrollDirection: Axis.horizontal,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -78,6 +83,6 @@ class MyClassesGrid extends StatelessWidget {
                 );
               },
             ),
-        );
+          );
   }
 }

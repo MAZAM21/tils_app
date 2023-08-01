@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:excel/excel.dart';
 import 'package:tils_app/service/upload-service.dart';
@@ -56,6 +58,7 @@ class _AddStudentState extends State<AddStudent> {
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<DatabaseService>(context, listen: false);
+    final instData = Provider.of<InstituteData>(context);
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -275,13 +278,22 @@ class _AddStudentState extends State<AddStudent> {
                     ElevatedButton(
                       child: Text('Add students from spreadsheet'),
                       onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(allowMultiple: false);
-                        if (result != null) {
-                          var file = result.paths.first!;
-                          var bytes = File(file).readAsBytesSync();
-                          var excel = Excel.decodeBytes(bytes);
-                          us.uploadStudentToDB(excel, db);
+                        setState(() {
+                          Permission.accessMediaLocation.request();
+                        });
+                        PermissionStatus status =
+                            await Permission.accessMediaLocation.status;
+                        print(status);
+                        if (status.isGranted) {
+                          FilePickerResult? result = await FilePicker.platform
+                              .pickFiles(allowMultiple: false);
+                          if (result != null) {
+                            var file = result.paths.first!;
+                            var bytes = File(file).readAsBytesSync();
+                            var excel = Excel.decodeBytes(bytes);
+                            us.uploadTeacherToDB(
+                                excel, db, instData.inst_subjects);
+                          }
                         }
                       },
                     )

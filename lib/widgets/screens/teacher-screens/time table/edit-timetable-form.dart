@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/meeting.dart';
-
+import 'package:tils_app/widgets/button-style.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/service/db.dart';
 // import './time_table.dart';
 
 class EditTTForm extends StatefulWidget {
   static const routeName = '/edit-tt-form';
+  final InstituteData? instData;
+  EditTTForm(this.instData);
 
   @override
   _EditTTFormState createState() => _EditTTFormState();
@@ -19,16 +22,20 @@ class _EditTTFormState extends State<EditTTForm> {
   DateTime? _startDate = DateTime.now();
   DateTime? _startTime = DateTime.now();
   DateTime? _endTime = DateTime.now();
-  SubjectName? _subName;
+
   String? _topic = '';
-  String? _section;
+  String? _section = '';
+  String? _year = '';
   String _duration = '';
   int _customHours = 0;
   int _customMinutes = 0;
   final _form = GlobalKey<FormState>();
   var _isInit = true;
   var _isEdit = false;
+  String _selectedSub = '';
   String? _editedId;
+  Map<String, Map<String, dynamic>> year_subjects = {};
+  bool isExam = false;
 
   @override
   void didChangeDependencies() {
@@ -40,7 +47,7 @@ class _EditTTFormState extends State<EditTTForm> {
         _startDate = editClass.from;
         _startTime = editClass.from;
         _endTime = editClass.to;
-        _subName = checkSubject(editClass.eventName);
+        _selectedSub = editClass.eventName;
         _isEdit = true;
         _editedId = editClass.docId;
       }
@@ -51,175 +58,131 @@ class _EditTTFormState extends State<EditTTForm> {
   }
 
   //sets _subName to SubjectName enum
-  void setSubject(String sub) {
-    switch (sub) {
-      case 'Jurisprudence':
-        _subName = SubjectName.Jurisprudence;
-        break;
-      case 'Trust':
-        _subName = SubjectName.Trust;
-        break;
-      case 'Conflict':
-        _subName = SubjectName.Conflict;
-        break;
-      case 'Islamic':
-        _subName = SubjectName.Islamic;
-        break;
-      case 'Company':
-        _subName = SubjectName.Company;
-        break;
-      case 'Tort':
-        _subName = SubjectName.Tort;
-        break;
-      case 'Property':
-        _subName = SubjectName.Property;
-        break;
-      case 'EU':
-        _subName = SubjectName.EU;
-        break;
-      case 'HR':
-        _subName = SubjectName.HR;
-        break;
-      case 'Contract':
-        _subName = SubjectName.Contract;
-        break;
-      case 'Criminal':
-        _subName = SubjectName.Criminal;
-        break;
-      case 'LSM':
-        _subName = SubjectName.LSM;
-        break;
-      case 'Public':
-        _subName = SubjectName.Public;
-        break;
-      default:
-        _subName = SubjectName.Undeclared;
-    }
-  }
 
   //returns string from enum
-  String enToString(SubjectName? name) {
-    switch (name) {
-      case SubjectName.Jurisprudence:
-        return 'Jurisprudence';
-        break;
-      case SubjectName.Trust:
-        return 'Trust';
-        break;
-      case SubjectName.Conflict:
-        return 'Conflict';
-        break;
-      case SubjectName.Islamic:
-        return 'Islamic';
-        break;
-      case SubjectName.Company:
-        return 'Company';
-        break;
-      case SubjectName.Tort:
-        return 'Tort';
-        break;
-      case SubjectName.Property:
-        return 'Property';
-        break;
-      case SubjectName.EU:
-        return 'EU';
-        break;
-      case SubjectName.HR:
-        return 'HR';
-        break;
-      case SubjectName.Contract:
-        return 'Contract';
-        break;
-      case SubjectName.Criminal:
-        return 'Criminal';
-        break;
-      case SubjectName.LSM:
-        return 'LSM';
-        break;
-      case SubjectName.Public:
-        return 'Public';
-        break;
-      default:
-        return 'Undeclared';
-    }
-  }
 
 //takes string returns subject name
-  SubjectName checkSubject(String sub) {
-    switch (sub) {
-      case 'Jurisprudence':
-        return SubjectName.Jurisprudence;
-        break;
-      case 'Trust':
-        return SubjectName.Trust;
-        break;
-      case 'Conflict':
-        return SubjectName.Conflict;
-        break;
-      case 'Islamic':
-        return SubjectName.Islamic;
-        break;
-      case 'Company':
-        return SubjectName.Company;
-        break;
-      case 'Tort':
-        return SubjectName.Tort;
-        break;
-      case 'Property':
-        return SubjectName.Property;
-        break;
-      case 'EU':
-        return SubjectName.EU;
-        break;
-      case 'HR':
-        return SubjectName.HR;
-        break;
-      case 'Contract':
-        return SubjectName.Contract;
-        break;
-      case 'Criminal':
-        return SubjectName.Criminal;
-        break;
-      case 'LSM':
-        return SubjectName.LSM;
-        break;
-      case 'Public':
-        return SubjectName.Public;
-        break;
-      default:
-        return SubjectName.Undeclared;
-    }
-  }
 
 //subject option buttons,
 //set _subName.
-  Widget buildSubjectButton(String subName) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
-    return ElevatedButton(
-      child: Text(
-        subName == 'Jurisprudence' ? 'Juris' : subName,
-        style: TextStyle(
-          fontSize: 12.5,
-          fontFamily: 'Proxima Nova',
-          fontWeight: FontWeight.w600,
-          color: _subName == checkSubject(subName)
-              ? Color(0xffffffff)
-              : Color(0xff161616),
+
+  List<Widget> buildSubjectGrid(sectionSubs) {
+    List<Widget> rows = [];
+    final subLength = sectionSubs!.length;
+
+    /// The main for loop iterates for every three subjects added
+    /// when the value of i exceeds the subjects, it terminates
+    for (int i = 0; i < subLength; i += 3) {
+      List<Widget> children = [];
+
+      /// the inner for loop condition iterates to three and checks whether
+      /// the subject length has been reached by adding the main for loop i with
+      /// the inner for loop j and seeing if they are less than subLength
+
+      for (int j = 0; j < 3 && i + j < subLength; j++) {
+        if (_selectedSub == sectionSubs[i + j]) {
+          children.add(RedSubjectButtonMobile(
+              child: '${sectionSubs[i + j]}',
+              onPressed: () {
+                setState(() {
+                  _selectedSub = sectionSubs[i + j];
+                });
+                print('in buildsubject red');
+                print('$_year');
+                print('$_section');
+                print(_selectedSub);
+              }));
+        } else {
+          children.add(WhiteSubjectButtonMobile(
+              child: '${sectionSubs[i + j]}',
+              onPressed: () {
+                setState(() {
+                  _selectedSub = sectionSubs[i + j];
+                });
+                print('in buildsubject white');
+                print('$_year');
+                print('$_section');
+                print(_selectedSub);
+              }));
+        }
+
+        //end of inner for loop
+      }
+
+      rows.add(Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: children,
+      ));
+
+      //end of outer for loop
+    }
+    return rows;
+  }
+
+  Widget buildYearButton(String year) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _section = '';
+            _selectedSub = '';
+            _year = year;
+          });
+          print('in buildyear');
+          print('$_year');
+          print('$_section');
+          print(_selectedSub);
+        },
+        child: Text(
+          year,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'Proxima Nova',
+            fontWeight: FontWeight.w600,
+            color: _year == year ? Color(0xffffffff) : Color(0xff161616),
+          ),
+        ),
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size(107, 25)),
+          fixedSize: MaterialStateProperty.all(Size(110, 32)),
+          backgroundColor: _year == year
+              ? MaterialStateProperty.all(Color(0xffC54134))
+              : MaterialStateProperty.all(Color(0xfff4f6f9)),
         ),
       ),
-      onPressed: () {
-        setState(() {
-          setSubject(subName);
-        });
-        print(_subName);
-      },
-      style: ButtonStyle(
-        elevation: MaterialStateProperty.all(0),
-        minimumSize: MaterialStateProperty.all(Size(40, 25)),
-        fixedSize: MaterialStateProperty.all(Size(107, 38)),
-        backgroundColor: _subName == checkSubject(subName)
-            ? MaterialStateProperty.all(Color(0xffc54134))
-            : MaterialStateProperty.all(Color(0xfff4f6f9)),
+    );
+  }
+
+  Widget buildSectionButton(String section) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _section = section;
+          });
+          print('in buildSection');
+          print('$_year');
+          print('$_section');
+          print(_selectedSub);
+        },
+        child: Text(
+          section,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'Proxima Nova',
+            fontWeight: FontWeight.w600,
+            color: _section == section ? Color(0xffffffff) : Color(0xff161616),
+          ),
+        ),
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size(107, 25)),
+          fixedSize: MaterialStateProperty.all(Size(110, 32)),
+          backgroundColor: _section == section
+              ? MaterialStateProperty.all(Color(0xffC54134))
+              : MaterialStateProperty.all(Color(0xfff4f6f9)),
+        ),
       ),
     );
   }
@@ -334,33 +297,34 @@ class _EditTTFormState extends State<EditTTForm> {
   void _saveForm(BuildContext context) {
     final db = Provider.of<DatabaseService>(context, listen: false);
     if (!_endTime!.isBefore(_startTime!) &&
-        _subName != SubjectName.Undeclared &&
-        _subName != null &&
+        _selectedSub.isNotEmpty &&
         _duration != '' &&
         _section != null) {
       _form.currentState!.save();
       _form.currentState!.reset();
       if (!_isEdit) {
         db.addClassToCF(
-          _subName,
+          _selectedSub,
           _startTime!,
           _endTime!,
           _section,
           _topic,
+          isExam,
         );
         setState(() {
-          _subName = null;
+          _selectedSub = '';
           _startTime = DateTime.now();
           _duration = '';
           _endTime = null;
           _customHours = 0;
           _customMinutes = 0;
-          _section = null;
+          _section = '';
+          _year = '';
         });
       } else {
         db.editClassInCF(
           _editedId,
-          enToString(_subName),
+          _selectedSub,
           _startTime!,
           _endTime!,
           _section,
@@ -372,7 +336,7 @@ class _EditTTFormState extends State<EditTTForm> {
         context: context,
         barrierDismissible: true,
         builder: (_) => AlertDialog(
-          title: Text('Fields Incorrect'),
+          title: Text('Fields Incorrect, or internet not connected'),
           content: Text('Please fill all fields correctly'),
         ),
       );
@@ -381,7 +345,8 @@ class _EditTTFormState extends State<EditTTForm> {
 
   @override
   Widget build(BuildContext context) {
-    bool startPicked = false;
+    year_subjects = widget.instData!.year_subjects;
+
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       appBar: AppBar(
@@ -400,21 +365,73 @@ class _EditTTFormState extends State<EditTTForm> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              'Add Class',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Proxima Nova',
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xff2A353F),
+                        if (isExam)
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                'Add Exam',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xff2A353F),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        if (!isExam)
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                'Add Class',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontFamily: 'Proxima Nova',
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xff2A353F),
+                                ),
+                              ),
+                            ],
+                          ),
                         SizedBox(
                           height: 25,
+                        ),
+
+                        Container(
+                          child: Column(children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Exam',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w400,
+                                    color: Color(0xff2A353F),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Switch(
+                                  activeColor: Color(0xffC54134),
+                                  value: isExam,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      isExam = val;
+                                    });
+                                    print(isExam);
+                                  },
+                                ),
+                              ],
+                            )
+                          ]),
                         ),
 
                         /// Section Buttons
@@ -424,7 +441,7 @@ class _EditTTFormState extends State<EditTTForm> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    'Select Section',
+                                    'Select Year',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontFamily: 'Proxima Nova',
@@ -438,72 +455,34 @@ class _EditTTFormState extends State<EditTTForm> {
                                 height: 12,
                               ),
                               Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _section = 'A';
-                                      });
-                                    },
-                                    child: Text(
-                                      'Section A',
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: year_subjects.keys
+                                    .map((year) => buildYearButton(year))
+                                    .toList(),
+                              ),
+                              if (_year!.isNotEmpty)
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'Select Section',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                        color: _section == 'A'
-                                            ? Color(0xffffffff)
-                                            : Color(0xff161616),
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff2A353F),
                                       ),
                                     ),
-                                    style: ButtonStyle(
-                                      minimumSize: MaterialStateProperty.all(
-                                          Size(107, 25)),
-                                      fixedSize: MaterialStateProperty.all(
-                                          Size(129, 32)),
-                                      backgroundColor: _section == 'A'
-                                          ? MaterialStateProperty.all(
-                                              Color(0xffC54134))
-                                          : MaterialStateProperty.all(
-                                              Color(0xfff4f6f9)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _section = 'B';
-                                      });
-                                    },
-                                    child: Text(
-                                      'Section B',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                        color: _section == 'B'
-                                            ? Color(0xffffffff)
-                                            : Color(0xff161616),
-                                      ),
-                                    ),
-                                    style: ButtonStyle(
-                                      minimumSize: MaterialStateProperty.all(
-                                          Size(107, 25)),
-                                      fixedSize: MaterialStateProperty.all(
-                                          Size(129, 32)),
-                                      backgroundColor: _section == 'B'
-                                          ? MaterialStateProperty.all(
-                                              Color(0xffC54134))
-                                          : MaterialStateProperty.all(
-                                              Color(0xfff4f6f9)),
-                                    ),
-                                  ),
-                                  Spacer(),
-                                ],
-                              )
+                                  ],
+                                ),
+                              if (_year!.isNotEmpty)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: year_subjects[_year]!
+                                      .keys
+                                      .map((section) =>
+                                          buildSectionButton(section))
+                                      .toList(),
+                                ),
                             ],
                           ),
                         ),
@@ -517,59 +496,28 @@ class _EditTTFormState extends State<EditTTForm> {
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Select Subject',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'Proxima Nova',
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xff2A353F),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              SingleChildScrollView(
-                                physics: NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              if (_section!.isNotEmpty)
+                                Row(
                                   children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        buildSubjectButton('Jurisprudence'),
-                                        buildSubjectButton('Trust'),
-                                        buildSubjectButton('Conflict'),
-                                        buildSubjectButton('Islamic'),
-                                        buildSubjectButton('Company'),
-                                      ],
-                                    ),
-                                    SizedBox(width: 7),
-                                    Column(
-                                      children: <Widget>[
-                                        buildSubjectButton('Tort'),
-                                        buildSubjectButton('Property'),
-                                        buildSubjectButton('EU'),
-                                        buildSubjectButton('HR'),
-                                      ],
-                                    ),
-                                    SizedBox(width: 7),
-                                    Column(
-                                      children: <Widget>[
-                                        buildSubjectButton('Criminal'),
-                                        buildSubjectButton('Contract'),
-                                        buildSubjectButton('LSM'),
-                                        buildSubjectButton('Public'),
-                                      ],
+                                    Text(
+                                      'Select Subject',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: 'Proxima Nova',
+                                        fontWeight: FontWeight.w400,
+                                        color: Color(0xff2A353F),
+                                      ),
                                     ),
                                   ],
                                 ),
+                              SizedBox(
+                                height: 12,
                               ),
+                              if (_section!.isNotEmpty)
+                                Column(
+                                  children: buildSubjectGrid(
+                                      year_subjects[_year]?[_section]),
+                                )
                             ],
                           ),
                         ),
@@ -768,12 +716,11 @@ class _EditTTFormState extends State<EditTTForm> {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content: !_endTime!.isBefore(_startTime!) &&
-                                          _subName != SubjectName.Undeclared &&
-                                          _subName != null &&
+                                          _selectedSub.isNotEmpty &&
                                           _duration != null &&
                                           _section != null
                                       ? Text(
-                                          '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime!)} added to Time Table')
+                                          '$_selectedSub on ${DateFormat('d MMM hh mm a').format(_startTime!)} added to Time Table')
                                       : Text('Class not added'),
                                 ));
                                 setState(() {
@@ -1025,330 +972,3 @@ class _EditTTFormState extends State<EditTTForm> {
     });
   }
 }
-
-
-
-
-//  Row(
-//                           children: <Widget>[
-
-//                         Container(
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             children: <Widget>[
-//                               ElevatedButton(
-//                                 child: Text('A'),
-//                                 onPressed: () {
-//                                   setState(() {
-//                                     _section = 'A';
-//                                   });
-//                                 },
-//                                 style: ButtonStyle(
-//                                   backgroundColor: _section == 'A'
-//                                       ? MaterialStateProperty.all(
-//                                           Colors.redAccent)
-//                                       : MaterialStateProperty.all(
-//                                           Colors.greenAccent),
-//                                 ),
-//                               ),
-//                               SizedBox(
-//                                 width: 20,
-//                               ),
-//                               ElevatedButton(
-//                                 child: Text('B'),
-//                                 onPressed: () {
-//                                   setState(() {
-//                                     _section = 'B';
-//                                   });
-//                                 },
-//                                 style: ButtonStyle(
-//                                   backgroundColor: _section == 'B'
-//                                       ? MaterialStateProperty.all(
-//                                           Colors.redAccent)
-//                                       : MaterialStateProperty.all(
-//                                           Colors.greenAccent),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Divider(),
-//                         //Subject Buttons
-//                         Container(
-//                           height: 280,
-//                           child: Row(
-//                             children: <Widget>[
-//                               Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: Column(
-//                                   crossAxisAlignment:
-//                                       CrossAxisAlignment.stretch,
-//                                   children: <Widget>[
-//                                     buildSubjectButton('Jurisprudence'),
-//                                     buildSubjectButton('Trust'),
-//                                     buildSubjectButton('Conflict'),
-//                                     buildSubjectButton('Islamic'),
-//                                     buildSubjectButton('Company'),
-//                                   ],
-//                                 ),
-//                               ),
-//                               Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: Column(
-//                                   crossAxisAlignment:
-//                                       CrossAxisAlignment.stretch,
-//                                   children: <Widget>[
-//                                     buildSubjectButton('Tort'),
-//                                     buildSubjectButton('Property'),
-//                                     buildSubjectButton('EU'),
-//                                     buildSubjectButton('HR'),
-//                                   ],
-//                                 ),
-//                               ),
-//                               Padding(
-//                                 padding: const EdgeInsets.all(8.0),
-//                                 child: Column(
-//                                   crossAxisAlignment:
-//                                       CrossAxisAlignment.stretch,
-//                                   children: <Widget>[
-//                                     buildSubjectButton('Criminal'),
-//                                     buildSubjectButton('Contract'),
-//                                     buildSubjectButton('LSM'),
-//                                     buildSubjectButton('Public'),
-//                                   ],
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Divider(),
-//                         //Date Display and Picker
-//                         Container(
-//                           width: 250,
-//                           height: 100,
-//                           child: Column(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             crossAxisAlignment: CrossAxisAlignment.stretch,
-//                             children: <Widget>[
-//                               buildDatepicker(),
-//                               buildDateDisplay(),
-//                             ],
-//                           ),
-//                         ),
-//                         Divider(),
-//                         //Time Display and Picker
-//                         Container(
-//                           width: 250,
-//                           height: 50,
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             crossAxisAlignment: CrossAxisAlignment.stretch,
-//                             children: <Widget>[
-//                               buildTimePicker(),
-//                               buildTimeDisplay(),
-//                             ],
-//                           ),
-//                         ),
-//                         Divider(),
-//                         //Topic input field
-//                         Text(
-//                           'Topic',
-//                           style: TextStyle(
-//                             color: Colors.black,
-//                             fontSize: 16,
-//                             fontFamily: 'Lato',
-//                           ),
-//                         ),
-//                         Container(
-//                           width: 300,
-//                           child: TextFormField(
-//                             initialValue: _topic,
-//                             keyboardType: TextInputType.text,
-//                             onSaved: (value) {
-//                               _topic = value;
-//                             },
-//                             decoration: InputDecoration(
-//                               labelText: 'Topic',
-//                               border: OutlineInputBorder(
-//                                 borderSide: BorderSide(
-//                                     color: Theme.of(context).primaryColor),
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-
-//                         Divider(),
-//                         //Duration presets
-//                         Container(
-//                           margin: EdgeInsets.symmetric(vertical: 10),
-//                           width: 400,
-//                           height: 50,
-//                           child: Column(
-//                             children: <Widget>[
-//                               Row(
-//                                 mainAxisAlignment:
-//                                     MainAxisAlignment.center,
-//                                 crossAxisAlignment:
-//                                     CrossAxisAlignment.stretch,
-//                                 children: <Widget>[
-//                                   buildDurationOption('1', 1, 0),
-//                                   buildDurationOption('1.5', 1, 30),
-//                                   buildDurationOption('2', 2, 0),
-//                                   buildDurationOption('2.5', 2, 30),
-//                                   buildDurationOption('3', 3, 0),
-//                                 ],
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Divider(),
-//                         //Custom duration
-//                         Container(
-//                           height: 70,
-//                           child: Column(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             children: <Widget>[
-//                               Text(
-//                                 'Custom Duration',
-//                                 style: TextStyle(
-//                                   color: Colors.black,
-//                                   fontSize: 16,
-//                                   fontFamily: 'Lato',
-//                                 ),
-//                               ),
-//                               SizedBox(
-//                                 height: 10,
-//                               ),
-//                               Row(
-//                                 mainAxisAlignment: MainAxisAlignment.center,
-//                                 children: <Widget>[
-//                                   SizedBox(
-//                                     height: 35,
-//                                     width: 35,
-//                                     child: ElevatedButton(
-//                                       child: Text(
-//                                         'H',
-//                                         textAlign: TextAlign.center,
-//                                       ),
-//                                       onPressed: () {
-//                                         showDialog(
-//                                             context: context,
-//                                             builder:
-//                                                 (BuildContext context) {
-//                                               return NumberPicker(
-//                                                 value: 0,
-//                                                 minValue: 0,
-//                                                 maxValue: 12,
-//                                                 onChanged: (v) {
-//                                                   setState(() {
-//                                                     _customMinutes = v;
-//                                                     setDuration(
-//                                                         _customHours,
-//                                                         _customMinutes,
-//                                                         '');
-//                                                   });
-//                                                 },
-//                                               );
-//                                             });
-//                                       },
-//                                     ),
-//                                   ),
-//                                   SizedBox(
-//                                     width: 40,
-//                                     height: 40,
-//                                     child: Card(
-//                                       color: Colors.white,
-//                                       child: Padding(
-//                                         padding: const EdgeInsets.symmetric(
-//                                             vertical: 8, horizontal: 11),
-//                                         child: Text(
-//                                           _customHours.toString(),
-//                                           style: TextStyle(
-//                                               fontSize: 16,
-//                                               color: Colors.blueGrey[900]),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   SizedBox(
-//                                     width: 35,
-//                                     height: 35,
-//                                     child: ElevatedButton(
-//                                       child: Text(
-//                                         'M',
-//                                         textAlign: TextAlign.center,
-//                                       ),
-//                                       onPressed: () {
-//                                         showDialog(
-//                                           context: context,
-//                                           builder: (BuildContext context) {
-//                                             return NumberPicker(
-//                                               value: 0,
-//                                               minValue: 0,
-//                                               maxValue: 60,
-//                                               onChanged: (v) {
-//                                                 setState(() {
-//                                                   _customMinutes = v;
-//                                                   setDuration(_customHours,
-//                                                       _customMinutes, '');
-//                                                 });
-//                                               },
-//                                             );
-//                                           },
-//                                         );
-//                                       },
-//                                     ),
-//                                   ),
-//                                   SizedBox(
-//                                     width: 50,
-//                                     height: 40,
-//                                     child: Card(
-//                                       color: Colors.white,
-//                                       child: Padding(
-//                                         padding: const EdgeInsets.symmetric(
-//                                             vertical: 8, horizontal: 11),
-//                                         child: Text(
-//                                           _customMinutes.toString(),
-//                                           style: TextStyle(
-//                                               fontSize: 16,
-//                                               color: Colors.blueGrey[900]),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Divider(),
-//                         // Save button
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: <Widget>[
-//                             ElevatedButton(
-//                               child: Text('Add to Time Table'),
-//                               onPressed: () {
-//                                 Scaffold.of(context).hideCurrentSnackBar();
-//                                 Scaffold.of(context).showSnackBar(SnackBar(
-//                                   content: _subName !=
-//                                               SubjectName.Undeclared &&
-//                                           _duration != null &&
-//                                           _section.isNotEmpty
-//                                       ? Text(
-//                                           '${enToString(_subName)} on ${DateFormat('d MMM hh mm a').format(_startTime)} added to Time Table')
-//                                       : Text('Class not added'),
-//                                 ));
-//                                 setState(() {
-//                                   _saveForm(context);
-//                                 });
-//                                 if (_isEdit) {
-//                                   Navigator.pop(context);
-//                                 }
-//                               },
-//                             )
-//                           ],
-//                         ),
-//                         SizedBox(
-//                           height: 25,
-//                         )

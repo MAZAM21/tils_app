@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:tils_app/main.dart';
+import 'package:tils_app/models/instititutemd.dart';
 
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -19,7 +20,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
-
+import 'package:tils_app/widgets/screens/teacher-screens/time%20table/schedule-class.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
 import 'package:tils_app/widgets/student-screens/student_home/classes-grid.dart';
@@ -122,6 +123,7 @@ class _HomePageState extends State<HomePage> {
     final meetingsList = Provider.of<List<Meeting>>(context);
     final subClassList = Provider.of<List<SubjectClass>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
+    final instData = Provider.of<InstituteData?>(context);
 
     ///testing student rank
     final stdRank = Provider.of<List<StudentRank>>(context);
@@ -195,41 +197,43 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(
                                 width: 5,
                               ),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(0xffC54134)),
-                                    minimumSize: MaterialStateProperty.all(
-                                        Size(107, 25)),
-                                    fixedSize: MaterialStateProperty.all(
-                                        Size(117, 27)),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(23)),
-                                    )),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      settings: RouteSettings(
-                                          name: '/edit-time-table'),
-                                      builder: (BuildContext context) =>
-                                          ChangeNotifierProvider.value(
-                                        value: teacherData,
-                                        child: EditTTForm(),
+                              if (teacherData!.isAdmin!)
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Color(0xffC54134)),
+                                      minimumSize: MaterialStateProperty.all(
+                                          Size(107, 25)),
+                                      fixedSize: MaterialStateProperty.all(
+                                          Size(117, 27)),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(23)),
+                                      )),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        settings: RouteSettings(
+                                            name: '/edit-time-table'),
+                                        builder: (BuildContext context) =>
+                                            ChangeNotifierProvider.value(
+                                          value: teacherData,
+                                          child: EditTTForm(instData),
+                                        ),
                                       ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Schedule Class',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: 'Proxima Nova',
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  'Schedule Class',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'Proxima Nova',
-                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                              ),
                               Spacer(),
                               ElevatedButton(
                                 style: ButtonStyle(
@@ -272,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
 
-                          TeacherResourcesPanel(teacherData: teacherData),
+                          //TeacherResourcesPanel(teacherData: teacherData),
 
                           /// Teacher Assessment Panel
                           /// includes list of latest three assessments and buttons

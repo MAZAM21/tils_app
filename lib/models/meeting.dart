@@ -63,44 +63,56 @@ Color getColor(subjectName) {
   switch (subjectName) {
     case 'Jurisprudence':
       return Color.fromARGB(255, 56, 85, 89);
-      break;
+
     case 'Trust':
       return Color.fromARGB(255, 68, 137, 156);
-      break;
+
     case 'Conflict':
       return Color.fromARGB(255, 37, 31, 87);
-      break;
+
     case 'Islamic':
       return Color.fromARGB(255, 39, 59, 92);
-      break;
+
     case 'Company':
       return Color.fromARGB(255, 50, 33, 58);
-      break;
+
     case 'Tort':
       return Color.fromARGB(255, 56, 59, 83);
-      break;
+
     case 'Property':
       return Color.fromARGB(255, 102, 113, 126);
-      break;
+
     case 'EU':
       return Color.fromARGB(255, 206, 185, 146);
-      break;
+
     case 'HR':
       return Color.fromARGB(255, 143, 173, 136);
-      break;
+
     case 'Contract':
       return Color.fromARGB(255, 36, 79, 38);
-      break;
+
     case 'Criminal':
       return Color.fromARGB(255, 37, 109, 27);
-      break;
+
     case 'LSM':
       return Color.fromARGB(255, 189, 213, 234);
-      break;
+
     case 'Public':
       return Color.fromARGB(255, 201, 125, 96);
-      break;
+
+    case 'Islamiat':
+      return Color.fromARGB(255, 102, 113, 126);
+    case 'Maths':
+      return Color.fromARGB(255, 189, 213, 234);
+    case 'Urdu':
+      return Color.fromARGB(255, 201, 125, 96);
+    case 'English':
+      return Color.fromARGB(255, 206, 185, 146);
+    case 'Computer':
+      return Color.fromARGB(255, 39, 59, 92);
+    case 'Biology':
+      return Color.fromARGB(255, 143, 173, 136);
     default:
-      return Colors.black;
+      return Color(0xffC54134);
   }
 }

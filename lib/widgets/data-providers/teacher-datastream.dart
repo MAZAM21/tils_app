@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/institute-id.dart';
 import 'package:tils_app/models/role.dart';
 
@@ -37,7 +38,7 @@ class _TeacherDataStreamState extends State<TeacherDataStream> {
   Widget build(BuildContext context) {
     final uid = Provider.of<User?>(context)?.uid;
     final role = Provider.of<Role?>(context, listen: false);
-    //Provider.of<InstProvider>(context, listen: false).setID(role!.instID);
+
     final db = Provider.of<DatabaseService>(context, listen: false);
     final inst = role?.instID;
     bool isActive = false;
@@ -49,7 +50,7 @@ class _TeacherDataStreamState extends State<TeacherDataStream> {
         : StreamProvider<TeacherUser?>(
             initialData: null,
             create: (context) => db.streamTeacherUser(uid, inst),
-            builder: (context, _) => AllTabs(),
+            builder: (context, _) => AllTabs(db),
           );
   }
 }

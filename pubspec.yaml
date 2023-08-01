@@ -46,6 +46,7 @@ dependencies:
   cached_network_image: ^3.2.0
   flutter_echarts: ^2.3.0
   dotted_border: ^2.0.0+3
+  permission_handler: ^10.4.3
 
 flutter_app_name:
   name: "LCI"

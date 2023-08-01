@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/institute-id.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/remote_assessment.dart';
@@ -99,6 +100,12 @@ class RoutesAndTheme extends StatelessWidget {
               Provider.of<DatabaseService>(ctx, listen: false).streamMetrics(),
           initialData: [],
         ),
+        FutureProvider<InstituteData?>(
+          create: (ctx) => Provider.of<DatabaseService>(ctx, listen: false)
+              .getInstituteData(),
+          initialData: InstituteData(
+              name: 'Fluency', year_subjects: {}, inst_subjects: []),
+        )
       ],
       child: MaterialApp(
         initialRoute: '/',
@@ -170,7 +177,7 @@ class RoutesAndTheme extends StatelessWidget {
           RecordsPage.routeName: (context) => RecordsPage(),
           ClassRecords.routeName: (context) => ClassRecords(),
           ClassRecordDetail.routeName: (context) => ClassRecordDetail(),
-          EditTTForm.routeName: (context) => EditTTForm(),
+          // EditTTForm.routeName: (context) => EditTTForm(),
           AllAnnouncements.routeName: (context) => AllAnnouncements(),
           AnnouncementDetail.routeName: (context) => AnnouncementDetail(),
           RemoteAssessmentInput.routeName: (context) => RemoteAssessmentInput(),

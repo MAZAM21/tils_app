@@ -57,7 +57,7 @@ class RoleGetter extends StatelessWidget {
     print('rolegetter called');
     bool isLoggedIn = false;
     final authState = FirebaseAuth.instance.currentUser;
-    print("authstate ${authState!.email} ${authState.uid}");
+    // print("authstate ${authState!.email} ${authState.uid}");
 
     if (authState != null) {
       isLoggedIn = true;
@@ -68,13 +68,17 @@ class RoleGetter extends StatelessWidget {
             initialData: null,
             create: (ctx) => genDB.getRole(authState!.uid),
             builder: (context, _) {
+              bool isActive = false;
               final roleProv = Provider.of<Role?>(context);
               if (roleProv != null) {
-                //Provider.of<InstProvider>(context, listen: false)
-                //  .setID(roleProv!.instID);
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                //   Provider.of<InstProvider>(context, listen: false)
+                //       .setID(roleProv!.instID);
+                // });
                 print('roleprov not null: ${roleProv.role}');
+                isActive = true;
               }
-              return roleProv != null
+              return roleProv != null && isActive
                   ? roleProv.getRole == 'teacher'
                       ? TeacherDataStream()
                       : roleProv.getRole == 'student'

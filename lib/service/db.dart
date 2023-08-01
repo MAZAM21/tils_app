@@ -6,6 +6,7 @@ import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_inte
 import 'package:tils_app/models/admin-user-data.dart';
 import 'package:tils_app/models/allTextQAs.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/institute-id.dart';
 import 'package:tils_app/models/metrics.dart';
 import 'package:tils_app/models/parent-user-data.dart';
@@ -54,8 +55,11 @@ class DatabaseService with ChangeNotifier {
     try {
       CollectionReference ref =
           _db.collection('institutes').doc(instID).collection('classes');
-      return ref.snapshots().map((list) =>
-          list.docs.map((doc) => SubjectClass.fromFirestore(doc)).toList());
+      return ref.snapshots().map((list) => list.docs
+          .map((doc) => SubjectClass.fromFirestore(doc))
+          .where(
+              (subject) => !subject.isInvalid()) // Filter out invalid objects
+          .toList());
     } on Exception catch (e) {
       print('error in streamclasses: $e');
     }
@@ -264,6 +268,17 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  Future<InstituteData?> getInstituteData() async {
+    DocumentReference ref = _db.collection('institutes').doc(instID);
+    try {
+      final instDataDoc = await ref.get();
+      return InstituteData.fromFirestore(instDataDoc);
+    } catch (e) {
+      print('error in getInstituteData: ${e}');
+    }
+    throw Exception();
+  }
+
   ///get all student docs from student collection
   Future<List<Student>?> getAllStudents() async {
     try {
@@ -406,29 +421,46 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> addClassToCF(
-    SubjectName? name,
+    String? name,
     DateTime start,
     DateTime end,
     String? section, [
     String? topic,
+    bool? exam,
   ]) async {
-    final _classCollection =
-        _db.collection('institutes').doc(instID).collection('classes');
-    String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
-    String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
-    String notification = DateFormat("EEE, dd-MM hh:mm a").format(start);
+    print('add class to cf: $name');
+    if (instID != null) {
+      final _classCollection =
+          _db.collection('institutes').doc(instID).collection('classes');
+      String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
+      String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
+      String notification = DateFormat("EEE, dd-MM hh:mm a").format(start);
 
-    try {
-      await _classCollection.add({
-        'subjectName': enToString(name),
-        'startTime': startString,
-        'endTime': endString,
-        'topic': topic ?? '',
-        'section': section,
-        'notification': notification,
-      });
-    } catch (err) {
-      print('error in adding to database: $err');
+      try {
+        if (exam!) {
+          await _classCollection.add({
+            'subjectName': 'Exam: $name',
+            'startTime': startString,
+            'endTime': endString,
+            'topic': topic ?? 'none',
+            'section': section,
+            'notification': notification,
+          });
+        } else {
+          await _classCollection.add({
+            'subjectName': name,
+            'startTime': startString,
+            'endTime': endString,
+            'topic': topic ?? 'none',
+            'section': section,
+            'notification': notification,
+          });
+        }
+      } catch (err) {
+        print('error in adding to database: $err');
+      }
+    } else {
+      print('instID not found in db');
     }
   }
 
@@ -986,52 +1018,55 @@ class DatabaseService with ChangeNotifier {
   Future<void> saveTeacher(
     List<UploadTeacher> uploadTeachers,
   ) async {
-    CollectionReference tRef =
-        _db.collection('institutes').doc(instID).collection('teachers');
-    CollectionReference userRef =
-        _db.collection('institutes').doc(instID).collection('users');
+    if (instID != null) {
+      CollectionReference tRef =
+          _db.collection('institutes').doc(instID).collection('teachers');
+      CollectionReference userRef = _db.collection('users');
 
-    Future.forEach(
-      uploadTeachers,
-      (UploadTeacher teach) => auth
-          .createUserWithEmailAndPassword(
-            email: teach.email!,
-            password: teach.password!,
+      Future.forEach(
+        uploadTeachers,
+        (UploadTeacher teach) => auth
+            .createUserWithEmailAndPassword(
+              email: teach.email!,
+              password: teach.password!,
+            )
+            .then((UserCredential cred) => teach.uid = cred.user!.uid),
+      )
+          .then(
+            (value) => Future.forEach(
+              uploadTeachers,
+              (UploadTeacher teacher) => tRef.add(
+                {
+                  'name': teacher.name,
+                  'email': teacher.email,
+                  'password': teacher.password,
+                  'registeredSubs': teacher.subMap,
+                  'uid': teacher.uid,
+                  'isAdmin': false,
+                  'Assessment-textqMarks': null,
+                  'marked-textQs': {},
+                  'profile-pic-url': '',
+                },
+              ),
+            ),
           )
-          .then((UserCredential cred) => teach.uid = cred.user!.uid),
-    )
-        .then(
-          (value) => Future.forEach(
-            uploadTeachers,
-            (UploadTeacher teacher) => tRef.add(
-              {
-                'name': teacher.name,
-                'email': teacher.email,
-                'password': teacher.password,
-                'registeredSubs': teacher.subMap,
-                'uid': teacher.uid,
-                'isAdmin': false,
-                'Assessment-textqMarks': null,
-                'marked-textQs': {},
-                'profile-pic-url': '',
-              },
+          .then(
+            (value) => Future.forEach(
+              uploadTeachers,
+              (UploadTeacher teacher) => userRef.doc(teacher.uid).set(
+                {
+                  'role': 'teacher',
+                  'email': teacher.email,
+                  'password': teacher.password,
+                  'name': teacher.name,
+                },
+                SetOptions(merge: true),
+              ),
             ),
-          ),
-        )
-        .then(
-          (value) => Future.forEach(
-            uploadTeachers,
-            (UploadTeacher teacher) => userRef.doc(teacher.uid).set(
-              {
-                'role': 'teacher',
-                'email': teacher.email,
-                'password': teacher.password,
-                'name': teacher.name,
-              },
-              SetOptions(merge: true),
-            ),
-          ),
-        );
+          );
+    } else {
+      throw Exception();
+    }
   }
 
   Future<void> editStudentYear(String? newYear, StudentRank stud) async {

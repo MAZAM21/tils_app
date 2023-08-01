@@ -1,6 +1,5 @@
 import 'package:excel/excel.dart';
 import 'package:tils_app/service/db.dart';
-import 'package:provider/provider.dart';
 
 class UploadService {
   /// This function takes an excell sheet and makes students out of it
@@ -12,7 +11,8 @@ class UploadService {
   /// year
   /// batch
   /// section
-  void uploadStudentToDB(Excel excelSheet, DatabaseService db) {
+  void uploadStudentToDB(
+      Excel excelSheet, DatabaseService db, List<String> inst_subs) {
     List<UploadStudent> upStud = [];
 
     for (var table in excelSheet.tables.keys) {
@@ -36,30 +36,14 @@ class UploadService {
     }
     upStud.forEach(
       (stud) {
-        Map<String, bool> subs = {
-          'Conflict': false,
-          'Jurisprudence': false,
-          'Islamic': false,
-          'Trust': false,
-          'Company': false,
-          'Tort': false,
-          'Property': false,
-          'EU': false,
-          'HR': false,
-          'Contract': false,
-          'Criminal': false,
-          'Public': false,
-          'LSM': false,
-        };
-
-        subs.forEach(
-          (k, v) {
-            print(k);
-            if (stud.subjects!.contains('$k')) {
+        inst_subs.forEach(
+          (sub) {
+            print(sub);
+            if (stud.subjects!.contains(sub)) {
               print(stud.name);
-              stud.subMap!['$k'] = true;
+              stud.subMap![sub] = true;
             } else {
-              stud.subMap!['$k'] = false;
+              stud.subMap![sub] = false;
             }
           },
         );
@@ -68,7 +52,8 @@ class UploadService {
     db.saveStudent(upStud);
   }
 
-  void uploadTeacherToDB(Excel excelSheet, DatabaseService db) {
+  void uploadTeacherToDB(
+      Excel excelSheet, DatabaseService db, List<String> inst_subs) {
     ///Error note:
     /// While uploading teachers for bls, two things went wrong
     /// 1. Year was not added
@@ -97,29 +82,14 @@ class UploadService {
     }
     upTeacher.forEach(
       (t) {
-        Map<String, bool> subs = {
-          'Conflict': false,
-          'Jurisprudence': false,
-          'Islamic': false,
-          'Trust': false,
-          'Company': false,
-          'Tort': false,
-          'Property': false,
-          'EU': false,
-          'HR': false,
-          'Contract': false,
-          'Criminal': false,
-          'Public': false,
-          'LSM': false,
-        };
-        subs.forEach(
-          (k, v) {
-            print(k);
-            if (t.subjects!.contains('$k')) {
+        inst_subs.forEach(
+          (sub) {
+            print(sub);
+            if (t.subjects!.contains(sub)) {
               print(t.name);
-              t.subMap!['$k'] = true;
+              t.subMap![sub] = true;
             } else {
-              t.subMap!['$k'] = false;
+              t.subMap![sub] = false;
             }
           },
         );
