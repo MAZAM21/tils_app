@@ -1,24 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:provider/provider.dart';
+
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
-import 'package:tils_app/models/subject-class.dart';
+
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/ranking-service.dart';
+
 import 'package:tils_app/service/student-management-service.dart';
-import 'package:tils_app/service/student-service.dart';
+
 import 'package:tils_app/widgets/screens/loading-screen.dart';
-import 'package:provider/provider.dart';
+
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/activate-parent-portal.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/edit-student-subs.dart';
 
 class ManageStudents extends StatefulWidget {
-  const ManageStudents({Key? key}) : super(key: key);
+  final Map<String, dynamic> yearSubfromDb;
+  ManageStudents(this.yearSubfromDb);
 
   static const routeName = '/managementMain';
 
@@ -46,7 +46,7 @@ class _ManageStudentsState extends State<ManageStudents> {
 
     _filter = 'Year';
     _yearFilter = teacherData.year;
-    _subYearFilter = '1';
+    _subYearFilter = teacherData.year;
 
     super.didChangeDependencies();
   }
@@ -423,18 +423,14 @@ class _ManageStudentsState extends State<ManageStudents> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            _filterButtonSubYear(
-                              text: '1',
-                              filterText: '1',
-                            ),
-                            _filterButtonSubYear(
-                              text: '2',
-                              filterText: '2',
-                            ),
-                            _filterButtonSubYear(
-                              text: '3',
-                              filterText: '3',
-                            ),
+                            for (var x = 0;
+                                x < widget.yearSubfromDb.keys.length;
+                                x++)
+                              _filterButtonSubYear(
+                                text: widget.yearSubfromDb.keys.toList()[x],
+                                filterText:
+                                    widget.yearSubfromDb.keys.toList()[x],
+                              ),
                           ],
                         ),
                         SingleChildScrollView(
@@ -442,11 +438,15 @@ class _ManageStudentsState extends State<ManageStudents> {
                           child: Row(
                             children: <Widget>[
                               for (var x = 0;
-                                  x < yearSub['$_subYearFilter']!.length;
+                                  x <
+                                      widget.yearSubfromDb['$_subYearFilter']!
+                                          .length;
                                   x++)
                                 _filterButtonSubject(
-                                    text: yearSub['$_subYearFilter']![x],
-                                    filterText: yearSub['$_subYearFilter']![x]),
+                                    text: widget
+                                        .yearSubfromDb['$_subYearFilter']![x],
+                                    filterText: widget
+                                        .yearSubfromDb['$_subYearFilter']![x]),
                             ],
                           ),
                         )
@@ -459,18 +459,13 @@ class _ManageStudentsState extends State<ManageStudents> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        _filterButtonYear(
-                          text: '1',
-                          filterText: '1',
-                        ),
-                        _filterButtonYear(
-                          text: '2',
-                          filterText: '2',
-                        ),
-                        _filterButtonYear(
-                          text: '3',
-                          filterText: '3',
-                        ),
+                        for (var x = 0;
+                            x < widget.yearSubfromDb.keys.length;
+                            x++)
+                          _filterButtonYear(
+                            text: widget.yearSubfromDb.keys.toList()[x],
+                            filterText: widget.yearSubfromDb.keys.toList()[x],
+                          ),
                       ],
                     ),
                   ),

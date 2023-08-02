@@ -12,7 +12,8 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 // This needs to be the page where the students with the top score are displayed
 class TeacherRankingDisplay extends StatefulWidget {
   static const routeName = '/rankingDiplay';
-
+  final Map<String, dynamic> yearSubfromDb;
+  TeacherRankingDisplay(this.yearSubfromDb);
   @override
   _TeacherRankingDisplayState createState() => _TeacherRankingDisplayState();
 }
@@ -23,11 +24,12 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
   String? _filter;
   String? _yearFilter;
   String? _subYearFilter;
-  Map<String, List<String>> yearSub = {
-    '1': ['Contract', 'LSM', 'Criminal', 'Public'],
-    '2': ['Tort', 'Property', 'HR', 'EU'],
-    '3': ['Jurisprudence', 'Trust', 'Company', 'Conflict', 'Islamic']
-  };
+
+  // Map<String, List<String>> yearSub = {
+  //   '1': ['Contract', 'LSM', 'Criminal', 'Public'],
+  //   '2': ['Tort', 'Property', 'HR', 'EU'],
+  //   '3': ['Jurisprudence', 'Trust', 'Company', 'Conflict', 'Islamic']
+  // };
   String? _subjectFilter;
 
   @override
@@ -36,7 +38,7 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
     _filter = 'Year';
     _yearFilter = teacherData.year;
     _subYearFilter = teacherData.year;
-    _subjectFilter = teacherData.subjects.last;
+    _subjectFilter = teacherData.subjects.first;
     super.didChangeDependencies();
   }
 
@@ -423,18 +425,15 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  _filterButtonSubYear(
-                                    text: '1',
-                                    filterText: '1',
-                                  ),
-                                  _filterButtonSubYear(
-                                    text: '2',
-                                    filterText: '2',
-                                  ),
-                                  _filterButtonSubYear(
-                                    text: '3',
-                                    filterText: '3',
-                                  ),
+                                  for (var x = 0;
+                                      x < widget.yearSubfromDb.keys.length;
+                                      x++)
+                                    _filterButtonSubYear(
+                                      text:
+                                          widget.yearSubfromDb.keys.toList()[x],
+                                      filterText:
+                                          widget.yearSubfromDb.keys.toList()[x],
+                                    ),
                                 ],
                               ),
                               SingleChildScrollView(
@@ -442,12 +441,17 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                 child: Row(
                                   children: <Widget>[
                                     for (var x = 0;
-                                        x < yearSub['$_subYearFilter']!.length;
+                                        x <
+                                            widget
+                                                .yearSubfromDb[
+                                                    '$_subYearFilter']!
+                                                .length;
                                         x++)
                                       _filterButtonSubject(
-                                          text: yearSub['$_subYearFilter']![x],
-                                          filterText: yearSub['$_subYearFilter']!
-                                              [x]),
+                                          text: widget.yearSubfromDb[
+                                              '$_subYearFilter']![x],
+                                          filterText: widget.yearSubfromDb[
+                                              '$_subYearFilter']![x]),
                                   ],
                                 ),
                               )
@@ -460,18 +464,14 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              _filterButtonYear(
-                                text: '1',
-                                filterText: '1',
-                              ),
-                              _filterButtonYear(
-                                text: '2',
-                                filterText: '2',
-                              ),
-                              _filterButtonYear(
-                                text: '3',
-                                filterText: '3',
-                              ),
+                              for (var x = 0;
+                                  x < widget.yearSubfromDb.keys.length;
+                                  x++)
+                                _filterButtonYear(
+                                  text: widget.yearSubfromDb.keys.toList()[x],
+                                  filterText:
+                                      widget.yearSubfromDb.keys.toList()[x],
+                                ),
                             ],
                           ),
                         ),
@@ -531,8 +531,10 @@ class _TeacherRankingDisplayState extends State<TeacherRankingDisplay> {
                                       ),
                                       if (students[i].imageUrl != '')
                                         CircleAvatar(
-                                          backgroundImage: CachedNetworkImageProvider(
-                                              students[i].imageUrl!,),
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                            students[i].imageUrl!,
+                                          ),
                                           radius: i == 0 || i == 1 || i == 2
                                               ? 25
                                               : 15,

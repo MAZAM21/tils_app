@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/role.dart';
+import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 
 class GeneralDatabase with ChangeNotifier {
@@ -30,5 +32,30 @@ class GeneralDatabase with ChangeNotifier {
     return ref.snapshots().map((list) => TeacherUser.fromFirestore(
         list.docs.firstWhere((doc) => doc['uid'] == uid)
             as QueryDocumentSnapshot<Map<String, dynamic>>));
+  }
+
+  Stream<StudentUser> streamStudentUser(String? uid, String? instID) {
+    CollectionReference ref =
+        _db.collection('institutes').doc(instID).collection('teachers');
+    return ref.snapshots().map((list) => StudentUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['uid'] == uid)
+            as QueryDocumentSnapshot<Map<String, dynamic>>));
+  }
+
+  Future<InstituteData?> getInstituteDataforAllTabs(
+      String? instIDfromTDS) async {
+    if (instIDfromTDS != null) {
+      DocumentReference ref = _db.collection('institutes').doc(instIDfromTDS);
+      try {
+        print('in getinsititutedataforalltabs: ${ref.id}');
+        final instDataDoc = await ref.get();
+        return InstituteData.fromFirestore(instDataDoc);
+      } catch (e) {
+        print('error in getInstituteData: ${e}');
+      }
+      throw Exception('try catch error in streaminstdataforalltabs');
+    } else {
+      throw Exception('in getinstitutedata alltabs error');
+    }
   }
 }

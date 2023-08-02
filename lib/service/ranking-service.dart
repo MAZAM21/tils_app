@@ -88,7 +88,8 @@ class RankingService {
   List<StudentRank> getStudentBySub(String? sub, List<StudentRank> studList) {
     List<StudentRank> studSubs = [];
     studList.forEach((stud) {
-      if (stud.subjects!.contains(sub) && stud.raSubScore!.containsKey('$sub')) {
+      if (stud.subjects!.contains(sub) &&
+          stud.raSubScore!.containsKey('$sub')) {
         studSubs.add(stud);
       }
     });
@@ -119,8 +120,11 @@ class RankingService {
     List<StudentRank> studlist,
   ) {
     List<StudentRank> yearList = [];
+    print('year in ranking service: $year');
     studlist.forEach((stud) {
       if (stud.year == year) {
+        print(stud.year);
+        print(stud.name);
         yearList.add(stud);
       }
     });

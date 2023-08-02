@@ -32,6 +32,8 @@ import 'package:tils_app/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
+  //final String? instID;
+  //HomePage(this.instID);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -44,49 +46,52 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    final instProvider = Provider.of<InstProvider>(context, listen: false);
 
-    final teacherData = Provider.of<TeacherUser?>(context, listen: false);
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    if (instProvider.instID != null) {
+      final teacherData = Provider.of<TeacherUser?>(context, listen: false);
+      final db = Provider.of<DatabaseService>(context, listen: false);
 
-    ///this is for foreground notifications supposedly
+      ///this is for foreground notifications supposedly
 
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.android) {
-      var initialzationSettingsAndroid =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
-      var initializationSettings = InitializationSettings(
-        android: initialzationSettingsAndroid,
-      );
+      if (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.android) {
+        var initialzationSettingsAndroid =
+            AndroidInitializationSettings('@mipmap/ic_launcher');
+        var initializationSettings = InitializationSettings(
+          android: initialzationSettingsAndroid,
+        );
 
-      flutterLocalNotificationsPlugin.initialize(initializationSettings);
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        RemoteNotification? notification = message.notification;
-        AndroidNotification? android = message.notification?.android;
-        if (notification != null && android != null) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('${notification.title}'),
-          ));
-          flutterLocalNotificationsPlugin.show(
-              notification.hashCode,
-              notification.title,
-              notification.body,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  icon: 'LCI_icon',
-                ),
-              ));
+        flutterLocalNotificationsPlugin.initialize(initializationSettings);
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          RemoteNotification? notification = message.notification;
+          AndroidNotification? android = message.notification?.android;
+          if (notification != null && android != null) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('${notification.title}'),
+            ));
+            flutterLocalNotificationsPlugin.show(
+                notification.hashCode,
+                notification.title,
+                notification.body,
+                NotificationDetails(
+                  android: AndroidNotificationDetails(
+                    channel.id,
+                    channel.name,
+                    icon: 'LCI_icon',
+                  ),
+                ));
+          }
+        });
+        if (teacherData != null) {
+          for (var i = 0; i < teacherData.subjects.length; i++) {
+            //print('${teacherData.subjects[i]}');
+            FirebaseMessaging.instance
+                .subscribeToTopic('${teacherData.subjects[i]}');
+          }
+          getToken(teacherData.docId, db);
         }
-      });
-      if (teacherData != null) {
-        for (var i = 0; i < teacherData.subjects.length; i++) {
-          //print('${teacherData.subjects[i]}');
-          FirebaseMessaging.instance
-              .subscribeToTopic('${teacherData.subjects[i]}');
-        }
-        getToken(teacherData.docId, db);
       }
     }
     // getTopics();
@@ -127,16 +132,17 @@ class _HomePageState extends State<HomePage> {
 
     ///testing student rank
     final stdRank = Provider.of<List<StudentRank>>(context);
+    bool isActive = false;
     //print(stdRank.length);
     int estimateTs = 0;
     int endTime = 0;
     int deployedRA = 0;
-    bool isActive = false;
     List<SubjectClass> gridList = [];
     Meeting? nextClass;
 
     if (meetingsList != null &&
         teacherData != null &&
+        instData != null &&
         subClassList != null &&
         raList != null) {
       gridList = ts.getClassesForGrid(subClassList);
@@ -288,7 +294,10 @@ class _HomePageState extends State<HomePage> {
 
                           ///teacher assignment panel
                           ///built on same format as assessment panel
-                          TeacherAssignmentPanel(teacherData: teacherData),
+                          TeacherAssignmentPanel(
+                            teacherData: teacherData,
+                            instData: instData!,
+                          ),
 
                           const SizedBox(
                             height: 30,

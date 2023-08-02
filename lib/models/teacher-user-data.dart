@@ -32,7 +32,7 @@ class TeacherUser with ChangeNotifier {
       //print(doc.id);
 
       if (data.containsKey('marked-textQs')) {
-        mtq = {...data['marked-textQs']} ?? {};
+        mtq = {...data['marked-textQs']};
       }
       List<String> tsubs = [];
       subs.forEach((k, v) {

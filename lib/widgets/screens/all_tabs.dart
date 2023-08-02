@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/instititutemd.dart';
+import 'package:tils_app/models/role.dart';
 
 import 'package:tils_app/service/db.dart';
+import 'package:tils_app/service/genDb.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
@@ -27,11 +29,11 @@ class ColoredTabBar extends Container implements PreferredSizeWidget {
 }
 
 class AllTabs extends StatefulWidget {
-  final DatabaseService db;
+  // final InstituteData? instData;
 
-  AllTabs(
-    this.db,
-  );
+  // AllTabs(
+  //   this.instData,
+  // );
   @override
   _AllTabsState createState() => _AllTabsState();
 }
@@ -44,57 +46,55 @@ class _AllTabsState extends State<AllTabs> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureProvider<InstituteData?>(
-      initialData: null,
-      create: (context) => widget.db.getInstituteData(),
-      builder: (context, child) {
-        final instData = Provider.of<InstituteData?>(context);
-        return instData != null
-            ? DefaultTabController(
-                length: 3,
-                initialIndex: 1,
-                child: Scaffold(
-                  drawer: AppDrawer(),
-                  appBar: AppBar(
-                    title: Text(
-                      '${instData.name}\'s Portal',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 76, 76, 76),
-                        fontFamily: 'Proxima Nova',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      textAlign: TextAlign.justify,
+    // bool isActive = false;
+    // if (widget.instID != null && widget.instID != '') {
+    //   isActive = true;
+    //   print('in all tabs is active: ${widget.instID}');
+    // }
+    final instData = Provider.of<InstituteData?>(context);
+
+    return DefaultTabController(
+      length: 3,
+      initialIndex: 1,
+      child: Scaffold(
+        drawer: AppDrawer(),
+        appBar: AppBar(
+          title: Text(
+            '${instData!.name}\'s Portal',
+            style: TextStyle(
+              color: Color.fromARGB(255, 76, 76, 76),
+              fontFamily: 'Proxima Nova',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.justify,
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: ColoredTabBar(
+              color: Theme.of(context).canvasColor,
+              tabBar: TabBar(
+                  labelColor: Color.fromARGB(255, 76, 76, 76),
+                  indicatorColor: Color.fromARGB(255, 143, 166, 203),
+                  isScrollable: false,
+                  tabs: <Widget>[
+                    Tab(
+                      text: 'Rankings',
                     ),
-                    bottom: PreferredSize(
-                      preferredSize: Size.fromHeight(30),
-                      child: ColoredTabBar(
-                        color: Theme.of(context).canvasColor,
-                        tabBar: TabBar(
-                            labelColor: Color.fromARGB(255, 76, 76, 76),
-                            indicatorColor: Color.fromARGB(255, 143, 166, 203),
-                            isScrollable: false,
-                            tabs: <Widget>[
-                              Tab(
-                                text: 'Rankings',
-                              ),
-                              Tab(
-                                text: 'Home',
-                              ),
-                              Tab(text: 'NewsFeed'),
-                            ]),
-                      ),
+                    Tab(
+                      text: 'Home',
                     ),
-                  ),
-                  body: TabBarView(children: <Widget>[
-                    TeacherRankingDisplay(),
-                    HomePage(),
-                    AllAnnouncements(),
+                    Tab(text: 'NewsFeed'),
                   ]),
-                ),
-              )
-            : LoadingScreen();
-      },
+            ),
+          ),
+        ),
+        body: TabBarView(children: <Widget>[
+          TeacherRankingDisplay(instData.ranking_yearSub),
+          HomePage(),
+          AllAnnouncements(),
+        ]),
+      ),
     );
   }
 }

@@ -32,6 +32,7 @@ class Student with ChangeNotifier {
   factory Student.fromFirestore(QueryDocumentSnapshot doc) {
     try {
       Map data = doc.data() as Map<dynamic, dynamic>;
+      print(' in student constructor${data['name']}');
 
       return Student(
         id: doc.id ?? '',

@@ -119,6 +119,7 @@ class StudentRank with ChangeNotifier {
       subs.forEach((k, v) {
         if (v == true) {
           regSubs.add(k);
+          print(k);
         }
       });
 

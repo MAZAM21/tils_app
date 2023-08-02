@@ -35,7 +35,7 @@ class DatabaseService with ChangeNotifier {
 
   String? instID;
 
-  DatabaseService(this.instID);
+  DatabaseService([this.instID]);
 
   //gets classes collection data and converts to Meeting list for TT
   Stream<List<Meeting>>? streamMeetings() {
@@ -52,6 +52,7 @@ class DatabaseService with ChangeNotifier {
 
   //gets classes collection data and converts to subjectclass for attendance
   Stream<List<SubjectClass>> streamClasses() {
+    print('stream classes called, instID:$instID');
     try {
       CollectionReference ref =
           _db.collection('institutes').doc(instID).collection('classes');
@@ -269,14 +270,34 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<InstituteData?> getInstituteData() async {
-    DocumentReference ref = _db.collection('institutes').doc(instID);
-    try {
-      final instDataDoc = await ref.get();
-      return InstituteData.fromFirestore(instDataDoc);
-    } catch (e) {
-      print('error in getInstituteData: ${e}');
+    if (instID != null) {
+      DocumentReference ref = _db.collection('institutes').doc(instID);
+      try {
+        final instDataDoc = await ref.get();
+        return InstituteData.fromFirestore(instDataDoc);
+      } catch (e) {
+        print('error in getInstituteData: ${e}');
+      }
+      throw Exception();
+    } else {
+      throw Exception('in getinstitutedata error');
     }
-    throw Exception();
+  }
+
+  Future<InstituteData?> getInstituteDataforAllTabs() async {
+    if (instID != null) {
+      DocumentReference ref = _db.collection('institutes').doc(instID);
+      try {
+        print('in getinsititutedataforalltabs: ${ref.id}');
+        final instDataDoc = await ref.get();
+        return InstituteData.fromFirestore(instDataDoc);
+      } catch (e) {
+        print('error in getInstituteData: ${e}');
+      }
+      throw Exception('try catch error in streaminstdataforalltabs');
+    } else {
+      throw Exception('in getinstitutedata alltabs error');
+    }
   }
 
   ///get all student docs from student collection
@@ -929,58 +950,61 @@ class DatabaseService with ChangeNotifier {
   Future<void> saveStudent(
     List<UploadStudent> uploadStudents,
   ) async {
-    CollectionReference studRef =
-        _db.collection('institutes').doc(instID).collection('students');
-    CollectionReference userRef =
-        _db.collection('institutes').doc(instID).collection('users');
+    if (instID != null) {
+      CollectionReference studRef =
+          _db.collection('institutes').doc(instID).collection('students');
+      CollectionReference userRef = _db.collection('users');
 
-    Future.forEach(
-      uploadStudents,
-      (UploadStudent stud) => auth
-          .createUserWithEmailAndPassword(
-            email: stud.email!,
-            password: stud.password!,
+      Future.forEach(
+        uploadStudents,
+        (UploadStudent stud) => auth
+            .createUserWithEmailAndPassword(
+              email: stud.email!,
+              password: stud.password!,
+            )
+            .then((UserCredential cred) => stud.uid = cred.user!.uid),
+      )
+          .then(
+            (value) => Future.forEach(
+              uploadStudents,
+              (UploadStudent student) => studRef.add(
+                {
+                  'name': student.name,
+                  'email': student.email,
+                  'password': student.password,
+                  'registeredSubs': student.subMap,
+                  'uid': student.uid,
+                  'attendance': {},
+                  'year': student.year,
+                  'completed-assessments': [],
+                  'batch': student.batch,
+                  'section': student.section,
+                  'parent-uid': '',
+                  'profile-pic-url': '',
+                },
+              ),
+            ),
           )
-          .then((UserCredential cred) => stud.uid = cred.user!.uid),
-    )
-        .then(
-          (value) => Future.forEach(
-            uploadStudents,
-            (UploadStudent student) => studRef.add(
-              {
-                'name': student.name,
-                'email': student.email,
-                'password': student.password,
-                'registeredSubs': student.subMap,
-                'uid': student.uid,
-                'attendance': {},
-                'year': student.year,
-                'completed-assessments': [],
-                'batch': student.batch,
-                'section': student.section,
-                'parent-uid': '',
-                'profile-pic-url': '',
-              },
+          .then(
+            (value) => Future.forEach(
+              uploadStudents,
+              (UploadStudent student) => userRef.doc(student.uid).set(
+                {
+                  'role': 'student',
+                  'email': student.email,
+                  'password': student.password,
+                  'name': student.name,
+                },
+                SetOptions(merge: true),
+              ),
             ),
-          ),
-        )
-        .then(
-          (value) => Future.forEach(
-            uploadStudents,
-            (UploadStudent student) => userRef.doc(student.uid).set(
-              {
-                'role': 'student',
-                'email': student.email,
-                'password': student.password,
-                'name': student.name,
-              },
-              SetOptions(merge: true),
-            ),
-          ),
-          //TODO: Add parent portal user creation
-        )
-        .then((value) =>
-            Future.forEach(uploadStudents, (UploadStudent student) => null));
+            //TODO: Add parent portal user creation
+          )
+          .then((value) =>
+              Future.forEach(uploadStudents, (UploadStudent student) => null));
+    } else {
+      throw Exception('error in save student');
+    }
   }
 
   Future<void> saveParent(

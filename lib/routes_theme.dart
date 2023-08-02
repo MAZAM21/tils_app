@@ -1,3 +1,4 @@
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,7 +41,7 @@ import './models/meeting.dart';
 import './service/db.dart';
 
 class RoutesAndTheme extends StatelessWidget {
-  //final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   // final String uid = auth.currentUser.uid;
   final genDb = GeneralDatabase();
 
@@ -54,6 +55,11 @@ class RoutesAndTheme extends StatelessWidget {
         ChangeNotifierProvider<InstProvider>.value(
           value: instProvider,
         ),
+        ChangeNotifierProxyProvider<InstProvider, DatabaseService>(
+          create: (ctx) => DatabaseService(),
+          update: (context, rProvider, _) =>
+              DatabaseService(instProvider.instID),
+        ),
 
         ChangeNotifierProvider<RemoteAssessment>(
           create: (ctx) => RemoteAssessment(),
@@ -62,10 +68,6 @@ class RoutesAndTheme extends StatelessWidget {
           create: (ctx) => AssignmentMarks(),
         ),
         // Use ProxyProvider to create the DatabaseService with the Role object
-        ListenableProxyProvider<InstProvider, DatabaseService>(
-          update: (context, rProvider, _) =>
-              DatabaseService(instProvider.instID),
-        ),
         StreamProvider<List<Meeting>>(
           create: (ctx) =>
               Provider.of<DatabaseService>(ctx, listen: false).streamMeetings(),
@@ -104,7 +106,10 @@ class RoutesAndTheme extends StatelessWidget {
           create: (ctx) => Provider.of<DatabaseService>(ctx, listen: false)
               .getInstituteData(),
           initialData: InstituteData(
-              name: 'Fluency', year_subjects: {}, inst_subjects: []),
+              name: 'Fluency',
+              year_subjects: {},
+              inst_subjects: [],
+              ranking_yearSub: {}),
         )
       ],
       child: MaterialApp(
@@ -170,7 +175,7 @@ class RoutesAndTheme extends StatelessWidget {
         routes: {
           //'/': (context) => AllTabs(),
           AttendancePage.routeName: (context) => AttendancePage(),
-          HomePage.routeName: (context) => HomePage(),
+
           StudentRecords.routeName: (context) => StudentRecords(),
           AnnouncementForm.routeName: (context) => AnnouncementForm(),
           StudentProvider.routeName: (context) => StudentProvider(),

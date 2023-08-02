@@ -30,6 +30,10 @@ class InstProvider with ChangeNotifier {
 
   String? get instID => _instID;
 
+  Future<String?> getId() {
+    return Future.value(_instID);
+  }
+
   void setID(String instID) {
     _instID = instID;
     notifyListeners();

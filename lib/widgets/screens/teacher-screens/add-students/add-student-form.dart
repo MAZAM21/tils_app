@@ -278,11 +278,11 @@ class _AddStudentState extends State<AddStudent> {
                     ElevatedButton(
                       child: Text('Add students from spreadsheet'),
                       onPressed: () async {
-                        setState(() {
-                          Permission.accessMediaLocation.request();
-                        });
+                        Permission.storage.request();
+                        Permission.manageExternalStorage.request();
+
                         PermissionStatus status =
-                            await Permission.accessMediaLocation.status;
+                            await Permission.storage.status;
                         print(status);
                         if (status.isGranted) {
                           FilePickerResult? result = await FilePicker.platform
@@ -291,7 +291,7 @@ class _AddStudentState extends State<AddStudent> {
                             var file = result.paths.first!;
                             var bytes = File(file).readAsBytesSync();
                             var excel = Excel.decodeBytes(bytes);
-                            us.uploadTeacherToDB(
+                            us.uploadStudentToDB(
                                 excel, db, instData.inst_subjects);
                           }
                         }

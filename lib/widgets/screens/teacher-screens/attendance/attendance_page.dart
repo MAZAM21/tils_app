@@ -9,7 +9,6 @@ import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/attendance/attendance-marker-builder.dart';
 
-
 class AttendancePage extends StatelessWidget {
   static const routeName = '/attpage';
   // final List<SubjectClass> allClassesAdded;
@@ -33,7 +32,7 @@ class AttendancePage extends StatelessWidget {
     return !isActive
         ? LoadingScreen()
         : Scaffold(
-          appBar: AppBar(),
+            appBar: AppBar(),
             body: ListView.builder(
               itemCount: myClasses.length,
               itemBuilder: (ctx, i) {
@@ -45,8 +44,8 @@ class AttendancePage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline4,
                       )
                     : Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: ListTile(
                           tileColor: Colors.white,
                           title: myClasses[i].topic == ''
                               ? Text(
@@ -88,9 +87,10 @@ class AttendancePage extends StatelessWidget {
                               AttendanceMarkerBuilder.routeName,
                               arguments: myClasses[i],
                             );
+                            print(myClasses[i].subjectName);
                           },
                         ),
-                    );
+                      );
               },
             ),
           );

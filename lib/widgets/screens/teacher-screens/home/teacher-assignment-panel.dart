@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tils_app/models/assignment-marks.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
@@ -14,11 +15,13 @@ class TeacherAssignmentPanel extends StatelessWidget {
   TeacherAssignmentPanel({
     Key? key,
     required this.teacherData,
+    required this.instData,
   }) : super(key: key);
 
   final ts = TeacherService();
 
   final TeacherUser? teacherData;
+  final InstituteData instData;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +127,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                   builder: (BuildContext context) =>
                       ChangeNotifierProvider.value(
                     value: teacherData,
-                    child: ManageStudents(),
+                    child: ManageStudents(instData.ranking_yearSub),
                   ),
                 ),
               );

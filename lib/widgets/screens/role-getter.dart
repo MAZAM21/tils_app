@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:tils_app/models/role.dart';
 
 import 'package:provider/provider.dart';
@@ -50,13 +51,37 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 // //         : AuthScreen();
 // //   }
 // // }
-class RoleGetter extends StatelessWidget {
+class RoleGetter extends StatefulWidget {
+  @override
+  State<RoleGetter> createState() => _RoleGetterState();
+}
+
+class _RoleGetterState extends State<RoleGetter> {
+  void initState() {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (mounted) {
+    //     final roleProv = Provider.of<Role?>(context, listen: false);
+    //     print(
+    //         'teacherdatastream instprovider called instID:${roleProv!.instID}');
+    //     //if (!dbActive) {
+    //     Provider.of<InstProvider>(context, listen: false)
+    //         .setID();
+    //     //dbActive = true;
+    //     //}
+    //   }
+    // });
+    super.initState();
+  }
+
   final genDB = GeneralDatabase();
+
   @override
   Widget build(BuildContext context) {
     print('rolegetter called');
     bool isLoggedIn = false;
-    final authState = FirebaseAuth.instance.currentUser;
+    final authState = Provider.of<User?>(context);
+    ;
+    // FirebaseAuth.instance.signOut();
     // print("authstate ${authState!.email} ${authState.uid}");
 
     if (authState != null) {
@@ -71,10 +96,9 @@ class RoleGetter extends StatelessWidget {
               bool isActive = false;
               final roleProv = Provider.of<Role?>(context);
               if (roleProv != null) {
-                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                //   Provider.of<InstProvider>(context, listen: false)
-                //       .setID(roleProv!.instID);
-                // });
+                // Provider.of<InstProvider>(context, listen: false)
+                //     .setID(roleProv!.instID);
+
                 print('roleprov not null: ${roleProv.role}');
                 isActive = true;
               }
