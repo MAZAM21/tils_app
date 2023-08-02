@@ -123,8 +123,6 @@ class RankingService {
     print('year in ranking service: $year');
     studlist.forEach((stud) {
       if (stud.year == year) {
-        print(stud.year);
-        print(stud.name);
         yearList.add(stud);
       }
     });

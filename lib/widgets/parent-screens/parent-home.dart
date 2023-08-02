@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
@@ -39,8 +40,8 @@ class _ParentHomeState extends State<ParentHome> {
   @override
   @override
   Widget build(BuildContext context) {
-    final db = Provider.of<DatabaseService>(context, listen: false);
-    final parentData = Provider.of<ParentUser>(context);
+    final instData = Provider.of<InstituteData?>(context);
+    final parentData = Provider.of<ParentUser?>(context);
     final allClasses = Provider.of<List<SubjectClass>>(context);
     final allStudRanks = Provider.of<List<StudentRank>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
@@ -54,6 +55,7 @@ class _ParentHomeState extends State<ParentHome> {
     // If all lists are null, I need to
     if (allStudRanks != null &&
         raList != null &&
+        instData != null &&
         allClasses != null &&
         parentData != null) {
       //marked = ps.getMarkedClasses(allClasses, parentData.attendance);
@@ -89,7 +91,7 @@ class _ParentHomeState extends State<ParentHome> {
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      ParentHomeAvatarPanel(parentData: parentData),
+                      ParentHomeAvatarPanel(parentData: parentData!),
                       SizedBox(
                         height: 10,
                       ),

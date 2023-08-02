@@ -11,6 +11,8 @@ import 'package:tils_app/widgets/screens/loading-screen.dart';
 // This needs to be the page where the students with the top score are displayed
 class StudentRankingDisplay extends StatefulWidget {
   static const routeName = '/rankingDiplay';
+  final Map<String, dynamic> yearSubfromDb;
+  StudentRankingDisplay(this.yearSubfromDb);
 
   @override
   _StudentRankingDisplayState createState() => _StudentRankingDisplayState();
@@ -21,11 +23,11 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
   String? _filter;
   String? _yearFilter;
   String? _subYearFilter;
-  Map<String, List<String>> yearSub = {
-    '1': ['Contract', 'LSM', 'Criminal', 'Public'],
-    '2': ['Tort', 'Property', 'HR', 'EU'],
-    '3': ['Jurisprudence', 'Trust', 'Company', 'Conflict', 'Islamic']
-  };
+  // Map<String, List<String>> yearSub = {
+  //   '1': ['Contract', 'LSM', 'Criminal', 'Public'],
+  //   '2': ['Tort', 'Property', 'HR', 'EU'],
+  //   '3': ['Jurisprudence', 'Trust', 'Company', 'Conflict', 'Islamic']
+  // };
   String? _subjectFilter;
 
   @override
@@ -234,12 +236,14 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                 child: Row(
                                   children: <Widget>[
                                     for (var x = 0;
-                                        x < yearSub['$_subYearFilter']!.length;
+                                        x < widget.yearSubfromDb.keys.length;
                                         x++)
                                       _filterButtonSubject(
-                                          text: yearSub['$_subYearFilter']![x],
-                                          filterText: yearSub['$_subYearFilter']!
-                                              [x]),
+                                        text: widget.yearSubfromDb.keys
+                                            .toList()[x],
+                                        filterText: widget.yearSubfromDb.keys
+                                            .toList()[x],
+                                      ),
                                   ],
                                 ),
                               )
@@ -342,7 +346,7 @@ class _StudentRankingDisplayState extends State<StudentRankingDisplay> {
                                               fontWeight: FontWeight.w700,
                                               color: Color(0xffD6200F)),
                                         ),
-                                       if (students[i].id == studentUser.uid &&
+                                      if (students[i].id == studentUser.uid &&
                                           _filter == 'Assignments')
                                         Text(
                                           '${students[i].assignmentScore!.toInt()}',

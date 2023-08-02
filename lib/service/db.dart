@@ -280,7 +280,7 @@ class DatabaseService with ChangeNotifier {
       }
       throw Exception();
     } else {
-      throw Exception('in getinstitutedata error');
+      throw Exception('in getinstitutedata genDB');
     }
   }
 
@@ -1013,8 +1013,7 @@ class DatabaseService with ChangeNotifier {
     /// 2. first then(): create doc in user collection for parent with the role parent
     /// 3. second then(): add the parent uid to students doc.
 
-    CollectionReference userRef =
-        _db.collection('institutes').doc(instID).collection('users');
+    CollectionReference userRef = _db.collection('users');
     DocumentReference studRef = _db
         .collection('institutes')
         .doc(instID)
@@ -1025,6 +1024,7 @@ class DatabaseService with ChangeNotifier {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((UserCredential credential) {
         userRef.doc(credential.user!.uid).set({
+          'instID': instID,
           'role': 'parent',
           'email': email,
           'password': password,
@@ -1175,6 +1175,27 @@ class DatabaseService with ChangeNotifier {
       }, SetOptions(merge: true));
     } catch (err) {
       print('error in adding edited class: $err');
+    }
+  }
+
+  Future<void> addProfileURL(String url, String uid) async {
+    print(uid);
+    DocumentReference userRef = _db.collection('users').doc(uid);
+    QuerySnapshot stuQuery = await _db
+        .collection('institutes')
+        .doc(instID)
+        .collection('students')
+        .where('uid', isEqualTo: uid)
+        .limit(1)
+        .get();
+    try {
+      await userRef.set({'profile-pic-url': url}, SetOptions(merge: true));
+      await stuQuery.docs.first.reference.set(
+        {'profile-pic-url': url},
+        SetOptions(merge: true),
+      );
+    } catch (err) {
+      print('error in addProfileURL: $err');
     }
   }
 

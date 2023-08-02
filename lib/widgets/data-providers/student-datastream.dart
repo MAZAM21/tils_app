@@ -5,6 +5,7 @@ import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student-user-data.dart';
 
 import 'package:tils_app/service/genDb.dart';
+import 'package:tils_app/widgets/data-providers/student_db_datastream.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/student-screens/student-tabs.dart';
 
@@ -46,7 +47,7 @@ class _StudentDataStreamState extends State<StudentDataStream> {
         : StreamProvider<StudentUser?>(
             initialData: null,
             create: (context) => genDb.streamStudentUser(uid, inst),
-            builder: (context, _) => AllStudentTabs(),
+            builder: (context, _) => StudentDBDatastream(),
           );
   }
 }

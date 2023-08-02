@@ -160,7 +160,8 @@ class _StudentCalendarState extends State<StudentCalendar> {
 
     /// Changing this to student user (from teachers CalendarApp)
     final studentData = Provider.of<StudentUser>(context);
-    final myClasses = ss.getMyClassesForTT(meetingsData, studentData.subjects);
+    final myClasses = ss.getMyClassesForTT(
+        meetingsData, studentData.subjects, studentData.section);
     var source = myClasses;
     return Scaffold(
       appBar: AppBar(

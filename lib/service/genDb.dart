@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/instititutemd.dart';
+import 'package:tils_app/models/parent-user-data.dart';
 import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
@@ -34,9 +35,17 @@ class GeneralDatabase with ChangeNotifier {
             as QueryDocumentSnapshot<Map<String, dynamic>>));
   }
 
+  Stream<ParentUser> streamParentUser(String? uid, String? instID) {
+    CollectionReference ref =
+        _db.collection('institutes').doc(instID).collection('students');
+    return ref.snapshots().map((list) => ParentUser.fromFirestore(
+        list.docs.firstWhere((doc) => doc['parent-uid'] == uid)
+            as QueryDocumentSnapshot<Map<String, dynamic>>));
+  }
+
   Stream<StudentUser> streamStudentUser(String? uid, String? instID) {
     CollectionReference ref =
-        _db.collection('institutes').doc(instID).collection('teachers');
+        _db.collection('institutes').doc(instID).collection('students');
     return ref.snapshots().map((list) => StudentUser.fromFirestore(
         list.docs.firstWhere((doc) => doc['uid'] == uid)
             as QueryDocumentSnapshot<Map<String, dynamic>>));

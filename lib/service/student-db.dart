@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 import '../models/student.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,21 +35,4 @@ class StudentDB with ChangeNotifier {
 
   //adds profile picture download url to users collection
   //the reason for not adding to student's collection is because the uid referst to the document name in users and because we need it globally.
-  Future<void> addProfileURL(String url, String uid) async {
-    DocumentReference userRef = _db.collection('users').doc('$uid');
-    QuerySnapshot stuQuery = await _db
-        .collection('students')
-        .where('uid', isEqualTo: uid)
-        .limit(1)
-        .get();
-    try {
-      await userRef.set({'profile-pic-url': url}, SetOptions(merge: true));
-      await stuQuery.docs.first.reference.set(
-        {'profile-pic-url': url},
-        SetOptions(merge: true),
-      );
-    } catch (err) {
-      print('error in addProfileURL');
-    }
-  }
 }

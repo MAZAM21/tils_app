@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/metrics.dart';
+import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student-user-data.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/service/db.dart';
@@ -36,44 +38,47 @@ class _StudentHomeState extends State<StudentHome> {
   @override
   void initState() {
     super.initState();
-    final studDatainit = Provider.of<StudentUser>(context, listen: false);
-    final db = Provider.of<DatabaseService>(context, listen: false);
+    final instProvider = Provider.of<InstProvider>(context, listen: false);
+    if (instProvider.instID != null) {
+      final studDatainit = Provider.of<StudentUser?>(context, listen: false);
+      final db = Provider.of<DatabaseService>(context, listen: false);
 
-    ///this is for foreground notifications supposedly
+      ///this is for foreground notifications supposedly
 
-    var initialzationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettings =
-        InitializationSettings(android: initialzationSettingsAndroid);
+      var initialzationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/ic_launcher');
+      var initializationSettings =
+          InitializationSettings(android: initialzationSettingsAndroid);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if (notification != null && android != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('${notification.title}'),
-        ));
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                icon: android?.smallIcon,
-              ),
-            ));
+      flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+        if (notification != null && android != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('${notification.title}'),
+          ));
+          flutterLocalNotificationsPlugin.show(
+              notification.hashCode,
+              notification.title,
+              notification.body,
+              NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  icon: android?.smallIcon,
+                ),
+              ));
+        }
+      });
+      if (studDatainit != null) {
+        for (var i = 0; i < studDatainit.subjects.length; i++) {
+          print('${studDatainit.subjects[i]}');
+          FirebaseMessaging.instance
+              .subscribeToTopic('${studDatainit.subjects[i]}');
+        }
+        getToken(studDatainit.uid, db);
       }
-    });
-    if (studDatainit != null) {
-      for (var i = 0; i < studDatainit.subjects.length; i++) {
-        print('${studDatainit.subjects[i]}');
-        FirebaseMessaging.instance
-            .subscribeToTopic('${studDatainit.subjects[i]}');
-      }
-      getToken(studDatainit.uid, db);
     }
     // getTopics();
   }
@@ -89,10 +94,11 @@ class _StudentHomeState extends State<StudentHome> {
 
   @override
   Widget build(BuildContext context) {
-    final studData = Provider.of<StudentUser>(context, listen: true);
+    final studData = Provider.of<StudentUser?>(context, listen: true);
     final allClasses = Provider.of<List<SubjectClass>>(context);
     final meetingsList = Provider.of<List<Meeting>>(context);
-    final metrics = Provider.of<List<StudentMetrics>>(context);
+    //final metrics = Provider.of<List<StudentMetrics>>(context);
+    final instData = Provider.of<InstituteData?>(context);
 
     int estimateTs = 0;
     int endTime = 0;
@@ -101,7 +107,10 @@ class _StudentHomeState extends State<StudentHome> {
     bool mActive = false;
     List<SubjectClass> myClasses = [];
 
-    if (studData != null && allClasses != null && meetingsList != null) {
+    if (studData != null &&
+        allClasses != null &&
+        meetingsList != null &&
+        instData != null) {
       myClasses =
           ss.getMyClasses(allClasses, studData.subjects, studData.section);
       final myMeets = ss.getMyClassesforTimer(
@@ -113,9 +122,9 @@ class _StudentHomeState extends State<StudentHome> {
       }
       isActive = true;
     }
-    if (metrics != null) {
-      mActive = true;
-    }
+    // if (metrics != null) {
+    //   mActive = true;
+    // }
 
     return !isActive
         ? LoadingScreen()
@@ -135,22 +144,28 @@ class _StudentHomeState extends State<StudentHome> {
                         SizedBox(
                           height: 10,
                         ),
-                        StudentAvatarPanel(studData: studData),
+                        StudentAvatarPanel(studData: studData!),
                         SizedBox(
                           height: 25,
                         ),
-                        if (mActive && isActive)
-                          //MetricDisplay(metrics: metrics, studData: studData),
+                        // if (mActive && isActive)
+                        //   //MetricDisplay(metrics: metrics, studData: studData),
 
-                          ///Class timer panel widget is same as for teachers
-                          ///stored in teachers HP
-                          ///just passed different postional argument object student user
-                          StudentClassTimerPanel(
-                            estimateTs,
-                            endTime,
-                            nextClass,
-                            studData,
-                          ),
+                        //   ///Class timer panel widget is same as for teachers
+                        //   ///stored in teachers HP
+                        //   ///just passed different postional argument object student user
+                        //   StudentClassTimerPanel(
+                        //     estimateTs,
+                        //     endTime,
+                        //     nextClass,
+                        //     studData,
+                        //   ),
+                        StudentClassTimerPanel(
+                          estimateTs,
+                          endTime,
+                          nextClass,
+                          studData,
+                        ),
                         SizedBox(
                           height: 14,
                         ),

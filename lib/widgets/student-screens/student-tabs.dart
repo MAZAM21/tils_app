@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/widgets/student-screens/rankings/student-ranking-display.dart';
 
 import 'package:tils_app/widgets/student-screens/student-drawer.dart';
 import 'package:tils_app/widgets/student-screens/student-newsfeed/student-newsfeed.dart';
-
+import 'package:provider/provider.dart';
 import './student_home/student_home.dart';
 
 class ColoredTabBar extends Container implements PreferredSizeWidget {
@@ -33,6 +34,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
 
   @override
   Widget build(BuildContext context) {
+    final instData = Provider.of<InstituteData?>(context);
     return DefaultTabController(
       length: 3,
       initialIndex: 1,
@@ -40,8 +42,13 @@ class _AllStudentTabsState extends State<AllStudentTabs>
         drawer: StudentDrawer(),
         appBar: AppBar(
           title: Text(
-            'BLS Student\'s Portal',
-            style: Theme.of(context).textTheme.headline6,
+            '${instData!.name} Student\'s Portal',
+            style: TextStyle(
+              color: Color.fromARGB(255, 76, 76, 76),
+              fontFamily: 'Proxima Nova',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
             textAlign: TextAlign.justify,
           ),
           bottom: PreferredSize(
@@ -70,7 +77,7 @@ class _AllStudentTabsState extends State<AllStudentTabs>
         body: TabBarView(children: <Widget>[
           StudentNewsFeed(),
           StudentHome(),
-          StudentRankingDisplay(),
+          StudentRankingDisplay(instData.ranking_yearSub),
         ]),
       ),
     );

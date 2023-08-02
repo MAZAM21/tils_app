@@ -20,7 +20,6 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
   String? id;
   bool _isInit = true;
   bool _isEdit = false;
-  String? category;
 
   @override
   void didChangeDependencies() {
@@ -31,7 +30,7 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
         vals['title'] = routeArgs.title;
         vals['body'] = routeArgs.body;
         id = routeArgs.id;
-        category = routeArgs.category;
+
         _isEdit = true;
       }
       _isInit = false;
@@ -40,13 +39,18 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
     super.didChangeDependencies();
   }
 
-  void _saveState(String? title, String? body, String uid, String? cat, db) {
+  void _saveState(String? title, String? body, String uid, db) {
     bool isValid = _formKey.currentState!.validate();
     if (isValid) {
       if (!_isEdit) {
-        db.addAnnouncementToCF(title, body, uid, DateTime.now(), cat);
+        db.addAnnouncementToCF(
+          title,
+          body,
+          uid,
+          DateTime.now(),
+        );
         _formKey.currentState!.reset();
-        category = null;
+
         Navigator.pop(context);
       }
       if (_isEdit) {
@@ -55,7 +59,6 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
           title,
           body,
           uid,
-          category,
         );
 
         Navigator.pop(context);
@@ -79,17 +82,8 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
               child: Icon(Icons.save),
               onPressed: () {
                 _formKey.currentState!.save();
-                if (category != null) {
-                  _saveState(vals['title'], vals['body'], id, category, db);
-                } else {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext ctx) {
-                        return AlertDialog(
-                          title: Text('Please Select Category'),
-                        );
-                      });
-                }
+
+                _saveState(vals['title'], vals['body'], id, db);
               },
             ),
             appBar: AppBar(
@@ -161,37 +155,37 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                           SizedBox(
                             height: 20,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: category == 'uol'
-                                          ? MaterialStateProperty.all(
-                                              Colors.blue)
-                                          : MaterialStateProperty.all(
-                                              Color.fromARGB(255, 76, 76, 76))),
-                                  onPressed: () {
-                                    setState(() {
-                                      category = 'uol';
-                                    });
-                                  },
-                                  child: Text('UoL')),
-                              ElevatedButton(
-                                  style: ButtonStyle(
-                                      backgroundColor: category == 'bls'
-                                          ? MaterialStateProperty.all(
-                                              Colors.blue)
-                                          : MaterialStateProperty.all(
-                                              Color.fromARGB(255, 76, 76, 76))),
-                                  onPressed: () {
-                                    setState(() {
-                                      category = 'bls';
-                                    });
-                                  },
-                                  child: Text('BLS'))
-                            ],
-                          )
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          //   children: <Widget>[
+                          //     ElevatedButton(
+                          //         style: ButtonStyle(
+                          //             backgroundColor: category == 'uol'
+                          //                 ? MaterialStateProperty.all(
+                          //                     Colors.blue)
+                          //                 : MaterialStateProperty.all(
+                          //                     Color.fromARGB(255, 76, 76, 76))),
+                          //         onPressed: () {
+                          //           setState(() {
+                          //             category = 'uol';
+                          //           });
+                          //         },
+                          //         child: Text('UoL')),
+                          //     ElevatedButton(
+                          //         style: ButtonStyle(
+                          //             backgroundColor: category == 'bls'
+                          //                 ? MaterialStateProperty.all(
+                          //                     Colors.blue)
+                          //                 : MaterialStateProperty.all(
+                          //                     Color.fromARGB(255, 76, 76, 76))),
+                          //         onPressed: () {
+                          //           setState(() {
+                          //             category = 'bls';
+                          //           });
+                          //         },
+                          //         child: Text('BLS'))
+                          //   ],
+                          // )
                         ],
                       ),
                     ),

@@ -190,10 +190,11 @@ class StudentService {
   List<Meeting> getMyClassesForTT(
     List<Meeting> allClasses,
     List subs,
+    String section,
   ) {
     List<Meeting> myClasses = [];
     allClasses.forEach((cls) {
-      if (subs.contains(cls.eventName)) {
+      if (subs.contains(cls.eventName) && section == cls.section) {
         myClasses.add(cls);
       }
     });
@@ -247,7 +248,6 @@ class StudentService {
     //tl is total length of assessment q maps
     int tl = ra.allMCQs!.length + ra.allTextQs!.length;
     if (index < ra.allMCQs!.length) {
-      
       return ra.allMCQs![index].answerChoices;
     }
     if (index >= tl) {

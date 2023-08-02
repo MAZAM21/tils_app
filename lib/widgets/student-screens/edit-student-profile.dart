@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/student-user-data.dart';
+import 'package:tils_app/service/db.dart';
 import 'package:tils_app/service/student-db.dart';
 
 class EditStudentProfile extends StatefulWidget {
@@ -20,12 +21,10 @@ class _EditStudentProfileState extends State<EditStudentProfile> {
   File? _pickedImageFile;
   final studentDB = StudentDB();
 
-  void _pickImage(String uid) async {
-    final pickedImage = await (_picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-        maxWidth: 120) as Future<XFile>);
-    final File fImage = File(pickedImage.path);
+  void _pickImage(String uid, DatabaseService db) async {
+    final XFile? pickedImage = await (_picker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50, maxWidth: 120));
+    final File fImage = File(pickedImage!.path);
     setState(() {
       _pickedImageFile = fImage;
     });
@@ -35,7 +34,7 @@ class _EditStudentProfileState extends State<EditStudentProfile> {
 
     final url = await ref.child(uid + '.jpg').getDownloadURL();
     if (url != null) {
-      await studentDB.addProfileURL(url, uid);
+      await db.addProfileURL(url, uid);
     }
   }
 
@@ -43,6 +42,7 @@ class _EditStudentProfileState extends State<EditStudentProfile> {
   Widget build(BuildContext context) {
     final uid = Provider.of<User>(context).uid;
     final studentUser = Provider.of<StudentUser>(context);
+    final db = Provider.of<DatabaseService>(context);
     print('url=' + '${studentUser.imageURL}');
     return Scaffold(
       appBar: AppBar(),
@@ -53,17 +53,17 @@ class _EditStudentProfileState extends State<EditStudentProfile> {
             children: <Widget>[
               Column(
                 children: <Widget>[
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundImage: (_pickedImageFile != null
-                        ? FileImage(_pickedImageFile!)
-                        : studentUser.imageURL != null
-                            ? NetworkImage(studentUser.imageURL!)
-                            : null) as ImageProvider<Object>?,
-                  ),
+                  // CircleAvatar(
+                  //   radius: 60,
+                  //   backgroundImage: (_pickedImageFile != null
+                  //       ? FileImage(_pickedImageFile!)
+                  //       : studentUser.imageURL != null
+                  //           ? NetworkImage(studentUser.imageURL!)
+                  //           : Icon(Icons.person)) as ImageProvider<Object>?,
+                  // ),
                   TextButton(
                     onPressed: () {
-                      _pickImage(uid);
+                      _pickImage(uid, db);
                     },
                     child: Text('Edit Profile Picture'),
                   )
