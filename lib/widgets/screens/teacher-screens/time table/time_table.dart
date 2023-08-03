@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:tils_app/models/instititutemd.dart';
 
 import 'package:tils_app/models/meeting.dart';
 
@@ -54,11 +55,11 @@ class _CalendarAppState extends State<CalendarApp> {
 
   bool myClass = true;
 
-  void calendarTapped(
-      CalendarTapDetails calendarTapDetails, List<StudentRank> students, db) {
+  void calendarTapped(CalendarTapDetails calendarTapDetails,
+      List<StudentRank> students, db, InstituteData instData) {
     dynamic appointments = calendarTapDetails.appointments;
     if (appointments != null) {
-      showElementDetails(appointments[0], students, db);
+      showElementDetails(appointments[0], students, db, instData);
     }
     if (_controller!.view == CalendarView.month &&
         calendarTapDetails.targetElement == CalendarElement.calendarCell) {
@@ -76,11 +77,15 @@ class _CalendarAppState extends State<CalendarApp> {
     }
   }
 
-  void onTapCalendar(Meeting tappedClass) {
-    Navigator.pushNamed(context, EditTTForm.routeName, arguments: tappedClass);
+  void onTapCalendar(Meeting tappedClass, InstituteData instData) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => EditTTForm(instData, tappedClass)));
   }
 
-  void showElementDetails(Meeting selected, List<StudentRank> students, db) {
+  void showElementDetails(Meeting selected, List<StudentRank> students, db,
+      InstituteData instData) {
     showModalBottomSheet(
       backgroundColor: selected.background,
       context: context,
@@ -92,7 +97,7 @@ class _CalendarAppState extends State<CalendarApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Subject: ${selected.eventName}',
+                '${selected.section} ${selected.eventName}',
                 style: TextStyle(
                   color: Color.fromARGB(255, 250, 235, 215),
                   fontFamily: 'Proxima Nova',
@@ -135,7 +140,7 @@ class _CalendarAppState extends State<CalendarApp> {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  onTapCalendar(selected);
+                  onTapCalendar(selected, instData);
                 },
               ),
               ElevatedButton(
@@ -161,6 +166,9 @@ class _CalendarAppState extends State<CalendarApp> {
     final teacherData = Provider.of<TeacherUser>(context);
     final students = Provider.of<List<StudentRank>>(context);
     final db = Provider.of<DatabaseService>(context, listen: false);
+    final instData = Provider.of<InstituteData?>(
+      context,
+    );
     final myClasses = ts.getMyClasses(meetingsData, teacherData.subjects);
     var source = myClasses;
     return Scaffold(
@@ -245,7 +253,7 @@ class _CalendarAppState extends State<CalendarApp> {
         onTap: (CalendarTapDetails details) {
           DateTime? date = details.date;
           print(date.toString());
-          calendarTapped(details, students, db);
+          calendarTapped(details, students, db, instData!);
         },
         initialDisplayDate: _jumpToTime,
         //maxDate: DateTime.now().add(Duration(days: 7)),

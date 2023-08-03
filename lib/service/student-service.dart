@@ -154,6 +154,7 @@ class StudentService {
         null,
         false,
         'no class',
+        'no class',
         null,
       ),
     );

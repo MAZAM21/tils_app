@@ -38,6 +38,7 @@ class TeacherUser with ChangeNotifier {
       subs.forEach((k, v) {
         if (v == true) {
           tsubs.add(k);
+          print('in teacher user constructor: $k');
         }
       });
       return TeacherUser(

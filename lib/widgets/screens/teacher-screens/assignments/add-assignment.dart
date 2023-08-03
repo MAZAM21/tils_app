@@ -56,11 +56,14 @@ class _AddAssignmentState extends State<AddAssignment> {
             minimumSize: MaterialStateProperty.all(Size.fromHeight(50)),
             backgroundColor: subject == sub
                 ? MaterialStateProperty.all(Colors.red)
-                : MaterialStateProperty.all(col),
-            textStyle: MaterialStateProperty.all(
-                Theme.of(context).textTheme.headline6),
+                : MaterialStateProperty.all(Colors.white),
           ),
-          child: Text(sub),
+          child: Text(
+            sub,
+            style: TextStyle(
+                color: subject == sub ? Colors.white : Colors.black,
+                fontSize: 16),
+          ),
         ),
       ),
     );
@@ -141,7 +144,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                       height: 8,
                     ),
                     Divider(
-                      thickness: 4,
+                      thickness: 1,
                     ),
 
                     //total marks input
@@ -150,56 +153,59 @@ class _AddAssignmentState extends State<AddAssignment> {
                       height: 15,
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        ClipRRect(
-                            child: Container(
-                          child: Row(
-                            children: <Widget>[
-                              Text(
-                                'Total Marks',
-                                style: TextStyle(
-                                  fontFamily: 'Proxima Nova',
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color.fromARGB(255, 76, 76, 76),
+                    Container(
+                      height: 200,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          ClipRRect(
+                              child: Container(
+                            child: Row(
+                              children: <Widget>[
+                                Text(
+                                  'Total Marks',
+                                  style: TextStyle(
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color.fromARGB(255, 76, 76, 76),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              NumberPicker(
-                                itemHeight: 30,
-                                textStyle: TextStyle(
-                                    color: Color(0xff161616),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Proxima Nova'),
-                                selectedTextStyle: TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xffC54134),
-                                    fontWeight: FontWeight.w800,
-                                    fontFamily: 'Proxima Nova'),
-                                minValue: 0,
-                                maxValue: 100,
-                                value: assignmentMarks.totalMarks ?? 0,
-                                onChanged: (int val) {
-                                  setState(() {
-                                    assignmentMarks.totalMarks = val;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ))
-                      ],
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                NumberPicker(
+                                  itemHeight: 30,
+                                  textStyle: TextStyle(
+                                      color: Color(0xff161616),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Proxima Nova'),
+                                  selectedTextStyle: TextStyle(
+                                      fontSize: 18,
+                                      color: Color(0xffC54134),
+                                      fontWeight: FontWeight.w800,
+                                      fontFamily: 'Proxima Nova'),
+                                  minValue: 0,
+                                  maxValue: 100,
+                                  value: assignmentMarks.totalMarks ?? 0,
+                                  onChanged: (int val) {
+                                    setState(() {
+                                      assignmentMarks.totalMarks = val;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ))
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Divider(
-                      thickness: 4,
+                      thickness: 1,
                     ),
                     SizedBox(
                       height: 8,
@@ -228,7 +234,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                       height: 10,
                     ),
                     Divider(
-                      thickness: 4,
+                      thickness: 1,
                     ),
                     SizedBox(
                       height: 20,

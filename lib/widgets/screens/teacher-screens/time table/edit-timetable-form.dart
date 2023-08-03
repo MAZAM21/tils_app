@@ -12,7 +12,8 @@ import 'package:tils_app/service/db.dart';
 class EditTTForm extends StatefulWidget {
   static const routeName = '/edit-tt-form';
   final InstituteData? instData;
-  EditTTForm(this.instData);
+  final Meeting? editClass;
+  EditTTForm(this.instData, [this.editClass]);
 
   @override
   _EditTTFormState createState() => _EditTTFormState();
@@ -40,8 +41,12 @@ class _EditTTFormState extends State<EditTTForm> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final editClass = ModalRoute.of(context)!.settings.arguments as Meeting?;
+      final editClass = widget.editClass;
+      final instData = widget.instData;
+
+      print('in edit tt ${instData!.year_subjects}');
       if (editClass != null) {
+        year_subjects = instData!.year_subjects;
         _section = editClass.section;
         _topic = editClass.topic ?? '';
         _startDate = editClass.from;
@@ -50,6 +55,8 @@ class _EditTTFormState extends State<EditTTForm> {
         _selectedSub = editClass.eventName;
         _isEdit = true;
         _editedId = editClass.docId;
+
+        _year = editClass.year;
       }
       //if a route argument is passed to this then it copies the passed values to the local variables and executes findMeetingIndex to get the index of the edited element.
     }
@@ -308,6 +315,7 @@ class _EditTTFormState extends State<EditTTForm> {
           _startTime!,
           _endTime!,
           _section,
+          _year,
           _topic,
           isExam,
         );
@@ -328,6 +336,7 @@ class _EditTTFormState extends State<EditTTForm> {
           _startTime!,
           _endTime!,
           _section,
+          _year,
           _topic,
         );
       }

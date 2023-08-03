@@ -89,22 +89,10 @@ class StudentRank with ChangeNotifier {
       String? pToken;
 
       String? getYearofSub(String sub) {
-        if (sub == 'Jurisprudence' ||
-            sub == 'Conflict' ||
-            sub == 'Trust' ||
-            sub == 'Company' ||
-            sub == 'Islamic') {
-          return '3';
-        } else if (sub == 'Tort' ||
-            sub == 'Property' ||
-            sub == 'EU' ||
-            sub == 'HR') {
-          return '2';
-        } else if (sub == 'Contract' ||
-            sub == 'Criminal' ||
-            sub == 'Public' ||
-            sub == 'LSM') {
-          return '1';
+        if (sub.endsWith('1')) {
+          return '1st';
+        } else if (sub.endsWith('2')) {
+          return '2nd';
         } else {
           return null;
         }

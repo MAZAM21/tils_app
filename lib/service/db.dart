@@ -445,7 +445,8 @@ class DatabaseService with ChangeNotifier {
     String? name,
     DateTime start,
     DateTime end,
-    String? section, [
+    String? section,
+    String? year, [
     String? topic,
     bool? exam,
   ]) async {
@@ -475,6 +476,7 @@ class DatabaseService with ChangeNotifier {
             'topic': topic ?? 'none',
             'section': section,
             'notification': notification,
+            'year': year,
           });
         }
       } catch (err) {
@@ -1158,7 +1160,8 @@ class DatabaseService with ChangeNotifier {
     String name,
     DateTime start,
     DateTime end,
-    String? section, [
+    String? section,
+    String? year, [
     String? topic,
   ]) async {
     final _classCollection =

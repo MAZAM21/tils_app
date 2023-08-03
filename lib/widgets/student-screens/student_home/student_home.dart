@@ -72,11 +72,11 @@ class _StudentHomeState extends State<StudentHome> {
         }
       });
       if (studDatainit != null) {
-        for (var i = 0; i < studDatainit.subjects.length; i++) {
-          print('${studDatainit.subjects[i]}');
-          FirebaseMessaging.instance
-              .subscribeToTopic('${studDatainit.subjects[i]}');
-        }
+        // for (var i = 0; i < studDatainit.subjects.length; i++) {
+        //   print('${studDatainit.subjects[i]}');
+        //   FirebaseMessaging.instance
+        //       .subscribeToTopic('${studDatainit.subjects[i]}');
+        // }
         getToken(studDatainit.uid, db);
       }
     }

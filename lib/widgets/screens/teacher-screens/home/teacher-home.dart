@@ -20,7 +20,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/time%20table/schedule-class.dart';
+// import 'package:tils_app/widgets/screens/teacher-screens/time%20table/schedule-class.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
 import 'package:tils_app/widgets/student-screens/student_home/classes-grid.dart';
@@ -85,11 +85,11 @@ class _HomePageState extends State<HomePage> {
           }
         });
         if (teacherData != null) {
-          for (var i = 0; i < teacherData.subjects.length; i++) {
-            //print('${teacherData.subjects[i]}');
-            FirebaseMessaging.instance
-                .subscribeToTopic('${teacherData.subjects[i]}');
-          }
+          // for (var i = 0; i < teacherData.subjects.length; i++) {
+          //   //print('${teacherData.subjects[i]}');
+          //   FirebaseMessaging.instance
+          //       .subscribeToTopic('${teacherData.subjects[i]}');
+          // }
           getToken(teacherData.docId, db);
         }
       }

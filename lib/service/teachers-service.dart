@@ -161,6 +161,7 @@ class TeacherService with ChangeNotifier {
         null,
         false,
         'no class',
+        'no class',
         null,
       ),
     );
@@ -475,7 +476,7 @@ class TeacherService with ChangeNotifier {
         return Color.fromARGB(255, 201, 125, 96);
         break;
       default:
-        return Colors.black;
+        return Colors.white;
     }
   }
 }

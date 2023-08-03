@@ -11,7 +11,8 @@ class Meeting {
     this.background,
     this.isAllDay,
     this.docId,
-    this.section, [
+    this.section,
+    this.year, [
     this.topic,
   ]);
 
@@ -25,7 +26,8 @@ class Meeting {
         getColor(data['subjectName']) ?? Colors.black,
         false,
         doc.id,
-        data['section'],
+        data['section'] ?? '',
+        data['year'] ?? '',
         data['topic'] ?? '',
       );
     } on Exception catch (e) {
@@ -57,6 +59,8 @@ class Meeting {
 
   /// Section
   String? section;
+
+  String? year;
 }
 
 Color getColor(subjectName) {
