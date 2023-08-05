@@ -1,101 +1,214 @@
-import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:numberpicker/numberpicker.dart';
+import 'package:tils_app/models/instititutemd.dart';
+
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:provider/provider.dart';
+import 'package:tils_app/widgets/button-style.dart';
+import 'package:tils_app/widgets/screens/loading-screen.dart';
 
 class EditStudSubs extends StatefulWidget {
   static const routeName = '/edit-stud-subs';
-  const EditStudSubs(
-    this.stud,
-  );
+  const EditStudSubs(this.stud, this.instData);
 
   final StudentRank stud;
-
+  final InstituteData? instData;
   @override
   State<EditStudSubs> createState() => _EditStudProfileState();
 }
 
 class _EditStudProfileState extends State<EditStudSubs> {
-  List<String> _selectedSubs = [];
-
-  String? _yearVal;
-
+  List _selectedSubs = [];
+  String? _section = '';
+  String? _year = '';
+  Map<String, Map<String, dynamic>> year_subjects = {};
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _year = widget.stud.year;
+    _section = widget.stud.section;
+    year_subjects = widget.instData!.year_subjects;
+    _selectedSubs = widget.stud.subjects!;
+  }
+
   void didChangeDependencies() {
-    widget.stud.subjects!.forEach((sub) {
-      _selectedSubs.add(sub);
-    });
-    _yearVal = widget.stud.year;
+    // widget.stud.subjects!.forEach((sub) {
+    //   _selectedSubs.add(sub);
+    // });
+    _year = widget.stud.year;
 
     super.didChangeDependencies();
   }
 
-  ElevatedButton _buildYearButton(String yearDisplay) {
-    return ElevatedButton(
-      style: ButtonStyle(
-          backgroundColor: _yearVal == yearDisplay
+  Widget buildYearButton(
+    String year,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _section = '';
+
+            _year = year;
+          });
+          print('in buildyear');
+          print('$_year');
+          print('$_section');
+        },
+        child: Text(
+          year,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'Proxima Nova',
+            fontWeight: FontWeight.w600,
+            color: _year == year ? Color(0xffffffff) : Color(0xff161616),
+          ),
+        ),
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size(107, 25)),
+          fixedSize: MaterialStateProperty.all(Size(110, 32)),
+          backgroundColor: _year == year
               ? MaterialStateProperty.all(Color(0xffC54134))
-              : MaterialStateProperty.all(Color(0xffDEE4ED)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-          )),
-      child: Text(
-        yearDisplay,
-        style: TextStyle(
-          fontFamily: 'Proxima Nova',
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: _yearVal == yearDisplay ? Colors.white : Colors.black,
+              : MaterialStateProperty.all(Color(0xfff4f6f9)),
         ),
       ),
-      onPressed: () {
-        setState(() {
-          _yearVal = yearDisplay;
-        });
-      },
     );
   }
 
-  Widget _buildSubButton(String subName) {
-    return ElevatedButton(
-      child: Text(
-        subName == 'Jurisprudence' ? 'Juris' : subName,
-        style: TextStyle(
-          fontSize: 12.5,
-          fontFamily: 'Proxima Nova',
-          fontWeight: FontWeight.w600,
-          color: _selectedSubs.contains(subName)
-              ? Color(0xffffffff)
-              : Color(0xff161616),
+  List<Widget> buildSubjectGrid(sectionSubs) {
+    List<Widget> rows = [];
+    print('sectionSubs: $sectionSubs');
+    final subLength = sectionSubs!.length;
+    print('subLength: $subLength');
+
+    /// The main for loop iterates for every three subjects added
+    /// when the value of i exceeds the subjects, it terminates
+    if (subLength > 0) {
+      for (int i = 0; i < subLength; i += 3) {
+        List<Widget> children = [];
+
+        /// the inner for loop condition iterates to three and checks whether
+        /// the subject length has been reached by adding the main for loop i with
+        /// the inner for loop j and seeing if they are less than subLength
+
+        for (int j = 0; j < 3 && i + j < subLength; j++) {
+          print(i + j);
+          if (_selectedSubs.isNotEmpty &&
+              _selectedSubs.contains(sectionSubs[i + j])) {
+            children.add(RedSubjectButtonMobile(
+                child: '${sectionSubs[i + j]}',
+                onPressed: () {
+                  setState(() {
+                    _selectedSubs[i + j].remove(sectionSubs[i + j]);
+                  });
+                  print('in buildsubject red');
+                  // print('$_year');
+                  // print('$_section');
+                  // print(_selectedSub);
+                }));
+          } else {
+            children.add(WhiteSubjectButtonMobile(
+                child: '${sectionSubs[i + j]}',
+                onPressed: () {
+                  setState(() {
+                    _selectedSubs[i + j] = sectionSubs[i + j];
+                  });
+                  print('in buildsubject white');
+                  print('$_year');
+                  print('$_section');
+                  print(_selectedSubs[i + j]);
+                }));
+          }
+
+          //end of inner for loop
+        }
+
+        rows.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: children,
+        ));
+
+        //end of outer for loop
+      }
+    }
+    return rows;
+  }
+
+  Widget buildSectionButton(String section) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          setState(() {
+            _section = section;
+          });
+          print('in buildSection');
+          print('$_year');
+          print('$_section');
+          //print(_selectedSub);
+        },
+        child: Text(
+          section,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'Proxima Nova',
+            fontWeight: FontWeight.w600,
+            color: _section == section ? Color(0xffffffff) : Color(0xff161616),
+          ),
+        ),
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size(107, 25)),
+          fixedSize: MaterialStateProperty.all(Size(110, 32)),
+          backgroundColor: _section == section
+              ? MaterialStateProperty.all(Color(0xffC54134))
+              : MaterialStateProperty.all(Color(0xfff4f6f9)),
         ),
       ),
-      style: ButtonStyle(
-        backgroundColor: _selectedSubs.contains(subName)
-            ? MaterialStateProperty.all(Color(0xffc54134))
-            : MaterialStateProperty.all(Color(0xfff4f6f9)),
-      ),
-      onPressed: _selectedSubs.contains(subName)
-          ? () {
-              setState(() {
-                _selectedSubs.remove('$subName');
-              });
-            }
-          : () {
-              setState(() {
-                _selectedSubs.add(subName);
-              });
-            },
     );
   }
+
+  // Widget _buildSubButton(String subName) {
+  //   return ElevatedButton(
+  //     child: Text(
+  //       subName == 'Jurisprudence' ? 'Juris' : subName,
+  //       style: TextStyle(
+  //         fontSize: 12.5,
+  //         fontFamily: 'Proxima Nova',
+  //         fontWeight: FontWeight.w600,
+  //         color: _selectedSubs.contains(subName)
+  //             ? Color(0xffffffff)
+  //             : Color(0xff161616),
+  //       ),
+  //     ),
+  //     style: ButtonStyle(
+  //       backgroundColor: _selectedSubs.contains(subName)
+  //           ? MaterialStateProperty.all(Color(0xffc54134))
+  //           : MaterialStateProperty.all(Color(0xfff4f6f9)),
+  //     ),
+  //     onPressed: _selectedSubs.contains(subName)
+  //         ? () {
+  //             setState(() {
+  //               _selectedSubs.remove('$subName');
+  //             });
+  //           }
+  //         : () {
+  //             setState(() {
+  //               _selectedSubs.add(subName);
+  //             });
+  //           },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<DatabaseService>(context, listen: false);
+
+    print(year_subjects);
+    print(_year);
+    print('section: $_section');
+    print('selectedSubs: $_selectedSubs');
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       appBar: AppBar(
@@ -105,65 +218,65 @@ class _EditStudProfileState extends State<EditStudSubs> {
           child: Column(
         children: <Widget>[
           Text(
+            'Year',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: year_subjects.keys
+                .map((year) => buildYearButton(year))
+                .toList(),
+          ),
+          if (_year!.isNotEmpty)
+            Row(
+              children: <Widget>[
+                Text(
+                  'Select Section',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff2A353F),
+                  ),
+                ),
+              ],
+            ),
+          if (_year!.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: year_subjects[_year]!
+                  .keys
+                  .map((section) => buildSectionButton(section))
+                  .toList(),
+            ),
+          Text(
             'Registered Subjects',
             style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(
             height: 20,
           ),
-          Container(
-            height: 280,
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        _buildSubButton('Conflict'),
-                        _buildSubButton('Jurisprudence'),
-                        _buildSubButton('Islamic'),
-                        _buildSubButton('Trust'),
-                        _buildSubButton('Company'),
-                      ],
+          if (_year!.isNotEmpty && _section!.isNotEmpty)
+            Container(
+              height: 280,
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: buildSubjectGrid(
+                              year_subjects[_year]?[_section])),
                     ),
                   ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        _buildSubButton('Tort'),
-                        _buildSubButton('Property'),
-                        _buildSubButton('EU'),
-                        _buildSubButton('HR'),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        _buildSubButton('Contract'),
-                        _buildSubButton('Criminal'),
-                        _buildSubButton('Public'),
-                        _buildSubButton('LSM'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
           ElevatedButton(
             onPressed: () {
               setState(() {
@@ -195,28 +308,13 @@ class _EditStudProfileState extends State<EditStudSubs> {
           SizedBox(
             height: 20,
           ),
-          Text(
-            'Year',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildYearButton('1'),
-              _buildYearButton('2'),
-              _buildYearButton('3'),
-            ],
-          ),
           SizedBox(
             height: 20,
           ),
           ElevatedButton(
             onPressed: () {
               setState(() {
-                db.editStudentYear(_yearVal, widget.stud);
+                db.editStudentYear(_year, widget.stud);
               });
             },
             child: Text(

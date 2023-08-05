@@ -1112,32 +1112,21 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<void> editStudentSubs(
-    List<String> newSubs,
+    List newSubs,
     StudentRank stud,
   ) async {
-    Map<String, bool> subs = {
-      'Conflict': false,
-      'Jurisprudence': false,
-      'Islamic': false,
-      'Trust': false,
-      'Company': false,
-      'Tort': false,
-      'Property': false,
-      'EU': false,
-      'HR': false,
-      'Contract': false,
-      'Criminal': false,
-      'Public': false,
-      'LSM': false,
-    };
-
-    subs.forEach((sub, value) {
-      if (newSubs.contains(sub)) {
-        subs['$sub'] = true;
-      } else {
-        subs['$sub'] = false;
-      }
+    // subs.forEach((sub, value) {
+    //   if (newSubs.contains(sub)) {
+    //     subs['$sub'] = true;
+    //   } else {
+    //     subs['$sub'] = false;
+    //   }
+    // });
+    Map<String, bool> subs = {};
+    newSubs.forEach((newsub) {
+      subs[newsub] = true;
     });
+    print('new subs being added, db editStudentSubs: $subs');
 
     DocumentReference studRef = _db
         .collection('institutes')

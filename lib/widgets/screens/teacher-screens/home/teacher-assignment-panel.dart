@@ -73,7 +73,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
             ///add navigator to add assessments
             IconButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(
+                Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) =>
                         ChangeNotifierProvider.value(

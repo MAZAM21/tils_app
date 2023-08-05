@@ -104,17 +104,29 @@ Color getColor(subjectName) {
     case 'Public':
       return Color.fromARGB(255, 201, 125, 96);
 
-    case 'Islamiat':
+    case 'Islamiat 1':
       return Color.fromARGB(255, 102, 113, 126);
-    case 'Maths':
+    case 'Islamiat 2':
+      return Color.fromARGB(255, 102, 113, 126);
+    case 'Maths 1':
       return Color.fromARGB(255, 189, 213, 234);
-    case 'Urdu':
+    case 'Maths 2':
+      return Color.fromARGB(255, 189, 213, 234);
+    case 'Urdu 1':
       return Color.fromARGB(255, 201, 125, 96);
-    case 'English':
+    case 'Urdu 2':
+      return Color.fromARGB(255, 201, 125, 96);
+    case 'English 1':
       return Color.fromARGB(255, 206, 185, 146);
-    case 'Computer':
+    case 'English 2':
+      return Color.fromARGB(255, 206, 185, 146);
+    case 'Computer 1':
       return Color.fromARGB(255, 39, 59, 92);
-    case 'Biology':
+    case 'Computer 2':
+      return Color.fromARGB(255, 39, 59, 92);
+    case 'Biology 1':
+      return Color.fromARGB(255, 143, 173, 136);
+    case 'Biology 2':
       return Color.fromARGB(255, 143, 173, 136);
     default:
       return Color(0xffC54134);

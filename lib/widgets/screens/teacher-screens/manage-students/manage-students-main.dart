@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:tils_app/models/instititutemd.dart';
 
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/student_rank.dart';
@@ -171,7 +172,7 @@ class _ManageStudentsState extends State<ManageStudents> {
     );
   }
 
-  Future<dynamic> showOptions(StudentRank stud, db) {
+  Future<dynamic> showOptions(StudentRank stud, db, InstituteData? instData) {
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -242,7 +243,8 @@ class _ManageStudentsState extends State<ManageStudents> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (ctx) => EditStudSubs(stud)));
+                                    builder: (ctx) =>
+                                        EditStudSubs(stud, instData)));
                           },
                           child: Text(
                             'Change subjects or year',
@@ -361,6 +363,7 @@ class _ManageStudentsState extends State<ManageStudents> {
     final studsFromdb = Provider.of<List<StudentRank>>(context);
     final assessments = Provider.of<List<RAfromDB>>(context);
     final teacherData = Provider.of<TeacherUser>(context);
+    final instData = Provider.of<InstituteData?>(context);
     final db = Provider.of<DatabaseService>(context, listen: false);
     bool isActive = false;
 
@@ -375,7 +378,7 @@ class _ManageStudentsState extends State<ManageStudents> {
         students = ms.getStudentsOfYear(_yearFilter, studsFromdb);
     }
 
-    if (studsFromdb.isNotEmpty) {
+    if (studsFromdb.isNotEmpty && instData != null) {
       isActive = true;
       // print('active in manage students');
     }
@@ -485,7 +488,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                  showOptions(students[i], db);
+                                  showOptions(students[i], db, instData);
                                 },
                                 child: Container(
                                   color: Colors.white,

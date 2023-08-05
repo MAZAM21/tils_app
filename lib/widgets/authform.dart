@@ -37,8 +37,8 @@ class _AuthFormState extends State<AuthForm> {
     //.trim removes whitespace
     if (isValid) {
       _formKey.currentState!.save();
-      widget.submitFn(_userEmail!.trim(), _userPassword!.trim(), _userName.trim(),
-          _isLogin, context);
+      widget.submitFn(_userEmail!.trim(), _userPassword!.trim(),
+          _userName.trim(), _isLogin, context);
     }
   }
 
@@ -56,8 +56,8 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Image(
-                    image: AssetImage('lib/assets/LCI_icon.png'),
-                    height: 150,
+                    image: AssetImage('lib/assets/Fluency_logo.png'),
+                    height: 250,
                   ),
                   SizedBox(
                     height: 70,
@@ -67,7 +67,7 @@ class _AuthFormState extends State<AuthForm> {
                       Text(
                         'Email Address',
                         style: TextStyle(
-                          color: Color(0xffF9CB6E),
+                          color: Colors.black,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Proxima Nova',
                           fontSize: 18,
@@ -109,7 +109,7 @@ class _AuthFormState extends State<AuthForm> {
                       Text(
                         'Password',
                         style: TextStyle(
-                          color: Color(0xffF9CB6E),
+                          color: Colors.black,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
@@ -148,17 +148,17 @@ class _AuthFormState extends State<AuthForm> {
                   if (!widget.isLoading)
                     ElevatedButton(
                       style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(Size(200, 40)),
-                        backgroundColor:
-                            MaterialStateProperty.all(Color(0xffF9CB6E)),
-                      ),
+                          fixedSize: MaterialStateProperty.all(Size(200, 40)),
+                          backgroundColor: MaterialStateProperty.all(
+                            Color(0xff4D302E),
+                          )),
                       child: Text(
                         'Login',
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             fontFamily: 'Proxima Nova',
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                       onPressed: _trySubmit,
                     ),
