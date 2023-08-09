@@ -224,7 +224,7 @@ class _EditTTFormState extends State<EditTTForm> {
           backgroundColor:
               MaterialStateProperty.all(Theme.of(context).primaryColor),
           textStyle:
-              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
+              MaterialStateProperty.all(Theme.of(context).textTheme.titleLarge),
         ),
         onPressed: () {
           pickDate();
