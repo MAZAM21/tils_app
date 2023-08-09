@@ -69,7 +69,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
               },
               child: Text(
                 'Assessements',
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
             Text(
@@ -118,7 +118,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                   tileColor: Colors.white,
                   title: Text(
                     '${topThree[i].assessmentTitle}',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   subtitle: Text(
                     'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',

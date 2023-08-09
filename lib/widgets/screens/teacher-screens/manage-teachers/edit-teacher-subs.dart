@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/instititutemd.dart';
 
-import 'package:tils_app/models/student_rank.dart';
+import 'package:tils_app/models/teachers-all.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/button-style.dart';
 
-class EditStudSubs extends StatefulWidget {
-  static const routeName = '/edit-stud-subs';
-  const EditStudSubs(this.stud, this.instData);
+class EditTeacherSubs extends StatefulWidget {
+  static const routeName = '/edit-teacher-subs';
+  const EditTeacherSubs(this.teacher, this.instData);
 
-  final StudentRank stud;
+  final AllTeachers teacher;
   final InstituteData? instData;
   @override
-  State<EditStudSubs> createState() => _EditStudProfileState();
+  State<EditTeacherSubs> createState() => _EditTeacherSubsState();
 }
 
-class _EditStudProfileState extends State<EditStudSubs> {
+class _EditTeacherSubsState extends State<EditTeacherSubs> {
   List _selectedSubs = [];
   List _originalSubs = [];
   String? _section = '';
@@ -25,29 +25,29 @@ class _EditStudProfileState extends State<EditStudSubs> {
   @override
   void initState() {
     super.initState();
-    _year = widget.stud.year;
-    _section = widget.stud.section;
+    _year = widget.teacher.year;
+    _section = widget.teacher.section;
     year_subjects = widget.instData!.year_subjects;
-    _selectedSubs = widget.stud.subjects!;
-    _originalSubs = List.from(widget.stud.subjects!);
+    _selectedSubs = widget.teacher.subjects!;
+    _originalSubs = List.from(widget.teacher.subjects!);
   }
 
   void didChangeDependencies() {
-    // widget.stud.subjects!.forEach((sub) {
+    // widget.teacher.subjects!.forEach((sub) {
     //   _selectedSubs.add(sub);
     // });
-    _year = widget.stud.year;
-    _section = widget.stud.section;
+    _year = widget.teacher.year;
+    _section = widget.teacher.section;
     year_subjects = widget.instData!.year_subjects;
-    _selectedSubs = widget.stud.subjects!;
-    _originalSubs = List.from(widget.stud.subjects!);
+    _selectedSubs = widget.teacher.subjects!;
+    _originalSubs = List.from(widget.teacher.subjects!);
 
     super.didChangeDependencies();
   }
 
   void revertChanges() {
     print('revert changes called');
-    print('stud subs: ${widget.stud.subjects!}');
+    print('teacher subs: ${widget.teacher.subjects}');
     setState(() {
       _selectedSubs.clear();
       _selectedSubs.addAll(List.from(_originalSubs));
@@ -183,38 +183,6 @@ class _EditStudProfileState extends State<EditStudSubs> {
     );
   }
 
-  // Widget _buildSubButton(String subName) {
-  //   return ElevatedButton(
-  //     child: Text(
-  //       subName == 'Jurisprudence' ? 'Juris' : subName,
-  //       style: TextStyle(
-  //         fontSize: 12.5,
-  //         fontFamily: 'Proxima Nova',
-  //         fontWeight: FontWeight.w600,
-  //         color: _selectedSubs.contains(subName)
-  //             ? Color(0xffffffff)
-  //             : Color(0xff161616),
-  //       ),
-  //     ),
-  //     style: ButtonStyle(
-  //       backgroundColor: _selectedSubs.contains(subName)
-  //           ? MaterialStateProperty.all(Color(0xffc54134))
-  //           : MaterialStateProperty.all(Color(0xfff4f6f9)),
-  //     ),
-  //     onPressed: _selectedSubs.contains(subName)
-  //         ? () {
-  //             setState(() {
-  //               _selectedSubs.remove('$subName');
-  //             });
-  //           }
-  //         : () {
-  //             setState(() {
-  //               _selectedSubs.add(subName);
-  //             });
-  //           },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final db = Provider.of<DatabaseService>(context, listen: false);
@@ -238,17 +206,9 @@ class _EditStudProfileState extends State<EditStudSubs> {
       body: SingleChildScrollView(
           child: Column(
         children: <Widget>[
-          SizedBox(height: 25),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Year',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ],
+          Text(
+            'Year',
+            style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(
             height: 20,
@@ -262,16 +222,17 @@ class _EditStudProfileState extends State<EditStudSubs> {
           if (_year!.isNotEmpty)
             Row(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Select Section',
-                    style: Theme.of(context).textTheme.titleLarge,
+                Text(
+                  'Select Section',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xff2A353F),
                   ),
                 ),
               ],
             ),
-          SizedBox(height: 25),
           if (_year!.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -280,17 +241,9 @@ class _EditStudProfileState extends State<EditStudSubs> {
                   .map((section) => buildSectionButton(section))
                   .toList(),
             ),
-          SizedBox(height: 25),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Registered Subjects',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ],
+          Text(
+            'Registered Subjects',
+            style: Theme.of(context).textTheme.headline6,
           ),
           SizedBox(
             height: 20,
@@ -316,9 +269,9 @@ class _EditStudProfileState extends State<EditStudSubs> {
           ElevatedButton(
             onPressed: () {
               setState(() {
-                db.editStudentSubs(_selectedSubs, widget.stud, _year, _section,
-                    widget.instData!.inst_subjects);
-                //db.printInstID();
+                db.editTeacherSubs(_selectedSubs, widget.teacher, _year,
+                    _section, widget.instData!.inst_subjects);
+                db.printInstID();
               });
             },
             child: Text(
@@ -348,30 +301,6 @@ class _EditStudProfileState extends State<EditStudSubs> {
           ),
           SizedBox(
             height: 20,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                db.editStudentYear(_year, widget.stud);
-              });
-            },
-            child: Text(
-              'Save Year',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Proxima Nova',
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-              ),
-            ),
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(23)),
-              ),
-              minimumSize: MaterialStateProperty.all(Size(107, 25)),
-              fixedSize: MaterialStateProperty.all(Size(150, 45)),
-              backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
-            ),
           ),
         ],
       )),

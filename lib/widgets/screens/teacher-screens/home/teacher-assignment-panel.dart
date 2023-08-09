@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 import 'package:tils_app/models/assignment-marks.dart';
 import 'package:tils_app/models/instititutemd.dart';
-import 'package:tils_app/models/remote_assessment.dart';
+
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/service/teachers-service.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/add-assignment.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/assignments/assignment-main.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/manage-teachers/manage-teachers-main.dart';
 
 class TeacherAssignmentPanel extends StatelessWidget {
   TeacherAssignmentPanel({
@@ -55,7 +55,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
               },
               child: Text(
                 'Assignments',
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
             Text(
@@ -103,7 +103,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                   tileColor: Colors.white,
                   title: Text(
                     '${topThree[i].title}',
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   subtitle: Text(
                     '${topThree[i].subject}',
@@ -119,35 +119,71 @@ class TeacherAssignmentPanel extends StatelessWidget {
           ),
         ),
         if (teacherData!.isAdmin!)
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  settings: RouteSettings(name: '/manage-studs'),
-                  builder: (BuildContext context) =>
-                      ChangeNotifierProvider.value(
-                    value: teacherData,
-                    child: ManageStudents(instData.ranking_yearSub),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/manage-teachers'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: ManageTeachers(instData.ranking_yearSub),
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Manage Teachers',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              );
-            },
-            child: Text(
-              'Manage Students',
-              style: TextStyle(
-                fontSize: 12,
-                fontFamily: 'Proxima Nova',
-                fontWeight: FontWeight.w600,
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xffC54134)),
+                    minimumSize: MaterialStateProperty.all(Size(107, 25)),
+                    fixedSize: MaterialStateProperty.all(Size(145, 27)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(23)),
+                    )),
               ),
-            ),
-            style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Color(0xffC54134)),
-                minimumSize: MaterialStateProperty.all(Size(107, 25)),
-                fixedSize: MaterialStateProperty.all(Size(145, 27)),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(23)),
-                )),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/manage-studs'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: ManageStudents(instData.ranking_yearSub),
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Manage Students',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Proxima Nova',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all(Color(0xffC54134)),
+                    minimumSize: MaterialStateProperty.all(Size(107, 25)),
+                    fixedSize: MaterialStateProperty.all(Size(145, 27)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(23)),
+                    )),
+              ),
+            ],
           )
       ],
     );

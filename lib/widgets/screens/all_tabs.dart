@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tils_app/models/instititutemd.dart';
-import 'package:tils_app/models/role.dart';
-
-import 'package:tils_app/service/db.dart';
-import 'package:tils_app/service/genDb.dart';
 
 import 'package:tils_app/widgets/drawer.dart';
-import 'package:tils_app/widgets/screens/loading-screen.dart';
+
 import 'package:tils_app/widgets/screens/teacher-screens/announcements/display-announcements.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-home.dart';

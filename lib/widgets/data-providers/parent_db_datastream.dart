@@ -54,6 +54,7 @@ class _ParentDBDatastreamState extends State<ParentDBDatastream> {
               return FutureProvider<InstituteData?>(
                 create: (ctx) => db.getInstituteDataforAllTabs(),
                 initialData: InstituteData(
+                    instId: '',
                     inst_subjects: [],
                     name: '',
                     year_subjects: {},

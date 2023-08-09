@@ -5,11 +5,13 @@ class InstituteData {
   final Map<String, Map<String, dynamic>> year_subjects;
   final Map<String, dynamic> ranking_yearSub;
   final List<String> inst_subjects;
+  final String instId;
   InstituteData({
     required this.name,
     required this.year_subjects,
     required this.inst_subjects,
     required this.ranking_yearSub,
+    required this.instId,
   });
 
   factory InstituteData.fromFirestore(DocumentSnapshot doc) {
@@ -27,6 +29,7 @@ class InstituteData {
           'ranking year_sub in institutedata constructor: ${ranking_yearSub}');
 
       return InstituteData(
+        instId: doc.id,
         name: name,
         year_subjects: year_subjects,
         inst_subjects: inst_subs,

@@ -1,33 +1,30 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/instititutemd.dart';
 
 // import 'package:tils_app/models/remote_assessment.dart';
-import 'package:tils_app/models/student_rank.dart';
 
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/models/teachers-all.dart';
 import 'package:tils_app/service/db.dart';
 
 import 'package:tils_app/service/student-management-service.dart';
 
 import 'package:tils_app/widgets/screens/loading-screen.dart';
+import 'package:tils_app/widgets/screens/teacher-screens/manage-teachers/edit-teacher-subs.dart';
 
-import 'package:tils_app/widgets/screens/teacher-screens/manage-students/activate-parent-portal.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/manage-students/edit-student-subs.dart';
-
-class ManageStudents extends StatefulWidget {
+class ManageTeachers extends StatefulWidget {
   final Map<String, dynamic> yearSubfromDb;
-  ManageStudents(this.yearSubfromDb);
+  ManageTeachers(this.yearSubfromDb);
 
-  static const routeName = '/managementMain';
+  static const routeName = '/management-teachers';
 
   @override
-  State<ManageStudents> createState() => _ManageStudentsState();
+  State<ManageTeachers> createState() => _ManageTeachersState();
 }
 
-class _ManageStudentsState extends State<ManageStudents> {
+class _ManageTeachersState extends State<ManageTeachers> {
   final ms = ManagementService();
 
   String? _yearFilter;
@@ -172,7 +169,8 @@ class _ManageStudentsState extends State<ManageStudents> {
     );
   }
 
-  Future<dynamic> showOptions(StudentRank stud, db, InstituteData? instData) {
+  Future<dynamic> showOptions(
+      AllTeachers teacher, db, InstituteData? instData) {
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -188,7 +186,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(children: <Widget>[
                     Text(
-                      '${stud.name}',
+                      '${teacher.name}',
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: 'Proxima Nova',
@@ -197,36 +195,6 @@ class _ManageStudentsState extends State<ManageStudents> {
                     ),
                     SizedBox(
                       height: 45,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.people_outline_outlined,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (ctx) => ActivateParentPortal(stud)),
-                            );
-                          },
-                          child: Text(
-                            'Activate Parent Portal',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.blueGrey[800],
-                              fontFamily: 'Proxima Nova',
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                     Row(
                       children: <Widget>[
@@ -244,102 +212,10 @@ class _ManageStudentsState extends State<ManageStudents> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (ctx) =>
-                                        EditStudSubs(stud, instData)));
+                                        EditTeacherSubs(teacher, instData)));
                           },
                           child: Text(
                             'Change subjects or year',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.blueGrey[800],
-                              fontFamily: 'Proxima Nova',
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.delete,
-                          color: Colors.blueGrey,
-                          size: 30,
-                        ),
-                        SizedBox(
-                          width: 25,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            showDialog(
-                                context: ctx,
-                                barrierDismissible: true,
-                                builder: (BuildContext dialogCtx) {
-                                  return AlertDialog(
-                                    actions: <Widget>[
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        'Are you sure you want to permanently delete this student?',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: 'Proxima Nova',
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          ElevatedButton(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Color(0xffC54134)),
-                                              ),
-                                              onPressed: () {
-                                                db.deleteStudent(stud.id);
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'Yes, Delete',
-                                                style: TextStyle(
-                                                  fontFamily: 'Proxima Nova',
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )),
-                                          ElevatedButton(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Color(0xffffffff)),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  fontFamily: 'Proxima Nova',
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ))
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                    ],
-                                  );
-                                });
-                          },
-                          child: Text(
-                            'Delete Student',
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.blueGrey[800],
@@ -359,8 +235,8 @@ class _ManageStudentsState extends State<ManageStudents> {
   }
 
   Widget build(BuildContext context) {
-    List<StudentRank> students = [];
-    final studsFromdb = Provider.of<List<StudentRank>>(context);
+    List<AllTeachers> teachers = [];
+    final allTeachers = Provider.of<List<AllTeachers>>(context);
     // final assessments = Provider.of<List<RAfromDB>>(context);
     // final teacherData = Provider.of<TeacherUser>(context);
     final instData = Provider.of<InstituteData?>(context);
@@ -369,25 +245,25 @@ class _ManageStudentsState extends State<ManageStudents> {
 
     switch (_filter) {
       case 'Year':
-        students = ms.getStudentsOfYear(_yearFilter, studsFromdb);
+        teachers = ms.getTeachersOfYear(_yearFilter, allTeachers);
         break;
       case 'Subject':
-        students = ms.getStudentsOfSub(_subjectFilter, studsFromdb);
+        teachers = ms.getTeachersOfSub(_subjectFilter, allTeachers);
         break;
       default:
-        students = ms.getStudentsOfYear(_yearFilter, studsFromdb);
+        teachers = ms.getTeachersOfYear(_yearFilter, allTeachers);
     }
 
-    if (studsFromdb.isNotEmpty && instData != null) {
+    if (allTeachers.isNotEmpty && instData != null) {
       isActive = true;
-      // print('active in manage students');
+      // print('active in manage teachers');
     }
 
     return isActive
         ? Scaffold(
             appBar: AppBar(
                 title: Text(
-              'Manage Students',
+              'Manage teachers',
               style: TextStyle(
                 color: Color(0xff4c4c4c),
                 fontFamily: 'Proxima Nova',
@@ -477,7 +353,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                   child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: students.length,
+                      itemCount: teachers.length,
                       itemBuilder: (ctx, i) {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -488,7 +364,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                  showOptions(students[i], db, instData);
+                                  showOptions(teachers[i], db, instData);
                                 },
                                 child: Container(
                                   color: Colors.white,
@@ -498,22 +374,13 @@ class _ManageStudentsState extends State<ManageStudents> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      if (students[i].imageUrl != '')
-                                        CircleAvatar(
-                                          backgroundImage:
-                                              CachedNetworkImageProvider(
-                                            students[i].imageUrl!,
-                                          ),
-                                          radius: 20,
-                                        )
-                                      else
-                                        Icon(
-                                          Icons.person,
-                                          size: 30,
-                                        ),
+                                      Icon(
+                                        Icons.person,
+                                        size: 30,
+                                      ),
                                       SizedBox(width: 11),
                                       Text(
-                                        students[i].name,
+                                        teachers[i].name!,
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontFamily: 'Proxima Nova',
@@ -540,4 +407,4 @@ class _ManageStudentsState extends State<ManageStudents> {
   }
 }
 
-///filter determines the year students displayed 
+///filter determines the year teachers displayed 

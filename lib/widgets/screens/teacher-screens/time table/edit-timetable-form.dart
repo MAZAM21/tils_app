@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/widgets/button-style.dart';
-import 'package:tils_app/models/subject-class.dart';
+
 import 'package:tils_app/service/db.dart';
 // import './time_table.dart';
 
@@ -23,7 +23,7 @@ class _EditTTFormState extends State<EditTTForm> {
   DateTime? _startDate = DateTime.now();
   DateTime? _startTime = DateTime.now();
   DateTime? _endTime = DateTime.now();
-
+  String? assessmentTitle = '';
   String? _topic = '';
   String? _section = '';
   String? _year = '';
@@ -37,6 +37,8 @@ class _EditTTFormState extends State<EditTTForm> {
   String? _editedId;
   Map<String, Map<String, dynamic>> year_subjects = {};
   bool isExam = false;
+  List<DateTime> startTimes = [];
+  List<DateTime> endTimes = [];
 
   @override
   void didChangeDependencies() {
@@ -46,7 +48,7 @@ class _EditTTFormState extends State<EditTTForm> {
 
       print('in edit tt ${instData!.year_subjects}');
       if (editClass != null) {
-        year_subjects = instData!.year_subjects;
+        year_subjects = instData.year_subjects;
         _section = editClass.section;
         _topic = editClass.topic ?? '';
         _startDate = editClass.from;
@@ -240,10 +242,28 @@ class _EditTTFormState extends State<EditTTForm> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
           DateFormat('d MMM').format(_startDate!),
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.titleMedium,
           textAlign: TextAlign.center,
         ),
       ),
+    );
+  }
+
+  Widget buildTestTitle() {
+    return Container(
+      child: Row(children: [
+        Text('Week'),
+        DropdownButton(
+            items: List.generate(14, (index) {
+              return DropdownMenuItem<int>(
+                value: index + 1,
+                child: Text('${index + 1}'),
+              );
+            }),
+            onChanged: (newVal) {
+              assessmentTitle = 'Week ${newVal.toString()}';
+            })
+      ]),
     );
   }
 
@@ -671,15 +691,28 @@ class _EditTTFormState extends State<EditTTForm> {
                         ),
                         Row(
                           children: <Widget>[
-                            Text(
-                              'Topic',
-                              style: TextStyle(
-                                color: Color(0xff2a353f),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'Proxima Nova',
+                            if (widget.instData!.instId ==
+                                'RIBR3Pwr3We2D5IQPF5O')
+                              Text(
+                                'Teacher\'s name',
+                                style: TextStyle(
+                                  color: Color(0xff2a353f),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Proxima Nova',
+                                ),
                               ),
-                            ),
+                            if (widget.instData!.instId !=
+                                'RIBR3Pwr3We2D5IQPF5O')
+                              Text(
+                                'TopicR',
+                                style: TextStyle(
+                                  color: Color(0xff2a353f),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Proxima Nova',
+                                ),
+                              ),
                           ],
                         ),
                         SizedBox(
@@ -688,8 +721,8 @@ class _EditTTFormState extends State<EditTTForm> {
                         Container(
                           width: double.infinity,
                           child: TextFormField(
-                            maxLines: 10,
-                            minLines: 4,
+                            maxLines: 2,
+                            minLines: 1,
                             initialValue: _topic,
                             keyboardType: TextInputType.text,
                             onSaved: (value) {
@@ -726,7 +759,6 @@ class _EditTTFormState extends State<EditTTForm> {
                                     .showSnackBar(SnackBar(
                                   content: !_endTime!.isBefore(_startTime!) &&
                                           _selectedSub.isNotEmpty &&
-                                          _duration != null &&
                                           _section != null
                                       ? Text(
                                           '$_selectedSub on ${DateFormat('d MMM hh mm a').format(_startTime!)} added to Time Table')

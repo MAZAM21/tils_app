@@ -14,6 +14,7 @@ import 'package:tils_app/models/resource.dart';
 import 'package:tils_app/models/student-answers.dart';
 import 'package:tils_app/models/student-textAnswers.dart';
 import 'package:tils_app/models/student_rank.dart';
+import 'package:tils_app/models/teachers-all.dart';
 import 'package:tils_app/service/upload-service.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import '../models/announcement.dart';
@@ -83,6 +84,18 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => StudentRank.fromFirestore(doc)).toList());
     } catch (e) {
       print('error in student list stream db: $e');
+    }
+    return null;
+  }
+
+  Stream<List<AllTeachers>>? streamTeachers() {
+    try {
+      CollectionReference ref =
+          _db.collection('institutes').doc(instID).collection('teachers');
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => AllTeachers.fromFirestore(doc)).toList());
+    } catch (e) {
+      print('error in  streamTeachers db: $e');
     }
     return null;
   }
@@ -703,7 +716,7 @@ class DatabaseService with ChangeNotifier {
 
         ///if editAm is there, then only student marks and uid marks are updated and indivual student
         ///docs as well
-      } else if (editAm != null) {
+      } else {
         DocumentReference eref = _db
             .collection('institutes')
             .doc(instID)
@@ -1095,25 +1108,41 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  void printInstID() {
+    print('instID: $instID');
+  }
+
   Future<void> editStudentYear(String? newYear, StudentRank stud) async {
-    DocumentReference studRef = _db
-        .collection('institutes')
-        .doc(instID)
-        .collection('students')
-        .doc(stud.id);
-    try {
-      await studRef.set(
-        {'year': newYear},
-        SetOptions(merge: true),
-      );
-    } catch (e) {
-      print('error in editStudentYear db function: $e');
+    print(instID);
+    if (instID != null) {
+      try {
+        DocumentReference studRef = _db
+            .collection('institutes')
+            .doc(instID)
+            .collection('students')
+            .doc(stud.id);
+        try {
+          await studRef.set(
+            {'year': newYear},
+            SetOptions(merge: true),
+          );
+        } catch (e) {
+          print('error in editStudentYear db function: $e');
+        }
+      } on Exception catch (e) {
+        print('error in editStudentYear: $e');
+      }
+    } else {
+      throw Exception('instID null in editStudentYear');
     }
   }
 
   Future<void> editStudentSubs(
     List newSubs,
     StudentRank stud,
+    String? year,
+    String? section,
+    List instSubs,
   ) async {
     // subs.forEach((sub, value) {
     //   if (newSubs.contains(sub)) {
@@ -1122,24 +1151,83 @@ class DatabaseService with ChangeNotifier {
     //     subs['$sub'] = false;
     //   }
     // });
-    Map<String, bool> subs = {};
-    newSubs.forEach((newsub) {
-      subs[newsub] = true;
-    });
-    print('new subs being added, db editStudentSubs: $subs');
+    if (instID != null) {
+      Map<String, bool> subs = {};
+      instSubs.forEach((instSub) {
+        if (newSubs.contains(instSub)) {
+          subs[instSub] = true;
+        } else {
+          subs[instSub] = false;
+        }
+      });
+      print('new subs being added, db editStudentSubs: $subs');
 
-    DocumentReference studRef = _db
-        .collection('institutes')
-        .doc(instID)
-        .collection('students')
-        .doc(stud.id);
-    try {
-      await studRef.set(
-        {'registeredSubs': subs},
-        SetOptions(merge: true),
-      );
-    } on Exception catch (e) {
-      print('error in editStudentsSubs db function: $e');
+      DocumentReference studRef = _db
+          .collection('institutes')
+          .doc(instID)
+          .collection('students')
+          .doc(stud.id);
+      try {
+        await studRef.set(
+          {
+            'registeredSubs': subs,
+            'section': section,
+            'year': year,
+          },
+          SetOptions(merge: true),
+        );
+      } on Exception catch (e) {
+        print('error in editStudentsSubs db function: $e');
+      }
+    } else {
+      throw Exception('instID null');
+    }
+  }
+
+  Future<void> editTeacherSubs(
+    List newSubs,
+    AllTeachers teach,
+    String? year,
+    String? section,
+    List instSubs,
+  ) async {
+    // subs.forEach((sub, value) {
+    //   if (newSubs.contains(sub)) {
+    //     subs['$sub'] = true;
+    //   } else {
+    //     subs['$sub'] = false;
+    //   }
+    // });
+    if (instID != null) {
+      Map<String, bool> subs = {};
+      instSubs.forEach((instSub) {
+        if (newSubs.contains(instSub)) {
+          subs[instSub] = true;
+        } else {
+          subs[instSub] = false;
+        }
+      });
+      print('new subs being added, db editStudentSubs: $subs');
+
+      DocumentReference studRef = _db
+          .collection('institutes')
+          .doc(instID)
+          .collection('teachers')
+          .doc(teach.id);
+      try {
+        await studRef.set(
+          {
+            'registeredSubs': subs,
+            'section': section,
+            'year': year,
+          },
+          SetOptions(merge: true),
+        );
+      } on Exception catch (e) {
+        print('error in editStudentsSubs db function: $e');
+      }
+    } else {
+      throw Exception('instID null');
     }
   }
 
@@ -1345,97 +1433,5 @@ class DatabaseService with ChangeNotifier {
     } catch (err) {
       print('err in delete Announcement: $err');
     }
-  }
-}
-
-SubjectName setSubject(String sub) {
-  switch (sub) {
-    case 'Jurisprudence':
-      return SubjectName.Jurisprudence;
-
-    case 'Trust':
-      return SubjectName.Trust;
-
-    case 'Conflict':
-      return SubjectName.Conflict;
-
-    case 'Islamic':
-      return SubjectName.Islamic;
-
-    case 'Company':
-      return SubjectName.Company;
-
-    case 'Tort':
-      return SubjectName.Tort;
-
-    case 'Property':
-      return SubjectName.Property;
-
-    case 'EU':
-      return SubjectName.EU;
-
-    case 'HR':
-      return SubjectName.HR;
-
-    case 'Contract':
-      return SubjectName.Contract;
-      break;
-    case 'Criminal':
-      return SubjectName.Criminal;
-      break;
-    case 'LSM':
-      return SubjectName.LSM;
-      break;
-    case 'Public':
-      return SubjectName.Public;
-      break;
-    default:
-      return SubjectName.Undeclared;
-  }
-}
-
-String enToString(SubjectName? name) {
-  switch (name) {
-    case SubjectName.Jurisprudence:
-      return 'Jurisprudence';
-      break;
-    case SubjectName.Trust:
-      return 'Trust';
-      break;
-    case SubjectName.Conflict:
-      return 'Conflict';
-      break;
-    case SubjectName.Islamic:
-      return 'Islamic';
-      break;
-    case SubjectName.Company:
-      return 'Company';
-      break;
-    case SubjectName.Tort:
-      return 'Tort';
-      break;
-    case SubjectName.Property:
-      return 'Property';
-      break;
-    case SubjectName.EU:
-      return 'EU';
-      break;
-    case SubjectName.HR:
-      return 'HR';
-      break;
-    case SubjectName.Contract:
-      return 'Contract';
-      break;
-    case SubjectName.Criminal:
-      return 'Criminal';
-      break;
-    case SubjectName.LSM:
-      return 'LSM';
-      break;
-    case SubjectName.Public:
-      return 'Public';
-      break;
-    default:
-      return 'Undeclared';
   }
 }

@@ -10,6 +10,7 @@ import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
+import 'package:tils_app/models/teachers-all.dart';
 import 'package:tils_app/service/db.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 
@@ -129,6 +130,8 @@ class _HomePageState extends State<HomePage> {
     final subClassList = Provider.of<List<SubjectClass>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
     final instData = Provider.of<InstituteData?>(context);
+    final allTeachers = Provider.of<List<AllTeachers>>(context);
+    print('all teachers: ${allTeachers.length}');
 
     ///testing student rank
     final stdRank = Provider.of<List<StudentRank>>(context);
@@ -140,11 +143,7 @@ class _HomePageState extends State<HomePage> {
     List<SubjectClass> gridList = [];
     Meeting? nextClass;
 
-    if (meetingsList != null &&
-        teacherData != null &&
-        instData != null &&
-        subClassList != null &&
-        raList != null) {
+    if (teacherData != null && instData != null) {
       gridList = ts.getClassesForGrid(subClassList);
       final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
       nextClass = ts.getNextClass(myClasses);

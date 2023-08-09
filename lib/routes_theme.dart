@@ -10,6 +10,7 @@ import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/role.dart';
 import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
+import 'package:tils_app/models/teachers-all.dart';
 import 'package:tils_app/service/genDb.dart';
 import 'package:tils_app/widgets/screens/loading-screen.dart';
 import 'package:tils_app/widgets/screens/role-getter.dart';
@@ -87,6 +88,11 @@ class RoutesAndTheme extends StatelessWidget {
               Provider.of<DatabaseService>(ctx, listen: false).streamStudents(),
           initialData: [],
         ),
+        StreamProvider<List<AllTeachers>>(
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamTeachers(),
+          initialData: [],
+        ),
         StreamProvider<List<RAfromDB>>(
           create: (ctx) =>
               Provider.of<DatabaseService>(ctx, listen: false).streamRA(),
@@ -107,6 +113,7 @@ class RoutesAndTheme extends StatelessWidget {
               .getInstituteData(),
           initialData: InstituteData(
               name: 'Fluency',
+              instId: '',
               year_subjects: {},
               inst_subjects: [],
               ranking_yearSub: {}),
@@ -136,40 +143,48 @@ class RoutesAndTheme extends StatelessWidget {
               TabBarTheme(labelColor: Color.fromARGB(255, 24, 118, 133)),
           //cardcolor removed
           textTheme: TextTheme(
-              headline6: TextStyle(
-                color: Color.fromARGB(255, 76, 76, 76),
-                fontFamily: 'Proxima Nova',
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
+            //previously hl6
+            titleLarge: TextStyle(
+              color: Color.fromARGB(255, 76, 76, 76),
+              fontFamily: 'Proxima Nova',
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
 
-              /// HL5 is for titles
-              headline5: TextStyle(
-                fontSize: 18,
-                fontFamily: 'Proxima Nova',
-                fontWeight: FontWeight.w700,
-                color: Color(0xff21353f),
-              ),
+            //previously hl5
+            titleMedium: TextStyle(
+              fontSize: 18,
+              fontFamily: 'Proxima Nova',
+              fontWeight: FontWeight.w700,
+              color: Color(0xff21353f),
+            ),
 
-              /// HL4 is for descriptive text
-              /// e.g subject names and assessment titles
-              headline4: TextStyle(
-                  color: Color(0xff161616),
-                  fontFamily: 'Proxima Nova',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14),
-              headline3: TextStyle(
-                color: Color(0xffC54134),
+            /// HL4 is for descriptive text
+            /// e.g subject names and assessment titles
+
+            /// previously headline 4
+            titleSmall: TextStyle(
+                color: Color(0xff161616),
                 fontFamily: 'Proxima Nova',
-                fontSize: 16,
                 fontWeight: FontWeight.w600,
-              ),
-              headline2: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Proxima Nova',
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-              )),
+                fontSize: 14),
+
+            // previously headLine 3
+            bodyLarge: TextStyle(
+              color: Color(0xffC54134),
+              fontFamily: 'Proxima Nova',
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+
+            //previously headline 2
+            bodySmall: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Proxima Nova',
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
         ),
         home: RoleGetter(),
         routes: {

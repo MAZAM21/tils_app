@@ -13,24 +13,24 @@ class ClassRecords extends StatefulWidget {
 }
 
 class _ClassRecordsState extends State<ClassRecords> {
-  String enToString(SubjectName name) {
-    switch (name) {
-      case SubjectName.Jurisprudence:
-        return 'Jurisprudence';
-        break;
-      case SubjectName.Trust:
-        return 'Trust';
-        break;
-      case SubjectName.Conflict:
-        return 'Conflict';
-        break;
-      case SubjectName.Islamic:
-        return 'Islamic';
-        break;
-      default:
-        return 'Undeclared';
-    }
-  }
+  // String enToString(SubjectName name) {
+  //   switch (name) {
+  //     case SubjectName.Jurisprudence:
+  //       return 'Jurisprudence';
+  //       break;
+  //     case SubjectName.Trust:
+  //       return 'Trust';
+  //       break;
+  //     case SubjectName.Conflict:
+  //       return 'Conflict';
+  //       break;
+  //     case SubjectName.Islamic:
+  //       return 'Islamic';
+  //       break;
+  //     default:
+  //       return 'Undeclared';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
