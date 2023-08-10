@@ -7,7 +7,7 @@ import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/meeting.dart';
 import 'package:tils_app/models/remote_assessment.dart';
 import 'package:tils_app/models/role.dart';
-import 'package:tils_app/models/student_rank.dart';
+//import 'package:tils_app/models/student_rank.dart';
 import 'package:tils_app/models/subject-class.dart';
 import 'package:tils_app/models/teacher-user-data.dart';
 import 'package:tils_app/models/teachers-all.dart';
@@ -20,7 +20,7 @@ import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assessment
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:flutter/foundation.dart';
-import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
+// import 'package:tils_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
 // import 'package:tils_app/widgets/screens/teacher-screens/time%20table/schedule-class.dart';
 import 'package:tils_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 
@@ -128,18 +128,18 @@ class _HomePageState extends State<HomePage> {
     final teacherData = Provider.of<TeacherUser?>(context);
     final meetingsList = Provider.of<List<Meeting>>(context);
     final subClassList = Provider.of<List<SubjectClass>>(context);
-    final raList = Provider.of<List<RAfromDB>>(context);
+    //final raList = Provider.of<List<RAfromDB>>(context);
     final instData = Provider.of<InstituteData?>(context);
     final allTeachers = Provider.of<List<AllTeachers>>(context);
     print('all teachers: ${allTeachers.length}');
 
     ///testing student rank
-    final stdRank = Provider.of<List<StudentRank>>(context);
+    //final stdRank = Provider.of<List<StudentRank>>(context);
     bool isActive = false;
     //print(stdRank.length);
     int estimateTs = 0;
     int endTime = 0;
-    int deployedRA = 0;
+    //int deployedRA = 0;
     List<SubjectClass> gridList = [];
     Meeting? nextClass;
 
@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
       gridList = ts.getClassesForGrid(subClassList);
       final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
       nextClass = ts.getNextClass(myClasses);
-      deployedRA = ts.getDeployedRA(raList, teacherData);
+      // deployedRA = ts.getDeployedRA(raList, teacherData);
 
       if (nextClass.eventName != 'no class') {
         estimateTs = nextClass.from!.millisecondsSinceEpoch;

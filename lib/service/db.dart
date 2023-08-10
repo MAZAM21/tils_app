@@ -454,6 +454,37 @@ class DatabaseService with ChangeNotifier {
     return null;
   }
 
+  Future<void> addPersistentClassToCF(
+      {required String classSubject,
+      required Map<DateTime, DateTime> times,
+      required String? section,
+      required String? year,
+      String? topic,
+      bool? exam,
+      bool? isPersistent}) async {
+    if (instID != null) {
+      final _classCollection =
+          _db.collection('institutes').doc(instID).collection('classes');
+
+      times.forEach((start, end) async {
+        String startString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(start);
+        String endString = DateFormat("yyyy-MM-dd hh:mm:ss a").format(end);
+        String notification = DateFormat("EEE, dd-MM hh:mm a").format(start);
+
+        try {
+          await _classCollection.add({
+            'subjectName': 'Exam: $classSubject',
+            'startTime': startString,
+            'endTime': endString,
+            'topic': topic ?? 'none',
+            'section': section,
+            'notification': notification,
+          });
+        } catch (e) {}
+      });
+    }
+  }
+
   Future<void> addClassToCF(
     String? name,
     DateTime start,

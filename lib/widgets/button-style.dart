@@ -73,7 +73,7 @@ class WhiteSubjectButtonMobile extends StatelessWidget {
       child: Text(
         '$child',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 15,
           fontFamily: 'Proxima Nova',
           fontWeight: FontWeight.w600,
           color: Color(0xff161616),
@@ -81,6 +81,7 @@ class WhiteSubjectButtonMobile extends StatelessWidget {
       ),
       onPressed: onPressed,
       style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.all(3)),
         elevation: MaterialStateProperty.all(0),
         minimumSize: MaterialStateProperty.all(Size(40, 25)),
         fixedSize: MaterialStateProperty.all(Size(107, 38)),
@@ -101,7 +102,7 @@ class RedSubjectButtonMobile extends StatelessWidget {
       child: Text(
         '$child',
         style: TextStyle(
-          fontSize: 16,
+          fontSize: 15,
           fontFamily: 'Proxima Nova',
           fontWeight: FontWeight.w600,
           color: Color(0xffffffff),
@@ -109,6 +110,7 @@ class RedSubjectButtonMobile extends StatelessWidget {
       ),
       onPressed: onPressed,
       style: ButtonStyle(
+        padding: MaterialStateProperty.all(EdgeInsets.all(3)),
         elevation: MaterialStateProperty.all(0),
         minimumSize: MaterialStateProperty.all(Size(40, 25)),
         fixedSize: MaterialStateProperty.all(Size(107, 38)),

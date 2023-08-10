@@ -11,6 +11,47 @@ import '../models/subject-class.dart';
 import '../models/remote_assessment.dart';
 
 class TeacherService with ChangeNotifier {
+  Map<DateTime, DateTime> getPersistantDates(
+      {required DateTime starttime,
+      required DateTime endtime,
+      required Set<int> selectedMonths}) {
+    print(starttime.weekday);
+    if (starttime.isAfter(endtime) || selectedMonths.isEmpty) {
+      return {};
+    }
+
+    int startWeekday = starttime.weekday;
+    int currentYear = starttime.year;
+    Duration lessonTime = endtime.difference(starttime);
+    Map<DateTime, DateTime> result = {};
+
+    for (int month in selectedMonths) {
+      if (month < 1 || month > 12) continue;
+      DateTime currentDate;
+      if (month == starttime.month) {
+        currentDate = DateTime(currentYear, month, starttime.day);
+      } else if (month > starttime.month) {
+        currentDate = DateTime(currentYear, month, 1);
+      } else {
+        currentDate = DateTime(currentYear + 1, month, 1);
+      }
+
+      // Find the first occurrence of the specified weekday in the month
+      while (currentDate.weekday != startWeekday) {
+        currentDate = currentDate.add(const Duration(days: 1));
+      }
+
+      // Add entries to the result map until the end of the month
+      while (currentDate.month == month) {
+        result[currentDate] = currentDate.add(lessonTime);
+        currentDate = currentDate.add(const Duration(days: 7));
+        print(currentDate.weekday);
+      }
+    }
+    print(result);
+    return result;
+  }
+
   bool getStudentScriptMarkedStat(
       String studentId, String assid, TeacherUser tdata) {
     Map mtq = tdata.markedTexQs!;

@@ -4,6 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 import 'package:tils_app/models/instititutemd.dart';
 import 'package:tils_app/models/meeting.dart';
+import 'package:tils_app/service/teachers-service.dart';
 import 'package:tils_app/widgets/button-style.dart';
 
 import 'package:tils_app/service/db.dart';
@@ -38,7 +39,23 @@ class _EditTTFormState extends State<EditTTForm> {
   Map<String, Map<String, dynamic>> year_subjects = {};
   bool isExam = false;
   List<DateTime> startTimes = [];
+  bool isPersistent = true;
   List<DateTime> endTimes = [];
+  Map<String, int> months = {
+    'January': 1,
+    'February': 2,
+    'March': 3,
+    'April': 4,
+    'May': 5,
+    'June': 6,
+    'July': 7,
+    'August': 8,
+    'September': 9,
+    'October': 10,
+    'November': 11,
+    'December': 12,
+  };
+  Set<int> selectedMonth = {};
 
   @override
   void didChangeDependencies() {
@@ -74,6 +91,45 @@ class _EditTTFormState extends State<EditTTForm> {
 
 //subject option buttons,
 //set _subName.
+
+  List<Widget> buildMonthButtons() {
+    List<Widget> monthRows = [];
+    for (int i = 1; i < months.length; i += 3) {
+      List<Widget> rowChildren = [];
+
+      for (int j = i; j < i + 3 && j < months.length; j++) {
+        if (!selectedMonth.contains(j)) {
+          rowChildren.add(WhiteSubjectButtonMobile(
+            onPressed: () {
+              setState(() {
+                selectedMonth.add(j);
+              });
+            },
+            child:
+                months.entries.firstWhere((element) => element.value == j).key,
+          ));
+        } else {
+          rowChildren.add(RedSubjectButtonMobile(
+            child:
+                months.entries.firstWhere((element) => element.value == j).key,
+            onPressed: () {
+              setState(() {
+                selectedMonth.remove(j);
+              });
+            },
+          ));
+        }
+      }
+
+      monthRows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: rowChildren,
+        ),
+      );
+    }
+    return monthRows;
+  }
 
   List<Widget> buildSubjectGrid(sectionSubs) {
     List<Widget> rows = [];
@@ -319,6 +375,28 @@ class _EditTTFormState extends State<EditTTForm> {
         ),
       ),
     );
+  }
+
+  void _savePersistentClasses(BuildContext context) {
+    final db = Provider.of<DatabaseService>(context, listen: false);
+    final ts = TeacherService();
+    Map<DateTime, DateTime> times = ts.getPersistantDates(
+      endtime: _endTime!,
+      starttime: _startTime!,
+      selectedMonths: selectedMonth,
+    );
+
+    print(times);
+    if (!_endTime!.isBefore(_startTime!) &&
+        _selectedSub.isNotEmpty &&
+        _duration != '' &&
+        _section != null) {
+      db.addPersistentClassToCF(
+          classSubject: _selectedSub,
+          times: times,
+          section: _section,
+          year: _year);
+    }
   }
 
   void _saveForm(BuildContext context) {
@@ -689,7 +767,48 @@ class _EditTTFormState extends State<EditTTForm> {
                         SizedBox(
                           height: 27,
                         ),
+                        if (_duration != '')
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Persistent',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Proxima Nova',
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xff2A353F),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Switch(
+                                      activeColor: Color(0xffC54134),
+                                      value: isPersistent,
+                                      onChanged: (newVal) {
+                                        setState(() {
+                                          isPersistent = newVal;
+                                        });
+                                      }),
+                                ],
+                              ),
+                              if (isPersistent)
+                                Column(
+                                  children: buildMonthButtons(),
+                                ),
+                            ],
+                          ),
+
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             if (widget.instData!.instId ==
                                 'RIBR3Pwr3We2D5IQPF5O')
@@ -705,7 +824,7 @@ class _EditTTFormState extends State<EditTTForm> {
                             if (widget.instData!.instId !=
                                 'RIBR3Pwr3We2D5IQPF5O')
                               Text(
-                                'TopicR',
+                                'Topic',
                                 style: TextStyle(
                                   color: Color(0xff2a353f),
                                   fontSize: 16,
@@ -764,11 +883,17 @@ class _EditTTFormState extends State<EditTTForm> {
                                           '$_selectedSub on ${DateFormat('d MMM hh mm a').format(_startTime!)} added to Time Table')
                                       : Text('Class not added'),
                                 ));
-                                setState(() {
-                                  _saveForm(context);
-                                });
-                                if (_isEdit) {
-                                  Navigator.pop(context);
+                                if (!isPersistent) {
+                                  setState(() {
+                                    _saveForm(context);
+                                  });
+                                  if (_isEdit) {
+                                    Navigator.pop(context);
+                                  }
+                                } else {
+                                  setState(() {
+                                    _savePersistentClasses(context);
+                                  });
                                 }
                               },
                               style: ButtonStyle(
