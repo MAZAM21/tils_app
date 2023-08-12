@@ -391,6 +391,8 @@ class _EditTTFormState extends State<EditTTForm> {
         _selectedSub.isNotEmpty &&
         _duration != '' &&
         _section != null) {
+      _form.currentState!.save();
+      _form.currentState!.reset();
       db.addPersistentClassToCF(
           classSubject: _selectedSub,
           times: times,

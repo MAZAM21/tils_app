@@ -84,8 +84,8 @@ class _CalendarAppState extends State<CalendarApp> {
             builder: (context) => EditTTForm(instData, tappedClass)));
   }
 
-  void showElementDetails(Meeting selected, List<StudentRank> students, db,
-      InstituteData instData) {
+  void showElementDetails(Meeting selected, List<StudentRank> students,
+      DatabaseService db, InstituteData instData) {
     showModalBottomSheet(
       backgroundColor: selected.background,
       context: context,
@@ -150,6 +150,16 @@ class _CalendarAppState extends State<CalendarApp> {
                 ),
                 onPressed: () {
                   db.deleteClass(selected.docId, ofSub);
+                  Navigator.pop(context);
+                },
+              ),
+              ElevatedButton(
+                child: Text('Delete All'),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.red),
+                ),
+                onPressed: () {
+                  db.deleteMultiClasses(selected.docId, ofSub, selected);
                   Navigator.pop(context);
                 },
               )

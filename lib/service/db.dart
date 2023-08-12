@@ -473,7 +473,7 @@ class DatabaseService with ChangeNotifier {
 
         try {
           await _classCollection.add({
-            'subjectName': 'Exam: $classSubject',
+            'subjectName': '$classSubject',
             'startTime': startString,
             'endTime': endString,
             'topic': topic ?? 'none',
@@ -1351,6 +1351,37 @@ class DatabaseService with ChangeNotifier {
         _db.collection('institutes').doc(instID).collection('attendance');
     try {
       attRef.doc(id).delete();
+      return await classRef.doc(id).delete().then(
+            (value) => Future.forEach(
+              students,
+              (StudentRank stud) => deleteAttendanceRecordFromStud(stud.id, id),
+            ),
+          );
+    } catch (err) {
+      print('error in deleteClass: $err');
+    }
+  }
+
+  Future<void> deleteMultiClasses(
+      String id, List<StudentRank> students, Meeting cls) async {
+    final classRef =
+        _db.collection('institutes').doc(instID).collection('classes');
+    final attRef =
+        _db.collection('institutes').doc(instID).collection('attendance');
+
+    try {
+      attRef.doc(id).delete();
+      final QuerySnapshot snapshot = await classRef
+          .where(
+            'subjectName',
+            isEqualTo: '${cls.eventName}',
+          )
+          .get();
+      final List<QueryDocumentSnapshot> documents = snapshot.docs;
+
+      for (var doc in documents) {
+        await doc.reference.delete();
+      }
       return await classRef.doc(id).delete().then(
             (value) => Future.forEach(
               students,
