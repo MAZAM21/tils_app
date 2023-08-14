@@ -741,6 +741,11 @@ class DatabaseService with ChangeNotifier {
     CollectionReference ref = _db.collection('remote-assessment');
     DateTime? start;
     DateTime? end;
+    print(assessment.subject);
+    print(assessment.allMCQs);
+    print(assessment.deployTime);
+    print(assessment.teacherId);
+    print(assessment.deadline.toString());
     if (assessment.deployTime != null && assessment.deadline != null) {
       start = assessment.deployTime;
       end = assessment.deadline;

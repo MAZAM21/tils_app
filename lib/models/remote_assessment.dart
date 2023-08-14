@@ -18,6 +18,8 @@ class RemoteAssessment with ChangeNotifier {
     this.allMCQs,
     this.allTextQs,
     this.assessmentTitle,
+    this.deadline,
+    this.deployTime,
   });
   void addMCQ(MCQ mcq) {
     MCQ rMcq = randomizeMCQ(mcq);

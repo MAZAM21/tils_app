@@ -4,12 +4,83 @@ import 'package:image_picker/image_picker.dart';
 import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:http/http.dart' as http;
+import 'package:cloud_functions/cloud_functions.dart';
 
 import 'dart:convert';
 
 const key = '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';
 
 class AIPower {
+  Map<String, dynamic> offerAcceptanceMCQs = {
+    "1": {
+      "no": "1",
+      "mcq":
+          "According to the context, when does a legally binding agreement arise from an offer?",
+      "options": {
+        "1": "When the offer is made",
+        "2": "When the offer is accepted",
+        "3": "When the offer is communicated",
+        "correct":
+            "When acceptance is communicated to the offeror in the manner contemplated by the offer"
+      }
+    },
+    "2": {
+      "no": "2",
+      "mcq":
+          "Can an offer be revoked without the consent of the other party after acceptance?",
+      "options": {
+        "1": "Yes",
+        "2": "It depends on the circumstances",
+        "correct": "No"
+      }
+    },
+    "3": {
+      "no": "3",
+      "mcq":
+          "What must be proven in order to establish that an offer has been accepted?",
+      "options": {
+        "1": "That the offeree knew about the offer",
+        "2": "That the offeror knew about the acceptance",
+        "3": "That the offeror communicated the acceptance",
+        "correct":
+            "That acceptance is communicated to the offeror in the manner contemplated by the offer"
+      }
+    }
+  };
+  Map<String, dynamic> generated_mcq = {
+    "1": {
+      "no": "1",
+      "mcq": "What is a secret trust?",
+      "options": {
+        "1": "A trust created during the testator's lifetime",
+        "2": "A trust created under a will",
+        "3": "A trust where the beneficiaries are named in the will",
+        "correct": "A trust where the beneficiaries are not named in the will"
+      }
+    },
+    "2": {
+      "no": "2",
+      "mcq": "Who holds the property in a secret trust?",
+      "options": {
+        "1": "The testator",
+        "2": "The legatee",
+        "3": "The beneficiaries",
+        "correct": "The legatee"
+      }
+    },
+    "3": {
+      "no": "3",
+      "mcq": "What is the purpose of a secret trust?",
+      "options": {
+        "1": "To avoid probate fees",
+        "2":
+            "To ensure the property is distributed according to the testator's wishes",
+        "3": "To keep the existence of the trust a secret",
+        "correct":
+            "To ensure the property is distributed according to the testator's wishes"
+      }
+    }
+  };
   final llm = OpenAI(
     apiKey: key,
     temperature: 0.9,
@@ -19,9 +90,32 @@ class AIPower {
     apiKey: key,
     temperature: 0,
   );
-  final filePath = 'lib/assets/data.txt';
+  final filePath = 'lib/assets/contract_law.txt';
 
-  Future<List<MCQ>?> textGenTesting() async {
+  void textGenCloudFunction() async {
+    var _bytes = await XFile(filePath).readAsBytes();
+    // Map<String, String> headers = {
+    //   'Content-Type':
+    //       'application/json', // Adjust the content type based on your server
+    // };
+    String base64File = base64Encode(_bytes);
+    // Map<String, dynamic> body = {
+    //   'file': base64File,
+    // };
+    final data = await FirebaseFunctions.instance
+        .httpsCallable('mcq_generation')
+        .call({'file': base64File});
+    print(data);
+  }
+
+  Future<List<MCQ>?> textGenSample() async {
+    List<MCQ> mcqList =
+        offerAcceptanceMCQs.values.map((json) => MCQ.fromJson(json)).toList();
+
+    return mcqList;
+  }
+
+  Future<List<MCQ>?> mcq_generation(String topic) async {
     final url = 'http://127.0.0.1:5000/auto_quiz';
 
     var _bytes = await XFile(filePath).readAsBytes();
@@ -34,6 +128,7 @@ class AIPower {
 
     Map<String, dynamic> body = {
       'file': base64File,
+      'topic': topic,
     };
 
     http.Response response = await http.post(
@@ -47,9 +142,10 @@ class AIPower {
       final data = jsonDecode(response.body);
       final mcq_json = (data['response']);
       Map<String, dynamic> jsonData = jsonDecode(mcq_json);
-
+      print(jsonData);
       List<MCQ> mcqList =
           jsonData.values.map((json) => MCQ.fromJson(json)).toList();
+
       return mcqList;
     } else {
       print('Error uploading file: ${response.reasonPhrase}');
