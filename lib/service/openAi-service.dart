@@ -17,9 +17,10 @@ class AIPower {
       "mcq":
           "According to the context, when does a legally binding agreement arise from an offer?",
       "options": {
-        "1": "When the offer is made",
-        "2": "When the offer is accepted",
+        "2":
+            "When acceptance is communicated to the offeror in the manner contemplated by the offer",
         "3": "When the offer is communicated",
+        "4": "When the offer is made",
         "correct":
             "When acceptance is communicated to the offeror in the manner contemplated by the offer"
       }
@@ -40,7 +41,7 @@ class AIPower {
           "What must be proven in order to establish that an offer has been accepted?",
       "options": {
         "1": "That the offeree knew about the offer",
-        "2": "That the offeror knew about the acceptance",
+        "2": "That the offeree knew about the offer",
         "3": "That the offeror communicated the acceptance",
         "correct":
             "That acceptance is communicated to the offeror in the manner contemplated by the offer"
