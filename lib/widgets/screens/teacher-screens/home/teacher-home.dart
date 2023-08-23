@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.915,
+                          // width: MediaQuery.of(context).size.width * 0.915,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -303,10 +303,10 @@ class _HomePageState extends State<HomePage> {
                   drawer: AppDrawer(),
                   body: SingleChildScrollView(
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.915,
+                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
