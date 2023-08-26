@@ -1,3 +1,4 @@
+import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-web-home.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -298,102 +299,15 @@ class _HomePageState extends State<HomePage> {
 
             //Web Home
 
-            : SafeArea(
-                child: Scaffold(
-                  drawer: AppDrawer(),
-                  body: SingleChildScrollView(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                height: 50,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  TeacherAvatarPanel(teacherData: teacherData),
-
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-
-                                  /// Class countdown
-                                ],
-                              ),
-                              SizedBox(
-                                height: 50,
-                              ),
-                              ClassTimerPanel(
-                                estimateTs,
-                                nextClass,
-                                endTime,
-                                teacherData,
-                              ),
-
-                              ///Name and avatar panel
-
-                              SizedBox(
-                                height: 30,
-                              ),
-
-                              /// Classes Grid (Stored in student screens)
-
-                              MyClassesGrid(myClasses: gridList),
-                              SizedBox(
-                                height: 30,
-                              ),
-
-                              ///Schedule Class button
-
-                              /// Teacher Assessment Panel
-                              /// includes list of latest three assessments and buttons
-                              SizedBox(
-                                height: 30,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TeacherAssessmentPanel(
-                                        teacherData: teacherData),
-                                    SizedBox(width: 30),
-                                    TeacherResourcesPanel(
-                                        teacherData: teacherData),
-                                    SizedBox(width: 30),
-                                    TeacherAssignmentPanel(
-                                        teacherData: teacherData),
-                                  ],
-                                ),
-                              ),
-
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              ButtonRowMain(teacherData: teacherData),
-
-                              ///teacher assignment panel
-                              ///built on same format as assessment panel
-
-                              const SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+            : TeacherWebHome(
+                teacherData: teacherData,
+                estimateTs: estimateTs,
+                nextClass: nextClass,
+                endTime: endTime,
+                gridList: gridList);
   }
 }
+
 
 
 

@@ -246,6 +246,7 @@ class TeacherService with ChangeNotifier {
 
   List<SubjectClass> getClassesForGrid(List<SubjectClass> all) {
     List<SubjectClass> myClasses = [];
+    print('getClassesForGrid called');
     var now = DateTime.now();
     all.forEach((cls) {
       if (cls.startTime!.isAfter(now)) {

@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -44,44 +47,30 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyB-KqeV5zW2FkLTkTO9RgCrLId62hGY-g0',
-    appId: '1:231869960195:web:05aa070eacf40b5c213e36',
-    messagingSenderId: '231869960195',
-    projectId: 'sil-app-c5b47',
-    authDomain: 'sil-app-c5b47.firebaseapp.com',
-    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
-    storageBucket: 'sil-app-c5b47.appspot.com',
-    measurementId: 'G-9N840Z5XS6',
+    apiKey: 'AIzaSyAYYG1T_t8ym4GkhsJTsrlmyQOEsVlcZHk',
+    appId: '1:777208983885:web:0cccba32e76da016e30704',
+    messagingSenderId: '777208983885',
+    projectId: 'fluency-001',
+    authDomain: 'fluency-001.firebaseapp.com',
+    storageBucket: 'fluency-001.appspot.com',
+    measurementId: 'G-B66FV334PH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDZMKfa3MjO5DdU9Sd2XILYdwpzdEoHU5o',
-    appId: '1:231869960195:android:0fb0f4913d76040d213e36',
-    messagingSenderId: '231869960195',
-    projectId: 'sil-app-c5b47',
-    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
-    storageBucket: 'sil-app-c5b47.appspot.com',
+    apiKey: 'AIzaSyBFSQBn_jBpSaFC1Ll5TGpwh_NTFR_Tnv4',
+    appId: '1:777208983885:android:ca67e92d51007761e30704',
+    messagingSenderId: '777208983885',
+    projectId: 'fluency-001',
+    storageBucket: 'fluency-001.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD7ohmwvWHtaNx36KGkVz1_0xsxnEiKxcI',
-    appId: '1:231869960195:ios:38533cdfd9c2af19213e36',
-    messagingSenderId: '231869960195',
-    projectId: 'sil-app-c5b47',
-    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
-    storageBucket: 'sil-app-c5b47.appspot.com',
-    iosClientId: '231869960195-578ihnp7eqch3d23dc8gtfvu26kfqu59.apps.googleusercontent.com',
+    apiKey: 'AIzaSyDQHCMp-zjaXENthPQD0VDT2upe4V83jp0',
+    appId: '1:777208983885:ios:368d507be4609f6ce30704',
+    messagingSenderId: '777208983885',
+    projectId: 'fluency-001',
+    storageBucket: 'fluency-001.appspot.com',
+    iosClientId: '777208983885-2mbuhnm17ino83nfoe5mqdg14cfnhndl.apps.googleusercontent.com',
     iosBundleId: 'com.example.tilsApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD7ohmwvWHtaNx36KGkVz1_0xsxnEiKxcI',
-    appId: '1:231869960195:ios:184c5f22c6edf9a4213e36',
-    messagingSenderId: '231869960195',
-    projectId: 'sil-app-c5b47',
-    databaseURL: 'https://sil-app-c5b47-default-rtdb.firebaseio.com',
-    storageBucket: 'sil-app-c5b47.appspot.com',
-    iosClientId: '231869960195-a6kuf6hhkrl7s09226i39iu18akva6og.apps.googleusercontent.com',
-    iosBundleId: 'com.fluency.tilsApp',
   );
 }

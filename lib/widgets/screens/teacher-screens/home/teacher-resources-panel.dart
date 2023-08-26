@@ -30,7 +30,7 @@ class TeacherResourcesPanel extends StatelessWidget {
     }
 
     return Container(
-      width: 400,
+      width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
           SizedBox(height: 20),
@@ -54,7 +54,7 @@ class TeacherResourcesPanel extends StatelessWidget {
                 },
                 child: Text(
                   'Resources',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               // Text(

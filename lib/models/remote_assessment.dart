@@ -168,21 +168,21 @@ class DummyAssessments {
   List<RAfromDB> dummyData = [
     RAfromDB(
         id: 'asdf',
-        subject: 'Conflict',
+        subject: 'Maths 2',
         startTime: DateTime.now(),
         endTime: DateTime.now(),
         teacherId: 'ad',
         assessmentTitle: 'Assessment 1'),
     RAfromDB(
         id: 'asdsdf',
-        subject: 'Conflict',
+        subject: 'Maths 2',
         startTime: DateTime.now(),
         endTime: DateTime.now(),
         teacherId: 'ad',
         assessmentTitle: 'Assessment 3'),
     RAfromDB(
         id: 'asgsadf',
-        subject: 'Conflict',
+        subject: 'Maths 2',
         startTime: DateTime.now(),
         endTime: DateTime.utc(2023, 7, 9, 0, 0, 0),
         teacherId: 'ad',

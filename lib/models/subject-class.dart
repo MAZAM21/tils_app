@@ -18,6 +18,7 @@ enum SubjectName {
   LSM,
   Undeclared,
 }
+
 enum AttendanceStatus {
   Present,
   Absent,
@@ -53,13 +54,14 @@ class SubjectClass with ChangeNotifier {
   factory SubjectClass.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data() as Map<dynamic, dynamic>;
     String? name = data['subjectName'];
-    DateTime start = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']);
+    DateTime start =
+        DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']);
     DateTime end = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']);
-    Map attStat ={};
-    if(data.containsKey('attStat')){
-      attStat= {...data['attStat']};
+    Map attStat = {};
+    if (data.containsKey('attStat')) {
+      attStat = {...data['attStat']};
     }
-
+    print('subjectclass from firestore constructor called');
     return SubjectClass(
       id: doc.id,
       subjectName: name,

@@ -152,7 +152,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
         //WEB
 
         : Container(
-            width: 400,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
@@ -173,7 +173,7 @@ class TeacherAssignmentPanel extends StatelessWidget {
                       },
                       child: Text(
                         'Assignments',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
                     Text(

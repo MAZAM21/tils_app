@@ -296,7 +296,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
         //WEB
 
         : Container(
-            width: 400,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
@@ -335,7 +335,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                       },
                       child: Text(
                         'Assessements',
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
                     Text(
@@ -381,7 +381,7 @@ class TeacherAssessmentPanel extends StatelessWidget {
                           tileColor: Colors.white,
                           title: Text(
                             '${topThree[i].assessmentTitle}',
-                            style: Theme.of(context).textTheme.headlineMedium,
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                           subtitle: Text(
                             'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',

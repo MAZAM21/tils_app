@@ -1,35 +1,77 @@
 {
   "project_info": {
-    "project_number": "231869960195",
-    "firebase_url": "https://sil-app-c5b47-default-rtdb.firebaseio.com",
-    "project_id": "sil-app-c5b47",
-    "storage_bucket": "sil-app-c5b47.appspot.com"
+    "project_number": "777208983885",
+    "project_id": "fluency-001",
+    "storage_bucket": "fluency-001.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:231869960195:android:0fb0f4913d76040d213e36",
+        "mobilesdk_app_id": "1:777208983885:android:3396328646d563bce30704",
         "android_client_info": {
-          "package_name": "com.fluency.sil"
+          "package_name": "com.fluency.lords"
         }
       },
       "oauth_client": [
         {
-          "client_id": "231869960195-nt5ei0smfcnqf1dr1e9oletb499ovsv1.apps.googleusercontent.com",
+          "client_id": "777208983885-u05mfcr8ih1pa5hfju2mfsgf6dvk6nb4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDZMKfa3MjO5DdU9Sd2XILYdwpzdEoHU5o"
+          "current_key": "AIzaSyBFSQBn_jBpSaFC1Ll5TGpwh_NTFR_Tnv4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "231869960195-nt5ei0smfcnqf1dr1e9oletb499ovsv1.apps.googleusercontent.com",
+              "client_id": "777208983885-u05mfcr8ih1pa5hfju2mfsgf6dvk6nb4.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "777208983885-2mbuhnm17ino83nfoe5mqdg14cfnhndl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tilsApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:777208983885:android:ca67e92d51007761e30704",
+        "android_client_info": {
+          "package_name": "com.fluency.sil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "777208983885-u05mfcr8ih1pa5hfju2mfsgf6dvk6nb4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFSQBn_jBpSaFC1Ll5TGpwh_NTFR_Tnv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "777208983885-u05mfcr8ih1pa5hfju2mfsgf6dvk6nb4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "777208983885-2mbuhnm17ino83nfoe5mqdg14cfnhndl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tilsApp"
+              }
             }
           ]
         }

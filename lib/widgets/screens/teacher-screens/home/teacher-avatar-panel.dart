@@ -17,10 +17,10 @@ class TeacherAvatarPanel extends StatelessWidget {
             defaultTargetPlatform == TargetPlatform.iOS
         ? Row(
             children: <Widget>[
-              Icon(
-                Icons.person,
-                size: 50,
-              ),
+              // Icon(
+              //   Icons.person,
+              //   size: 50,
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Container(
@@ -116,10 +116,10 @@ class TeacherAvatarPanel extends StatelessWidget {
           )
         : Row(
             children: <Widget>[
-              Icon(
-                Icons.person,
-                size: 50,
-              ),
+              // Icon(
+              //   Icons.person,
+              //   size: 50,
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Container(

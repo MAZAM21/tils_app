@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:SIL_app/models/institutemd.dart';
+import 'package:SIL_app/models/teachers-all.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/foundation.dart';
@@ -36,6 +38,10 @@ class DatabaseService with ChangeNotifier {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  String? instID;
+
+  DatabaseService([this.instID]);
+
   //gets classes collection data and converts to Meeting list for TT
   Stream<List<Meeting>>? streamMeetings() {
     CollectionReference ref = _db.collection('classes');
@@ -69,6 +75,18 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => StudentRank.fromFirestore(doc)).toList());
     } catch (e) {
       print('error in student list stream db:' + '$e');
+    }
+    return null;
+  }
+
+  Stream<List<AllTeachers>>? streamTeachers() {
+    try {
+      CollectionReference ref =
+          _db.collection('institutes').doc(instID).collection('teachers');
+      return ref.snapshots().map((list) =>
+          list.docs.map((doc) => AllTeachers.fromFirestore(doc)).toList());
+    } catch (e) {
+      print('error in  streamTeachers db: $e');
     }
     return null;
   }
@@ -244,6 +262,37 @@ class DatabaseService with ChangeNotifier {
       print('err in getallstudents $err');
     }
     return null;
+  }
+
+  Future<InstituteData?> getInstituteData() async {
+    if (instID != null) {
+      DocumentReference ref = _db.collection('institutes').doc(instID);
+      try {
+        final instDataDoc = await ref.get();
+        return InstituteData.fromFirestore(instDataDoc);
+      } catch (e) {
+        print('error in getInstituteData: ${e}');
+      }
+      throw Exception();
+    } else {
+      throw Exception('in getinstitutedata genDB');
+    }
+  }
+
+  Future<InstituteData?> getInstituteDataforAllTabs() async {
+    if (instID != null) {
+      DocumentReference ref = _db.collection('institutes').doc(instID);
+      try {
+        print('in getinsititutedataforalltabs: ${ref.id}');
+        final instDataDoc = await ref.get();
+        return InstituteData.fromFirestore(instDataDoc);
+      } catch (e) {
+        print('error in getInstituteData: ${e}');
+      }
+      throw Exception('try catch error in streaminstdataforalltabs');
+    } else {
+      throw Exception('in getinstitutedata alltabs error');
+    }
   }
 
   Future<List<String>?> getAllAssessmentIds() async {
