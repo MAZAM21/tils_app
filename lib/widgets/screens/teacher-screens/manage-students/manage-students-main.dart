@@ -1,3 +1,4 @@
+import 'package:SIL_app/models/institutemd.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,8 @@ import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/activate
 import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/edit-student-subs.dart';
 
 class ManageStudents extends StatefulWidget {
-  const ManageStudents({Key? key}) : super(key: key);
+  final Map<String, dynamic> yearSubfromDb;
+  ManageStudents(this.yearSubfromDb);
 
   static const routeName = '/managementMain';
 
@@ -21,7 +23,6 @@ class ManageStudents extends StatefulWidget {
 
 class _ManageStudentsState extends State<ManageStudents> {
   final ms = ManagementService();
-  final db = DatabaseService();
 
   String? _yearFilter;
   String? _filter;
@@ -40,7 +41,7 @@ class _ManageStudentsState extends State<ManageStudents> {
 
     _filter = 'Year';
     _yearFilter = teacherData.year;
-    _subYearFilter = '1';
+    _subYearFilter = teacherData.year;
 
     super.didChangeDependencies();
   }
@@ -165,7 +166,7 @@ class _ManageStudentsState extends State<ManageStudents> {
     );
   }
 
-  Future<dynamic> showOptions(StudentRank stud) {
+  Future<dynamic> showOptions(StudentRank stud, db, InstituteData? instData) {
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -236,7 +237,8 @@ class _ManageStudentsState extends State<ManageStudents> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (ctx) => EditStudSubs(stud)));
+                                    builder: (ctx) =>
+                                        EditStudSubs(stud, instData)));
                           },
                           child: Text(
                             'Change subjects or year',
@@ -353,8 +355,10 @@ class _ManageStudentsState extends State<ManageStudents> {
   Widget build(BuildContext context) {
     List<StudentRank> students = [];
     final studsFromdb = Provider.of<List<StudentRank>>(context);
-    final assessments = Provider.of<List<RAfromDB>>(context);
-    final teacherData = Provider.of<TeacherUser>(context);
+    // final assessments = Provider.of<List<RAfromDB>>(context);
+    // final teacherData = Provider.of<TeacherUser>(context);
+    final instData = Provider.of<InstituteData?>(context);
+    final db = Provider.of<DatabaseService>(context, listen: false);
     bool isActive = false;
 
     switch (_filter) {
@@ -368,7 +372,7 @@ class _ManageStudentsState extends State<ManageStudents> {
         students = ms.getStudentsOfYear(_yearFilter, studsFromdb);
     }
 
-    if (studsFromdb.isNotEmpty) {
+    if (studsFromdb.isNotEmpty && instData != null) {
       isActive = true;
       // print('active in manage students');
     }
@@ -416,18 +420,14 @@ class _ManageStudentsState extends State<ManageStudents> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            _filterButtonSubYear(
-                              text: '1',
-                              filterText: '1',
-                            ),
-                            _filterButtonSubYear(
-                              text: '2',
-                              filterText: '2',
-                            ),
-                            _filterButtonSubYear(
-                              text: '3',
-                              filterText: '3',
-                            ),
+                            for (var x = 0;
+                                x < widget.yearSubfromDb.keys.length;
+                                x++)
+                              _filterButtonSubYear(
+                                text: widget.yearSubfromDb.keys.toList()[x],
+                                filterText:
+                                    widget.yearSubfromDb.keys.toList()[x],
+                              ),
                           ],
                         ),
                         SingleChildScrollView(
@@ -435,11 +435,15 @@ class _ManageStudentsState extends State<ManageStudents> {
                           child: Row(
                             children: <Widget>[
                               for (var x = 0;
-                                  x < yearSub['$_subYearFilter']!.length;
+                                  x <
+                                      widget.yearSubfromDb['$_subYearFilter']!
+                                          .length;
                                   x++)
                                 _filterButtonSubject(
-                                    text: yearSub['$_subYearFilter']![x],
-                                    filterText: yearSub['$_subYearFilter']![x]),
+                                    text: widget
+                                        .yearSubfromDb['$_subYearFilter']![x],
+                                    filterText: widget
+                                        .yearSubfromDb['$_subYearFilter']![x]),
                             ],
                           ),
                         )
@@ -452,18 +456,13 @@ class _ManageStudentsState extends State<ManageStudents> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
-                        _filterButtonYear(
-                          text: '1',
-                          filterText: '1',
-                        ),
-                        _filterButtonYear(
-                          text: '2',
-                          filterText: '2',
-                        ),
-                        _filterButtonYear(
-                          text: '3',
-                          filterText: '3',
-                        ),
+                        for (var x = 0;
+                            x < widget.yearSubfromDb.keys.length;
+                            x++)
+                          _filterButtonYear(
+                            text: widget.yearSubfromDb.keys.toList()[x],
+                            filterText: widget.yearSubfromDb.keys.toList()[x],
+                          ),
                       ],
                     ),
                   ),
@@ -483,7 +482,7 @@ class _ManageStudentsState extends State<ManageStudents> {
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () {
-                                  showOptions(students[i]);
+                                  showOptions(students[i], db, instData);
                                 },
                                 child: Container(
                                   color: Colors.white,

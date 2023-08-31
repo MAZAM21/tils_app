@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 enum SubjectName {
@@ -50,27 +51,50 @@ class SubjectClass with ChangeNotifier {
     this.attendanceStatus,
     this.topic,
   });
+  factory SubjectClass.invalid() {
+    return SubjectClass(
+      id: '', // Provide some default values for the properties
+      subjectName: 'Invalid Subject',
+      startTime: DateTime.now(),
+      endTime: DateTime.now(),
+      section: 'Invalid Section',
+      topic: 'Invalid Topic',
+      attendanceStatus: {},
+    );
+  }
+  bool isInvalid() {
+    // Define your conditions here to determine if the object is invalid or not
+    // For example, you can check if the id is empty or if the subjectName is 'Invalid Subject'
+    return id.isEmpty || subjectName == 'Invalid Subject';
+  }
 
   factory SubjectClass.fromFirestore(QueryDocumentSnapshot doc) {
     Map data = doc.data() as Map<dynamic, dynamic>;
     String? name = data['subjectName'];
-    DateTime start =
-        DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']);
-    DateTime end = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']);
-    Map attStat = {};
-    if (data.containsKey('attStat')) {
-      attStat = {...data['attStat']};
+    String className;
+    if (!name!.contains('Exam')) {
+      className = name;
+
+      DateTime start =
+          DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['startTime']);
+      DateTime end = DateFormat("yyyy-MM-dd hh:mm:ss a").parse(data['endTime']);
+      Map attStat = {};
+      if (data.containsKey('attStat')) {
+        attStat = {...data['attStat']};
+      }
+
+      return SubjectClass(
+        id: doc.id,
+        subjectName: className,
+        startTime: start,
+        endTime: end,
+        section: data['section'],
+        topic: data['topic'] ?? 'Not Added',
+        attendanceStatus: attStat,
+      );
+    } else {
+      return SubjectClass.invalid();
     }
-    print('subjectclass from firestore constructor called');
-    return SubjectClass(
-      id: doc.id,
-      subjectName: name,
-      startTime: start,
-      endTime: end,
-      section: data['section'],
-      topic: data['topic'] ?? 'Not Added',
-      attendanceStatus: attStat,
-    );
   }
 
   Map<dynamic, dynamic>? get attStat {
@@ -88,91 +112,56 @@ class SubjectClass with ChangeNotifier {
     switch (subjectName) {
       case 'Jurisprudence':
         return Color.fromARGB(255, 56, 85, 89);
-        break;
+
       case 'Trust':
         return Color.fromARGB(255, 68, 137, 156);
-        break;
+
       case 'Conflict':
         return Color.fromARGB(255, 37, 31, 87);
-        break;
+
       case 'Islamic':
         return Color.fromARGB(255, 39, 59, 92);
-        break;
+
       case 'Company':
         return Color.fromARGB(255, 50, 33, 58);
-        break;
+
       case 'Tort':
         return Color.fromARGB(255, 56, 59, 83);
-        break;
+
       case 'Property':
         return Color.fromARGB(255, 102, 113, 126);
-        break;
+
       case 'EU':
         return Color.fromARGB(255, 206, 185, 146);
-        break;
+
       case 'HR':
         return Color.fromARGB(255, 143, 173, 136);
-        break;
+
       case 'Contract':
         return Color.fromARGB(255, 36, 79, 38);
-        break;
+
       case 'Criminal':
         return Color.fromARGB(255, 37, 109, 27);
-        break;
+
       case 'LSM':
         return Color.fromARGB(255, 189, 213, 234);
-        break;
+
       case 'Public':
         return Color.fromARGB(255, 201, 125, 96);
-        break;
+      case 'Islamiat':
+        return Color.fromARGB(255, 102, 113, 126);
+      case 'Maths':
+        return Color.fromARGB(255, 189, 213, 234);
+      case 'Urdu':
+        return Color.fromARGB(255, 201, 125, 96);
+      case 'English':
+        return Color.fromARGB(255, 206, 185, 146);
+      case 'Computer':
+        return Color.fromARGB(255, 39, 59, 92);
+      case 'Biology':
+        return Color.fromARGB(255, 143, 173, 136);
       default:
         return Colors.black;
-    }
-  }
-
-  SubjectName setSubject(String sub) {
-    switch (sub) {
-      case 'Jurisprudence':
-        return SubjectName.Jurisprudence;
-        break;
-      case 'Trust':
-        return SubjectName.Trust;
-        break;
-      case 'Conflict':
-        return SubjectName.Conflict;
-        break;
-      case 'Islamic':
-        return SubjectName.Islamic;
-        break;
-      case 'Company':
-        return SubjectName.Company;
-        break;
-      case 'Tort':
-        return SubjectName.Tort;
-        break;
-      case 'Property':
-        return SubjectName.Property;
-        break;
-      case 'EU':
-        return SubjectName.EU;
-        break;
-      case 'HR':
-        return SubjectName.HR;
-        break;
-      case 'Contract':
-        return SubjectName.Contract;
-        break;
-      case 'Criminal':
-        return SubjectName.Criminal;
-        break;
-      case 'LSM':
-        return SubjectName.LSM;
-        break;
-      case 'Public':
-        return SubjectName.Public;
-        break;
-      default:
-        return SubjectName.Undeclared;
     }
   }
 

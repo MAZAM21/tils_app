@@ -1,14 +1,12 @@
 import 'package:SIL_app/models/meeting.dart';
 import 'package:SIL_app/models/subject-class.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
-import 'package:SIL_app/widgets/drawer.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/home/button-row-webmain.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/class-timer-panel.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-assessment-panel.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-assignment-panel.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-resources-panel.dart';
 import 'package:SIL_app/widgets/student-screens/student_home/classes-grid.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class TeacherWebHome extends StatelessWidget {
@@ -31,7 +29,7 @@ class TeacherWebHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: AppDrawer(),
+        // drawer: AppDrawer(),
         body: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -47,27 +45,51 @@ class TeacherWebHome extends StatelessWidget {
                       SizedBox(
                         height: 50,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: ClassTimerPanel(
-                          estimateTs,
-                          nextClass,
-                          endTime,
-                          teacherData,
-                        ),
-                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          TeacherAvatarPanel(teacherData: teacherData),
-
-                          // SizedBox(
-                          //   height: 25,
-                          // ),
-
-                          /// Class countdown
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: ClassTimerPanel(
+                                  estimateTs,
+                                  nextClass,
+                                  endTime,
+                                  teacherData,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 70,
+                              )
+                            ],
+                          ),
+                          SingleChildScrollView(
+                            dragStartBehavior: DragStartBehavior.start,
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.59,
+                              child: MyClassesGrid(myClasses: gridList),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
                         ],
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: <Widget>[
+                      //     TeacherAvatarPanel(teacherData: teacherData),
+
+                      //     // SizedBox(
+                      //     //   height: 25,
+                      //     // ),
+
+                      //     /// Class countdown
+                      //   ],
+                      // ),
                       // SizedBox(
                       //   height: 50,
                       // ),
@@ -85,11 +107,6 @@ class TeacherWebHome extends StatelessWidget {
                       ),
 
                       /// Classes Grid (Stored in student screens)
-
-                      MyClassesGrid(myClasses: gridList),
-                      SizedBox(
-                        height: 30,
-                      ),
 
                       ///Schedule Class button
 

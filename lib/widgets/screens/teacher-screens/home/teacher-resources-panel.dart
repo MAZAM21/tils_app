@@ -102,7 +102,7 @@ class TeacherResourcesPanel extends StatelessWidget {
                     tileColor: Colors.white,
                     title: Text(
                       '${topThree[i].topic}',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
                     subtitle: Text(
                       '${topThree[i].subject}',

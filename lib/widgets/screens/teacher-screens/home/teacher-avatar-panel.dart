@@ -123,7 +123,7 @@ class TeacherAvatarPanel extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
                 child: Container(
-                  width: 200,
+                  width: 170,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
@@ -146,7 +146,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                                 fontSize: 14,
                                 fontFamily: 'Proxima Nova',
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xff5F686F),
+                                color: Colors.grey[400],
                               ),
                             ),
                           if (now.isBefore(
@@ -169,7 +169,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                                 fontSize: 14,
                                 fontFamily: 'Proxima Nova',
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xff5F686F),
+                                color: Colors.grey[400],
                               ),
                             ),
                           if (now.isBefore(
@@ -192,7 +192,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                                 fontSize: 14,
                                 fontFamily: 'Proxima Nova',
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xff5F686F),
+                                color: Colors.grey[400],
                               ),
                             ),
                         ],
@@ -203,7 +203,7 @@ class TeacherAvatarPanel extends StatelessWidget {
                           fontSize: 18,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w700,
-                          color: Color(0xff2A353F),
+                          color: Colors.white,
                         ),
                         textAlign: TextAlign.left,
                       ),

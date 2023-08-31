@@ -127,7 +127,6 @@ class StudentService {
     List<ResourceDownload> myRes = [];
     final List<String> subjects = stdata.subjects as List<String>;
     allRes.forEach((res) {
-     
       if (subjects.contains(res.subject)) {
         myRes.add(res);
       }
@@ -181,15 +180,8 @@ class StudentService {
       (meeting) {
         return meeting.to!.isAfter(now);
       },
-      orElse: () => Meeting(
-        'no class',
-        null,
-        null,
-        null,
-        false,
-        'no class',
-        null,
-      ),
+      orElse: () =>
+          Meeting('no class', null, null, null, false, 'no class', null, null),
     );
 
     list.forEach((meeting) {
@@ -281,7 +273,6 @@ class StudentService {
     //tl is total length of assessment q maps
     int tl = ra.allMCQs!.length + ra.allTextQs!.length;
     if (index < ra.allMCQs!.length) {
-      
       return ra.allMCQs![index].answerChoices;
     }
     if (index >= tl) {

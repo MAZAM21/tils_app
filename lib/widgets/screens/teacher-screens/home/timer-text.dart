@@ -28,7 +28,7 @@ class TimerText extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: Container(
         color: Colors.white,
-        height: MediaQuery.of(context).size.height * 0.20,
+        height: 124,
         width: MediaQuery.of(context).size.width * 0.20,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

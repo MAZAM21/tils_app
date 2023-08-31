@@ -107,10 +107,8 @@ class RAfromDB {
       DateTime? end;
       bool isDep;
       //print(startTime);
-      start = DateTime.parse(
-          startTime.toDate().toString() ?? Timestamp.now() as String);
-      end = DateTime.parse(
-          endTime.toDate().toString() ?? Timestamp.now() as String);
+      start = DateTime.parse(startTime.toDate().toString());
+      end = DateTime.parse(endTime.toDate().toString());
       mcqs.forEach((q, a) {
         converted.add(MCQ(question: q, answerChoices: a));
       });
@@ -135,8 +133,8 @@ class RAfromDB {
           assessmentTitle: data['title'],
           allMCQs: randomizedMCQs,
           allTextQs: textQs,
-          startTime: start != null ? start : null,
-          endTime: end != null ? end : null,
+          startTime: start,
+          endTime: end,
           isDeployed: isDep);
     } catch (e) {
       print('err in rafromdb constructor: $e');

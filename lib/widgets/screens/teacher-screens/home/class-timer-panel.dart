@@ -140,6 +140,8 @@ class _ClassTimerPanelState extends State<ClassTimerPanel> {
                         ),
                       ],
                     )
+
+                  //Web
                   : Column(
                       children: <Widget>[
                         Row(

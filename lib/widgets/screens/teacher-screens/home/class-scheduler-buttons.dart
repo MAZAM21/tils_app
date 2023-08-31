@@ -35,20 +35,20 @@ class ClassSchedulerButtons extends StatelessWidget {
                 },
                 child: Text('Time Table'),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ChangeNotifierProvider.value(
-                        value: teacherData,
-                        child: EditTTForm(),
-                      ),
-                    ),
-                  );
-                },
-                child: Text('Schedule Class'),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (BuildContext context) =>
+              //             ChangeNotifierProvider.value(
+              //           value: teacherData,
+              //           child: EditTTForm(),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              //   child: Text('Schedule Class'),
+              // ),
             ],
           )
         ],

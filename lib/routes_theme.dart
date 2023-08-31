@@ -179,6 +179,12 @@ class RoutesAndTheme extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
+            labelMedium: TextStyle(
+              color: Colors.white,
+              fontFamily: 'Proxima Nova',
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+            ),
 
             //previously headline 2
             bodySmall: TextStyle(

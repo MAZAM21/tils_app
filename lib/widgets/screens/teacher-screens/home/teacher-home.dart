@@ -1,3 +1,4 @@
+import 'package:SIL_app/models/institutemd.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-web-home.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -121,6 +122,7 @@ class _HomePageState extends State<HomePage> {
     final meetingsList = Provider.of<List<Meeting>>(context);
     final subClassList = Provider.of<List<SubjectClass>>(context);
     final raList = Provider.of<List<RAfromDB>>(context);
+    final instData = Provider.of<InstituteData?>(context);
 
     ///testing student rank
     final stdRank = Provider.of<List<StudentRank>>(context);
@@ -132,7 +134,7 @@ class _HomePageState extends State<HomePage> {
     List<SubjectClass> gridList = [];
     Meeting? nextClass;
 
-    if (teacherData != null) {
+    if (teacherData != null && instData != null) {
       gridList = ts.getClassesForGrid(subClassList);
       final myClasses = ts.getMyClasses(meetingsList, teacherData.subjects);
       nextClass = ts.getNextClass(myClasses);
@@ -150,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                 defaultTargetPlatform == TargetPlatform.android
             ? SafeArea(
                 child: Scaffold(
-                  drawer: AppDrawer(),
+                  //drawer: AppDrawer(),
                   body: SingleChildScrollView(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -215,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (BuildContext context) =>
                                               ChangeNotifierProvider.value(
                                             value: teacherData,
-                                            child: EditTTForm(),
+                                            child: EditTTForm(instData),
                                           ),
                                         ),
                                       );

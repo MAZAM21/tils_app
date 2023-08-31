@@ -32,24 +32,24 @@ class ButtonRowMain extends StatelessWidget {
             child: Wrap(
               alignment: WrapAlignment.spaceEvenly,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RedButtonMain(
-                    child: 'Schedule Class',
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          settings: RouteSettings(name: '/edit-time-table'),
-                          builder: (BuildContext context) =>
-                              ChangeNotifierProvider.value(
-                            value: teacherData,
-                            child: EditTTForm(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: RedButtonMain(
+                //     child: 'Schedule Class',
+                //     onPressed: () {
+                //       Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           settings: RouteSettings(name: '/edit-time-table'),
+                //           builder: (BuildContext context) =>
+                //               ChangeNotifierProvider.value(
+                //             value: teacherData,
+                //             child: EditTTForm(),
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: WhiteButtonMain(
@@ -171,7 +171,7 @@ class ButtonRowMain extends StatelessWidget {
                           builder: (BuildContext context) =>
                               ChangeNotifierProvider.value(
                             value: teacherData,
-                            child: ManageStudents(),
+                            child: ManageStudents({}),
                           ),
                         ),
                       );
@@ -189,7 +189,7 @@ class ButtonRowMain extends StatelessWidget {
                           builder: (BuildContext context) =>
                               ChangeNotifierProvider.value(
                             value: teacherData,
-                            child: ManageStudents(),
+                            child: ManageStudents({}),
                           ),
                         ),
                       );

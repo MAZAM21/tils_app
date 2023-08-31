@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:langchain/langchain.dart';
@@ -115,6 +116,44 @@ class AIPower {
     return mcqList;
   }
 
+  void uploadAnswers(
+      List<Uint8List> _fileBytesList, List<String> _fileNames) async {
+    if (_fileBytesList.isEmpty) {
+      print('No files selected to upload');
+      return;
+    }
+
+    try {
+      var url = Uri.parse('http://127.0.0.1:5000/file_upload');
+      var request = http.MultipartRequest('POST', url);
+
+      for (var i = 0; i < _fileBytesList.length; i++) {
+        Uint8List fileBytes = _fileBytesList[i];
+        String fileName = _fileNames[i];
+
+        Stream<List<int>> stream =
+            Stream.fromIterable(fileBytes.map((byte) => [byte]));
+
+        request.files.add(http.MultipartFile(
+          'files', // Adjust the field name to match your server's expectations
+          stream,
+          fileBytes.length,
+          filename: fileName,
+        ));
+      }
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print('Files uploaded successfully');
+      } else {
+        print('Error uploading files: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error uploading files: $e');
+    }
+  }
+
   Future<List<MCQ>?> mcq_generation(String topic) async {
     final url = 'http://127.0.0.1:5000/auto_quiz';
 
@@ -205,10 +244,10 @@ class AIPower {
         )
         .values
         .toList(growable: false);
-    final embeddings = OpenAIEmbeddings(
-      apiKey: key,
-      model: 'text-embedding-ada-002',
-    );
+    // final embeddings = OpenAIEmbeddings(
+    //   apiKey: key,
+    //   model: 'text-embedding-ada-002',
+    // );
     print('added sources');
     print(textsWithSources[0].toString());
   }
