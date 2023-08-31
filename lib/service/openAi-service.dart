@@ -15,70 +15,43 @@ class AIPower {
   Map<String, dynamic> offerAcceptanceMCQs = {
     "1": {
       "no": "1",
-      "mcq":
-          "According to the context, when does a legally binding agreement arise from an offer?",
+      "mcq": "What was the focus of the author's discussion?",
       "options": {
-        "1": "When the offer is made",
-        "2": "When the offer is accepted",
-        "3": "When the offer is communicated",
-        "correct":
-            "When acceptance is communicated to the offeror in the manner contemplated by the offer"
+        "1": "The certainty of the agreement itself",
+        "2": "The duration of the agreement",
+        "3": "The enforceability of the agreement",
+        "correct": "The certainty of the agreement itself"
       }
     },
     "2": {
       "no": "2",
-      "mcq":
-          "Can an offer be revoked without the consent of the other party after acceptance?",
+      "mcq": "According to the context, what did the author conclude?",
       "options": {
-        "1": "Yes",
-        "2": "It depends on the circumstances",
-        "correct": "No"
+        "1": "The agreement was uncertain",
+        "2": "The agreement was enforceable",
+        "3": "The agreement was indefinite",
+        "correct": "The agreement was certain"
       }
     },
     "3": {
       "no": "3",
       "mcq":
-          "What must be proven in order to establish that an offer has been accepted?",
+          "What aspect of the agreement did the author specifically mention?",
       "options": {
-        "1": "That the offeree knew about the offer",
-        "2": "That the offeror knew about the acceptance",
-        "3": "That the offeror communicated the acceptance",
-        "correct":
-            "That acceptance is communicated to the offeror in the manner contemplated by the offer"
-      }
-    }
-  };
-  Map<String, dynamic> generated_mcq = {
-    "1": {
-      "no": "1",
-      "mcq": "What is a secret trust?",
-      "options": {
-        "1": "A trust created during the testator's lifetime",
-        "2": "A trust created under a will",
-        "3": "A trust where the beneficiaries are named in the will",
-        "correct": "A trust where the beneficiaries are not named in the will"
-      }
+        "1": "The payment terms",
+        "2": "The negotiation process",
+        "correct": "The duration"
+      },
+      "4": "The legal consequences"
     },
-    "2": {
-      "no": "2",
-      "mcq": "Who holds the property in a secret trust?",
+    "4": {
+      "no": "4",
+      "mcq": "What was the author's opinion on the certainty of the agreement?",
       "options": {
-        "1": "The testator",
-        "2": "The legatee",
-        "3": "The beneficiaries",
-        "correct": "The legatee"
-      }
-    },
-    "3": {
-      "no": "3",
-      "mcq": "What is the purpose of a secret trust?",
-      "options": {
-        "1": "To avoid probate fees",
-        "2":
-            "To ensure the property is distributed according to the testator's wishes",
-        "3": "To keep the existence of the trust a secret",
-        "correct":
-            "To ensure the property is distributed according to the testator's wishes"
+        "1": "It was irrelevant",
+        "2": "It was crucial",
+        "3": "It was unclear",
+        "correct": "It was important"
       }
     }
   };
@@ -168,6 +141,8 @@ class AIPower {
     Map<String, dynamic> body = {
       'file': base64File,
       'topic': topic,
+      "number": 4,
+      "subject": "certainty"
     };
 
     http.Response response = await http.post(

@@ -187,6 +187,22 @@ class _CallChatGPTState extends State<CallChatGPT> {
   }
 
   Widget buildMCQCard(MCQ mcq) {
+    Set<String> seenIncorrectAnswers = {};
+    String correctAnswer = mcq.answerChoices!['correct']!;
+
+    Map<String, String> processedAns = {};
+
+    mcq.answerChoices!.forEach((option, answer) {
+      if (option != 'correct' &&
+          answer != correctAnswer &&
+          !seenIncorrectAnswers.contains(answer)) {
+        seenIncorrectAnswers.add(answer);
+        processedAns[option] = answer;
+      }
+    });
+    processedAns["correct"] = correctAnswer;
+    print(processedAns);
+
     return Card(
       color: Theme.of(context).canvasColor,
       child: Padding(
@@ -197,14 +213,15 @@ class _CallChatGPTState extends State<CallChatGPT> {
             Text(
               mcq.question!,
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  fontFamily: 'Proxima Nova'),
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                fontFamily: 'Proxima Nova',
+              ),
             ),
             SizedBox(height: 8.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: mcq.answerChoices!.entries.map((entry) {
+              children: processedAns.entries.map((entry) {
                 final option = entry.key;
                 final answer = entry.value;
                 final isCorrect = option == "correct";
@@ -213,7 +230,8 @@ class _CallChatGPTState extends State<CallChatGPT> {
                   padding: const EdgeInsets.all(8.0),
                   child: ListTile(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     tileColor: isCorrect ? Color(0xffBAEDA9) : Colors.white,
                     title: Text(
                       answer,
