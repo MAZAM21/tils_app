@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_functions/cloud_functions.dart';
 
 import 'dart:convert';
+import 'package:file_picker/file_picker.dart';
 
 const key = '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';
 
@@ -165,6 +166,75 @@ class AIPower {
       print('Error uploading file: ${response.reasonPhrase}');
     }
     throw Exception;
+  }
+
+  Future<List<Marks>?> pickAndUploadFiles() async {
+    List<Uint8List> _fileBytesList = [];
+    List<String> _fileNames = [];
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt', 'pdf'],
+      allowMultiple: true,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      List<PlatformFile> selectedFiles = result.files;
+
+      _fileBytesList.clear();
+      _fileNames.clear();
+
+      for (var file in selectedFiles) {
+        if (file.extension == 'txt' || file.extension == 'pdf') {
+          Uint8List fileBytes = file.bytes!;
+          _fileBytesList.add(fileBytes);
+          _fileNames.add(file.name);
+        }
+      }
+
+      if (_fileBytesList.isEmpty) {
+        print('No files selected to upload');
+        return null;
+      }
+
+      try {
+        var url = Uri.parse('http://127.0.0.1:5000/file_upload');
+        var request = http.MultipartRequest('POST', url);
+
+        for (var i = 0; i < _fileBytesList.length; i++) {
+          Uint8List fileBytes = _fileBytesList[i];
+          String fileName = _fileNames[i];
+
+          Stream<List<int>> stream =
+              Stream.fromIterable(fileBytes.map((byte) => [byte]));
+
+          request.files.add(http.MultipartFile(
+            'files',
+            stream,
+            fileBytes.length,
+            filename: fileName,
+          ));
+        }
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          print('File uploaded successfully');
+          print(response);
+          final respStr = await response.stream.bytesToString();
+          List<dynamic> jsonList = jsonDecode(respStr);
+
+          // Convert each element in the jsonList to Marks objects
+          List<Marks> marksList =
+              jsonList.map((json) => Marks.fromJson(json)).toList();
+
+          return marksList;
+        } else {
+          print('Error uploading files: ${response.reasonPhrase}');
+        }
+      } catch (e) {
+        print('Error uploading files: $e');
+      }
+    }
   }
 
   Future<String?> serverTest(String? sourceMaterial) async {

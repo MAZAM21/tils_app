@@ -3,7 +3,6 @@ import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/db.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/mark-TextQs/all-textQs.dart';
 import 'package:flutter/material.dart';
 import 'package:SIL_app/service/openAi-service.dart';
 import 'package:provider/provider.dart';
