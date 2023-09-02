@@ -168,7 +168,7 @@ class AIPower {
     throw Exception;
   }
 
-  Future<List<Marks>?> pickAndUploadFiles() async {
+  Future<List<Marks>?> pickAndUploadFiles(String criteria) async {
     List<Uint8List> _fileBytesList = [];
     List<String> _fileNames = [];
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -199,6 +199,7 @@ class AIPower {
       try {
         var url = Uri.parse('http://127.0.0.1:5000/file_upload');
         var request = http.MultipartRequest('POST', url);
+        request.fields['criteria'] = criteria;
 
         for (var i = 0; i < _fileBytesList.length; i++) {
           Uint8List fileBytes = _fileBytesList[i];

@@ -58,8 +58,8 @@ class _CallChatGPTState extends State<MarkAnswers> {
                       }
                       return null;
                     },
-                    onSaved: (value) {
-                      que = value!;
+                    onChanged: (value) {
+                      que = value;
                     },
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -80,7 +80,9 @@ class _CallChatGPTState extends State<MarkAnswers> {
                     child: 'Upload Files',
                     onPressed: () {
                       setState(() {
-                        isTesting = true;
+                        if (que != "") {
+                          isTesting = true;
+                        }
                       });
                     }),
                 if (isTesting == true)
@@ -88,7 +90,7 @@ class _CallChatGPTState extends State<MarkAnswers> {
                     children: [
                       Container(
                         child: FutureBuilder<List<Marks>?>(
-                            future: aiService.pickAndUploadFiles(),
+                            future: aiService.pickAndUploadFiles(que),
                             builder: (ctx, snap) {
                               if (snap.connectionState ==
                                   ConnectionState.waiting) {
