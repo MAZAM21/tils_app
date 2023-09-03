@@ -67,6 +67,20 @@ class MCQ with ChangeNotifier {
   }
 }
 
+class Marks with ChangeNotifier {
+  String? answer;
+  Map<String, String>? marksJson;
+
+  Marks({this.answer, this.marksJson});
+
+  factory Marks.fromJson(Map<String, dynamic> json) {
+    return Marks(
+      answer: json['answer'],
+      marksJson: Map<String, String>.from(json['marks_json']),
+    );
+  }
+}
+
 class RAfromDB {
   final String? id;
   final DateTime? timeAdded;

@@ -4,7 +4,7 @@ import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance_page.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI-menu.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/mark-answers.dart';
 
 import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 import 'package:SIL_app/widgets/screens/teacher-screens/add-students/add-student-form.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final TeacherUser teacherData;
@@ -48,6 +49,50 @@ class AppDrawer extends StatelessWidget {
                   ),
                   Column(
                     children: [
+                      ListTile(
+                        title: Text(
+                          'AI',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                        leading: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              settings: RouteSettings(name: '/call-chatgpt'),
+                              builder: (BuildContext context) =>
+                                  ChangeNotifierProvider.value(
+                                value: teacherData,
+                                child: CallChatGPT(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Mark Answers',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                        leading: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              settings: RouteSettings(name: '/mark-answers'),
+                              builder: (BuildContext context) =>
+                                  ChangeNotifierProvider.value(
+                                value: teacherData,
+                                child: MarkAnswers(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                       ListTile(
                         title: Text(
                           'Schedule Class',
