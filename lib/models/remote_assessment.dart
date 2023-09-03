@@ -70,13 +70,15 @@ class MCQ with ChangeNotifier {
 class Marks with ChangeNotifier {
   String? answer;
   Map<String, String>? marksJson;
+  String? filename; // Add a field to store the original filename
 
-  Marks({this.answer, this.marksJson});
+  Marks({this.answer, this.marksJson, this.filename});
 
   factory Marks.fromJson(Map<String, dynamic> json) {
     return Marks(
       answer: json['answer'],
       marksJson: Map<String, String>.from(json['marks_json']),
+      filename: json['filename'],
     );
   }
 }
