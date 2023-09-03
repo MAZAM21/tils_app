@@ -1,7 +1,7 @@
 import 'package:SIL_app/models/institutemd.dart';
 import 'package:SIL_app/models/role.dart';
 import 'package:SIL_app/models/teachers-all.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI_screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/MCQ-generation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';

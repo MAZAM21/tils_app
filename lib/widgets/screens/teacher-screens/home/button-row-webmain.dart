@@ -10,7 +10,7 @@ import 'package:SIL_app/widgets/screens/teacher-screens/results/result-main.dart
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/edit-timetable-form.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/time%20table/time_table.dart';
 import 'package:provider/provider.dart';
-import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI_screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/MCQ-generation.dart';
 
 class ButtonRowMain extends StatelessWidget {
   const ButtonRowMain({

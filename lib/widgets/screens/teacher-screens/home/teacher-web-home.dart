@@ -45,38 +45,41 @@ class TeacherWebHome extends StatelessWidget {
                       SizedBox(
                         height: 50,
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: ClassTimerPanel(
-                                  estimateTs,
-                                  nextClass,
-                                  endTime,
-                                  teacherData,
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: ClassTimerPanel(
+                                    estimateTs,
+                                    nextClass,
+                                    endTime,
+                                    teacherData,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 70,
-                              )
-                            ],
-                          ),
-                          SingleChildScrollView(
-                            dragStartBehavior: DragStartBehavior.start,
-                            scrollDirection: Axis.horizontal,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.59,
-                              child: MyClassesGrid(myClasses: gridList),
+                                SizedBox(
+                                  height: 70,
+                                )
+                              ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                        ],
+                            SingleChildScrollView(
+                              dragStartBehavior: DragStartBehavior.start,
+                              scrollDirection: Axis.horizontal,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.59,
+                                child: MyClassesGrid(myClasses: gridList),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                          ],
+                        ),
                       ),
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
