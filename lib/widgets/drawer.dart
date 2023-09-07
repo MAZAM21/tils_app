@@ -5,6 +5,7 @@ import 'package:SIL_app/widgets/screens/teacher-screens/attendance/attendance_pa
 import 'package:SIL_app/widgets/screens/teacher-screens/home/teacher-avatar-panel.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/manage-students/manage-students-main.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/mark-answers.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/upload_textbook.dart';
 
 import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/display-all-ra.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/remote-testing/select-assessment-subject.dart';
@@ -49,6 +50,28 @@ class AppDrawer extends StatelessWidget {
                   ),
                   Column(
                     children: [
+                      ListTile(
+                        title: Text(
+                          'Upload Textbook',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                        leading: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              settings: RouteSettings(name: '/upload-textbook'),
+                              builder: (BuildContext context) =>
+                                  ChangeNotifierProvider.value(
+                                value: teacherData,
+                                child: UploadTextbook(),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                       ListTile(
                         title: Text(
                           'AI',

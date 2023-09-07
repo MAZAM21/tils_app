@@ -6,6 +6,14 @@ import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:SIL_app/models/student-user-data.dart';
+import 'package:SIL_app/service/student-db.dart';
 
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
@@ -128,44 +136,81 @@ class AIPower {
     }
   }
 
-  Future<List<MCQ>?> mcq_generation(String topic) async {
-    final url = 'http://127.0.0.1:5000/auto_quiz';
-
-    var _bytes = await XFile(filePath).readAsBytes();
-    String base64File = base64Encode(_bytes);
-
-    Map<String, String> headers = {
-      'Content-Type':
-          'application/json', // Adjust the content type based on your server
-    };
-
-    Map<String, dynamic> body = {
-      'file': base64File,
-      'topic': topic,
-      "number": 4,
-      "subject": "certainty"
-    };
-
-    http.Response response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(body),
+  Future<String?> upload_textbook(String bookname) async {
+    var ref = FirebaseStorage.instance.ref().child('');
+    List<Uint8List> _fileBytesList = [];
+    List<String> _fileNames = [];
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt', 'pdf'],
+      allowMultiple: true,
     );
 
-    if (response.statusCode == 200) {
-      print('File uploaded successfully');
-      final data = jsonDecode(response.body);
-      final mcq_json = (data['response']);
-      Map<String, dynamic> jsonData = jsonDecode(mcq_json);
-      print(jsonData);
-      List<MCQ> mcqList =
-          jsonData.values.map((json) => MCQ.fromJson(json)).toList();
+    if (result != null && result.files.isNotEmpty) {
+      List<PlatformFile> selectedFiles = result.files;
 
-      return mcqList;
-    } else {
-      print('Error uploading file: ${response.reasonPhrase}');
+      _fileBytesList.clear();
+      _fileNames.clear();
+
+      for (var file in selectedFiles) {
+        if (file.extension == 'txt' || file.extension == 'pdf') {
+          Uint8List fileBytes = file.bytes!;
+          _fileBytesList.add(fileBytes);
+          _fileNames.add(file.name);
+        }
+      }
+
+      if (_fileBytesList.isEmpty) {
+        print('No files selected to upload');
+        return null;
+      }
+
+      try {
+        var url = Uri.parse('http://127.0.0.1:5000/upload_textbooks');
+        var request = http.MultipartRequest('POST', url);
+        request.fields['bookname'] = bookname;
+
+        for (var i = 0; i < _fileBytesList.length; i++) {
+          Uint8List fileBytes = _fileBytesList[i];
+          String fileName = _fileNames[i];
+
+          Stream<List<int>> stream =
+              Stream.fromIterable(fileBytes.map((byte) => [byte]));
+
+          request.files.add(http.MultipartFile(
+            'files',
+            stream,
+            fileBytes.length,
+            filename: fileName,
+          ));
+        }
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          print('File uploaded successfully');
+          print(response);
+          final respStr = await response.stream.bytesToString();
+          String jsonList = jsonDecode(respStr);
+          String url;
+          List<String> json_List = json.decode(jsonList).cast<String>();
+          for (String path in json_List) {
+            print(path);
+            ref = FirebaseStorage.instance.ref();
+            String url = await ref
+                .child("gs://tils-portal.appspot.com/" + path)
+                .getDownloadURL();
+            print(url);
+          }
+          print(json_List);
+          return "hello";
+        } else {
+          print('Error uploading files: ${response.reasonPhrase}');
+        }
+      } catch (e) {
+        print('Error uploading files: $e');
+      }
     }
-    throw Exception;
   }
 
   Future<List<Marks>?> pickAndUploadFiles(String criteria) async {

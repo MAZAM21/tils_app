@@ -175,25 +175,38 @@ class _CallChatGPTState extends State<MarkAnswers> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Criteria: ${entry.key}',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
+                  if (entry.key != 'total' &&
+                      entry.key !=
+                          'feedback') // Exclude 'marks' and 'criteria' for 'total' and 'feedback'
+                    Text(
+                      'Criteria: ${entry.key}',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 4.0),
-                  if (entry.key !=
-                      marks.marksJson!.keys.last) // Check if it's the last key
+                  if (entry.key != 'total' &&
+                      entry.key !=
+                          'feedback') // Exclude 'marks' and 'criteria' for 'total' and 'feedback'
+                    SizedBox(height: 4.0),
+                  if (entry.key != 'total' &&
+                      entry.key !=
+                          'feedback') // Exclude 'marks' and 'criteria' for 'total' and 'feedback'
                     Text(
                       'Marks: ${entry.value}',
                       style: TextStyle(
                         fontSize: 14.0,
                       ),
                     ),
-                  if (entry.key ==
-                      marks.marksJson!.keys
-                          .last) // Display only the value for the last key
+                  if (entry.key == "total" || entry.key == "feedback")
+                    Text(
+                      '${entry.key}',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  if (entry.key == "total" || entry.key == "feedback")
                     Text(
                       '${entry.value}',
                       style: TextStyle(
