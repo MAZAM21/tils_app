@@ -6,21 +6,18 @@ import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:provider/provider.dart';
-import 'package:SIL_app/models/student-user-data.dart';
-import 'package:SIL_app/service/student-db.dart';
-
+import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 const key = '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';
 
 class AIPower {
+  final db = DatabaseService();
   Map<String, dynamic> offerAcceptanceMCQs = {
     "1": {
       "no": "1",
@@ -136,7 +133,11 @@ class AIPower {
     }
   }
 
-  Future<String?> upload_textbook(String bookname) async {
+  Future<String?> upload_textbook(
+      String bookname, String author, String subject) async {
+    print(bookname);
+    print(author);
+    print(subject);
     var ref = FirebaseStorage.instance.ref().child('');
     List<Uint8List> _fileBytesList = [];
     List<String> _fileNames = [];
@@ -162,7 +163,7 @@ class AIPower {
 
       if (_fileBytesList.isEmpty) {
         print('No files selected to upload');
-        return null;
+        return "error";
       }
 
       try {
@@ -192,18 +193,34 @@ class AIPower {
           print(response);
           final respStr = await response.stream.bytesToString();
           String jsonList = jsonDecode(respStr);
-          String url;
           List<String> json_List = json.decode(jsonList).cast<String>();
+          List<String> url_list = [];
           for (String path in json_List) {
             print(path);
             ref = FirebaseStorage.instance.ref();
-            String url = await ref
-                .child("gs://tils-portal.appspot.com/" + path)
-                .getDownloadURL();
-            print(url);
+            try {
+              String url = await ref.child(path).getDownloadURL();
+              print(url);
+              url_list.add(url);
+            } catch (e) {
+              print("url err: $e");
+            }
           }
+
+          // // Add the data to Firebase Cloud Firestore
+          // final FirebaseFirestore _db = FirebaseFirestore.instance;
+          // DocumentReference<Map> res = await _db
+          //     .collection('institutes')
+          //     .doc(instID)
+          //     .collection('textbook_vectors')
+          //     .add({
+          //   'bookname': bookname,
+          //   'author': author,
+          //   'subject': subject,
+          //   'urls': url_list,
+
           print(json_List);
-          return "hello";
+          return db.addTextbook(bookname, author, subject, url_list);
         } else {
           print('Error uploading files: ${response.reasonPhrase}');
         }

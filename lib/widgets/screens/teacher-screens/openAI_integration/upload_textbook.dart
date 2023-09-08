@@ -13,7 +13,9 @@ class UploadTextbook extends StatefulWidget {
 class _CallChatGPTState extends State<UploadTextbook> {
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
+  final authorController = TextEditingController(); // Added author controller
   String que = '';
+  String selectedSubject = ''; // Added selectedSubject variable
 
   final aiService = AIPower();
 
@@ -69,10 +71,15 @@ class _CallChatGPTState extends State<UploadTextbook> {
                       for (int j = i; j < i + 3 && j < values.length; j++) {
                         rowChildren.add(
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                selectedSubject = values[j];
+                              });
+                            },
                             style: TextButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 229, 79, 79),
+                              backgroundColor: selectedSubject == values[j]
+                                  ? Colors.green // Change color when selected
+                                  : const Color.fromARGB(255, 229, 79, 79),
                               padding: const EdgeInsets.all(16.0),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -121,39 +128,56 @@ class _CallChatGPTState extends State<UploadTextbook> {
                     minLines: 2,
                   ),
                 ),
+                Container(
+                  // Added Author input field
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: TextFormField(
+                    key: ValueKey('author'),
+                    controller: authorController,
+                    decoration: InputDecoration(
+                      labelText: 'Author',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.indigo),
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20),
                 SizedBox(
                   height: 20,
                 ),
                 WhiteButtonMain(
-                    child: 'Upload',
-                    onPressed: () {
-                      setState(() {
-                        isTesting = true;
-                      });
-                    }),
+                  child: 'Upload',
+                  onPressed: () {
+                    setState(() {
+                      isTesting = true;
+                    });
+                  },
+                ),
                 if (isTesting == true)
                   Container(
                     child: FutureBuilder<String?>(
-                        future: aiService.upload_textbook(que),
-                        builder: (ctx, snap) {
-                          if (snap.connectionState == ConnectionState.waiting) {
-                            print('waiting');
-                            return CircularProgressIndicator();
-                          }
-                          if (snap.connectionState == ConnectionState.none) {
-                            print('none');
-                            return Container();
-                          }
-                          if (snap.connectionState == ConnectionState.done) {
-                            print("done");
-                            return Text(snap.data!);
-                          }
-                          print('no state');
-                          return Column(
-                            children: [],
-                          );
-                        }),
+                      future: aiService.upload_textbook(
+                          que, selectedSubject, authorController.text),
+                      builder: (ctx, snap) {
+                        if (snap.connectionState == ConnectionState.waiting) {
+                          print('waiting');
+                          return CircularProgressIndicator();
+                        }
+                        if (snap.connectionState == ConnectionState.none) {
+                          print('none');
+                          return Container();
+                        }
+                        if (snap.connectionState == ConnectionState.done) {
+                          print("done");
+                          return Text(snap.data!);
+                        }
+                        print('no state');
+                        return Column(
+                          children: [],
+                        );
+                      },
+                    ),
                   ),
               ],
             ),

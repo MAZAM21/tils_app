@@ -622,6 +622,28 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<String> addTextbook(
+      String bookname, String author, String subject, List url_list) async {
+    print(instID);
+    try {
+      final FirebaseFirestore _db = FirebaseFirestore.instance;
+      DocumentReference<Map> res = await _db
+          .collection('institutes')
+          .doc(instID)
+          .collection('textbook_vectors')
+          .add({
+        'bookname': bookname,
+        'author': author,
+        'subject': subject,
+        'urls': url_list,
+      });
+      print(res);
+      return "success";
+    } catch (e) {
+      return "error: $e";
+    }
+  }
+
   Future<void> addClassToCF(
     String? name,
     DateTime start,
