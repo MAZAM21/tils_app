@@ -629,7 +629,7 @@ class DatabaseService with ChangeNotifier {
       final FirebaseFirestore _db = FirebaseFirestore.instance;
       DocumentReference<Map> res = await _db
           .collection('institutes')
-          .doc(instID)
+          .doc("RIBR3Pwr3We2D5IQPF5O")
           .collection('textbook_vectors')
           .add({
         'bookname': bookname,
@@ -1664,5 +1664,67 @@ class DatabaseService with ChangeNotifier {
     } catch (err) {
       print('err in delete Announcement: $err');
     }
+  }
+
+  Future<List<String>?> fetchBooknames() async {
+    try {
+      List<String> booknames = [];
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
+          .collection('institutes')
+          .doc("RIBR3Pwr3We2D5IQPF5O")
+          .collection('textbook_vectors')
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print("not empty");
+        for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+            in querySnapshot.docs) {
+          print(doc.id);
+          final bookname = doc.get('bookname');
+          if (bookname != null) {
+            booknames.add(bookname);
+          }
+        }
+        print(booknames);
+        return booknames;
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+    }
+  }
+
+  Future<List<String>?> fetchUrls(String bookname) async {
+    try {
+      List<String> urls = [];
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
+          .collection('institutes')
+          .doc("RIBR3Pwr3We2D5IQPF5O")
+          .collection('textbook_vectors')
+          .where('bookname', isEqualTo: bookname)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print("not empty");
+        for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+            in querySnapshot.docs) {
+          print(doc.id);
+          final urlList = doc.get('urls');
+          if (urlList != null) {
+            for (var item in urlList) {
+              urls.add(item.toString());
+            }
+          }
+        }
+        print(urls);
+        if (urls.isNotEmpty) {
+          return urls;
+        }
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+    }
+    return null;
   }
 }

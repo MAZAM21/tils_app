@@ -95,6 +95,48 @@ class AIPower {
     return mcqList;
   }
 
+  Future<List<MCQ>?> mcq_generation(String topic) async {
+    final url = 'http://127.0.0.1:5000/auto_quiz';
+
+    var _bytes = await XFile(filePath).readAsBytes();
+    String base64File = base64Encode(_bytes);
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    List<dynamic>? urls = await db.fetchUrls(topic);
+
+    Map<String, dynamic> body = {
+      'file': base64File,
+      'topic': topic,
+      "number": 4,
+      "subject": "certainty",
+      "urls": urls
+    };
+
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      print('File uploaded successfully');
+      final data = jsonDecode(response.body);
+      final mcq_json = (data['response']);
+      Map<String, dynamic> jsonData = jsonDecode(mcq_json);
+      print(jsonData);
+      List<MCQ> mcqList =
+          jsonData.values.map((json) => MCQ.fromJson(json)).toList();
+
+      return mcqList;
+    } else {
+      print('Error uploading file: ${response.reasonPhrase}');
+    }
+    throw Exception;
+  }
+
   void uploadAnswers(
       List<Uint8List> _fileBytesList, List<String> _fileNames) async {
     if (_fileBytesList.isEmpty) {
@@ -114,7 +156,7 @@ class AIPower {
             Stream.fromIterable(fileBytes.map((byte) => [byte]));
 
         request.files.add(http.MultipartFile(
-          'files', // Adjust the field name to match your server's expectations
+          'files',
           stream,
           fileBytes.length,
           filename: fileName,
@@ -201,7 +243,7 @@ class AIPower {
             try {
               String url = await ref.child(path).getDownloadURL();
               print(url);
-              url_list.add(url);
+              url_list.add(path);
             } catch (e) {
               print("url err: $e");
             }

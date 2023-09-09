@@ -19,7 +19,9 @@ class _CallChatGPTState extends State<CallChatGPT> {
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
   String que = '';
-
+  final _db = DatabaseService();
+  String selectedBookname = "";
+  Future<List<String>?>? futureData = DatabaseService().fetchBooknames();
   final aiService = AIPower();
 
   void saveForm() {
@@ -46,6 +48,8 @@ class _CallChatGPTState extends State<CallChatGPT> {
   Widget build(BuildContext context) {
     final teacher = Provider.of<TeacherUser>(context);
     final db = Provider.of<DatabaseService>(context, listen: false);
+    // List<String> booknames = db.fetchBooknames() as List<String>;
+
     bool isActive = false;
     if (teacher != null) {
       isActive = true;
@@ -65,7 +69,7 @@ class _CallChatGPTState extends State<CallChatGPT> {
                     children: [
                       Text(
                         'Topic',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
@@ -91,6 +95,107 @@ class _CallChatGPTState extends State<CallChatGPT> {
                           minLines: 2,
                         ),
                       ),
+                      Text(
+                        'Textbook',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      FutureBuilder<List<String>?>(
+                        future: futureData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          } else if (!snapshot.hasData ||
+                              snapshot.data == null ||
+                              snapshot.data!.isEmpty) {
+                            return Center(
+                              child: Text('No booknames found.'),
+                            );
+                          } else {
+                            final booknames = snapshot.data!;
+                            final int columns = 4;
+                            List<Widget> rows = [];
+
+                            for (int i = 0;
+                                i < booknames.length;
+                                i += columns) {
+                              List<Widget> columnChildren = [];
+
+                              for (int j = 0; j < columns; j++) {
+                                if (i + j < booknames.length) {
+                                  final bookname = booknames[i + j];
+                                  final isSelected = selectedBookname ==
+                                      bookname; // Check if it's selected
+
+                                  // Wrap the Container with GestureDetector
+                                  columnChildren.add(
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedBookname =
+                                              bookname; // Update selected bookname
+                                        });
+                                      },
+                                      child: Center(
+                                        child: Container(
+                                          margin: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.black,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            color: isSelected
+                                                ? const Color.fromARGB(
+                                                    255,
+                                                    169,
+                                                    208,
+                                                    170) // Change color when selected
+                                                : Colors
+                                                    .transparent, // Default color
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              bookname,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              }
+
+                              rows.add(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: columnChildren,
+                                ),
+                              );
+                            }
+
+                            return SingleChildScrollView(
+                              child: Container(
+                                child: Column(
+                                  children: rows,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                      ),
                       SizedBox(height: 20),
                       SizedBox(
                         height: 20,
@@ -109,7 +214,8 @@ class _CallChatGPTState extends State<CallChatGPT> {
                           children: [
                             Container(
                               child: FutureBuilder<List<MCQ>?>(
-                                  future: aiService.textGenSample(),
+                                  future: aiService
+                                      .mcq_generation(selectedBookname),
                                   builder: (ctx, snap) {
                                     if (snap.connectionState ==
                                         ConnectionState.waiting) {
