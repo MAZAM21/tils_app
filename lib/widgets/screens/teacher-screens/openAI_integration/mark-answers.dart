@@ -161,7 +161,7 @@ class _CallChatGPTState extends State<MarkAnswers> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Marks Details',
+              '${marks.filename}',
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
