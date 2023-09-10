@@ -11,10 +11,13 @@ import 'package:SIL_app/widgets/data-providers/teacher-datastream.dart';
 
 import 'package:SIL_app/widgets/screens/auth_page.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/landing-page.dart';
 
 class RoleGetter extends StatefulWidget {
   @override
   State<RoleGetter> createState() => _RoleGetterState();
+
+  static const routeName = '/role-getter';
 }
 
 class _RoleGetterState extends State<RoleGetter> {

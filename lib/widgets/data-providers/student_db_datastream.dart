@@ -28,7 +28,7 @@ class _StudentDBDatastreamState extends State<StudentDBDatastream> {
   //final db = GeneralDatabase();
   @override
   Widget build(BuildContext context) {
-    //final id = Provider.of<InstProvider?>(context)!.getId();
+    final id = Provider.of<InstProvider?>(context)!.getId();
     final db = Provider.of<DatabaseService>(context, listen: false);
 
     // bool isActive = false;

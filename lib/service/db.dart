@@ -1196,30 +1196,34 @@ class DatabaseService with ChangeNotifier {
     /// 2. first then(): create doc in user collection for parent with the role parent
     /// 3. second then(): add the parent uid to students doc.
 
-    CollectionReference userRef = _db.collection('users');
-    DocumentReference studRef = _db
-        .collection('institutes')
-        .doc(instID)
-        .collection('students')
-        .doc(stud.id);
-    try {
-      auth
-          .createUserWithEmailAndPassword(email: email, password: password)
-          .then((UserCredential credential) {
-        userRef.doc(credential.user!.uid).set({
-          'instID': instID,
-          'role': 'parent',
-          'email': email,
-          'password': password,
-          'child_name': stud.name,
-        }, SetOptions(merge: true)).then(
-          (value) => studRef.set(
-            {'parent-uid': credential.user!.uid},
-            SetOptions(merge: true),
-          ),
-        );
-      });
-    } catch (e) {}
+    if (instID != null) {
+      CollectionReference userRef = _db.collection('users');
+      DocumentReference studRef = _db
+          .collection('institutes')
+          .doc(instID)
+          .collection('students')
+          .doc(stud.id);
+      try {
+        auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((UserCredential credential) {
+          userRef.doc(credential.user!.uid).set({
+            'instID': instID,
+            'role': 'parent',
+            'email': email,
+            'password': password,
+            'child_name': stud.name,
+          }, SetOptions(merge: true)).then(
+            (value) => studRef.set(
+              {'parent-uid': credential.user!.uid},
+              SetOptions(merge: true),
+            ),
+          );
+        });
+      } catch (e) {}
+    } else {
+      throw Exception('instId null');
+    }
   }
 
   Future<void> saveTeacher(

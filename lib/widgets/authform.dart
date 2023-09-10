@@ -37,9 +37,11 @@ class _AuthFormState extends State<AuthForm> {
     //if IsValid is true then save form state and execute submitfn on inputs
     //.trim removes whitespace
     if (isValid) {
-      _formKey.currentState!.save();
-      widget.submitFn(_userEmail!.trim(), _userPassword!.trim(), _userName.trim(),
-          _isLogin, context);
+      setState(() {
+        _formKey.currentState!.save();
+        widget.submitFn(_userEmail!.trim(), _userPassword!.trim(),
+            _userName.trim(), _isLogin, context);
+      });
     }
   }
 
@@ -174,7 +176,7 @@ class _AuthFormState extends State<AuthForm> {
             ),
           )
 
-          //Web
+        //Web
 
         : Center(
             child: Container(
@@ -188,8 +190,8 @@ class _AuthFormState extends State<AuthForm> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Image(
-                          image: AssetImage('lib/assets/SIL_innerlogo.png'),
-                          height: 230,
+                          image: AssetImage('lib/assets/Fluency-Icon.png'),
+                          height: 400,
                         ),
                         SizedBox(
                           height: 70,
@@ -201,7 +203,7 @@ class _AuthFormState extends State<AuthForm> {
                               Text(
                                 'Email Address',
                                 style: TextStyle(
-                                  color:Colors.indigo[900],
+                                  color: Colors.indigo[900],
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Proxima Nova',
                                   fontSize: 18,
@@ -225,7 +227,8 @@ class _AuthFormState extends State<AuthForm> {
                                   cursorColor: Colors.white,
                                   key: ValueKey('email'),
                                   validator: (value) {
-                                    if (value!.isEmpty || !value.contains('@')) {
+                                    if (value!.isEmpty ||
+                                        !value.contains('@')) {
                                       return 'Please enter a valid email address.';
                                     }
                                     return null;
@@ -249,7 +252,7 @@ class _AuthFormState extends State<AuthForm> {
                               Text(
                                 'Password',
                                 style: TextStyle(
-                                  color:Colors.indigo[900],
+                                  color: Colors.indigo[900],
                                   fontFamily: 'Proxima Nova',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 18,

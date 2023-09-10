@@ -33,101 +33,115 @@ class AssessmentHomePanel extends StatelessWidget {
       idActive = true;
     }
 
-    return  defaultTargetPlatform == TargetPlatform.android ||
-                defaultTargetPlatform == TargetPlatform.iOS
-            ? Column(
+    return defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS
+        ? Column(
+            children: <Widget>[
+              SizedBox(height: 20),
+              Row(
                 children: <Widget>[
-                  SizedBox(height: 20),
-                  Row(
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              settings: RouteSettings(
-                                  name: '/studentra-subject-selection'),
-                              builder: (BuildContext context) =>
-                                  ChangeNotifierProvider.value(
-                                value: studData,
-                                child: StudentRASubject(
-                                  studentUser: studData,
-                                  subjects: studData.subjects as List<String>,
-                                ),
-                              ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          settings: RouteSettings(
+                              name: '/studentra-subject-selection'),
+                          builder: (BuildContext context) =>
+                              ChangeNotifierProvider.value(
+                            value: studData,
+                            child: StudentRASubject(
+                              studentUser: studData,
+                              subjects: studData.subjects as List<String>,
                             ),
-                          );
-                        },
-                        child: Text(
-                          'Assessements',
-                          style: Theme.of(context).textTheme.headlineSmall,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '($totalNumRA)',
-                        style: TextStyle(
-                          color: Color(0xff5f686f),
-                          fontFamily: 'Proxima Nova',
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                      );
+                    },
+                    child: Text(
+                      'Assessements',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
-                  Container(
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: topThree.length,
-                      shrinkWrap: true,
-                      itemBuilder: (ctx, i) {
-                        String? dStat =
-                            ss.getdeadlineStatus(topThree[i], studData);
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 3.5),
-                          child: ListTile(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            tileColor: Colors.white,
-                            title: Text(
-                              '${topThree[i].assessmentTitle}',
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                            subtitle: Text(
-                              'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Proxima Nova',
-                                color: Color(0xff5F686F),
-                              ),
-                            ),
-                            trailing: Text(
-                              '$dStat',
-                              style: TextStyle(
-                                color: Color(0xffC54134),
-                                fontFamily: 'Proxima Nova',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            onTap: !studData.completedAssessments!
-                                        .contains(topThree[i].id) &&
-                                    topThree[i].isDeployed!
+                  Text(
+                    '($totalNumRA)',
+                    style: TextStyle(
+                      color: Color(0xff5f686f),
+                      fontFamily: 'Proxima Nova',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: topThree.length,
+                  shrinkWrap: true,
+                  itemBuilder: (ctx, i) {
+                    String? dStat = ss.getdeadlineStatus(topThree[i], studData);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.5),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        tileColor: Colors.white,
+                        title: Text(
+                          '${topThree[i].assessmentTitle}',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        subtitle: Text(
+                          'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Proxima Nova',
+                            color: Color(0xff5F686F),
+                          ),
+                        ),
+                        trailing: Text(
+                          '$dStat',
+                          style: TextStyle(
+                            color: Color(0xffC54134),
+                            fontFamily: 'Proxima Nova',
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        onTap: !studData.completedAssessments!
+                                    .contains(topThree[i].id) &&
+                                topThree[i].isDeployed!
+                            ? () {
+                                Navigator.pushNamed(
+                                    context, AssessmentPage.routeName,
+                                    arguments: {
+                                      'ra': topThree[i],
+                                      'uid': studData.uid,
+                                      'name': studData.name,
+                                    });
+                              }
+                            : studData.completedAssessments!
+                                    .contains(topThree[i].id)
                                 ? () {
-                                    Navigator.pushNamed(
-                                        context, AssessmentPage.routeName,
-                                        arguments: {
-                                          'ra': topThree[i],
-                                          'uid': studData.uid,
-                                          'name': studData.name,
-                                        });
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: Text(
+                                          'This assessment has been submitted \n \n No taksies backsies!',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontFamily: 'Raleway',
+                                              color: Colors.red),
+                                        ),
+                                      ),
+                                    );
                                   }
-                                : studData.completedAssessments!
-                                        .contains(topThree[i].id)
+                                : (!topThree[i].isDeployed!
                                     ? () {
                                         showDialog(
                                           context: context,
                                           builder: (context) => AlertDialog(
                                             content: Text(
-                                              'This assessment has been submitted \n \n No taksies backsies!',
+                                              'This assessment has not been deployed',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontFamily: 'Raleway',
@@ -136,136 +150,136 @@ class AssessmentHomePanel extends StatelessWidget {
                                           ),
                                         );
                                       }
-                                    : (!topThree[i].isDeployed!
-                                        ? () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                content: Text(
-                                                  'This assessment has not been deployed',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Raleway',
-                                                      color: Colors.red),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                        : {}) as void Function()?,
+                                    : {}) as void Function()?,
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 19,
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 10,
+                  ),
+                ],
+              ),
+            ],
+          )
+        :
+        //Web
+        Container(
+            width: 400,
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Row(
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            settings: RouteSettings(
+                                name: '/studentra-subject-selection'),
+                            builder: (BuildContext context) =>
+                                ChangeNotifierProvider.value(
+                              value: studData,
+                              child: StudentRASubject(
+                                studentUser: studData,
+                                subjects: studData.subjects as List<String>,
+                              ),
+                            ),
                           ),
                         );
                       },
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 19,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 10,
+                      child: Text(
+                        'Assessements',
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                    ],
-                  ),
-                ],
-              )
-            :
-            //Web
-            Container(
-                width: 400,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 20),
-                    Row(
-                      children: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                settings: RouteSettings(
-                                    name: '/studentra-subject-selection'),
-                                builder: (BuildContext context) =>
-                                    ChangeNotifierProvider.value(
-                                  value: studData,
-                                  child: StudentRASubject(
-                                    studentUser: studData,
-                                    subjects: studData.subjects as List<String>,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Assessements',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                        ),
-                        Text(
-                          '($totalNumRA)',
-                          style: TextStyle(
-                            color: Color(0xff5f686f),
-                            fontFamily: 'Proxima Nova',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
                     ),
-                    Container(
-                      child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: topThree.length,
-                        shrinkWrap: true,
-                        itemBuilder: (ctx, i) {
-                          String? dStat =
-                              ss.getdeadlineStatus(topThree[i], studData);
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 3.5),
-                            child: ListTile(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              tileColor: Colors.white,
-                              title: Text(
-                                '${topThree[i].assessmentTitle}',
-                                style: Theme.of(context).textTheme.headlineMedium,
-                              ),
-                              subtitle: Text(
-                                'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'Proxima Nova',
-                                  color: Color(0xff5F686F),
-                                ),
-                              ),
-                              trailing: Text(
-                                '$dStat',
-                                style: TextStyle(
-                                  color: Color(0xffC54134),
-                                  fontFamily: 'Proxima Nova',
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              onTap: !studData.completedAssessments!
-                                          .contains(topThree[i].id) &&
-                                      topThree[i].isDeployed!
+                    Text(
+                      '($totalNumRA)',
+                      style: TextStyle(
+                        color: Color(0xff5f686f),
+                        fontFamily: 'Proxima Nova',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  child: ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: topThree.length,
+                    shrinkWrap: true,
+                    itemBuilder: (ctx, i) {
+                      String? dStat =
+                          ss.getdeadlineStatus(topThree[i], studData);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.5),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          tileColor: Colors.white,
+                          title: Text(
+                            '${topThree[i].assessmentTitle}',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          subtitle: Text(
+                            'Deadline: ${DateFormat('MMM dd, yyyy, hh:mm a').format(topThree[i].endTime!)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Proxima Nova',
+                              color: Color(0xff5F686F),
+                            ),
+                          ),
+                          trailing: Text(
+                            '$dStat',
+                            style: TextStyle(
+                              color: Color(0xffC54134),
+                              fontFamily: 'Proxima Nova',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          onTap: !studData.completedAssessments!
+                                      .contains(topThree[i].id) &&
+                                  topThree[i].isDeployed!
+                              ? () {
+                                  Navigator.pushNamed(
+                                      context, AssessmentPage.routeName,
+                                      arguments: {
+                                        'ra': topThree[i],
+                                        'uid': studData.uid,
+                                        'name': studData.name,
+                                      });
+                                }
+                              : studData.completedAssessments!
+                                      .contains(topThree[i].id)
                                   ? () {
-                                      Navigator.pushNamed(
-                                          context, AssessmentPage.routeName,
-                                          arguments: {
-                                            'ra': topThree[i],
-                                            'uid': studData.uid,
-                                            'name': studData.name,
-                                          });
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          content: Text(
+                                            'This assessment has been submitted \n \n No taksies backsies!',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'Raleway',
+                                                color: Colors.red),
+                                          ),
+                                        ),
+                                      );
                                     }
-                                  : studData.completedAssessments!
-                                          .contains(topThree[i].id)
+                                  : (!topThree[i].isDeployed!
                                       ? () {
                                           showDialog(
                                             context: context,
                                             builder: (context) => AlertDialog(
                                               content: Text(
-                                                'This assessment has been submitted \n \n No taksies backsies!',
+                                                'This assessment has not been deployed',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontFamily: 'Raleway',
@@ -274,40 +288,24 @@ class AssessmentHomePanel extends StatelessWidget {
                                             ),
                                           );
                                         }
-                                      : (!topThree[i].isDeployed!
-                                          ? () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) =>
-                                                    AlertDialog(
-                                                  content: Text(
-                                                    'This assessment has not been deployed',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Raleway',
-                                                        color: Colors.red),
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          : {}) as void Function()?,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 19,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 10,
+                                      : {}) as void Function()?,
                         ),
-                      ],
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 19,
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 10,
                     ),
                   ],
                 ),
-              );
+              ],
+            ),
+          );
   }
 }

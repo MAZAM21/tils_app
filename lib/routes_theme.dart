@@ -1,6 +1,8 @@
 import 'package:SIL_app/models/institutemd.dart';
 import 'package:SIL_app/models/role.dart';
 import 'package:SIL_app/models/teachers-all.dart';
+import 'package:SIL_app/widgets/landing-page.dart';
+import 'package:SIL_app/widgets/screens/auth_page.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/MCQ-generation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -195,11 +197,13 @@ class RoutesAndTheme extends StatelessWidget {
             ),
           ),
         ),
-        home: RoleGetter(),
+        home: LandingPage(),
         routes: {
           //'/': (context) => AllTabs(),
+          RoleGetter.routeName: (context) => RoleGetter(),
           AttendancePage.routeName: (context) => AttendancePage(),
-
+          LandingPage.routeName: (context) => LandingPage(),
+          AuthScreen.routeName: (context) => AuthScreen(),
           StudentRecords.routeName: (context) => StudentRecords(),
           AnnouncementForm.routeName: (context) => AnnouncementForm(),
           StudentProvider.routeName: (context) => StudentProvider(),

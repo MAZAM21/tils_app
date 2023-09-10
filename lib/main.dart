@@ -1,3 +1,4 @@
+import 'package:SIL_app/widgets/landing-page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

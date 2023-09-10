@@ -48,7 +48,7 @@ class AIMenu extends StatelessWidget {
                       builder: (BuildContext context) =>
                           ChangeNotifierProvider.value(
                         value: teacherData,
-                        child: MarkAnswersAI(),
+                        child: MarkAnswers(),
                       ),
                     ),
                   );

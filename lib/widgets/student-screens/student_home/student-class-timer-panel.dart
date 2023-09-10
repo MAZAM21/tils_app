@@ -88,43 +88,6 @@ class _StudentClassTimerPanelState extends State<StudentClassTimerPanel> {
               //print(dateString)${remaining.inHours}:;
               return Column(
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Classes',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Proxima Nova',
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xff21353f),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              settings: RouteSettings(name: '/assignment-main'),
-                              builder: (BuildContext context) =>
-                                  ChangeNotifierProvider.value(
-                                value: widget.studData,
-                                child: StudentCalendar(),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Time-table',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Proxima Nova',
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff21353f),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   TimerText(
                     inSession: inSession,
                     dateString: dateString,

@@ -63,7 +63,7 @@ class StudentUser with ChangeNotifier {
         url,
       );
     } catch (err) {
-      print('erro in student user moder: $err');
+      print('error in student user model: $err');
     }
     throw Exception;
   }

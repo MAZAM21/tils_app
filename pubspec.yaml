@@ -108,6 +108,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Jura
+      fonts:
+        - asset: lib/assets/Jura-Bold.ttf
+        - asset: lib/assets/Jura-Regular.ttf
     - family: Raleway
       fonts:
         - asset: lib/assets/Raleway-Black.ttf

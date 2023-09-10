@@ -8,6 +8,7 @@ import '../authform.dart';
 class AuthScreen extends StatefulWidget {
   @override
   _AuthScreenState createState() => _AuthScreenState();
+  static const routeName = '/auth-screen';
 }
 
 class _AuthScreenState extends State<AuthScreen> {
@@ -63,7 +64,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:Colors.grey[350],
+      backgroundColor: Color(0xffE6ECEC),
       body: AuthForm(
         _submitAuthForm,
         _isLoading,

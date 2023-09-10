@@ -1,4 +1,5 @@
 import 'package:SIL_app/widgets/student-screens/student_home/student-resources-panel.dart';
+import 'package:SIL_app/widgets/student-screens/student_home/student_web_home.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -170,100 +171,12 @@ class _StudentHomeState extends State<StudentHome> {
                 ),
               )
             //WEb
-            : SafeArea(
-                child: Scaffold(
-                  body: SingleChildScrollView(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.915,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                height: 50,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: <Widget>[
-                                  StudentAvatarPanel(studData: studData),
-
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-
-                                  /// Class countdown
-                                ],
-                              ),
-                              SizedBox(
-                                height: 50,
-                              ),
-                              StudentClassTimerPanel(
-                                estimateTs,
-                                endTime,
-                                nextClass,
-                                studData,
-                              ),
-
-                              ///Name and avatar panel
-
-                              SizedBox(
-                                height: 30,
-                              ),
-
-                              /// Classes Grid (Stored in student screens)
-
-                              if (myClasses != null)
-                                MyClassesGrid(myClasses: myClasses),
-                              SizedBox(
-                                height: 30,
-                              ),
-
-                              ///Schedule Class button
-
-                              //ButtonRowMain(teacherData: teacherData),
-
-                              /// Teacher Assessment Panel
-                              /// includes list of latest three assessments and buttons
-                              SizedBox(
-                                height: 30,
-                              ),
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    AssessmentHomePanel(
-                                        ss: ss, studData: studData),
-                                       
-                                    SizedBox(width: 30),
-                                    StudentResourcesPanel(studUser: studData),
-                                    SizedBox(width: 30,),
-                                    StudentAttendancePanel(studData: studData),
-                                    SizedBox(width: 30),
-                                  ],
-                                ),
-                              ),
-
-                              const SizedBox(
-                                height: 20,
-                              ),
-
-                              ///teacher assignment panel
-                              ///built on same format as assessment panel
-
-                              const SizedBox(
-                                height: 30,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+            : StudentWebHome(
+                studData: studData,
+                estimateTs: estimateTs,
+                endTime: endTime,
+                nextClass: nextClass,
+                myClasses: myClasses,
+                ss: ss);
   }
 }

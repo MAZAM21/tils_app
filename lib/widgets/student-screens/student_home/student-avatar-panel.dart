@@ -14,18 +14,18 @@ class StudentAvatarPanel extends StatelessWidget {
     var now = DateTime.now().toUtc();
     return Row(
       children: <Widget>[
-        if (studData.imageURL != '')
-          CircleAvatar(
-            backgroundImage: studData.imageURL != null
-                ? NetworkImage(studData.imageURL!)
-                : null,
-            radius: 30,
-          ),
-        if (studData.imageURL == '')
-          Icon(
-            Icons.person,
-            size: 60,
-          ),
+        // if (studData.imageURL != '')
+        //   CircleAvatar(
+        //     backgroundImage: studData.imageURL != null
+        //         ? NetworkImage(studData.imageURL!)
+        //         : null,
+        //     radius: 30,
+        //   ),
+        // if (studData.imageURL == '')
+        //   Icon(
+        //     Icons.person,
+        //     size: 60,
+        //   ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5.0),
           child: Container(
@@ -48,10 +48,10 @@ class StudentAvatarPanel extends StatelessWidget {
                       Text(
                         'Good morning,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff5F686F),
+                          color: Colors.white,
                         ),
                       ),
                     if (now.isBefore(
@@ -71,10 +71,10 @@ class StudentAvatarPanel extends StatelessWidget {
                       Text(
                         'Good afternoon,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff5F686F),
+                          color: Colors.white,
                         ),
                       ),
                     if (now.isBefore(
@@ -94,10 +94,10 @@ class StudentAvatarPanel extends StatelessWidget {
                       Text(
                         'Good evening,',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 14,
                           fontFamily: 'Proxima Nova',
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff5F686F),
+                          color: Colors.white,
                         ),
                       ),
                   ],
@@ -107,10 +107,10 @@ class StudentAvatarPanel extends StatelessWidget {
                     Text(
                       '${studData.name}',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 18,
                         fontFamily: 'Proxima Nova',
                         fontWeight: FontWeight.w700,
-                        color: Color(0xff2A353F),
+                        color: Colors.white,
                       ),
                       textAlign: TextAlign.left,
                     ),

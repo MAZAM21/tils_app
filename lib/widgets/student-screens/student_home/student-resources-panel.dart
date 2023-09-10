@@ -17,7 +17,7 @@ class StudentResourcesPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final resources = Provider.of<List<ResourceDownload>>(context);
+    final resources = Provider.of<List<ResourceDownload>>(context);
     int totalNumRes = resources.length;
     List<ResourceDownload> topThree = [];
     bool _isActive = false;
@@ -37,24 +37,23 @@ class StudentResourcesPanel extends StatelessWidget {
             children: <Widget>[
               TextButton(
                 onPressed: () {
-                 Navigator.of(context).push(
-                        MaterialPageRoute(
-                          settings:
-                              RouteSettings(name: '/select-subject-resource'),
-                          builder: (BuildContext context) =>
-                              ChangeNotifierProvider.value(
-                            value: studUser,
-                            child: SelectSubjectResourceStudent(
-                              student: studUser,
-                              subs: studUser.subjects as List<String>,
-                            ),
-                          ),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/select-subject-resource'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: studUser,
+                        child: SelectSubjectResourceStudent(
+                          student: studUser,
+                          subs: studUser.subjects as List<String>,
                         ),
-                      );
+                      ),
+                    ),
+                  );
                 },
                 child: Text(
                   'Resources',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               // Text(
@@ -70,42 +69,38 @@ class StudentResourcesPanel extends StatelessWidget {
 
               ///TODO
               ///add navigator to add assessments
-            
             ],
           ),
           Container(
-                  child: ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: topThree.length,
-                    shrinkWrap: true,
-                    itemBuilder: (ctx, i) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 3.5),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                          tileColor: Colors.white,
-                          title: Text(
-                            '${topThree[i].topic}',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                          subtitle: Text(
-                            '${topThree[i].subject}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: 'Proxima Nova',
-                              color: Color(0xff5F686F),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: topThree.length,
+              shrinkWrap: true,
+              itemBuilder: (ctx, i) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 3.5),
+                  child: ListTile(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    tileColor: Colors.white,
+                    title: Text(
+                      '${topThree[i].topic}',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    subtitle: Text(
+                      '${topThree[i].subject}',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Proxima Nova',
+                        color: Color(0xff5F686F),
+                      ),
+                    ),
                   ),
-                ),
-          
-          
+                );
+              },
+            ),
+          ),
         ],
-
       ),
     );
   }
