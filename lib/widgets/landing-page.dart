@@ -78,50 +78,68 @@ class _LandingPageState extends State<LandingPage> {
                 ],
               ),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 40),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
                     children: [
-                      SizedBox(height: 100),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          'Fluency',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontFamily: 'Jura',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 90,
-                          ),
+                      Flexible(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // SizedBox(height: 50),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Text(
+                                'Fluency',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontFamily: 'Jura',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 90,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Text(
+                                'AI Powered Learning Management',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                  fontFamily: 'Jura',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 28,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'for Teachers and Students and Parents',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontFamily: 'Jura',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Text(
-                          'AI Powered Learning Management',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 0, 0, 0),
-                            fontFamily: 'Jura',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 28,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'for Teachers and Students and Parents',
-                        style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
-                          fontFamily: 'Jura',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                      Spacer(),
+                      Flexible(
+                        flex: 2,
+                        child: Image(
+                          image:
+                              AssetImage('lib/assets/Landing-page-image-1.png'),
+                          height: 522,
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             )
           ],

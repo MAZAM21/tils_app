@@ -62,7 +62,7 @@ class _AuthFormState extends State<AuthForm> {
                       children: <Widget>[
                         Image(
                           image: AssetImage('lib/assets/LCI_icon.png'),
-                          height: 150,
+                          height: 160,
                         ),
                         SizedBox(
                           height: 70,
@@ -186,130 +186,140 @@ class _AuthFormState extends State<AuthForm> {
                   padding: EdgeInsets.all(16),
                   child: Form(
                     key: _formKey,
-                    child: Column(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Image(
-                          image: AssetImage('lib/assets/Fluency-Icon.png'),
-                          height: 400,
+                        Flexible(
+                          flex: 1,
+                          child: Image(
+                            image: AssetImage('lib/assets/Fluency-Icon.png'),
+                            height: 400,
+                          ),
                         ),
-                        SizedBox(
-                          height: 70,
-                        ),
-                        Container(
-                          width: 500,
-                          child: Row(
+                        Spacer(),
+                        Flexible(
+                          flex: 1,
+                          child: Column(
                             children: [
-                              Text(
-                                'Email Address',
-                                style: TextStyle(
-                                  color: Colors.indigo[900],
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Proxima Nova',
-                                  fontSize: 18,
+                              Container(
+                                width: 500,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Email Address',
+                                      style: TextStyle(
+                                        color: Colors.indigo[900],
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Proxima Nova',
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 500,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    color: Colors.grey[200],
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        cursorColor: Colors.white,
+                                        key: ValueKey('email'),
+                                        validator: (value) {
+                                          if (value!.isEmpty ||
+                                              !value.contains('@')) {
+                                            return 'Please enter a valid email address.';
+                                          }
+                                          return null;
+                                        },
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        onSaved: (value) {
+                                          _userEmail = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              Container(
+                                width: 500,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Password',
+                                      style: TextStyle(
+                                        color: Colors.indigo[900],
+                                        fontFamily: 'Proxima Nova',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 500,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    color: Colors.grey[200],
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        cursorColor: Colors.white,
+                                        key: ValueKey('password'),
+                                        validator: (value) {
+                                          if (value!.isEmpty ||
+                                              value.length < 6) {
+                                            return 'Password must be at least 6 characters long.';
+                                          }
+                                          return null;
+                                        },
+                                        obscureText: true,
+                                        onSaved: (value) {
+                                          _userPassword = value;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                              if (widget.isLoading) CircularProgressIndicator(),
+                              if (!widget.isLoading)
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                        Size(200, 40)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.indigo[900]),
+                                  ),
+                                  child: Text(
+                                    'Login',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Proxima Nova',
+                                        color: Colors.white),
+                                  ),
+                                  onPressed: _trySubmit,
+                                ),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: 500,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              color: Colors.grey[200],
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  cursorColor: Colors.white,
-                                  key: ValueKey('email'),
-                                  validator: (value) {
-                                    if (value!.isEmpty ||
-                                        !value.contains('@')) {
-                                      return 'Please enter a valid email address.';
-                                    }
-                                    return null;
-                                  },
-                                  keyboardType: TextInputType.emailAddress,
-                                  onSaved: (value) {
-                                    _userEmail = value;
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Container(
-                          width: 500,
-                          child: Row(
-                            children: [
-                              Text(
-                                'Password',
-                                style: TextStyle(
-                                  color: Colors.indigo[900],
-                                  fontFamily: 'Proxima Nova',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: 500,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Container(
-                              color: Colors.grey[200],
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  cursorColor: Colors.white,
-                                  key: ValueKey('password'),
-                                  validator: (value) {
-                                    if (value!.isEmpty || value.length < 6) {
-                                      return 'Password must be at least 6 characters long.';
-                                    }
-                                    return null;
-                                  },
-                                  obscureText: true,
-                                  onSaved: (value) {
-                                    _userPassword = value;
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        if (widget.isLoading) CircularProgressIndicator(),
-                        if (!widget.isLoading)
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              fixedSize:
-                                  MaterialStateProperty.all(Size(200, 40)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.indigo[900]),
-                            ),
-                            child: Text(
-                              'Login',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Proxima Nova',
-                                  color: Colors.white),
-                            ),
-                            onPressed: _trySubmit,
-                          ),
                       ],
                     ),
                   ),
