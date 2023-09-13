@@ -129,7 +129,7 @@ class AIPower {
   }
 
   Future<List<MCQ>?> mcq_generation(String topic) async {
-    final url = 'http://127.0.0.1:5000/auto_quiz';
+    final url = 'https://fluencyai-o3ykvdugba-ue.a.run.app/auto_quiz';
 
     var _bytes = await XFile(filePath).readAsBytes();
     String base64File = base64Encode(_bytes);
