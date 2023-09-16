@@ -98,9 +98,6 @@ class AIPower {
   Future<List<MCQ>?> mcq_generation(String topic) async {
     final url = 'http://127.0.0.1:5000/auto_quiz';
 
-    var _bytes = await XFile(filePath).readAsBytes();
-    String base64File = base64Encode(_bytes);
-
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
@@ -108,7 +105,6 @@ class AIPower {
     List<dynamic>? urls = await db.fetchUrls(topic);
 
     Map<String, dynamic> body = {
-      'file': base64File,
       'topic': topic,
       "number": 4,
       "subject": "certainty",
@@ -131,6 +127,37 @@ class AIPower {
           jsonData.values.map((json) => MCQ.fromJson(json)).toList();
 
       return mcqList;
+    } else {
+      print('Error uploading file: ${response.reasonPhrase}');
+    }
+    throw Exception;
+  }
+
+  Future<String?> ai_tutor(String topic, String question) async {
+    final url = 'http://127.0.0.1:5000/ai_tutor';
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    List<dynamic>? urls = await db.fetchUrls(topic);
+
+    Map<String, dynamic> body = {
+      'topic': topic,
+      "subject": question,
+      "urls": urls
+    };
+
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print("data" + data);
+      return data;
     } else {
       print('Error uploading file: ${response.reasonPhrase}');
     }
@@ -248,19 +275,6 @@ class AIPower {
               print("url err: $e");
             }
           }
-
-          // // Add the data to Firebase Cloud Firestore
-          // final FirebaseFirestore _db = FirebaseFirestore.instance;
-          // DocumentReference<Map> res = await _db
-          //     .collection('institutes')
-          //     .doc(instID)
-          //     .collection('textbook_vectors')
-          //     .add({
-          //   'bookname': bookname,
-          //   'author': author,
-          //   'subject': subject,
-          //   'urls': url_list,
-
           print(json_List);
           return db.addTextbook(bookname, author, subject, url_list);
         } else {

@@ -158,7 +158,7 @@ class _CallChatGPTState extends State<UploadTextbook> {
                   Container(
                     child: FutureBuilder<String?>(
                       future: aiService.upload_textbook(
-                          que, selectedSubject, authorController.text),
+                          que, authorController.text, selectedSubject),
                       builder: (ctx, snap) {
                         if (snap.connectionState == ConnectionState.waiting) {
                           print('waiting');

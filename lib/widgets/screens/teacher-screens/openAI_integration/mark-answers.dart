@@ -31,10 +31,8 @@ class _CallChatGPTState extends State<MarkAnswers> {
   @override
   Widget build(BuildContext context) {
     final teacher = Provider.of<TeacherUser>(context);
-    // final db = Provider.of<DatabaseService>(context, listen: false);
 
     List<Marks>? marksList;
-    // aiService.testSplittint();
     return Scaffold(
       appBar: AppBar(),
       body: Form(
