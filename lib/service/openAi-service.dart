@@ -6,13 +6,18 @@ import 'package:langchain/langchain.dart';
 import 'package:langchain_openai/langchain_openai.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_functions/cloud_functions.dart';
-
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+import 'package:SIL_app/service/db.dart';
+import 'package:provider/provider.dart';
 
 const key = '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';
 
 class AIPower {
+  final db = DatabaseService();
   Map<String, dynamic> offerAcceptanceMCQs = {
     "1": {
       "no": "1",
@@ -90,60 +95,20 @@ class AIPower {
     return mcqList;
   }
 
-  void uploadAnswers(
-      List<Uint8List> _fileBytesList, List<String> _fileNames) async {
-    if (_fileBytesList.isEmpty) {
-      print('No files selected to upload');
-      return;
-    }
-
-    try {
-      var url = Uri.parse('http://127.0.0.1:5000/file_upload');
-      var request = http.MultipartRequest('POST', url);
-
-      for (var i = 0; i < _fileBytesList.length; i++) {
-        Uint8List fileBytes = _fileBytesList[i];
-        String fileName = _fileNames[i];
-
-        Stream<List<int>> stream =
-            Stream.fromIterable(fileBytes.map((byte) => [byte]));
-
-        request.files.add(http.MultipartFile(
-          'files', // Adjust the field name to match your server's expectations
-          stream,
-          fileBytes.length,
-          filename: fileName,
-        ));
-      }
-
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('Files uploaded successfully');
-      } else {
-        print('Error uploading files: ${response.reasonPhrase}');
-      }
-    } catch (e) {
-      print('Error uploading files: $e');
-    }
-  }
-
   Future<List<MCQ>?> mcq_generation(String topic) async {
-    final url = 'https://fluencyai-o3ykvdugba-ue.a.run.app/auto_quiz';
-
-    var _bytes = await XFile(filePath).readAsBytes();
-    String base64File = base64Encode(_bytes);
+    final url = 'http://127.0.0.1:5000/auto_quiz';
 
     Map<String, String> headers = {
-      'Content-Type':
-          'application/json', // Adjust the content type based on your server
+      'Content-Type': 'application/json',
     };
 
+    List<dynamic>? urls = await db.fetchUrls(topic);
+
     Map<String, dynamic> body = {
-      'file': base64File,
       'topic': topic,
       "number": 4,
-      "subject": "certainty"
+      "subject": "certainty",
+      "urls": urls
     };
 
     http.Response response = await http.post(
@@ -166,6 +131,159 @@ class AIPower {
       print('Error uploading file: ${response.reasonPhrase}');
     }
     throw Exception;
+  }
+
+  Future<String?> ai_tutor(String topic, String question) async {
+    final url = 'https://fluencyai-o3ykvdugba-ue.a.run.app/ai_tutor';
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    List<dynamic>? urls = await db.fetchUrls(topic);
+
+    Map<String, dynamic> body = {
+      'topic': topic,
+      "subject": question,
+      "urls": urls
+    };
+
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print("data" + data);
+      return data;
+    } else {
+      print('Error uploading file: ${response.reasonPhrase}');
+    }
+    throw Exception;
+  }
+
+  void uploadAnswers(
+      List<Uint8List> _fileBytesList, List<String> _fileNames) async {
+    if (_fileBytesList.isEmpty) {
+      print('No files selected to upload');
+      return;
+    }
+
+    try {
+      var url = Uri.parse('http://127.0.0.1:5000/file_upload');
+      var request = http.MultipartRequest('POST', url);
+
+      for (var i = 0; i < _fileBytesList.length; i++) {
+        Uint8List fileBytes = _fileBytesList[i];
+        String fileName = _fileNames[i];
+
+        Stream<List<int>> stream =
+            Stream.fromIterable(fileBytes.map((byte) => [byte]));
+
+        request.files.add(http.MultipartFile(
+          'files',
+          stream,
+          fileBytes.length,
+          filename: fileName,
+        ));
+      }
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print('Files uploaded successfully');
+      } else {
+        print('Error uploading files: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error uploading files: $e');
+    }
+  }
+
+  Future<String?> upload_textbook(
+      String bookname, String author, String subject) async {
+    print(bookname);
+    print(author);
+    print(subject);
+    var ref = FirebaseStorage.instance.ref().child('');
+    List<Uint8List> _fileBytesList = [];
+    List<String> _fileNames = [];
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt', 'pdf'],
+      allowMultiple: true,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      List<PlatformFile> selectedFiles = result.files;
+
+      _fileBytesList.clear();
+      _fileNames.clear();
+
+      for (var file in selectedFiles) {
+        if (file.extension == 'txt' || file.extension == 'pdf') {
+          Uint8List fileBytes = file.bytes!;
+          _fileBytesList.add(fileBytes);
+          _fileNames.add(file.name);
+        }
+      }
+
+      if (_fileBytesList.isEmpty) {
+        print('No files selected to upload');
+        return "error";
+      }
+
+      try {
+        var url = Uri.parse('http://127.0.0.1:5000/upload_textbooks');
+        var request = http.MultipartRequest('POST', url);
+        request.fields['bookname'] = bookname;
+
+        for (var i = 0; i < _fileBytesList.length; i++) {
+          Uint8List fileBytes = _fileBytesList[i];
+          String fileName = _fileNames[i];
+
+          Stream<List<int>> stream =
+              Stream.fromIterable(fileBytes.map((byte) => [byte]));
+
+          request.files.add(http.MultipartFile(
+            'files',
+            stream,
+            fileBytes.length,
+            filename: fileName,
+          ));
+        }
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          print('File uploaded successfully');
+          print(response);
+          final respStr = await response.stream.bytesToString();
+          String jsonList = jsonDecode(respStr);
+          List<String> json_List = json.decode(jsonList).cast<String>();
+          List<String> url_list = [];
+          for (String path in json_List) {
+            print(path);
+            ref = FirebaseStorage.instance.ref();
+            try {
+              String url = await ref.child(path).getDownloadURL();
+              print(url);
+              url_list.add(path);
+            } catch (e) {
+              print("url err: $e");
+            }
+          }
+          print(json_List);
+          return db.addTextbook(bookname, author, subject, url_list);
+        } else {
+          print('Error uploading files: ${response.reasonPhrase}');
+        }
+      } catch (e) {
+        print('Error uploading files: $e');
+      }
+    }
   }
 
   Future<List<Marks>?> pickAndUploadFiles(String criteria) async {
