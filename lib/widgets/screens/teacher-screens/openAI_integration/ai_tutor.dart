@@ -3,6 +3,7 @@ import 'package:SIL_app/service/db.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
 import 'package:flutter/material.dart';
 import 'package:SIL_app/service/openAi-service.dart';
+import 'package:uuid/uuid.dart';
 
 class AITutor extends StatefulWidget {
   const AITutor({Key? key}) : super(key: key);
@@ -29,7 +30,21 @@ class _CallChatGPTState extends State<AITutor> {
   }
 
   bool isTesting = false;
-  int chat_id = 0;
+  bool isCodeExecuted = false;
+  String chat_id = "";
+  @override
+  void initState() {
+    super.initState();
+
+    // Check if the code has not been executed yet
+    if (!isCodeExecuted) {
+      final uuid = Uuid();
+      chat_id = uuid.v4();
+      print('Code executed only once.');
+      isCodeExecuted = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,8 +192,8 @@ class _CallChatGPTState extends State<AITutor> {
                 WhiteButtonMain(
                   child: 'Ask',
                   onPressed: () async {
-                    final response =
-                        await aiService.ai_tutor(selectedBookname, que);
+                    final response = await aiService.ai_tutor(
+                        selectedBookname, que, chat_id);
                     questionAndResponseList.add({
                       'question': que,
                       'response': response!['answer'],
@@ -189,27 +204,6 @@ class _CallChatGPTState extends State<AITutor> {
                     });
                   },
                 ),
-                if (isTesting == true)
-                  Container(
-                    child: FutureBuilder<Map?>(
-                      future: aiService.ai_tutor(selectedBookname, que),
-                      builder: (ctx, snap) {
-                        if (snap.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        }
-                        if (snap.connectionState == ConnectionState.none) {
-                          return Container();
-                        }
-                        if (snap.connectionState == ConnectionState.done) {
-                          chat_id = snap.data!["chat_id"];
-                          return Text(snap.data!["answer"]);
-                        }
-                        return Column(
-                          children: [],
-                        );
-                      },
-                    ),
-                  ),
               ],
             ),
           ),

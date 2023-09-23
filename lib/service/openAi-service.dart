@@ -133,7 +133,7 @@ class AIPower {
     throw Exception;
   }
 
-  Future<Map?> ai_tutor(String topic, String question) async {
+  Future<Map?> ai_tutor(String topic, String question, String chat_id) async {
     final url = 'http://127.0.0.1:5000/ai_tutor';
 
     Map<String, String> headers = {
@@ -146,7 +146,7 @@ class AIPower {
       'topic': topic,
       "subject": question,
       "urls": urls,
-      "chat_id": 2
+      "chat_id": chat_id
     };
 
     http.Response response = await http.post(
