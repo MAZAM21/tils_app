@@ -133,7 +133,7 @@ class AIPower {
     throw Exception;
   }
 
-  Future<String?> ai_tutor(String topic, String question) async {
+  Future<Map?> ai_tutor(String topic, String question) async {
     final url = 'http://127.0.0.1:5000/ai_tutor';
 
     Map<String, String> headers = {
@@ -145,7 +145,8 @@ class AIPower {
     Map<String, dynamic> body = {
       'topic': topic,
       "subject": question,
-      "urls": urls
+      "urls": urls,
+      "chat_id": 2
     };
 
     http.Response response = await http.post(
@@ -153,11 +154,18 @@ class AIPower {
       headers: headers,
       body: jsonEncode(body),
     );
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
+      print("inside if");
       final data = jsonDecode(response.body);
-      print("data" + data);
-      return data;
+      print(data);
+      print("data");
+      print(data["answer"]);
+      final chat_id = data["chat_id"];
+      print(chat_id);
+      final answer = data["answer"];
+      print(answer);
+      return {"answer": answer, "chat_id": chat_id};
     } else {
       print('Error uploading file: ${response.reasonPhrase}');
     }

@@ -19,6 +19,7 @@ class _CallChatGPTState extends State<AITutor> {
   String selectedBookname = "";
   Future<List<String>?>? futureData = DatabaseService().fetchBooknames();
   final aiService = AIPower();
+  List<Map<String, String>> questionAndResponseList = [];
 
   void saveForm() {
     setState(() {
@@ -28,6 +29,7 @@ class _CallChatGPTState extends State<AITutor> {
   }
 
   bool isTesting = false;
+  int chat_id = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,16 +73,13 @@ class _CallChatGPTState extends State<AITutor> {
                         for (int j = 0; j < columns; j++) {
                           if (i + j < booknames.length) {
                             final bookname = booknames[i + j];
-                            final isSelected = selectedBookname ==
-                                bookname; // Check if it's selected
+                            final isSelected = selectedBookname == bookname;
 
-                            // Wrap the Container with GestureDetector
                             columnChildren.add(
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    selectedBookname =
-                                        bookname; // Update selected bookname
+                                    selectedBookname = bookname;
                                   });
                                 },
                                 child: Center(
@@ -93,9 +92,9 @@ class _CallChatGPTState extends State<AITutor> {
                                       ),
                                       borderRadius: BorderRadius.circular(8),
                                       color: isSelected
-                                          ? const Color.fromARGB(255, 169, 208,
-                                              170) // Change color when selected
-                                          : Colors.transparent, // Default color
+                                          ? const Color.fromARGB(
+                                              255, 169, 208, 170)
+                                          : Colors.transparent,
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -132,6 +131,17 @@ class _CallChatGPTState extends State<AITutor> {
                     }
                   },
                 ),
+                SizedBox(height: 30),
+                Column(
+                  children: questionAndResponseList.map((item) {
+                    return Column(
+                      children: [
+                        Text('Question: ${item['question']}'),
+                        Text('Response: ${item['response']}'),
+                      ],
+                    );
+                  }).toList(),
+                ),
                 Text(
                   'Question',
                   style: Theme.of(context).textTheme.headlineSmall,
@@ -165,30 +175,35 @@ class _CallChatGPTState extends State<AITutor> {
                   height: 20,
                 ),
                 WhiteButtonMain(
-                    child: 'Ask',
-                    onPressed: () {
-                      setState(() {
-                        isTesting = true;
-                      });
-                    }),
+                  child: 'Ask',
+                  onPressed: () async {
+                    final response =
+                        await aiService.ai_tutor(selectedBookname, que);
+                    questionAndResponseList.add({
+                      'question': que,
+                      'response': response!['answer'],
+                    });
+                    setState(() {
+                      isTesting = true;
+                      chat_id = response["chat_id"];
+                    });
+                  },
+                ),
                 if (isTesting == true)
                   Container(
-                    child: FutureBuilder<String?>(
+                    child: FutureBuilder<Map?>(
                       future: aiService.ai_tutor(selectedBookname, que),
                       builder: (ctx, snap) {
                         if (snap.connectionState == ConnectionState.waiting) {
-                          print('waiting');
                           return CircularProgressIndicator();
                         }
                         if (snap.connectionState == ConnectionState.none) {
-                          print('none');
                           return Container();
                         }
                         if (snap.connectionState == ConnectionState.done) {
-                          print("done");
-                          return Text(snap.data!);
+                          chat_id = snap.data!["chat_id"];
+                          return Text(snap.data!["answer"]);
                         }
-                        print('no state');
                         return Column(
                           children: [],
                         );
