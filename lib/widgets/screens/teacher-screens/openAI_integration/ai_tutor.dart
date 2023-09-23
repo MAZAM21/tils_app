@@ -147,6 +147,15 @@ class _CallChatGPTState extends State<AITutor> {
                   },
                 ),
                 SizedBox(height: 30),
+                WhiteButtonMain(
+                  onPressed: () {
+                    setState(() {
+                      chat_id = Uuid().v4();
+                      questionAndResponseList = [];
+                    });
+                  },
+                  child: "New Chat",
+                ),
                 Column(
                   children: questionAndResponseList.map((item) {
                     return Column(
