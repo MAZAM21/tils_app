@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:SIL_app/models/books.dart';
 import 'package:SIL_app/models/institute-id.dart';
 import 'package:SIL_app/models/institutemd.dart';
 import 'package:SIL_app/models/teachers-all.dart';
@@ -161,6 +162,18 @@ class DatabaseService with ChangeNotifier {
           list.docs.map((doc) => Announcement.fromFirestore(doc)).toList());
     } catch (err) {
       print('err in stream announcement: $err');
+    }
+    return null;
+  }
+
+  Stream<List<Books>>? streamBooks() {
+    CollectionReference ref =
+        _db.collection('institutes').doc(instID).collection('textbook_vectors');
+    try {
+      return ref.snapshots().map(
+          (list) => list.docs.map((doc) => Books.fromFirestore(doc)).toList());
+    } catch (err) {
+      print('err in stream books: $err');
     }
     return null;
   }
@@ -619,6 +632,28 @@ class DatabaseService with ChangeNotifier {
           });
         } catch (e) {}
       });
+    }
+  }
+
+  Future<String> addTextbook(
+      String bookname, String author, String subject, List url_list) async {
+    print(instID);
+    try {
+      final FirebaseFirestore _db = FirebaseFirestore.instance;
+      DocumentReference<Map> res = await _db
+          .collection('institutes')
+          .doc("RIBR3Pwr3We2D5IQPF5O")
+          .collection('textbook_vectors')
+          .add({
+        'bookname': bookname,
+        'author': author,
+        'subject': subject,
+        'urls': url_list,
+      });
+      print(res);
+      return "success";
+    } catch (e) {
+      return "error: $e";
     }
   }
 
@@ -1646,5 +1681,67 @@ class DatabaseService with ChangeNotifier {
     } catch (err) {
       print('err in delete Announcement: $err');
     }
+  }
+
+  Stream<List<String>?> fetchBooknames() async* {
+    try {
+      List<String> booknames = [];
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
+          .collection('institutes')
+          .doc("RIBR3Pwr3We2D5IQPF5O")
+          .collection('textbook_vectors')
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print("not empty");
+        for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+            in querySnapshot.docs) {
+          print(doc.id);
+          final bookname = doc.get('bookname');
+          if (bookname != null) {
+            booknames.add(bookname);
+          }
+        }
+        print(booknames);
+        yield booknames;
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+    }
+  }
+
+  Future<List<String>?> fetchUrls(String bookname) async {
+    try {
+      List<String> urls = [];
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
+          .collection('institutes')
+          .doc("RIBR3Pwr3We2D5IQPF5O")
+          .collection('textbook_vectors')
+          .where('bookname', isEqualTo: bookname)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        print("not empty");
+        for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+            in querySnapshot.docs) {
+          print(doc.id);
+          final urlList = doc.get('urls');
+          if (urlList != null) {
+            for (var item in urlList) {
+              urls.add(item.toString());
+            }
+          }
+        }
+        print(urls);
+        if (urls.isNotEmpty) {
+          return urls;
+        }
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+    }
+    return null;
   }
 }

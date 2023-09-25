@@ -20,48 +20,8 @@ class _LandingPageState extends State<LandingPage> {
             Padding(
               padding: EdgeInsets.only(left: 500, top: 40),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(
-                      onPressed: () {
-                        // Handle button press here
-                      },
-                      child: const Text('Menu',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontFamily: 'Jura',
-                              fontWeight: FontWeight.bold))),
-                  SizedBox(width: 30),
-                  TextButton(
-                      onPressed: () {
-                        // Handle button press here
-                      },
-                      child: const Text('Menu',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontFamily: 'Jura',
-                              fontWeight: FontWeight.bold))),
-                  SizedBox(width: 40),
-                  TextButton(
-                      onPressed: () {
-                        // Handle button press here
-                      },
-                      child: const Text('Menu',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontFamily: 'Jura',
-                              fontWeight: FontWeight.bold))),
-                  SizedBox(width: 40),
-                  TextButton(
-                      onPressed: () {
-                        // Handle button press here
-                      },
-                      child: const Text('Menu',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 0, 0, 0),
-                              fontFamily: 'Jura',
-                              fontWeight: FontWeight.bold))),
-                  SizedBox(width: 40),
                   TextButton(
                       onPressed: () {
                         setState(() {
@@ -107,7 +67,7 @@ class _LandingPageState extends State<LandingPage> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Text(
-                                'AI Powered Learning Management',
+                                'Chat with books',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 0, 0, 0),
                                   fontFamily: 'Jura',
@@ -116,15 +76,15 @@ class _LandingPageState extends State<LandingPage> {
                                 ),
                               ),
                             ),
-                            Text(
-                              'for Teachers and Students and Parents',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontFamily: 'Jura',
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
+                            // Text(
+                            //   'for Teachers and Students and Parents',
+                            //   style: TextStyle(
+                            //     color: Color.fromARGB(255, 0, 0, 0),
+                            //     fontFamily: 'Jura',
+                            //     fontWeight: FontWeight.bold,
+                            //     fontSize: 20,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

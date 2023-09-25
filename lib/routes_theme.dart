@@ -1,8 +1,10 @@
+import 'package:SIL_app/models/books.dart';
 import 'package:SIL_app/models/institutemd.dart';
 import 'package:SIL_app/models/role.dart';
 import 'package:SIL_app/models/teachers-all.dart';
 import 'package:SIL_app/widgets/landing-page.dart';
 import 'package:SIL_app/widgets/screens/auth_page.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI-tutor.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/MCQ-generation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -91,6 +93,11 @@ class RoutesAndTheme extends StatelessWidget {
         StreamProvider<List<StudentRank>>(
           create: (ctx) =>
               Provider.of<DatabaseService>(ctx, listen: false).streamStudents(),
+          initialData: [],
+        ),
+        StreamProvider<List<Books>>(
+          create: (ctx) =>
+              Provider.of<DatabaseService>(ctx, listen: false).streamBooks(),
           initialData: [],
         ),
         StreamProvider<List<AllTeachers>>(
@@ -195,6 +202,12 @@ class RoutesAndTheme extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.normal,
             ),
+            bodyMedium: TextStyle(
+              color: Colors.black,
+              fontFamily: 'RobotoCondensed',
+              fontSize: 24,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
         home: LandingPage(),
@@ -205,6 +218,7 @@ class RoutesAndTheme extends StatelessWidget {
           LandingPage.routeName: (context) => LandingPage(),
           AuthScreen.routeName: (context) => AuthScreen(),
           StudentRecords.routeName: (context) => StudentRecords(),
+          AITutor.routeName: (context) => AITutor(),
           AnnouncementForm.routeName: (context) => AnnouncementForm(),
           StudentProvider.routeName: (context) => StudentProvider(),
           RecordsPage.routeName: (context) => RecordsPage(),

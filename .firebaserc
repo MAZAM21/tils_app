@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "sil-app-c5b47",
+    "default": "fluency-001",
     "main": "tils-portal"
   },
   "targets": {}

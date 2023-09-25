@@ -142,6 +142,9 @@ class AIPower {
 
     List<dynamic>? urls = await db.fetchUrls(topic);
 
+    print('URLS:$urls');
+    print('topic:$topic');
+
     Map<String, dynamic> body = {
       'topic': topic,
       "subject": question,

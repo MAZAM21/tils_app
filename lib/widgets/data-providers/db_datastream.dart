@@ -1,8 +1,10 @@
 import 'package:SIL_app/models/institutemd.dart';
 import 'package:SIL_app/models/role.dart';
+import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/service/db.dart';
 import 'package:SIL_app/widgets/screens/all_tabs.dart';
 import 'package:SIL_app/widgets/screens/loading-screen.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI-tutor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,10 +31,11 @@ class _DBDatastreamState extends State<DBDatastream> {
   Widget build(BuildContext context) {
     final id = Provider.of<InstProvider?>(context)!.getId();
     final db = Provider.of<DatabaseService>(context, listen: false);
+    final teacherData = Provider.of<TeacherUser?>(context);
 
     // bool isActive = false;
     print('in db datastream isactive false');
-    if (db.instID != null) {
+    if (db.instID != null && teacherData != null) {
       isActive = true;
       print('in db datastream isactive');
     }
@@ -57,7 +60,7 @@ class _DBDatastreamState extends State<DBDatastream> {
                     year_subjects: {},
                     ranking_yearSub: {}),
                 builder: (context, child) {
-                  return AllTabs();
+                  return AITutor();
                 },
               );
             },

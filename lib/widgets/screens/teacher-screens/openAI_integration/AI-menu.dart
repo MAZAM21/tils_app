@@ -1,7 +1,9 @@
 import 'package:SIL_app/models/teacher-user-data.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/AI-tutor.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/MCQ-generation.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/mark-answers.dart';
+import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/upload-book.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +56,42 @@ class AIMenu extends StatelessWidget {
                   );
                 },
                 child: 'Answer Marking',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RedButtonMain(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/ai-tutor'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: AITutor(),
+                      ),
+                    ),
+                  );
+                },
+                child: 'AI Tutor',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RedButtonMain(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      settings: RouteSettings(name: '/upload-textbook'),
+                      builder: (BuildContext context) =>
+                          ChangeNotifierProvider.value(
+                        value: teacherData,
+                        child: UploadTextbook(),
+                      ),
+                    ),
+                  );
+                },
+                child: 'Upload Book',
               ),
             ),
           ]),
