@@ -636,7 +636,12 @@ class DatabaseService with ChangeNotifier {
   }
 
   Future<String> addTextbook(
-      String bookname, String author, String subject, List url_list) async {
+    String bookname,
+    String author,
+    String subject,
+    List url_list,
+    String category,
+  ) async {
     print(instID);
     try {
       final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -649,6 +654,7 @@ class DatabaseService with ChangeNotifier {
         'author': author,
         'subject': subject,
         'urls': url_list,
+        'category': category,
       });
       print(res);
       return "success";

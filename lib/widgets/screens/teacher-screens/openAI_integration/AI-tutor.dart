@@ -1,6 +1,6 @@
 import 'package:SIL_app/models/books.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
-import 'package:SIL_app/service/db.dart';
+
 import 'package:SIL_app/widgets/button-styles.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/upload-book.dart';
 import 'package:provider/provider.dart';
@@ -30,12 +30,32 @@ class _CallChatGPTState extends State<AITutor> {
     });
   }
 
+  void handleBookTileTap(Books book) {
+    setState(() {
+      isTesting = false;
+      selectedBookname = book.name;
+    });
+  }
+
   bool isTesting = false;
   @override
   Widget build(BuildContext context) {
-    List<Widget> columnChildren = [];
-    final teacherData = Provider.of<TeacherUser>(context);
-    final db = Provider.of<DatabaseService>(context);
+    final teacherData = Provider.of<TeacherUser?>(context);
+    //final db = Provider.of<DatabaseService>(context);
+    final books = Provider.of<List<Books>>(context);
+    Map<String?, List<Books>> categorizedBooks = {};
+    List<Books> booksWithoutCategory = [];
+
+    final organizedBooks = aiService.alphabeticalSort(books);
+
+    for (var book in organizedBooks) {
+      if (book.category!.isEmpty) {
+        booksWithoutCategory.add(book);
+      } else {
+        categorizedBooks.putIfAbsent(book.category, () => []).add(book);
+      }
+    }
+
     return Scaffold(
       appBar:
           AppBar(backgroundColor: Color.fromARGB(255, 230, 235, 235), actions: [
@@ -65,59 +85,65 @@ class _CallChatGPTState extends State<AITutor> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                StreamBuilder<List<Books?>>(
-                  stream: db.streamBooks(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: Container(child: CircularProgressIndicator()),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    } else if (!snapshot.hasData ||
-                        snapshot.data == null ||
-                        snapshot.data!.isEmpty) {
-                      return Center(
-                        child: Text('No booknames found.'),
-                      );
-                    } else {
-                      final List<Books?> booknames = snapshot.data!;
-                      //final int columns = 4;
-
-                      for (int j = 0; j < booknames.length; j++) {
-                        if (j < booknames.length) {
-                          final bookname = booknames[j]!.name;
-                          final isSelected = selectedBookname ==
-                              bookname; // Check if it's selected
-
-                          // Wrap the Container with GestureDetector
-                          columnChildren.add(
-                            ListTile(
-                              title: Text('$bookname'),
-                              enabled: true,
-                              selected: bookname == selectedBookname,
-                              selectedColor: Colors.red,
-                              onFocusChange: (value) => isSelected,
-                              onTap: () {
-                                setState(() {
-                                  isTesting = false;
-                                  selectedBookname =
-                                      bookname; // Update selected bookname
-                                });
-                              },
-                            ),
-                          );
-                        }
-                      }
-
-                      return Drawer(
-                        backgroundColor: Color.fromARGB(255, 230, 235, 235),
-                        child: ListView(children: columnChildren),
-                      );
-                    }
-                  },
+                Drawer(
+                  backgroundColor: Color.fromARGB(255, 230, 235, 235),
+                  child: ListView(children: [
+                    if (booksWithoutCategory.isNotEmpty)
+                      ExpansionTile(
+                        textColor: Color(0xff161616),
+                        title: Text('Books without Category'),
+                        children: booksWithoutCategory
+                            .map(
+                              (book) => ListTile(
+                                title: Text(book.name),
+                                onTap: () {
+                                  handleBookTileTap(book);
+                                },
+                                selectedColor: Colors.red,
+                                selected: selectedBookname == book.name,
+                                subtitle: Text(
+                                  'Author: ${book.author}',
+                                  style: TextStyle(
+                                      color: selectedBookname == book.name
+                                          ? Colors.red
+                                          : Color(0xff161616),
+                                      fontFamily: 'Proxima Nova',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    for (var entry in categorizedBooks.entries)
+                      ExpansionTile(
+                        textColor: Color(0xff161616),
+                        title: Text(entry.key ??
+                            'Unknown Category'), // Category title or 'Unknown Category' if null
+                        children: entry.value
+                            .map(
+                              (book) => ListTile(
+                                title: Text(book.name),
+                                subtitle: Text(
+                                  'Author: ${book.author}',
+                                  style: TextStyle(
+                                      color: selectedBookname == book.name
+                                          ? Colors.red
+                                          : Color(0xff161616),
+                                      fontFamily: 'Proxima Nova',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14),
+                                ),
+                                onTap: () {
+                                  handleBookTileTap(book);
+                                },
+                                selected: selectedBookname == book.name,
+                                selectedColor: Colors.red,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                  ]),
                 ),
                 Stack(
                   alignment: AlignmentDirectional.topCenter,
@@ -131,8 +157,15 @@ class _CallChatGPTState extends State<AITutor> {
                             if (snap.connectionState ==
                                 ConnectionState.waiting) {
                               print('waiting');
-                              return Container(
-                                  child: CircularProgressIndicator());
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: CircularProgressIndicator()),
+                                ],
+                              );
                             }
                             if (snap.connectionState == ConnectionState.none) {
                               print('none');

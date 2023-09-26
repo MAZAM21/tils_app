@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:SIL_app/models/books.dart';
 import 'package:SIL_app/models/remote_assessment.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:langchain/langchain.dart';
@@ -133,6 +134,11 @@ class AIPower {
     throw Exception;
   }
 
+  List<Books> alphabeticalSort(List<Books> books) {
+    books.sort((a, b) => a.name.compareTo(b.name));
+    return books;
+  }
+
   Future<String?> ai_tutor(String topic, String question) async {
     final url = 'https://fluencyai-o3ykvdugba-ue.a.run.app/ai_tutor';
 
@@ -206,7 +212,7 @@ class AIPower {
   }
 
   Future<String?> upload_textbook(
-      String bookname, String author, String subject) async {
+      String bookname, String author, String subject, String category) async {
     print(bookname);
     print(author);
     print(subject);
@@ -279,7 +285,7 @@ class AIPower {
             }
           }
           print(json_List);
-          return db.addTextbook(bookname, author, subject, url_list);
+          return db.addTextbook(bookname, author, subject, url_list, category);
         } else {
           print('Error uploading files: ${response.reasonPhrase}');
         }
