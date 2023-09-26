@@ -19,6 +19,8 @@ class _CallChatGPTState extends State<AITutor> {
   String que = '';
   String selectedBookname = "";
   Future<List<String>?>? futureData = DatabaseService().fetchBooknames();
+  Future<List<String>?>? chats = DatabaseService().getChatNames();
+  List<String> loadedMsgs = [];
   final aiService = AIPower();
   List<Map<String, String>> questionAndResponseList = [];
 
@@ -56,6 +58,103 @@ class _CallChatGPTState extends State<AITutor> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                FutureBuilder<List<String>?>(
+                  future: chats,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (!snapshot.hasData ||
+                        snapshot.data == null ||
+                        snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Text('No booknames found.'),
+                      );
+                    } else {
+                      final booknames = snapshot.data!;
+                      final int columns = 4;
+                      List<Widget> rows = [];
+
+                      for (int i = 0; i < booknames.length; i += columns) {
+                        List<Widget> columnChildren = [];
+
+                        for (int j = 0; j < columns; j++) {
+                          if (i + j < booknames.length) {
+                            final bookname = booknames[i + j];
+                            final isSelected = selectedBookname == bookname;
+
+                            columnChildren.add(
+                              GestureDetector(
+                                onTap: () async {
+                                  setState(() {
+                                    loadedMsgs = [];
+                                    chat_id = bookname;
+                                  });
+                                  List<String> msgs = await DatabaseService()
+                                      .getChatMessages(chat_id);
+                                  String book = await DatabaseService()
+                                      .getChatBook(chat_id);
+                                  setState(() {
+                                    loadedMsgs = msgs;
+                                    questionAndResponseList = [];
+                                    selectedBookname = book;
+                                  });
+                                },
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: 1.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: isSelected
+                                          ? const Color.fromARGB(
+                                              255, 169, 208, 170)
+                                          : Colors.transparent,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        bookname,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        }
+
+                        rows.add(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: columnChildren,
+                          ),
+                        );
+                      }
+
+                      return SingleChildScrollView(
+                        child: Container(
+                          child: Column(
+                            children: rows,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                SizedBox(height: 30),
                 Text(
                   'Textbook',
                   style: Theme.of(context).textTheme.headlineSmall,
@@ -152,10 +251,21 @@ class _CallChatGPTState extends State<AITutor> {
                     setState(() {
                       chat_id = Uuid().v4();
                       questionAndResponseList = [];
+                      loadedMsgs = [];
                     });
                   },
                   child: "New Chat",
                 ),
+                if (!loadedMsgs.isEmpty)
+                  Column(
+                    children: loadedMsgs.map((item) {
+                      return Column(
+                        children: [
+                          Text(item),
+                        ],
+                      );
+                    }).toList(),
+                  ),
                 Column(
                   children: questionAndResponseList.map((item) {
                     return Column(
@@ -202,7 +312,7 @@ class _CallChatGPTState extends State<AITutor> {
                   child: 'Ask',
                   onPressed: () async {
                     final response = await aiService.ai_tutor(
-                        selectedBookname, que, chat_id);
+                        selectedBookname, que, chat_id, loadedMsgs);
                     questionAndResponseList.add({
                       'question': que,
                       'response': response!['answer'],

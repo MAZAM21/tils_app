@@ -644,6 +644,129 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> storeMessage(String message, String chat_id, String book) async {
+    String customDocName = chat_id;
+
+    // Data you want to add to the document
+    Map<String, dynamic> chatData = {
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    try {
+      DocumentSnapshot docSnapshot = await _db
+          .collection('users')
+          .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+          .collection('chats')
+          .doc(customDocName)
+          .get();
+
+      if (!docSnapshot.exists) {
+        // Document already exists; add more data to it
+        await _db
+            .collection('users')
+            .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+            .collection('chats')
+            .doc(customDocName)
+            .set({"created": FieldValue.serverTimestamp(), "bookname": book});
+
+        print(
+            'Additional chat data added to existing document: $customDocName');
+      }
+      await _db
+          .collection('users')
+          .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+          .collection('chats')
+          .doc(customDocName)
+          .collection("messages")
+          .add(chatData);
+    } catch (e) {
+      print('Error adding data to Firestore: $e');
+    }
+  }
+
+  Future<List<String>?> getChatNames() async {
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    try {
+      // Specify the user's collection and create a query to get the "chats" documents
+      QuerySnapshot querySnapshot = await _db
+          .collection('users')
+          .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+          .collection('chats')
+          .get();
+
+      // Extract the custom document names (document IDs) from the query results
+      List<String> customDocNames = [];
+      querySnapshot.docs.forEach((doc) {
+        customDocNames.add(doc.id);
+      });
+
+      print('Custom document names in "chats" collection: $customDocNames');
+      return customDocNames;
+    } catch (e) {
+      print('Error querying Firestore: $e');
+    }
+  }
+
+  Future<List<String>> getChatMessages(String chat_id) async {
+    String userId = 'CKBtLUDwGSSNjHqsLaZrQtLbzNP2';
+
+    try {
+      // Create a reference to the "messages" collection within the custom document
+      CollectionReference messagesCollection = _db
+          .collection('users')
+          .doc(userId)
+          .collection('chats')
+          .doc(chat_id)
+          .collection('messages');
+
+      // Query all documents in the "messages" collection
+      QuerySnapshot querySnapshot = await messagesCollection.get();
+
+      // Extract the "message" field from each document
+      List<String> messages = [];
+      querySnapshot.docs.forEach((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        if (data.containsKey('message')) {
+          messages.add(data['message']);
+        }
+      });
+
+      print('Messages in document: $messages');
+      return messages;
+    } catch (e) {
+      print('Error querying Firestore: $e');
+      return [];
+    }
+  }
+
+  Future<String> getChatBook(String chat_id) async {
+    String userId = 'CKBtLUDwGSSNjHqsLaZrQtLbzNP2';
+
+    String customDocName = chat_id;
+    String chatDocumentPath = 'users/$userId/chats/$customDocName';
+
+    try {
+      // Use the document reference to get the chat document
+      DocumentSnapshot chatDocument = await _db.doc(chatDocumentPath).get();
+
+      // Check if the document exists
+      if (chatDocument.exists) {
+        // Access the "bookname" field from the document data
+        String bookName = chatDocument.get('bookname');
+
+        print('Book Name: $bookName');
+        return bookName;
+      } else {
+        print('Chat document does not exist.');
+        return "";
+      }
+    } catch (e) {
+      print('Error retrieving data from Firestore: $e');
+      return "";
+    }
+  }
+
   Future<void> addClassToCF(
     String? name,
     DateTime start,
