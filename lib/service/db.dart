@@ -644,12 +644,14 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
-  Future<void> storeMessage(String message, String chat_id, String book) async {
+  Future<void> storeMessage(
+      String message, String chat_id, Set<String> book, String cb) async {
     String customDocName = chat_id;
 
     // Data you want to add to the document
     Map<String, dynamic> chatData = {
       'message': message,
+      "cost": cb,
       'timestamp': FieldValue.serverTimestamp(),
     };
     final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -662,7 +664,6 @@ class DatabaseService with ChangeNotifier {
           .get();
 
       if (!docSnapshot.exists) {
-        // Document already exists; add more data to it
         await _db
             .collection('users')
             .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')

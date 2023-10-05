@@ -17,7 +17,7 @@ class _CallChatGPTState extends State<AITutor> {
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
   String que = '';
-  String selectedBookname = "";
+  Set<String> selectedBookname = {};
   Future<List<String>?>? futureData = DatabaseService().fetchBooknames();
   Future<List<String>?>? chats = DatabaseService().getChatNames();
   List<String> loadedMsgs = [];
@@ -73,7 +73,7 @@ class _CallChatGPTState extends State<AITutor> {
                         snapshot.data == null ||
                         snapshot.data!.isEmpty) {
                       return Center(
-                        child: Text('No booknames found.'),
+                        child: Text('No chats found.'),
                       );
                     } else {
                       final booknames = snapshot.data!;
@@ -102,7 +102,7 @@ class _CallChatGPTState extends State<AITutor> {
                                   setState(() {
                                     loadedMsgs = msgs;
                                     questionAndResponseList = [];
-                                    selectedBookname = book;
+                                    selectedBookname.add(book);
                                   });
                                 },
                                 child: Center(
@@ -187,13 +187,20 @@ class _CallChatGPTState extends State<AITutor> {
                         for (int j = 0; j < columns; j++) {
                           if (i + j < booknames.length) {
                             final bookname = booknames[i + j];
-                            final isSelected = selectedBookname == bookname;
+                            final isSelected = selectedBookname.contains(
+                                bookname); // Check if the book is selected
 
                             columnChildren.add(
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    selectedBookname = bookname;
+                                    if (isSelected) {
+                                      // If book is already selected, remove it from the set
+                                      selectedBookname.remove(bookname);
+                                    } else {
+                                      // If book is not selected, add it to the set
+                                      selectedBookname.add(bookname);
+                                    }
                                   });
                                 },
                                 child: Center(
@@ -311,7 +318,7 @@ class _CallChatGPTState extends State<AITutor> {
                 WhiteButtonMain(
                   child: 'Ask',
                   onPressed: () async {
-                    final response = await aiService.ai_tutor(
+                    final response = await aiService.aiTutor(
                         selectedBookname, que, chat_id, loadedMsgs);
                     questionAndResponseList.add({
                       'question': que,

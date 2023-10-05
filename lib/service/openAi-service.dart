@@ -133,22 +133,33 @@ class AIPower {
     throw Exception;
   }
 
-  Future<Map?> ai_tutor(String topic, String question, String chat_id,
-      List<String> history) async {
-    final url = 'http://127.0.0.1:5000/ai_tutor';
-
+  Future<Map<String, dynamic>> aiTutor(
+    Set<String> topics,
+    String question,
+    String chatId,
+    List<String> history,
+  ) async {
+    final url = 'http://127.0.0.1:5000/ai_tutor_combine';
     Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
 
-    List<dynamic>? urls = await db.fetchUrls(topic);
+    List<List<dynamic>> urls = [];
+
+    for (String topic in topics) {
+      print(topic);
+      List<dynamic>? topicUrls = await db.fetchUrls(topic);
+      if (topicUrls != null) {
+        urls.add(topicUrls);
+      }
+    }
 
     Map<String, dynamic> body = {
-      'topic': topic,
-      "subject": question,
-      "urls": urls,
-      "chat_id": chat_id,
-      "history": history
+      'topic': topics.toList(),
+      'subject': question,
+      'urls': urls,
+      'chat_id': chatId,
+      'history': history,
     };
 
     http.Response response = await http.post(
@@ -156,22 +167,27 @@ class AIPower {
       headers: headers,
       body: jsonEncode(body),
     );
+
     print(response.statusCode);
+
     if (response.statusCode == 200) {
-      print("inside if");
+      print('Inside if');
       final data = jsonDecode(response.body);
       print(data);
-      print("data");
-      print(data["answer"]);
-      final chat_id = data["chat_id"];
-      print(chat_id);
-      final answer = data["answer"];
+      print('data');
+      print(data['answer']);
+      final chatId = data['chat_id'];
+      print(chatId);
+      final answer = data['answer'];
+      final cb = data["cb"];
       print(answer);
-      db.storeMessage(answer, chat_id, topic);
-      return {"answer": answer, "chat_id": chat_id};
+      print(cb);
+      db.storeMessage(answer, chatId, topics, cb);
+      return {"answer": answer, "chat_id": chatId};
     } else {
       print('Error uploading file: ${response.reasonPhrase}');
     }
+
     throw Exception;
   }
 
