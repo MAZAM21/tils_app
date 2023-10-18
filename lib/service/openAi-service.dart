@@ -16,6 +16,8 @@ import 'package:SIL_app/service/db.dart';
 import 'package:provider/provider.dart';
 
 const key = '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';
+const serverURL = 'https://fluencyai-o3ykvdugba-ue.a.run.app';
+const localURL = 'http://127.0.0.1:5000';
 
 class AIPower {
   final db = DatabaseService();
@@ -97,7 +99,7 @@ class AIPower {
   }
 
   Future<List<MCQ>?> mcq_generation(String topic) async {
-    final url = 'http://127.0.0.1:5000/auto_quiz';
+    final url = '$serverURL/auto_quiz';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -139,8 +141,61 @@ class AIPower {
     return books;
   }
 
+  Future<Map<String, dynamic>> compare(
+    Set<String> books,
+    String question,
+  ) async {
+    final url = '$localURL/ai_tutor_compare';
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    List<List<dynamic>> urls = [];
+
+    for (String book in books) {
+      print(book);
+      List<dynamic>? topicUrls = await db.fetchUrls(book);
+      if (topicUrls != null) {
+        urls.add(topicUrls);
+      }
+    }
+
+    Map<String, dynamic> body = {
+      'topic': books.toList(),
+      'subject': question,
+      'urls': urls,
+    };
+
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      print('Inside if');
+      final data = jsonDecode(response.body);
+      print(data);
+      print('data');
+      print(data['answer']);
+
+      final answer = data['answer'];
+      print(answer);
+
+      return {
+        "answer": answer,
+      };
+    } else {
+      print('Error uploading file: ${response.reasonPhrase}');
+    }
+
+    throw Exception;
+  }
+
   Future<String?> ai_tutor(String topic, String question) async {
-    final url = 'https://fluencyai-o3ykvdugba-ue.a.run.app/ai_tutor';
+    final url = 'http://127.0.0.1:5000/ai_tutor';
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -167,6 +222,50 @@ class AIPower {
       final data = jsonDecode(response.body);
       print("data" + data);
       return data;
+    } else {
+      print('Error uploading file: ${response.reasonPhrase}');
+    }
+    throw Exception;
+  }
+
+  Future<Map?> ai_tutor_persistent(
+    String topic,
+    String question,
+  ) async {
+    final url = '$localURL/ai_tutor';
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+    };
+
+    List<dynamic>? urls = await db.fetchUrls(topic);
+
+    Map<String, dynamic> body = {
+      'topic': topic,
+      "subject": question,
+      "urls": urls,
+    };
+    print(body);
+
+    http.Response response = await http.post(
+      Uri.parse(url),
+      headers: headers,
+      body: jsonEncode(body),
+    );
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print("inside if");
+      final data = jsonDecode(response.body);
+      print(data);
+      print("data");
+      print(data["answer"]);
+
+      final answer = data["answer"];
+      print(answer);
+      //db.storeChat(answer, chat_id, topic, '');
+      return {
+        "answer": answer,
+      };
     } else {
       print('Error uploading file: ${response.reasonPhrase}');
     }
@@ -293,6 +392,7 @@ class AIPower {
         print('Error uploading files: $e');
       }
     }
+    throw Exception();
   }
 
   Future<List<Marks>?> pickAndUploadFiles(String criteria) async {

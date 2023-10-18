@@ -94,6 +94,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - lib/assets/subject-images/
+    - lib/assets/lp-images/
     - lib/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see

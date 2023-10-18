@@ -1,4 +1,5 @@
 import 'package:SIL_app/widgets/landing-page.dart';
+import 'package:SIL_app/widgets/screens/loading-screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -80,7 +81,7 @@ class Tapp extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
 
         // Otherwise, show something whilst waiting for initialization to complete

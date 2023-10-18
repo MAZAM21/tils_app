@@ -1444,6 +1444,90 @@ class DatabaseService with ChangeNotifier {
     }
   }
 
+  Future<void> storeMessage(
+      String message, String chat_id, Set<String> book) async {
+    String customDocName = chat_id;
+
+    // Data you want to add to the document
+    Map<String, dynamic> chatData = {
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    try {
+      DocumentSnapshot docSnapshot = await _db
+          .collection('users')
+          .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+          .collection('chats')
+          .doc(customDocName)
+          .get();
+
+      if (!docSnapshot.exists) {
+        // Document already exists; add more data to it
+        await _db
+            .collection('users')
+            .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+            .collection('chats')
+            .doc(customDocName)
+            .set({"created": FieldValue.serverTimestamp(), "bookname": book});
+
+        print(
+            'Additional chat data added to existing document: $customDocName');
+      }
+      await _db
+          .collection('users')
+          .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+          .collection('chats')
+          .doc(customDocName)
+          .collection("messages")
+          .add(chatData);
+    } catch (e) {
+      print('Error adding data to Firestore: $e');
+    }
+  }
+
+  Future<void> storeChat(
+      String message, String chat_id, String book, String uid) async {
+    String customDocName = chat_id;
+
+    // Data you want to add to the document
+    Map<String, dynamic> chatData = {
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+    final FirebaseFirestore _db = FirebaseFirestore.instance;
+    try {
+      DocumentSnapshot docSnapshot = await _db
+          .collection('chats')
+          .doc(uid)
+          .collection(book)
+          .doc(customDocName)
+          .get();
+
+      if (!docSnapshot.exists) {
+        // Document already exists; add more data to it
+        await _db
+            .collection('users')
+            .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+            .collection('chats')
+            .doc(customDocName)
+            .set({"created": FieldValue.serverTimestamp(), "bookname": book});
+
+        print(
+            'Additional chat data added to existing document: $customDocName');
+      }
+      await _db
+          .collection('users')
+          .doc('CKBtLUDwGSSNjHqsLaZrQtLbzNP2')
+          .collection('chats')
+          .doc(customDocName)
+          .collection("messages")
+          .add(chatData);
+    } catch (e) {
+      print('Error adding data to Firestore: $e');
+    }
+  }
+
   //adds edited class to cf
   Future<void> editClassInCF(
     String? id,

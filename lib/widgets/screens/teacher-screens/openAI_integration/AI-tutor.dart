@@ -1,6 +1,7 @@
 import 'package:SIL_app/models/books.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
-
+import 'package:flutter/rendering.dart';
+import 'package:uuid/uuid.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/upload-book.dart';
 import 'package:provider/provider.dart';
@@ -16,10 +17,17 @@ class AITutor extends StatefulWidget {
 }
 
 class _CallChatGPTState extends State<AITutor> {
+  bool isCodeExecuted = false;
+  bool isBatch = false;
+  String chat_id = "";
+  Map<String, List<Widget>> chat_history = {};
   final _formKey = GlobalKey<FormState>();
   final queController = TextEditingController();
   String que = '';
   String selectedBookname = "";
+  Map<String, String> convo = {};
+  List<String> history = [];
+  Set<String> selectedBookBatch = {};
 
   final aiService = AIPower();
 
@@ -31,10 +39,20 @@ class _CallChatGPTState extends State<AITutor> {
   }
 
   void handleBookTileTap(Books book) {
-    setState(() {
-      isTesting = false;
-      selectedBookname = book.name;
-    });
+    if (isBatch == false) {
+      setState(() {
+        isTesting = false;
+        selectedBookname = book.name;
+      });
+    } else {
+      setState(() {
+        if (!selectedBookBatch.contains(book.name)) {
+          selectedBookBatch.add(book.name);
+        } else {
+          selectedBookBatch.remove(book.name);
+        }
+      });
+    }
   }
 
   bool isTesting = false;
@@ -46,6 +64,7 @@ class _CallChatGPTState extends State<AITutor> {
     Map<String?, List<Books>> categorizedBooks = {};
     List<Books> booksWithoutCategory = [];
 
+    Map<String, FocusNode> entryFocusNodes = {};
     final organizedBooks = aiService.alphabeticalSort(books);
 
     for (var book in organizedBooks) {
@@ -59,23 +78,25 @@ class _CallChatGPTState extends State<AITutor> {
     return Scaffold(
       appBar:
           AppBar(backgroundColor: Color.fromARGB(255, 230, 235, 235), actions: [
+        Spacer(),
+        Spacer(),
         TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  settings: RouteSettings(name: '/upload-textbook'),
-                  builder: (BuildContext context) =>
-                      ChangeNotifierProvider.value(
-                    value: teacherData,
-                    child: UploadTextbook(),
-                  ),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                settings: RouteSettings(name: '/upload-textbook'),
+                builder: (BuildContext context) => ChangeNotifierProvider.value(
+                  value: teacherData,
+                  child: UploadTextbook(),
                 ),
-              );
-            },
-            child: Text(
-              'Upload Book',
-              style: Theme.of(context).textTheme.titleLarge,
-            ))
+              ),
+            );
+          },
+          child: Text(
+            'Upload Book',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
       ]),
       body: Form(
         key: _formKey,
@@ -86,25 +107,40 @@ class _CallChatGPTState extends State<AITutor> {
             child: Row(
               children: [
                 Drawer(
+                  width: 200,
                   backgroundColor: Color.fromARGB(255, 230, 235, 235),
                   child: ListView(children: [
                     if (booksWithoutCategory.isNotEmpty)
                       ExpansionTile(
-                        textColor: Color(0xff161616),
+                        textColor: Color.fromRGBO(22, 22, 22, 1),
                         title: Text('Books without Category'),
                         children: booksWithoutCategory
                             .map(
                               (book) => ListTile(
-                                title: Text(book.name),
+                                title: Text(
+                                  book.name,
+                                  style: TextStyle(
+                                    color: selectedBookname == book.name ||
+                                            selectedBookBatch
+                                                .contains(book.name)
+                                        ? Colors.red
+                                        : Color(0xff161616),
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                                 onTap: () {
                                   handleBookTileTap(book);
                                 },
                                 selectedColor: Colors.red,
-                                selected: selectedBookname == book.name,
+                                selected: selectedBookname == book.name ||
+                                    selectedBookBatch.contains(book.name),
                                 subtitle: Text(
                                   'Author: ${book.author}',
                                   style: TextStyle(
-                                      color: selectedBookname == book.name
+                                      color: selectedBookname == book.name ||
+                                              selectedBookBatch
+                                                  .contains(book.name)
                                           ? Colors.red
                                           : Color(0xff161616),
                                       fontFamily: 'Proxima Nova',
@@ -123,11 +159,24 @@ class _CallChatGPTState extends State<AITutor> {
                         children: entry.value
                             .map(
                               (book) => ListTile(
-                                title: Text(book.name),
+                                title: Text(
+                                  book.name,
+                                  style: TextStyle(
+                                    color: selectedBookname == book.name ||
+                                            selectedBookBatch
+                                                .contains(book.name)
+                                        ? Colors.red
+                                        : Color(0xff161616),
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                                 subtitle: Text(
                                   'Author: ${book.author}',
                                   style: TextStyle(
-                                      color: selectedBookname == book.name
+                                      color: selectedBookname == book.name ||
+                                              selectedBookBatch
+                                                  .contains(book.name)
                                           ? Colors.red
                                           : Color(0xff161616),
                                       fontFamily: 'Proxima Nova',
@@ -137,12 +186,34 @@ class _CallChatGPTState extends State<AITutor> {
                                 onTap: () {
                                   handleBookTileTap(book);
                                 },
-                                selected: selectedBookname == book.name,
+                                selected: selectedBookname == book.name ||
+                                    selectedBookBatch.contains(book.name),
                                 selectedColor: Colors.red,
                               ),
                             )
                             .toList(),
                       ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          'Batch Query',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ),
+                    ),
+                    Switch(
+                        value: isBatch,
+                        onChanged: (value) {
+                          setState(() {
+                            isBatch = value;
+                            if (isBatch == false) {
+                              selectedBookBatch.clear();
+                            } else {
+                              selectedBookname = '';
+                            }
+                          });
+                        })
                   ]),
                 ),
                 Stack(
@@ -151,29 +222,111 @@ class _CallChatGPTState extends State<AITutor> {
                     if (isTesting == true)
                       Container(
                         height: MediaQuery.of(context).size.height * 0.6,
-                        child: FutureBuilder<String?>(
-                          future: aiService.ai_tutor(selectedBookname, que),
+
+                        ///Single book answer
+
+                        child: FutureBuilder<Map<dynamic, dynamic>?>(
+                          future: isBatch
+                              ? aiService.compare(
+                                  selectedBookBatch,
+                                  que,
+                                )
+                              : aiService.ai_tutor_persistent(
+                                  selectedBookname,
+                                  que,
+                                ),
                           builder: (ctx, snap) {
                             if (snap.connectionState ==
                                 ConnectionState.waiting) {
                               print('waiting');
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                      height: 40,
-                                      width: 40,
-                                      child: CircularProgressIndicator()),
-                                ],
+                              return SingleChildScrollView(
+                                reverse: true,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 20),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.5,
+                                        child: Column(
+                                          children: convo.entries
+                                              .map((e) => Column(
+                                                    children: [
+                                                      SelectableText(
+                                                        '\n${e.key}: \n\n',
+                                                        style: TextStyle(
+                                                          color: Colors
+                                                              .deepOrange[800],
+                                                          fontFamily:
+                                                              'RobotoCondensed',
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                                      ),
+                                                      SelectableText(
+                                                          '${e.value} \n'),
+                                                    ],
+                                                  ))
+                                              .toList(),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height: 40,
+                                        width: 40,
+                                        child: CircularProgressIndicator()),
+                                  ],
+                                ),
                               );
                             }
                             if (snap.connectionState == ConnectionState.none) {
                               print('none');
                               return Container();
                             }
+
                             if (snap.connectionState == ConnectionState.done) {
                               print("done");
+
+                              history.add(snap.data!['answer']);
+
+                              convo.addAll({'$que': snap.data!['answer']});
+
+                              chat_history.addAll({
+                                selectedBookname: convo.entries
+                                    .map((e) => Column(
+                                          children: [
+                                            SelectableText(
+                                              '\n${e.key}: \n\n',
+                                              style: TextStyle(
+                                                color: Colors.deepOrange[800],
+                                                fontFamily: 'RobotoCondensed',
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SelectableText('${e.value} \n'),
+                                          ],
+                                        ))
+                                    .toList(),
+                              });
+                              print(chat_history[selectedBookname]);
+                              if (convo.isNotEmpty) {
+                                for (var entry in convo.entries) {
+                                  entryFocusNodes[entry.key] = FocusNode();
+                                }
+                              }
+                              isTesting = false;
+
+                              // Request focus on the last FocusNode after the frame is built
+
                               return SingleChildScrollView(
+                                // reverse: true,
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -187,11 +340,29 @@ class _CallChatGPTState extends State<AITutor> {
                                                   .size
                                                   .width *
                                               0.5,
-                                          child: SelectableText(
-                                            snap.data!,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
+                                          child: Column(
+                                            children: convo.entries
+                                                .map((e) => Column(
+                                                      children: [
+                                                        SelectableText(
+                                                          '\n${e.key}: \n\n',
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                    .deepOrange[
+                                                                800],
+                                                            fontFamily:
+                                                                'RobotoCondensed',
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                        ),
+                                                        SelectableText(
+                                                            '${e.value} \n'),
+                                                      ],
+                                                    ))
+                                                .toList(),
                                           )),
                                     ),
                                   ],
@@ -253,7 +424,8 @@ class _CallChatGPTState extends State<AITutor> {
                                       child: 'Ask',
                                       onPressed: () {
                                         if (que.isNotEmpty &&
-                                            selectedBookname.isNotEmpty) {
+                                            (selectedBookname.isNotEmpty ||
+                                                selectedBookBatch.isNotEmpty)) {
                                           setState(() {
                                             isTesting = true;
                                           });

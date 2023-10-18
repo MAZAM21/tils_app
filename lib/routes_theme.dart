@@ -205,7 +205,7 @@ class RoutesAndTheme extends StatelessWidget {
             bodyMedium: TextStyle(
               color: Colors.black,
               fontFamily: 'RobotoCondensed',
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.normal,
             ),
           ),
