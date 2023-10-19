@@ -310,58 +310,126 @@ class AIPower {
     }
   }
 
-  Future<String?> upload_textbook(
-      String bookname, String author, String subject, String category) async {
-    print(bookname);
-    print(author);
-    print(subject);
-    var ref = FirebaseStorage.instance.ref().child('');
-    List<Uint8List> _fileBytesList = [];
-    List<String> _fileNames = [];
+  // Future<String?> upload_textbook(
+  //     String bookname, String author, String subject, String category) async {
+  //   print(bookname);
+  //   print(author);
+  //   print(subject);
+  //   var ref = FirebaseStorage.instance.ref().child('');
+  //   List<Uint8List> _fileBytesList = [];
+  //   List<String> _fileNames = [];
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['txt', 'pdf'],
+  //     allowMultiple: true,
+  //   );
+
+  //   if (result != null && result.files.isNotEmpty) {
+  //     List<PlatformFile> selectedFiles = result.files;
+
+  //     _fileBytesList.clear();
+  //     _fileNames.clear();
+
+  //     for (var file in selectedFiles) {
+  //       if (file.extension == 'txt' || file.extension == 'pdf') {
+  //         Uint8List fileBytes = file.bytes!;
+  //         _fileBytesList.add(fileBytes);
+  //         _fileNames.add(file.name);
+  //       }
+  //     }
+
+  //     if (_fileBytesList.isEmpty) {
+  //       print('No files selected to upload');
+  //       return "error";
+  //     }
+
+  //     try {
+  //       var url = Uri.parse('http://127.0.0.1:5000/upload_textbooks');
+  //       var request = http.MultipartRequest('POST', url);
+  //       request.fields['bookname'] = bookname;
+
+  //       for (var i = 0; i < _fileBytesList.length; i++) {
+  //         Uint8List fileBytes = _fileBytesList[i];
+  //         String fileName = _fileNames[i];
+
+  //         Stream<List<int>> stream =
+  //             Stream.fromIterable(fileBytes.map((byte) => [byte]));
+
+  //         request.files.add(http.MultipartFile(
+  //           'files',
+  //           stream,
+  //           fileBytes.length,
+  //           filename: fileName,
+  //         ));
+  //       }
+
+  //       var response = await request.send();
+
+  //       if (response.statusCode == 200) {
+  //         print('File uploaded successfully');
+  //         print(response);
+  //         final respStr = await response.stream.bytesToString();
+  //         String jsonList = jsonDecode(respStr);
+  //         List<String> json_List = json.decode(jsonList).cast<String>();
+  //         List<String> url_list = [];
+  //         for (String path in json_List) {
+  //           print(path);
+  //           ref = FirebaseStorage.instance.ref();
+  //           try {
+  //             String url = await ref.child(path).getDownloadURL();
+  //             print(url);
+  //             url_list.add(path);
+  //           } catch (e) {
+  //             print("url err: $e");
+  //           }
+  //         }
+  //         print(json_List);
+  //         return db.addTextbook(bookname, author, subject, url_list, category);
+  //       } else {
+  //         print('Error uploading files: ${response.reasonPhrase}');
+  //       }
+  //     } catch (e) {
+  //       print('Error uploading files: $e');
+  //     }
+  //   }
+  //   throw Exception();
+  // }
+
+  Future<FilePickerResult?> pickFilesOnce() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['txt', 'pdf'],
       allowMultiple: true,
     );
+    return result;
+  }
 
-    if (result != null && result.files.isNotEmpty) {
-      List<PlatformFile> selectedFiles = result.files;
+  Future<String?> uploadSingleTextbook(String bookname, String author,
+      String subject, String category, PlatformFile file) async {
+    print(bookname);
+    print(author);
+    print(subject);
 
-      _fileBytesList.clear();
-      _fileNames.clear();
+    var ref = FirebaseStorage.instance.ref().child('');
 
-      for (var file in selectedFiles) {
-        if (file.extension == 'txt' || file.extension == 'pdf') {
-          Uint8List fileBytes = file.bytes!;
-          _fileBytesList.add(fileBytes);
-          _fileNames.add(file.name);
-        }
-      }
-
-      if (_fileBytesList.isEmpty) {
-        print('No files selected to upload');
-        return "error";
-      }
+    if (file.extension == 'txt' || file.extension == 'pdf') {
+      Uint8List fileBytes = file.bytes!;
+      String fileName = file.name;
 
       try {
         var url = Uri.parse('http://127.0.0.1:5000/upload_textbooks');
         var request = http.MultipartRequest('POST', url);
         request.fields['bookname'] = bookname;
 
-        for (var i = 0; i < _fileBytesList.length; i++) {
-          Uint8List fileBytes = _fileBytesList[i];
-          String fileName = _fileNames[i];
+        Stream<List<int>> stream =
+            Stream.fromIterable(fileBytes.map((byte) => [byte]));
 
-          Stream<List<int>> stream =
-              Stream.fromIterable(fileBytes.map((byte) => [byte]));
-
-          request.files.add(http.MultipartFile(
-            'files',
-            stream,
-            fileBytes.length,
-            filename: fileName,
-          ));
-        }
+        request.files.add(http.MultipartFile(
+          'files',
+          stream,
+          fileBytes.length,
+          filename: fileName,
+        ));
 
         var response = await request.send();
 
@@ -386,13 +454,57 @@ class AIPower {
           print(json_List);
           return db.addTextbook(bookname, author, subject, url_list, category);
         } else {
-          print('Error uploading files: ${response.reasonPhrase}');
+          print('Error uploading file: ${response.reasonPhrase}');
         }
       } catch (e) {
-        print('Error uploading files: $e');
+        print('Error uploading file: $e');
       }
     }
     throw Exception();
+  }
+
+  Future<String?> upload_textbook(
+      String bookname, String author, String subject, String category) async {
+    FilePickerResult? result = await pickFilesOnce();
+    if (result != null && result.files.isNotEmpty) {
+      PlatformFile file = result.files[0];
+
+      return uploadSingleTextbook(bookname, author, subject, category, file);
+    }
+  }
+
+  Future<String?> batch_upload_textbook(String category) async {
+    String subject = "placeholder";
+
+    FilePickerResult? result = await pickFilesOnce();
+    if (result != null && result.files.isNotEmpty) {
+      List<PlatformFile> selectedFiles = result.files;
+
+      for (int i = 0; i < selectedFiles.length; i++) {
+        String filename = selectedFiles[i].name;
+        RegExp regex =
+            RegExp(r'^(.*?)_(.*)\..*'); // Matches "book title_author name.ext"
+
+        Match? match = regex.firstMatch(filename);
+
+        if (match != null && match.groupCount >= 2) {
+          String bookname = match.group(1)!;
+          String author = match.group(2)!;
+
+          String? result = await uploadSingleTextbook(
+              bookname, author, subject, category, selectedFiles[i]);
+
+          if (result == "error") {
+            print('Error uploading book: $bookname');
+          } else {
+            print('Book uploaded successfully: $bookname');
+          }
+        } else {
+          print('Invalid filename format for file: $filename');
+        }
+      }
+      return "success";
+    }
   }
 
   Future<List<Marks>?> pickAndUploadFiles(String criteria) async {

@@ -19,6 +19,10 @@ class _CallChatGPTState extends State<UploadTextbook> {
   String selectedSubject = '';
   String category = ''; // Added selectedSubject variable
 
+  bool isBatch = false;
+  String selectedBookname = "";
+  Set<String> selectedBookBatch = {};
+
   final aiService = AIPower();
 
   void saveForm() {
@@ -43,43 +47,68 @@ class _CallChatGPTState extends State<UploadTextbook> {
                 width: MediaQuery.of(context).size.width * 0.6,
                 child: Column(
                   children: [
-                    TextFormField(
-                      key: ValueKey('topic'),
-                      validator: (value) {
-                        if (value!.isEmpty || value == '') {
-                          return 'Please enter a book name';
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        bookName = value;
-                      },
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        labelText: 'Title',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
-                        ),
-                      ),
-                      maxLines: 3,
-                      minLines: 2,
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    TextFormField(
-                      key: ValueKey('author'),
-                      controller: authorController,
-                      decoration: InputDecoration(
-                        labelText: 'Author',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          'Batch Upload',
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    Switch(
+                        value: isBatch,
+                        onChanged: (value) {
+                          setState(() {
+                            isBatch = value;
+                            // if (isBatch == false) {
+                            //   selectedBookBatch.clear();
+                            // } else {
+                            //   selectedBookname = '';
+                            // }
+                          });
+                        }),
+                    if (!isBatch)
+                      TextFormField(
+                        key: ValueKey('topic'),
+                        validator: (value) {
+                          if (value!.isEmpty || value == '') {
+                            return 'Please enter a book name';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          bookName = value;
+                        },
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo),
+                          ),
+                        ),
+                        maxLines: 3,
+                        minLines: 2,
+                      ),
+                    if (!isBatch)
+                      SizedBox(
+                        height: 30,
+                      ),
+                    if (!isBatch)
+                      TextFormField(
+                        key: ValueKey('author'),
+                        controller: authorController,
+                        decoration: InputDecoration(
+                          labelText: 'Author',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo),
+                          ),
+                        ),
+                      ),
+                    if (!isBatch)
+                      SizedBox(
+                        height: 30,
+                      ),
                     TextFormField(
                       key: ValueKey('Category'),
                       controller: categoryController,
@@ -103,34 +132,66 @@ class _CallChatGPTState extends State<UploadTextbook> {
                       },
                     ),
                     if (isTesting == true)
-                      Container(
-                        child: FutureBuilder<String?>(
-                          future: aiService.upload_textbook(
-                              bookName,
-                              authorController.text,
-                              selectedSubject,
-                              categoryController.text),
-                          builder: (ctx, snap) {
-                            if (snap.connectionState ==
-                                ConnectionState.waiting) {
-                              print('waiting');
-                              return CircularProgressIndicator();
-                            }
-                            if (snap.connectionState == ConnectionState.none) {
-                              print('none');
-                              return Container();
-                            }
-                            if (snap.connectionState == ConnectionState.done) {
-                              print("done");
-                              return Text(snap.data!);
-                            }
-                            print('no state');
-                            return Column(
-                              children: [],
-                            );
-                          },
+                      if (!isBatch)
+                        Container(
+                          child: FutureBuilder<String?>(
+                            future: aiService.upload_textbook(
+                                bookName,
+                                authorController.text,
+                                selectedSubject,
+                                categoryController.text),
+                            builder: (ctx, snap) {
+                              if (snap.connectionState ==
+                                  ConnectionState.waiting) {
+                                print('waiting');
+                                return CircularProgressIndicator();
+                              }
+                              if (snap.connectionState ==
+                                  ConnectionState.none) {
+                                print('none');
+                                return Container();
+                              }
+                              if (snap.connectionState ==
+                                  ConnectionState.done) {
+                                print("done");
+                                return Text(snap.data!);
+                              }
+                              print('no state');
+                              return Column(
+                                children: [],
+                              );
+                            },
+                          ),
                         ),
-                      ),
+                    if (isTesting == true)
+                      if (isBatch)
+                        Container(
+                          child: FutureBuilder<String?>(
+                            future: aiService
+                                .batch_upload_textbook(categoryController.text),
+                            builder: (ctx, snap) {
+                              if (snap.connectionState ==
+                                  ConnectionState.waiting) {
+                                print('waiting');
+                                return CircularProgressIndicator();
+                              }
+                              if (snap.connectionState ==
+                                  ConnectionState.none) {
+                                print('none');
+                                return Container();
+                              }
+                              if (snap.connectionState ==
+                                  ConnectionState.done) {
+                                print("done");
+                                return Text(snap.data!);
+                              }
+                              print('no state');
+                              return Column(
+                                children: [],
+                              );
+                            },
+                          ),
+                        ),
                   ],
                 ),
               ),

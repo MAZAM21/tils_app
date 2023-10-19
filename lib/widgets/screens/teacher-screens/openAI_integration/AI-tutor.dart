@@ -1,7 +1,5 @@
 import 'package:SIL_app/models/books.dart';
 import 'package:SIL_app/models/teacher-user-data.dart';
-import 'package:flutter/rendering.dart';
-import 'package:uuid/uuid.dart';
 import 'package:SIL_app/widgets/button-styles.dart';
 import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/upload-book.dart';
 import 'package:provider/provider.dart';
