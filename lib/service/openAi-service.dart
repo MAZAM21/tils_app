@@ -194,6 +194,14 @@ class AIPower {
     throw Exception;
   }
 
+  String replaceUrlsWithSymbols(String inputText) {
+    RegExp urlRegex = RegExp(r"(https?://\S+?)(t=\d+)");
+
+    return inputText.replaceAllMapped(urlRegex, (match) {
+      return '<a href="${match.group(0)}">${match.group(0)}</a>'; // Generates a simple 'a' tag for illustration
+    });
+  }
+
   Future<String?> ai_tutor(String topic, String question) async {
     final url = 'http://127.0.0.1:5000/ai_tutor';
 
@@ -219,8 +227,9 @@ class AIPower {
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
+      String data = jsonDecode(response.body);
       print("data" + data);
+      // data = replaceUrlsWithSymbols(data);
       return data;
     } else {
       print('Error uploading file: ${response.reasonPhrase}');
@@ -260,8 +269,9 @@ class AIPower {
       print("data");
       print(data["answer"]);
 
-      final answer = data["answer"];
+      String answer = data["answer"];
       print(answer);
+      answer = replaceUrlsWithSymbols(answer);
       //db.storeChat(answer, chat_id, topic, '');
       return {
         "answer": answer,
@@ -419,7 +429,7 @@ class AIPower {
       try {
         var url = Uri.parse('http://127.0.0.1:5000/upload_textbooks');
         var request = http.MultipartRequest('POST', url);
-        request.fields['bookname'] = bookname;
+        request.fields['url'] = "https://www.youtube.com/watch?v=6M5VXKLf4D4";
 
         Stream<List<int>> stream =
             Stream.fromIterable(fileBytes.map((byte) => [byte]));

@@ -5,6 +5,8 @@ import 'package:SIL_app/widgets/screens/teacher-screens/openAI_integration/uploa
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:SIL_app/service/openAi-service.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 
 class AITutor extends StatefulWidget {
   const AITutor({Key? key}) : super(key: key);
@@ -12,6 +14,69 @@ class AITutor extends StatefulWidget {
 
   @override
   State<AITutor> createState() => _CallChatGPTState();
+}
+
+class LinkText extends StatelessWidget {
+  final String text;
+
+  LinkText({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return SelectableText.rich(
+      _parseText(text),
+    );
+  }
+
+  TextSpan _parseText(String text) {
+    final pattern = RegExp(r'<a href="([^"]+)">([^<]+)<\/a>');
+    final matches = pattern.allMatches(text);
+
+    final List<TextSpan> textSpans = [];
+
+    int previousEnd = 0;
+    for (var match in matches) {
+      if (match.start > previousEnd) {
+        textSpans.add(TextSpan(
+          text: text.substring(previousEnd, match.start),
+          style: TextStyle(color: Colors.black),
+        ));
+      }
+
+      final url = match.group(1);
+
+      textSpans.add(TextSpan(
+        text: '🔗', // Small link symbol
+        style: TextStyle(
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        ),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () {
+            _launchURL(url!);
+          },
+      ));
+
+      previousEnd = match.end;
+    }
+
+    if (previousEnd < text.length) {
+      textSpans.add(TextSpan(
+        text: text.substring(previousEnd),
+        style: TextStyle(color: Colors.black),
+      ));
+    }
+
+    return TextSpan(children: textSpans);
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
 
 class _CallChatGPTState extends State<AITutor> {
@@ -267,8 +332,9 @@ class _CallChatGPTState extends State<AITutor> {
                                                               FontWeight.normal,
                                                         ),
                                                       ),
-                                                      SelectableText(
-                                                          '${e.value} \n'),
+                                                      LinkText(
+                                                          text:
+                                                              '${e.value} \n'),
                                                     ],
                                                   ))
                                               .toList(),
@@ -308,7 +374,7 @@ class _CallChatGPTState extends State<AITutor> {
                                                 fontWeight: FontWeight.normal,
                                               ),
                                             ),
-                                            SelectableText('${e.value} \n'),
+                                            LinkText(text: '${e.value} \n'),
                                           ],
                                         ))
                                     .toList(),
@@ -356,8 +422,9 @@ class _CallChatGPTState extends State<AITutor> {
                                                                     .normal,
                                                           ),
                                                         ),
-                                                        SelectableText(
-                                                            '${e.value} \n'),
+                                                        LinkText(
+                                                            text:
+                                                                '${e.value} \n'),
                                                       ],
                                                     ))
                                                 .toList(),
