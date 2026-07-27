@@ -57,7 +57,8 @@ class _HomePageState extends State<HomePage> {
         android: initialzationSettingsAndroid,
       );
 
-      flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      flutterLocalNotificationsPlugin.initialize(
+          settings: initializationSettings);
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         RemoteNotification? notification = message.notification;
         AndroidNotification? android = message.notification?.android;
@@ -67,16 +68,17 @@ class _HomePageState extends State<HomePage> {
             content: Text('${notification.title}'),
           ));
           flutterLocalNotificationsPlugin.show(
-              notification.hashCode,
-              notification.title,
-              notification.body,
-              NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  icon: 'LCI_icon',
-                ),
-              ));
+            id: notification.hashCode,
+            title: notification.title,
+            body: notification.body,
+            notificationDetails: NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                icon: 'lci_icon',
+              ),
+            ),
+          );
         }
       });
       if (teacherData != null) {

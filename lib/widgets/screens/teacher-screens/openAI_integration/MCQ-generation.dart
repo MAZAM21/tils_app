@@ -65,7 +65,7 @@ class _CallChatGPTState extends State<CallChatGPT> {
                     children: [
                       Text(
                         'Topic',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,

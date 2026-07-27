@@ -53,7 +53,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
     FilePickerResult? results;
 
     try {
-      results = await FilePicker.platform.pickFiles(
+      results = await FilePicker.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc', 'mp4', 'mp3', 'docx'],
@@ -140,14 +140,15 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                     width: 600,
                     color: Theme.of(context).primaryColor,
                     child: DottedBorder(
-                      color: Colors.white,
-                      borderType: BorderType.RRect,
-                      radius: Radius.circular(12),
-                      dashPattern: [4, 4],
-                      strokeWidth: 1,
-                      padding: EdgeInsets.all(6),
-                      borderPadding: EdgeInsets.all(4),
-                      child: Center(
+                      options: const RoundedRectDottedBorderOptions(
+                        color: Colors.white,
+                        radius: Radius.circular(12),
+                        dashPattern: [4, 4],
+                        strokeWidth: 1,
+                        padding: EdgeInsets.all(6),
+                        borderPadding: EdgeInsets.all(4),
+                      ),
+                      child: const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -182,55 +183,59 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                   width: 600,
                   color: Theme.of(context).primaryColor,
                   child: DottedBorder(
-                    color: Colors.white,
-                    borderType: BorderType.RRect,
-                    radius: Radius.circular(12),
-                    dashPattern: [4, 4],
-                    strokeWidth: 1,
-                    padding: EdgeInsets.all(6),
-                    borderPadding: EdgeInsets.all(4),
+                    options: const RoundedRectDottedBorderOptions(
+                      color: Colors.white,
+                      radius: Radius.circular(12),
+                      dashPattern: <double>[4, 4],
+                      strokeWidth: 1,
+                      padding: EdgeInsets.all(6),
+                      borderPadding: EdgeInsets.all(4),
+                    ),
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           if (!uploadComplete)
                             StreamBuilder<double?>(
-                                stream: db.uploadResource(resUp),
-                                builder: (context, snapshot) {
-                                  if (snapshot.data == 1) {
-                                    Future.delayed(Duration.zero, () {
-                                      uploadCompleted();
-                                    });
-                                    return SizedBox.shrink();
-                                  }
-                                  if (snapshot.data != null) {
-                                    final progress = snapshot.data;
+                              stream: db.uploadResource(resUp),
+                              builder: (context, snapshot) {
+                                if (snapshot.data == 1) {
+                                  Future.delayed(Duration.zero, () {
+                                    uploadCompleted();
+                                  });
 
-                                    return progress != null
-                                        ? Text(
-                                            'Uploading: ${(progress * 100).toStringAsFixed(2)}%',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontFamily: 'Proxima Nova',
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          )
-                                        : Text('');
-                                  } else {
-                                    return Text(
-                                      'Upload Processing',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontFamily: 'Proxima Nova',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    );
-                                  }
-                                }),
+                                  return const SizedBox.shrink();
+                                }
+
+                                if (snapshot.data != null) {
+                                  final double? progress = snapshot.data;
+
+                                  return progress != null
+                                      ? Text(
+                                          'Uploading: ${(progress * 100).toStringAsFixed(2)}%',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontFamily: 'Proxima Nova',
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      : const SizedBox.shrink();
+                                }
+
+                                return const Text(
+                                  'Upload Processing',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Proxima Nova',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                );
+                              },
+                            ),
                           if (uploadComplete)
-                            Text(
+                            const Text(
                               'Upload Completed',
                               style: TextStyle(
                                 color: Colors.white,
@@ -238,7 +243,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                                 fontFamily: 'Proxima Nova',
                                 fontWeight: FontWeight.w600,
                               ),
-                            )
+                            ),
                         ],
                       ),
                     ),
