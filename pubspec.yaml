@@ -23,41 +23,41 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0 
+  intl: ^0.20.3 
   numberpicker: ^2.1.1 
-  firebase_core: ^2.1.1
-  cloud_firestore: ^4.0.4
-  firebase_auth: ^4.1.1
+  firebase_core: 4.12.1
+  cloud_firestore: 6.7.1
+  firebase_auth: 6.5.6
   quiver: ^3.0.1
-  syncfusion_flutter_charts: ^20.2.50
-  syncfusion_flutter_calendar: ^20.2.50
-  syncfusion_flutter_datagrid: ^20.2.50
-  syncfusion_flutter_sliders: ^20.2.50
-  file_picker: ^4.0.0
-  excel: ^2.0.0-null-safety-3
-  flutter_launcher_icons: ^0.10.0
-  image_picker: ^0.8.3+3
-  firebase_storage: ^11.0.4
-  firebase_messaging: ^14.0.4
-  flutter_local_notifications: ^12.0.3
-  cloud_functions: ^4.0.3
-  flutter_app_name: ^0.1.0
-  emojis: ^0.9.9
-  cached_network_image: ^3.2.0
+  syncfusion_flutter_charts: ^30.2.6+1
+  syncfusion_flutter_calendar: ^29.2.5
+  syncfusion_flutter_datagrid: ^29.2.11
+  syncfusion_flutter_sliders: ^29.2.11
+  file_picker: ^11.0.2
+  excel: ^4.0.6
+  flutter_launcher_icons: ^0.14.4
+  image_picker: ^1.2.3
+  firebase_storage: 13.4.5
+  firebase_messaging: 16.4.3
+  flutter_local_notifications: ^20.1.0
+  cloud_functions: 6.3.5
+  # flutter_app_name: ^0.1.0
+  emojis: ^3.2.0
+  cached_network_image: ^3.3.1
   flutter_echarts: ^2.3.0
-  dotted_border: ^2.0.0+3
+  dotted_border: ^3.1.0
   video_player: ^2.6.0
   url_launcher: ^6.1.10
-  permission_handler: ^10.2.0
+  permission_handler: ^12.0.3
   android_intent: ^2.0.2
-  android_intent_plus: ^3.1.6
-  langchain: ^0.0.1
-  langchain_openai: ^0.0.1
+  android_intent_plus: ^6.1.0
+  langchain: ^0.8.1
+  langchain_openai: ^0.8.1+1
+  langchain_community: ^0.4.0+2
   path_provider: ^2.0.9
-  http: ^0.13.3
-
-flutter_app_name:
-  name: "LCI"
+  http: ^1.6.0
+# flutter_app_name:
+#   name: "LCI"
 
 flutter_icons:
   android: "launcher_icon"

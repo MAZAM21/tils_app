@@ -32,7 +32,8 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
     var initializationSettings =
         InitializationSettings(android: initialzationSettingsAndroid);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    flutterLocalNotificationsPlugin.initialize(
+        settings: initializationSettings);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -41,10 +42,10 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
           content: Text('${notification.title}'),
         ));
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
+            id: notification.hashCode,
+            title: notification.title,
+            body: notification.body,
+            notificationDetails: NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
@@ -108,8 +109,6 @@ class _ParentHomeAvatarPanelState extends State<ParentHomeAvatarPanel> {
                         : null,
                     radius: 30,
                   ),
-                
-                
               ],
             ),
           ),

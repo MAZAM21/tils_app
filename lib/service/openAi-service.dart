@@ -9,6 +9,7 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:langchain_community/langchain_community.dart';
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:SIL_app/service/db.dart';
@@ -63,12 +64,16 @@ class AIPower {
   };
   final llm = OpenAI(
     apiKey: key,
-    temperature: 0.9,
+    defaultOptions: const OpenAIOptions(
+      temperature: 0.9,
+    ),
   );
 
   final chatLlm = ChatOpenAI(
     apiKey: key,
-    temperature: 0,
+    defaultOptions: const ChatOpenAIOptions(
+      temperature: 0.0,
+    ),
   );
   final filePath = 'lib/assets/contract_law.txt';
 
@@ -237,7 +242,7 @@ class AIPower {
     var ref = FirebaseStorage.instance.ref().child('');
     List<Uint8List> _fileBytesList = [];
     List<String> _fileNames = [];
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['txt', 'pdf'],
       allowMultiple: true,
@@ -316,7 +321,7 @@ class AIPower {
   Future<List<Marks>?> pickAndUploadFiles(String criteria) async {
     List<Uint8List> _fileBytesList = [];
     List<String> _fileNames = [];
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['txt', 'pdf'],
       allowMultiple: true,
@@ -549,16 +554,20 @@ class AIPower {
   //   return res['result'].answer;
   // }
 
-  final chat = ChatOpenAI(apiKey: key, temperature: 0);
+  final chat = ChatOpenAI(
+    apiKey: key,
+    defaultOptions: const ChatOpenAIOptions(
+      temperature: 0.0,
+    ),
+  );
 
   Future<String?> getResponse(String? usrMsg) async {
-    String mes = '';
-    if (usrMsg != null) {
-      mes = usrMsg;
-    }
-    final sendMsg = ChatMessage.human(mes);
-    final aiMsg = await chat.generate([sendMsg]);
-    print('${aiMsg.generations.first.output.content}');
-    return aiMsg.generations.first.output.content;
+    final sendMsg = ChatMessage.humanText(usrMsg ?? '');
+
+    final aiMsg = await chat([sendMsg]);
+    final response = aiMsg.content;
+
+    print(response);
+    return response;
   }
 }

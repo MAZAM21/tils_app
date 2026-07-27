@@ -143,7 +143,7 @@ class RoutesAndTheme extends StatelessWidget {
               iconTheme: IconThemeData(color: Color.fromARGB(255, 76, 76, 76))),
 
           tabBarTheme:
-              TabBarTheme(labelColor: Color.fromARGB(255, 24, 118, 133)),
+              TabBarThemeData(labelColor: Color.fromARGB(255, 24, 118, 133)),
           //cardcolor removed
           textTheme: TextTheme(
             //previously hl6

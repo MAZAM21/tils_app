@@ -13,7 +13,7 @@ class AddStudent extends StatefulWidget {
 }
 
 class _AddStudentState extends State<AddStudent> {
-  final us= UploadService();
+  final us = UploadService();
   final _formKey = GlobalKey<FormState>();
   String? _userEmail = '';
   String? _userName = '';
@@ -65,7 +65,7 @@ class _AddStudentState extends State<AddStudent> {
                   _year != '' &&
                   _section!.isNotEmpty) {
                 _formKey.currentState!.save();
-               
+
                 _formKey.currentState!.reset();
                 setState(() {
                   _selectedSubs.clear();
@@ -267,13 +267,14 @@ class _AddStudentState extends State<AddStudent> {
                         ],
                       ),
                     ),
-                    Divider(thickness: 10,),
-
+                    Divider(
+                      thickness: 10,
+                    ),
                     ElevatedButton(
                       child: Text('Add students from spreadsheet'),
                       onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(allowMultiple: false);
+                        FilePickerResult? result =
+                            await FilePicker.pickFiles(allowMultiple: false);
                         if (result != null) {
                           var file = result.paths.first!;
                           var bytes = File(file).readAsBytesSync();

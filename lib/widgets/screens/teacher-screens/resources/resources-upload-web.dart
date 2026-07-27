@@ -53,7 +53,7 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
     FilePickerResult? results;
 
     try {
-      results = await FilePicker.platform.pickFiles(
+      results = await FilePicker.pickFiles(
         allowMultiple: true,
         type: FileType.custom,
         allowedExtensions: ['pdf', 'doc', 'mp4', 'mp3', 'docx'],
@@ -140,14 +140,15 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                     width: 600,
                     color: Theme.of(context).primaryColor,
                     child: DottedBorder(
-                      color: Colors.white,
-                      borderType: BorderType.RRect,
-                      radius: Radius.circular(12),
-                      dashPattern: [4, 4],
-                      strokeWidth: 1,
-                      padding: EdgeInsets.all(6),
-                      borderPadding: EdgeInsets.all(4),
-                      child: Center(
+                      options: const RoundedRectDottedBorderOptions(
+                        color: Colors.white,
+                        radius: Radius.circular(12),
+                        dashPattern: [4, 4],
+                        strokeWidth: 1,
+                        padding: EdgeInsets.all(6),
+                        borderPadding: EdgeInsets.all(4),
+                      ),
+                      child: const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -182,13 +183,14 @@ class _ResourcesUploadState extends State<ResourcesUpload> {
                   width: 600,
                   color: Theme.of(context).primaryColor,
                   child: DottedBorder(
-                    color: Colors.white,
-                    borderType: BorderType.RRect,
-                    radius: Radius.circular(12),
-                    dashPattern: [4, 4],
-                    strokeWidth: 1,
-                    padding: EdgeInsets.all(6),
-                    borderPadding: EdgeInsets.all(4),
+                    options: const RoundedRectDottedBorderOptions(
+                      color: Colors.white,
+                      radius: Radius.circular(12),
+                      dashPattern: [4, 4],
+                      strokeWidth: 1,
+                      padding: EdgeInsets.all(6),
+                      borderPadding: EdgeInsets.all(4),
+                    ),
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

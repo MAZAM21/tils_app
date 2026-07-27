@@ -47,7 +47,8 @@ class _StudentHomeState extends State<StudentHome> {
     var initializationSettings =
         InitializationSettings(android: initialzationSettingsAndroid);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    flutterLocalNotificationsPlugin.initialize(
+        settings: initializationSettings);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -56,10 +57,10 @@ class _StudentHomeState extends State<StudentHome> {
           content: Text('${notification.title}'),
         ));
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
+            id: notification.hashCode,
+            title: notification.title,
+            body: notification.body,
+            notificationDetails: NotificationDetails(
               android: AndroidNotificationDetails(
                 channel.id,
                 channel.name,
@@ -237,10 +238,11 @@ class _StudentHomeState extends State<StudentHome> {
                                   children: [
                                     AssessmentHomePanel(
                                         ss: ss, studData: studData),
-                                       
                                     SizedBox(width: 30),
                                     StudentResourcesPanel(studUser: studData),
-                                    SizedBox(width: 30,),
+                                    SizedBox(
+                                      width: 30,
+                                    ),
                                     StudentAttendancePanel(studData: studData),
                                     SizedBox(width: 30),
                                   ],

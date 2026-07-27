@@ -357,8 +357,8 @@ class _EditTTFormState extends State<EditTTForm> {
           minimumSize: MaterialStateProperty.all(Size.fromHeight(35)),
           backgroundColor:
               MaterialStateProperty.all(Theme.of(context).primaryColor),
-          textStyle:
-              MaterialStateProperty.all(Theme.of(context).textTheme.headline6),
+          textStyle: MaterialStateProperty.all(
+              Theme.of(context).textTheme.headlineSmall),
         ),
       ),
     );
@@ -371,7 +371,7 @@ class _EditTTFormState extends State<EditTTForm> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(
           DateFormat('h:mm a').format(_startTime!),
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headlineSmall,
           textAlign: TextAlign.center,
         ),
       ),
